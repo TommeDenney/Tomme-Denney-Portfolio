@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Tomme Denney</title>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Barlow:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#f2ede3;--text:#1a1714;--gr:#b5ada3;--mt:#8a7e70;--cb:#e0dad0;--b:rgba(26,23,20,.1)}
 [data-theme=white]{--bg:#f7f7f5;--text:#111;--gr:#bbb;--mt:#999;--cb:#eaeae8;--b:rgba(0,0,0,.08)}
@@ -14,60 +14,60 @@
 *{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--text);font-family:'Barlow','Helvetica Neue',Arial,sans-serif;cursor:none;overflow-x:hidden;transition:background .45s,color .45s;-webkit-font-smoothing:antialiased}
 
-/* CURSOR */
-#cur,#ring{position:fixed;pointer-events:none;z-index:9999;border-radius:50%;transform:translate(-50%,-50%)}
-#cur{width:8px;height:8px;background:var(--text);transition:width .15s,height .15s,background .35s}
-#ring{width:34px;height:34px;border:1.5px solid var(--text);opacity:.5;transition:width .3s,height .3s,border-color .35s}
-body.hov #cur{width:5px;height:5px}
-body.hov #ring{width:50px;height:50px;opacity:.22}
+/* ── CURSOR — mix-blend-mode:difference auto-contrasts on any bg ── */
+#cur,#ring{position:fixed;pointer-events:none;z-index:9999;border-radius:50%;transform:translate(-50%,-50%);mix-blend-mode:difference}
+#cur{width:10px;height:10px;background:#fff;transition:width .15s,height .15s,transform .15s}
+#ring{width:36px;height:36px;border:1.8px solid #fff;opacity:.85;transition:width .32s cubic-bezier(.25,.46,.45,.94),height .32s cubic-bezier(.25,.46,.45,.94),opacity .3s}
+body.hov #cur{width:6px;height:6px}
+body.hov #ring{width:54px;height:54px;opacity:.5}
+/* shake-to-magnify */
+body.shake #cur{width:28px;height:28px;opacity:.7;transition:width .18s,height .18s,opacity .18s}
+body.shake #ring{width:88px;height:88px;opacity:.4;transition:width .18s,height .18s}
 
-/* NAV */
-nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content:space-between;align-items:center;padding:22px 44px;transition:background .45s}
-.logo{font-size:11.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--text);text-decoration:none;cursor:pointer;transition:opacity .2s}
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content:space-between;align-items:center;padding:22px 44px}
+.logo{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--text);text-decoration:none;cursor:pointer;transition:opacity .2s}
 .logo:hover{opacity:.4}
 .navr{display:flex;gap:26px;list-style:none}
-.navr a{font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--mt);text-decoration:none;cursor:pointer;transition:color .2s}
+.navr a{font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--mt);text-decoration:none;cursor:pointer;transition:color .2s}
 .navr a:hover,.navr a.on{color:var(--text)}
-.back-btn{display:none;align-items:center;gap:8px;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mt);cursor:pointer;transition:color .2s;background:none;border:none}
-.back-btn:hover{color:var(--text)}
+
+/* back button — always visible, high contrast */
+.back-btn{display:none;align-items:center;gap:10px;font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;background:#fff;border:none;color:#111;padding:10px 20px;border-radius:100px;box-shadow:0 2px 18px rgba(0,0,0,.22);transition:transform .2s,box-shadow .2s}
+.back-btn:hover{transform:translateX(-3px);box-shadow:0 4px 28px rgba(0,0,0,.3)}
 .back-btn svg{transition:transform .2s}
 .back-btn:hover svg{transform:translateX(-3px)}
 
-/* VIEWS */
-#home-view,#project-view{transition:opacity .4s,transform .4s}
-#project-view{display:none;min-height:100vh}
-
-/* TICKER */
-.ticker{overflow:hidden;border-top:1px solid var(--b);border-bottom:1px solid var(--b);padding:11px 0;white-space:nowrap;transition:background .45s,border-color .45s}
+/* ── TICKER ── */
+.ticker{overflow:hidden;border-top:1px solid var(--b);border-bottom:1px solid var(--b);padding:13px 0;white-space:nowrap;transition:background .45s,border-color .45s}
 .tickin{display:inline-flex;animation:tick 26s linear infinite}
-.tickin span{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--mt);padding:0 24px;transition:color .35s}
+.tickin span{font-size:13px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--mt);padding:0 24px;transition:color .35s}
 .tickin .dot{color:var(--text);padding:0 2px}
 @keyframes tick{to{transform:translateX(-50%)}}
 
-/* HERO */
+/* ── HERO ── */
 .hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;padding-top:60px;position:relative;overflow:hidden}
-.hmeta{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--mt);text-align:center;line-height:2.1;margin-bottom:10px;position:relative;z-index:10;transition:opacity .3s}
+.hmeta{font-size:13px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--mt);text-align:center;line-height:2.1;margin-bottom:10px;position:relative;z-index:10;transition:opacity .3s}
 .hname{font-family:'Barlow Condensed',Impact,'Arial Narrow',sans-serif;font-weight:900;font-size:clamp(68px,15vw,220px);letter-spacing:-.03em;text-transform:uppercase;text-align:center;line-height:.88;color:var(--text);position:relative;z-index:10;user-select:none;transition:color .35s,opacity .35s;padding:0 32px;pointer-events:none}
 .clayer{position:relative;width:100%;height:300px;margin-top:38px;z-index:5;flex-shrink:0}
 .hcard{position:absolute;width:158px;height:224px;border-radius:14px;overflow:hidden;box-shadow:0 18px 48px rgba(0,0,0,.2),0 6px 14px rgba(0,0,0,.1);will-change:transform;cursor:pointer}
-.hcard:hover .hclbl{opacity:1}
 .hcbg{position:absolute;inset:0}
 .hcimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:2;opacity:0;transition:opacity .5s}
 .hcimg.ok{opacity:1}
 .hcico{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:46px;z-index:1}
-.hclbl{position:absolute;bottom:0;left:0;right:0;z-index:3;padding:9px 11px;font-size:9.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.94);text-shadow:0 1px 6px rgba(0,0,0,.5);background:linear-gradient(transparent,rgba(0,0,0,.42));opacity:.85;transition:opacity .2s}
+.hclbl{position:absolute;bottom:0;left:0;right:0;z-index:3;padding:9px 11px;font-size:11px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:rgba(255,255,255,.94);text-shadow:0 1px 6px rgba(0,0,0,.5);background:linear-gradient(transparent,rgba(0,0,0,.42));opacity:.9}
 
-/* ROLE */
+/* ── ROLE ── */
 .role{padding:72px 44px 64px}
 .rword{display:block;font-family:'Barlow Condensed',Impact,'Arial Narrow',sans-serif;font-weight:900;font-size:clamp(52px,10.5vw,148px);letter-spacing:-.02em;text-transform:uppercase;color:var(--gr);line-height:.9;transition:color .35s}
 .clients{margin-top:56px;text-align:center}
-.cl{font-size:10px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--text);margin-bottom:10px}
-.cv{font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--mt)}
+.cl{font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--text);margin-bottom:12px}
+.cv{font-size:13px;font-weight:500;letter-spacing:.11em;text-transform:uppercase;color:var(--mt)}
 
-/* FEATURED */
+/* ── FEATURED ── */
 .featured{padding:80px 0 68px;text-align:center}
 .sh{font-family:'Barlow Condensed',Impact,'Arial Narrow',sans-serif;font-weight:900;font-size:clamp(40px,7vw,90px);letter-spacing:-.015em;text-transform:uppercase;margin-bottom:8px}
-.ss{font-size:13px;color:var(--mt);margin-bottom:44px;letter-spacing:.02em}
+.ss{font-size:14px;font-weight:500;color:var(--mt);margin-bottom:44px;letter-spacing:.04em}
 .fcar{position:relative;height:450px;overflow:hidden}
 .fc{position:absolute;left:50%;top:50%;border-radius:16px;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.15);cursor:pointer;transition:transform .62s cubic-bezier(.23,.92,.58,1),opacity .55s,width .55s,height .55s}
 .fc.center{width:290px;height:412px;transform:translate(-50%,-50%);z-index:5;opacity:1}
@@ -79,10 +79,10 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content
 .fcimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:2;opacity:0;transition:opacity .5s}
 .fcimg.ok{opacity:1}
 .fcico{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:54px;z-index:1}
-.flabel{display:inline-flex;margin-top:18px;padding:9px 24px;border-radius:100px;background:var(--cb);font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;transition:background .35s;cursor:pointer}
+.flabel{display:inline-flex;margin-top:18px;padding:10px 26px;border-radius:100px;background:var(--cb);font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;transition:background .35s;cursor:pointer}
 .flabel:hover{opacity:.7}
 
-/* MORE WORK */
+/* ── MORE WORK ── */
 .more{padding:80px 44px 72px;text-align:center}
 .wgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:44px;max-width:940px;margin-left:auto;margin-right:auto}
 .wc{aspect-ratio:1;border-radius:16px;overflow:hidden;cursor:pointer;transform:scale(.84) translateY(22px);opacity:0;transition:transform .72s cubic-bezier(.25,.46,.45,.94),opacity .72s,box-shadow .3s}
@@ -93,52 +93,54 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content
 .wcimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:2;opacity:0;transition:opacity .5s}
 .wcimg.ok{opacity:1}
 .wcico{position:relative;z-index:1;font-size:40px}
-.wct{position:absolute;bottom:0;left:0;right:0;z-index:3;padding:11px 13px;background:linear-gradient(transparent,rgba(0,0,0,.52));font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#fff;text-align:left}
+.wct{position:absolute;bottom:0;left:0;right:0;z-index:3;padding:12px 14px;background:linear-gradient(transparent,rgba(0,0,0,.54));font-size:11px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:#fff;text-align:left}
 
-/* CONTACT */
+/* ── CONTACT ── */
 .contact{background:#161411;padding:88px 44px 52px;text-align:center;overflow:hidden}
 .cword{font-family:'Barlow Condensed',Impact,'Arial Narrow',sans-serif;font-weight:900;font-size:min(21vw,300px);letter-spacing:-.04em;text-transform:uppercase;color:rgba(255,255,255,.11);line-height:.82;margin-bottom:62px;user-select:none}
-.ceml{display:block;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.62);text-decoration:none;margin-bottom:18px;transition:opacity .2s}
+.ceml{display:block;font-size:13px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.62);text-decoration:none;margin-bottom:18px;transition:opacity .2s}
 .ceml:hover{opacity:.38}
 .csoc{display:flex;gap:24px;justify-content:center;list-style:none;margin-bottom:44px}
-.csoc a{font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:rgba(255,255,255,.4);text-decoration:none;transition:color .2s}
+.csoc a{font-size:12px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:rgba(255,255,255,.4);text-decoration:none;transition:color .2s}
 .csoc a:hover{color:rgba(255,255,255,.9)}
-.ccp{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.2)}
+.ccp{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.2)}
 
-/* PALETTE */
+/* ── PALETTE ── */
 #pal{position:fixed;bottom:28px;right:28px;z-index:400;display:flex;flex-direction:column;align-items:flex-end;gap:9px}
 #pbtn{width:44px;height:44px;border-radius:50%;background:var(--cb);border:1.5px solid var(--b);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 2px 20px rgba(0,0,0,.12);transition:transform .28s,background .35s}
 #pbtn:hover{transform:rotate(32deg) scale(1.07)}
 .swatches{display:flex;flex-direction:column;gap:9px;align-items:flex-end;opacity:0;transform:translateY(8px);pointer-events:none;transition:opacity .22s,transform .22s}
 .swatches.open{opacity:1;transform:none;pointer-events:all}
-.sw{display:flex;align-items:center;gap:9px;cursor:pointer;font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--mt);transition:color .2s}
+.sw{display:flex;align-items:center;gap:9px;cursor:pointer;font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--mt);transition:color .2s}
 .sw:hover{color:var(--text)}
 .sdot{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--b);transition:transform .18s}
 .sw:hover .sdot{transform:scale(1.22)}
 .sw.on .sdot{outline:2.5px solid var(--text);outline-offset:2px}
 
-/* ── PROJECT DETAIL VIEW ── */
+/* ── PROJECT DETAIL ── */
+#project-view{display:none;min-height:100vh}
 .pv-hero{width:100%;height:100vh;position:relative;overflow:hidden;display:flex;align-items:flex-end}
 .pv-hero-media{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .pv-hero-bg{position:absolute;inset:0}
-.pv-hero-grad{position:absolute;inset:0;background:linear-gradient(to top, rgba(0,0,0,.72) 0%, rgba(0,0,0,.1) 60%, transparent 100%);z-index:2}
+.pv-hero-grad{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.78) 0%,rgba(0,0,0,.12) 60%,transparent 100%);z-index:2}
 .pv-hero-info{position:relative;z-index:3;padding:0 52px 52px;width:100%}
-.pv-cat{font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:10px}
-.pv-title{font-family:'Barlow Condensed',Impact,'Arial Narrow',sans-serif;font-weight:900;font-size:clamp(56px,10vw,130px);letter-spacing:-.03em;text-transform:uppercase;color:#fff;line-height:.88;margin-bottom:18px}
-.pv-tags{display:flex;flex-wrap:wrap;gap:7px}
-.pv-tag{font-size:9.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:5px 12px;border-radius:100px;border:1.2px solid rgba(255,255,255,.3);color:rgba(255,255,255,.7)}
+.pv-cat{font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:12px}
+.pv-title{font-family:'Barlow Condensed',Impact,'Arial Narrow',sans-serif;font-weight:900;font-size:clamp(56px,10vw,130px);letter-spacing:-.03em;text-transform:uppercase;color:#fff;line-height:.88;margin-bottom:20px}
+.pv-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.pv-tag{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:6px 14px;border-radius:100px;border:1.2px solid rgba(255,255,255,.3);color:rgba(255,255,255,.75)}
+/* short caption under tags */
+.pv-caption{font-size:14px;font-weight:500;color:rgba(255,255,255,.7);letter-spacing:.02em;line-height:1.55;max-width:520px;margin-top:6px}
 
 .pv-body{max-width:1100px;margin:0 auto;padding:64px 52px}
-.pv-desc{font-size:16px;line-height:1.82;color:var(--text);max-width:640px;margin-bottom:56px;transition:color .35s}
+/* bigger description */
+.pv-desc{font-size:17px;font-weight:400;line-height:1.84;color:var(--text);max-width:660px;margin-bottom:56px;transition:color .35s}
 .pv-gallery{columns:2;gap:16px;margin-bottom:72px}
 .pv-gallery-item{break-inside:avoid;margin-bottom:16px;border-radius:14px;overflow:hidden;background:var(--cb)}
 .pv-gallery-item img,.pv-gallery-item video{width:100%;display:block;border-radius:14px;transition:transform .55s cubic-bezier(.25,.46,.45,.94)}
 .pv-gallery-item:hover img,.pv-gallery-item:hover video{transform:scale(1.025)}
-.pv-gallery-placeholder{aspect-ratio:4/3;background:var(--cb);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:42px;opacity:.4;margin-bottom:16px}
 
-/* More at bottom of project page */
 .pv-more{padding:0 0 80px}
-.pv-more-title{font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--mt);margin-bottom:24px;padding:0 52px}
+.pv-more-title{font-size:12px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--mt);margin-bottom:24px;padding:0 52px}
 .pv-more-track{display:flex;gap:16px;padding:0 52px 16px;overflow-x:auto;scrollbar-width:none}
 .pv-more-track::-webkit-scrollbar{display:none}
 .pv-more-card{flex-shrink:0;width:240px;height:180px;border-radius:14px;overflow:hidden;cursor:pointer;position:relative;transition:transform .4s,box-shadow .4s}
@@ -147,7 +149,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content
 .pv-more-card-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:2;opacity:0;transition:opacity .5s}
 .pv-more-card-img.ok{opacity:1}
 .pv-more-card-ico{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:36px;z-index:1}
-.pv-more-card-lbl{position:absolute;bottom:0;left:0;right:0;z-index:3;padding:8px 12px;background:linear-gradient(transparent,rgba(0,0,0,.5));font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#fff}
+.pv-more-card-lbl{position:absolute;bottom:0;left:0;right:0;z-index:3;padding:9px 12px;background:linear-gradient(transparent,rgba(0,0,0,.52));font-size:11px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:#fff}
 
 ::-webkit-scrollbar{width:3px}
 ::-webkit-scrollbar-thumb{background:var(--b);border-radius:2px}
@@ -160,8 +162,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content
 <nav id="nav">
   <span class="logo" onclick="goHome()">Tomme Denney</span>
   <button class="back-btn" id="back-btn" onclick="goHome()">
-    <svg width="14" height="10" viewBox="0 0 14 10" fill="none"><path d="M13 5H1M1 5L5 1M1 5L5 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    Back
+    <svg width="16" height="12" viewBox="0 0 16 12" fill="none"><path d="M15 6H1M1 6L6 1M1 6L6 11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    All Work
   </button>
   <ul class="navr" id="main-nav">
     <li><a href="#hero" class="on" id="nw">Work</a></li>
@@ -171,7 +173,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content
 
 <!-- ══ HOME VIEW ══ -->
 <div id="home-view">
-  <!-- TICKER -->
   <div style="padding-top:68px">
     <div class="ticker">
       <div class="tickin">
@@ -185,29 +186,28 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content
     <p class="hmeta" id="hmeta">Boston, Massachusetts<br><span style="opacity:.6">tomme@usurperinteractive.com</span></p>
     <h1 class="hname" id="hname">TOMME DENNEY</h1>
     <div class="clayer" id="clayer">
-      <!-- 4 hero cards: seereality, arworkofart, haptidraw, otherrealm -->
       <div class="hcard" id="hc0" onclick="openProject('seereality')">
         <div class="hcbg" style="background:linear-gradient(145deg,#050e1a,#0e2860,#1a449a)"></div>
         <div class="hcico">🌐</div>
-        <img class="hcimg" src="projects/seereality/0.png" alt="See Reality" onload="this.classList.add('ok')" onerror="this.style.display='none'">
+        <img class="hcimg" src="projects/seereality/0.png" alt="" onload="this.classList.add('ok')" onerror="this.style.display='none'">
         <div class="hclbl">See Reality</div>
       </div>
       <div class="hcard" id="hc1" onclick="openProject('arworkofart')">
         <div class="hcbg" style="background:linear-gradient(145deg,#1a0a2e,#4a1888,#7040b5)"></div>
         <div class="hcico">🎨</div>
-        <img class="hcimg" src="projects/arworkofart/1.png" alt="AR Work of Art" onload="this.classList.add('ok')" onerror="this.style.display='none'">
+        <img class="hcimg" src="projects/arworkofart/1.png" alt="" onload="this.classList.add('ok')" onerror="this.style.display='none'">
         <div class="hclbl">AR Work of Art</div>
       </div>
       <div class="hcard" id="hc2" onclick="openProject('haptidraw')">
         <div class="hcbg" style="background:linear-gradient(145deg,#1a1a05,#484810,#7a7a1a)"></div>
         <div class="hcico">✏️</div>
-        <img class="hcimg" src="projects/haptidraw/1.png" alt="HaptiDraw" onload="this.classList.add('ok')" onerror="this.style.display='none'">
+        <img class="hcimg" src="projects/haptidraw/1.png" alt="" onload="this.classList.add('ok')" onerror="this.style.display='none'">
         <div class="hclbl">HaptiDraw</div>
       </div>
       <div class="hcard" id="hc3" onclick="openProject('otherrealm')">
         <div class="hcbg" style="background:linear-gradient(145deg,#0a1a0a,#1a4a1a,#2a7a2a)"></div>
         <div class="hcico">🌿</div>
-        <img class="hcimg" src="projects/otherrealm/1.png" alt="Other Realm" onload="this.classList.add('ok')" onerror="this.style.display='none'">
+        <img class="hcimg" src="projects/otherrealm/1.png" alt="" onload="this.classList.add('ok')" onerror="this.style.display='none'">
         <div class="hclbl">Other Realm</div>
       </div>
     </div>
@@ -223,7 +223,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content
     </div>
   </section>
 
-  <!-- FEATURED (3) -->
   <section class="featured">
     <h2 class="sh">Featured Work</h2>
     <p class="ss">Select recent and notable projects</p>
@@ -231,17 +230,17 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content
       <div class="fc" data-id="seereality">
         <div class="fcbg" style="background:linear-gradient(145deg,#050e1a,#0e2860,#1a449a)"></div>
         <div class="fcico">🌐</div>
-        <img class="fcimg" src="projects/seereality/0.png" alt="See Reality" onload="this.classList.add('ok')" onerror="this.style.display='none'">
+        <img class="fcimg" src="projects/seereality/0.png" alt="" onload="this.classList.add('ok')" onerror="this.style.display='none'">
       </div>
       <div class="fc" data-id="arworkofart">
         <div class="fcbg" style="background:linear-gradient(145deg,#1a0a2e,#4a1888,#7040b5)"></div>
         <div class="fcico">🎨</div>
-        <img class="fcimg" src="projects/arworkofart/1.png" alt="AR Work of Art" onload="this.classList.add('ok')" onerror="this.style.display='none'">
+        <img class="fcimg" src="projects/arworkofart/1.png" alt="" onload="this.classList.add('ok')" onerror="this.style.display='none'">
       </div>
       <div class="fc" data-id="haptidraw">
         <div class="fcbg" style="background:linear-gradient(145deg,#1a1a05,#484810,#7a7a1a)"></div>
         <div class="fcico">✏️</div>
-        <img class="fcimg" src="projects/haptidraw/1.png" alt="HaptiDraw" onload="this.classList.add('ok')" onerror="this.style.display='none'">
+        <img class="fcimg" src="projects/haptidraw/1.png" alt="" onload="this.classList.add('ok')" onerror="this.style.display='none'">
       </div>
     </div>
     <div style="text-align:center;margin-top:18px">
@@ -249,7 +248,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content
     </div>
   </section>
 
-  <!-- MORE WORK (all 15) -->
   <section class="more">
     <h2 class="sh">More Work</h2>
     <p class="ss">Take a scroll, stay a while</p>
@@ -270,7 +268,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content
 
 <!-- ══ PROJECT VIEW ══ -->
 <div id="project-view">
-  <div class="pv-hero" id="pv-hero">
+  <div class="pv-hero">
     <div class="pv-hero-bg" id="pv-hero-bg"></div>
     <img class="pv-hero-media" id="pv-hero-img" alt="" style="display:none" onload="this.style.display='block'" onerror="this.style.display='none'">
     <video class="pv-hero-media" id="pv-hero-vid" autoplay muted loop playsinline style="display:none"></video>
@@ -279,6 +277,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content
       <p class="pv-cat" id="pv-cat"></p>
       <h1 class="pv-title" id="pv-title"></h1>
       <div class="pv-tags" id="pv-tags"></div>
+      <p class="pv-caption" id="pv-caption"></p>
     </div>
   </div>
   <div class="pv-body">
@@ -291,7 +290,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content
   </div>
 </div>
 
-<!-- PALETTE -->
 <div id="pal">
   <div class="swatches" id="sw">
     <div class="sw on" onclick="setTheme('',this)"><span>Warm</span><div class="sdot" style="background:#f2ede3"></div></div>
@@ -304,40 +302,112 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content
 </div>
 
 <script>
-/* ══ PROJECT DATA ══ */
+/* ══ PROJECT DATA — with short captions ══ */
 const PROJECTS = [
-  {id:'seereality',      name:'See Reality',                 cat:'XR Studio · Client Work',        cover:'projects/seereality/0.png',       video:'projects/seereality/0.mp4',    imgs:[], bg:'linear-gradient(145deg,#050e1a,#0e2860,#1a449a)', ico:'🌐', tags:['Unity C#','Meta Quest','URP','XR Experience','Client Work'], desc:'Immersive XR experiences built for world-class clients. Projects spanning heritage, sports, and entertainment — from Fort Nashborough colonial installations to Liverpool FC fan experiences. Built with Unity C#, Meta Quest hardware, and custom URP shader pipelines optimized for standalone passthrough.'},
-  {id:'arworkofart',     name:'AR Work of Art',              cat:'Augmented Reality · Art',         cover:'projects/arworkofart/1.png',      imgs:['2','3','4'],                   bg:'linear-gradient(145deg,#1a0a2e,#4a1888,#7040b5)', ico:'🎨', tags:['AR','Unity','Art Direction','Spatial'], desc:'An augmented reality art experience merging physical and digital mediums. Users interact with artworks that come alive through their device — blending the gallery wall with animated 3D layers, responsive to viewer position and gesture.'},
-  {id:'haptidraw',       name:'HaptiDraw',                   cat:'Haptic Interaction · HCI',        cover:'projects/haptidraw/1.png',        imgs:[],                              bg:'linear-gradient(145deg,#1a1a05,#484810,#7a7a1a)',   ico:'✏️', tags:['Haptics','HCI','Interaction Design','Prototype'], desc:'A haptic drawing experience exploring touch as a medium for digital creation. HaptiDraw investigates how force-feedback and tactile response can deepen the act of mark-making in virtual environments — giving users the feeling of texture, resistance, and weight in a digital canvas.'},
-  {id:'otherrealm',      name:'Other Realm',                 cat:'XR Experience',                   cover:'projects/otherrealm/1.png',       imgs:[],                              bg:'linear-gradient(145deg,#0a1a0a,#1a4a1a,#2a7a2a)',   ico:'🌿', tags:['XR','Immersive Environment','Spatial Audio','Unity'], desc:'A fully immersive journey into an otherworldly environment. Other Realm builds a sense of presence through layered spatial audio, hand-tracked interaction, and procedurally generated biomes that respond to the viewer\'s movement and attention.'},
-  {id:'unforgottenstories',name:'Unforgotten Stories',       cat:'Narrative XR · Memory',           cover:'projects/unforgottenstories/1.png',imgs:[],                             bg:'linear-gradient(145deg,#1a0a0a,#4a1a1a,#8a2a2a)',   ico:'📖', tags:['Narrative','XR','Spatial Memory','Heritage'], desc:'Preserving and sharing stories that history risks losing. Unforgotten Stories uses Gaussian splatting and spatial audio to reconstruct lived moments — placing viewers inside memories and letting them walk through time.'},
-  {id:'soulsolace',      name:'Soul Solace',                 cat:'Wellness XR',                     cover:'projects/soulsolace/1.png',       imgs:[],                              bg:'linear-gradient(145deg,#0a0a1a,#1a1a4a,#2a2a8a)',   ico:'🌊', tags:['Wellness','Meditative XR','Spatial Design','Unity'], desc:'A meditative XR space designed for emotional reset and inner stillness. Soul Solace uses generative soundscapes, particle environments, and breath-responsive interaction to create a sanctuary that responds to the user\'s presence and pace.'},
-  {id:'iamyou',          name:'I Am You',                    cat:'Interactive Experience',           cover:'projects/iamyou/1.png',           imgs:[],                              bg:'linear-gradient(145deg,#0a1a1a,#1a4a4a,#2a7a7a)',   ico:'👤', tags:['Identity','Empathy','Interactive','Perspective'], desc:'An intimate encounter with perspective and identity. I Am You places viewers inside another person\'s point of view through spatial audio, embodied motion capture, and first-person XR — challenging assumptions about self and other.'},
-  {id:'curse',           name:'Curse',                       cat:'Game Design · Atmosphere',        cover:'projects/curse/1.png',            imgs:[],                              bg:'linear-gradient(145deg,#0e0808,#201010,#341818)',    ico:'🌑', tags:['Game Design','Dark Atmosphere','Horror','Unity'], desc:'A dark, atmospheric game rooted in dread and discovery. Curse uses environmental storytelling, reactive lighting, and spatial sound design to craft an experience where the environment itself feels alive — and hostile.'},
-  {id:'flora',           name:'Flora',                       cat:'Environmental XR',                cover:'projects/flora/1.png',            imgs:[],                              bg:'linear-gradient(145deg,#0a1a0a,#1a3a1a,#2a5a2a)',   ico:'🌺', tags:['Nature','XR','Procedural','Environmental Design'], desc:'An XR exploration of natural systems and organic growth. Flora generates living, breathing environments in real-time — responding to the viewer\'s gaze and movement to produce ecosystems that feel discovered, not designed.'},
-  {id:'godsdrunkestdriver',name:"God's Drunkest Driver",     cat:'Game Design · Comedy',            cover:'projects/godsdrunkestdriver/1.png',imgs:['2'],                          bg:'linear-gradient(145deg,#1a0a05,#4a2010,#8a4020)',   ico:'🚗', tags:['Game Design','Comedy','Physics','Chaos'], desc:'A chaotic physics-based driving game channeling pure comedic mayhem. God\'s Drunkest Driver leans into ragdoll physics, unpredictable terrain, and escalating absurdity — because sometimes the point is just to crash beautifully.'},
-  {id:'greatvendingmachine',name:'Great Vending Machine',   cat:'Interactive Installation',        cover:'projects/greatvendingmachine/1.png',imgs:[],                             bg:'linear-gradient(145deg,#0a0a1a,#20201a,#403a10)',   ico:'🎰', tags:['Installation','Interactive','Art','Unexpected'], desc:'An interactive installation that reimagines the vending machine as a portal to unexpected experiences. Insert your selection — receive something you never anticipated. Great Vending Machine interrogates automation, desire, and surprise.'},
-  {id:'internshipintheafterlife',name:'Internship in the Afterlife',cat:'Narrative Game · Comedy', cover:'projects/internshipintheafterlife/1.png',imgs:[],                        bg:'linear-gradient(145deg,#10080a,#301818,#502828)',    ico:'👻', tags:['Narrative','Comedy','Game Design','Afterlife'], desc:'What happens when your internship is in the afterlife? Navigate a bureaucratic underworld, complete absurd tasks for your spectral supervisors, and try to survive your first performance review — from beyond the grave.'},
-  {id:'returnofthechickens',name:'Return of the Chickens',  cat:'Game Design',                     cover:'projects/returnofthechickens/1.png',imgs:[],                             bg:'linear-gradient(145deg,#1a1505,#4a3a10,#7a6020)',   ico:'🐔', tags:['Game Design','Comedy','Action','Physics'], desc:'They left. Now they\'re back. Return of the Chickens is a chaotic action game built on the premise that poultry has had enough — delivering feathered mayhem with tight controls, escalating challenge, and unreasonable satisfaction.'},
-  {id:'toweroffrankenfrog', name:'Tower of Frankenfrog',    cat:'Tower Defense · Strategy',        cover:'projects/toweroffrankenfrog/1.png',imgs:[],                              bg:'linear-gradient(145deg,#0a1a08,#1a3a12,#2a5a1a)',   ico:'🐸', tags:['Tower Defense','Strategy','Game Design','Monsters'], desc:'A tower defense game where Frankenfrog and his amphibian army hold the line against an increasingly unhinged parade of enemies. Strategic depth wrapped in a creature-feature aesthetic — every wave stranger than the last.'},
-  {id:'walk',            name:'Walk',                        cat:'Experiential Design · Minimal',  cover:'projects/walk/1.png',             imgs:[],                              bg:'linear-gradient(145deg,#101010,#1e1e1e,#2a2828)',   ico:'🚶', tags:['Experiential','Minimal','Spatial','Contemplative'], desc:'A contemplative piece about the act of walking. Walk strips back complexity to examine how movement through space creates meaning — using minimal visual language and immersive audio to turn one foot in front of the other into something meditative.'},
+  {id:'seereality',         name:'See Reality',               cat:'XR Studio · Client Work',       cover:'projects/seereality/0.png',        video:'projects/seereality/0.mp4', coverNum:0, extraStart:1,
+   bg:'linear-gradient(145deg,#050e1a,#0e2860,#1a449a)', ico:'🌐',
+   tags:['Unity C#','Meta Quest','URP','XR Experience','Client Work'],
+   caption:'Real-world client XR — from colonial installations to stadium fan experiences.',
+   desc:'Immersive XR experiences built for world-class clients. Projects spanning heritage, sports, and entertainment — from Fort Nashborough colonial installations to Liverpool FC fan experiences. Built with Unity C#, Meta Quest hardware, and custom URP shader pipelines optimized for standalone passthrough.'},
+
+  {id:'arworkofart',        name:'AR Work of Art',            cat:'Augmented Reality · Art',        cover:'projects/arworkofart/1.png',       coverNum:1, extraStart:2,
+   bg:'linear-gradient(145deg,#1a0a2e,#4a1888,#7040b5)', ico:'🎨',
+   tags:['AR','Unity','Art Direction','Spatial Design'],
+   caption:'Gallery walls that come alive — physical art extended into 3D space.',
+   desc:'An augmented reality art experience merging physical and digital mediums. Users interact with artworks that animate and extend beyond the frame — blending the gallery wall with responsive 3D layers tied to viewer position and gesture.'},
+
+  {id:'haptidraw',          name:'HaptiDraw',                 cat:'Haptic Interaction · HCI',       cover:'projects/haptidraw/1.png',         coverNum:1, extraStart:2,
+   bg:'linear-gradient(145deg,#1a1a05,#484810,#7a7a1a)', ico:'✏️',
+   tags:['Haptics','HCI','Interaction Design','Prototype'],
+   caption:'Drawing with texture, resistance, and weight — in a fully digital canvas.',
+   desc:'A haptic drawing experience exploring touch as a medium for digital creation. HaptiDraw investigates how force-feedback and tactile response can deepen the act of mark-making in virtual environments — giving users the sensation of texture and resistance with every stroke.'},
+
+  {id:'otherrealm',         name:'Other Realm',               cat:'XR Experience',                  cover:'projects/otherrealm/1.png',        coverNum:1, extraStart:2,
+   bg:'linear-gradient(145deg,#0a1a0a,#1a4a1a,#2a7a2a)', ico:'🌿',
+   tags:['XR','Spatial Audio','Immersive Environment','Unity'],
+   caption:'A living world that breathes and shifts in response to your presence.',
+   desc:'A fully immersive journey into an otherworldly environment. Other Realm builds a sense of presence through layered spatial audio, hand-tracked interaction, and procedurally generated biomes that respond to the viewer\'s movement and attention.'},
+
+  {id:'unforgottenstories', name:'Unforgotten Stories',       cat:'Narrative XR · Memory',          cover:'projects/unforgottenstories/1.png', coverNum:1, extraStart:2,
+   bg:'linear-gradient(145deg,#1a0a0a,#4a1a1a,#8a2a2a)', ico:'📖',
+   tags:['Narrative','XR','Spatial Memory','Heritage'],
+   caption:'Walk through history before it disappears — memory preserved in 3D space.',
+   desc:'Preserving and sharing stories that history risks losing. Unforgotten Stories uses Gaussian splatting and spatial audio to reconstruct lived moments — placing viewers inside memories and letting them walk through time.'},
+
+  {id:'soulsolace',         name:'Soul Solace',               cat:'Wellness XR',                    cover:'projects/soulsolace/1.png',        coverNum:1, extraStart:2,
+   bg:'linear-gradient(145deg,#0a0a1a,#1a1a4a,#2a2a8a)', ico:'🌊',
+   tags:['Wellness','Meditative XR','Spatial Design','Unity'],
+   caption:'A sanctuary that responds to your breath — built for stillness and reset.',
+   desc:'A meditative XR space designed for emotional reset and inner stillness. Soul Solace uses generative soundscapes, particle environments, and breath-responsive interaction to create a sanctuary that adapts to the user\'s presence and pace.'},
+
+  {id:'iamyou',             name:'I Am You',                  cat:'Interactive Experience',         cover:'projects/iamyou/1.png',            coverNum:1, extraStart:2,
+   bg:'linear-gradient(145deg,#0a1a1a,#1a4a4a,#2a7a7a)', ico:'👤',
+   tags:['Identity','Empathy','Interactive','Perspective'],
+   caption:'Step inside another point of view — and question what you thought you knew.',
+   desc:'An intimate encounter with perspective and identity. I Am You places viewers inside another person\'s point of view through spatial audio, embodied motion capture, and first-person XR — challenging assumptions about self and other.'},
+
+  {id:'curse',              name:'Curse',                     cat:'Game Design · Atmosphere',       cover:'projects/curse/1.png',             coverNum:1, extraStart:2,
+   bg:'linear-gradient(145deg,#0e0808,#201010,#341818)', ico:'🌑',
+   tags:['Game Design','Dark Atmosphere','Horror','Unity'],
+   caption:'The environment is alive. It knows you are here. Proceed carefully.',
+   desc:'A dark, atmospheric game rooted in dread and discovery. Curse uses environmental storytelling, reactive lighting, and spatial sound design to craft an experience where the environment itself feels aware — and hostile.'},
+
+  {id:'flora',              name:'Flora',                     cat:'Environmental XR',               cover:'projects/flora/1.png',             coverNum:1, extraStart:2,
+   bg:'linear-gradient(145deg,#0a1a0a,#1a3a1a,#2a5a2a)', ico:'🌺',
+   tags:['Nature','XR','Procedural','Environmental Design'],
+   caption:'Ecosystems that grow in real time — discovered, not designed.',
+   desc:'An XR exploration of natural systems and organic growth. Flora generates living, breathing environments in real-time — responding to the viewer\'s gaze and movement to produce ecosystems that feel found rather than built.'},
+
+  {id:'godsdrunkestdriver', name:"God's Drunkest Driver",     cat:'Game Design · Comedy',           cover:'projects/godsdrunkestdriver/1.png',coverNum:1, extraStart:2,
+   bg:'linear-gradient(145deg,#1a0a05,#4a2010,#8a4020)', ico:'🚗',
+   tags:['Game Design','Comedy','Physics','Chaos'],
+   caption:'Ragdoll physics, impossible roads, zero apologies — crash beautifully.',
+   desc:'A chaotic physics-based driving game channeling pure comedic mayhem. God\'s Drunkest Driver leans into ragdoll physics, unpredictable terrain, and escalating absurdity — because sometimes the point is just to crash beautifully.'},
+
+  {id:'greatvendingmachine',name:'Great Vending Machine',     cat:'Interactive Installation',       cover:'projects/greatvendingmachine/1.png',coverNum:1, extraStart:2,
+   bg:'linear-gradient(145deg,#0a0a1a,#20201a,#403a10)', ico:'🎰',
+   tags:['Installation','Interactive','Art','Unexpected'],
+   caption:'Insert a selection. Receive something you never expected.',
+   desc:'An interactive installation that reimagines the vending machine as a portal to unexpected experiences. Great Vending Machine interrogates automation, desire, and surprise — one transaction at a time.'},
+
+  {id:'internshipintheafterlife',name:'Internship in the Afterlife',cat:'Narrative Game · Comedy', cover:'projects/internshipintheafterlife/1.png',coverNum:1, extraStart:2,
+   bg:'linear-gradient(145deg,#10080a,#301818,#502828)', ico:'👻',
+   tags:['Narrative','Comedy','Game Design','Afterlife'],
+   caption:'Your first performance review is from beyond the grave. Good luck.',
+   desc:'What happens when your internship is in the afterlife? Navigate a bureaucratic underworld, complete absurd tasks for spectral supervisors, and try to survive your first performance review — from beyond the grave.'},
+
+  {id:'returnofthechickens', name:'Return of the Chickens',   cat:'Game Design',                   cover:'projects/returnofthechickens/1.png',coverNum:1, extraStart:2,
+   bg:'linear-gradient(145deg,#1a1505,#4a3a10,#7a6020)', ico:'🐔',
+   tags:['Game Design','Comedy','Action','Physics'],
+   caption:'They left. They regrouped. Now the chickens are back — and ready.',
+   desc:'They left. Now they\'re back. Return of the Chickens is a chaotic action game built on the premise that poultry has had enough — delivering feathered mayhem with tight controls, escalating challenge, and unreasonable satisfaction.'},
+
+  {id:'toweroffrankenfrog',  name:'Tower of Frankenfrog',     cat:'Tower Defense · Strategy',      cover:'projects/toweroffrankenfrog/1.png', coverNum:1, extraStart:2,
+   bg:'linear-gradient(145deg,#0a1a08,#1a3a12,#2a5a1a)', ico:'🐸',
+   tags:['Tower Defense','Strategy','Game Design','Monsters'],
+   caption:'Frankenfrog holds the line against waves stranger than the last.',
+   desc:'A tower defense game where Frankenfrog and his amphibian army hold the line against an increasingly unhinged parade of enemies. Strategic depth wrapped in a creature-feature aesthetic.'},
+
+  {id:'walk',                name:'Walk',                     cat:'Experiential Design · Minimal',  cover:'projects/walk/1.png',              coverNum:1, extraStart:2,
+   bg:'linear-gradient(145deg,#101010,#1e1e1e,#2a2828)', ico:'🚶',
+   tags:['Experiential','Minimal','Spatial','Contemplative'],
+   caption:'One foot in front of the other — made into something worth sitting with.',
+   desc:'A contemplative piece about the act of walking. Walk strips back complexity to examine how movement through space creates meaning — using minimal visual language and immersive audio to turn locomotion into something meditative.'},
 ];
 
-const PMAP = {};
-PROJECTS.forEach(p=>PMAP[p.id]=p);
+const PMAP={};PROJECTS.forEach(p=>PMAP[p.id]=p);
 
-/* ── hero card layout ── */
-const HERO_IDS = ['seereality','arworkofart','haptidraw','otherrealm'];
-const cdata = HERO_IDS.map((id,i)=>({el:document.getElementById('hc'+i),id,ox:0,oy:0,vx:0,vy:0,rot:[-22,-7,8,21][i]}));
+/* ── HERO CARD SPRING ── */
+const HERO_IDS=['seereality','arworkofart','haptidraw','otherrealm'];
+const cdata=HERO_IDS.map((id,i)=>({el:document.getElementById('hc'+i),id,ox:0,oy:0,vx:0,vy:0,rot:[-22,-7,8,21][i]}));
 function layoutCards(){
   const cl=document.getElementById('clayer');
-  const cw=cl.offsetWidth, totalW=4*158+3*18;
-  const sx=(cw-totalW)/2, my=cl.offsetHeight/2;
+  const cw=cl.offsetWidth,totalW=4*158+3*18;
+  const sx=(cw-totalW)/2,my=cl.offsetHeight/2;
   cdata.forEach((c,i)=>{const bx=sx+i*(158+18);c.el.style.left=bx+'px';c.el.style.top=(my-112)+'px';c.baseX=bx+79;c.baseY=my;});
 }
 layoutCards();
 window.addEventListener('resize',layoutCards);
-
 let pmx=window.innerWidth/2,pmy=window.innerHeight/2;
 document.addEventListener('mousemove',e=>{
   const dx=e.clientX-pmx,dy=e.clientY-pmy;pmx=e.clientX;pmy=e.clientY;
@@ -359,16 +429,54 @@ document.addEventListener('mousemove',e=>{
 const hname=document.getElementById('hname'),hmeta=document.getElementById('hmeta');
 window.addEventListener('scroll',()=>{
   const p=Math.min(window.scrollY/480,1);
-  hname.style.opacity=Math.max(0,1-p*2);
-  hmeta.style.opacity=Math.max(0,1-p*3);
+  hname.style.opacity=Math.max(0,1-p*2);hmeta.style.opacity=Math.max(0,1-p*3);
   cdata.forEach(c=>c.el.style.opacity=Math.max(0,1-p*2.5));
-  const mid=window.scrollY+window.innerHeight*.4;
-  const it=document.getElementById('info').offsetTop;
+  const mid=window.scrollY+window.innerHeight*.4,it=document.getElementById('info').offsetTop;
   document.getElementById('nw').classList.toggle('on',mid<it);
   document.getElementById('ni').classList.toggle('on',mid>=it);
 },{passive:true});
 
-/* ── FEATURED CAROUSEL ── */
+/* ── CURSOR — mix-blend-mode:difference handles contrast automatically ── */
+const cur=document.getElementById('cur'),ring=document.getElementById('ring');
+let mx=0,my=0,rx=0,ry=0;
+
+/* Shake detection */
+const xHist=[];let shakeTimer=null;
+document.addEventListener('mousemove',e=>{
+  mx=e.clientX;my=e.clientY;
+  cur.style.left=mx+'px';cur.style.top=my+'px';
+  // track x direction for shake
+  xHist.push({x:e.clientX,t:Date.now()});
+  if(xHist.length>30)xHist.shift();
+  detectShake();
+});
+function detectShake(){
+  if(xHist.length<12)return;
+  const recent=xHist.slice(-12);
+  const span=recent[recent.length-1].t-recent[0].t;
+  if(span>600)return; // too slow
+  let reversals=0;
+  for(let i=1;i<recent.length-1;i++){
+    const d1=recent[i].x-recent[i-1].x;
+    const d2=recent[i+1].x-recent[i].x;
+    if(d1*d2<0&&(Math.abs(d1)>6||Math.abs(d2)>6))reversals++;
+  }
+  if(reversals>=4){
+    document.body.classList.add('shake');
+    clearTimeout(shakeTimer);
+    shakeTimer=setTimeout(()=>document.body.classList.remove('shake'),600);
+  }
+}
+(function rl(){rx+=(mx-rx)*.11;ry+=(my-ry)*.11;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(rl)})();
+function updateHoverListeners(){
+  document.querySelectorAll('a,button,.fc,.wc,.sw,#pbtn,.hcard,.pv-more-card,.flabel').forEach(el=>{
+    el.onmouseenter=()=>document.body.classList.add('hov');
+    el.onmouseleave=()=>document.body.classList.remove('hov');
+  });
+}
+updateHoverListeners();
+
+/* ── FEATURED ── */
 const fcards=Array.from(document.querySelectorAll('.fc'));
 const FEAT_LABELS=['See Reality','AR Work of Art','HaptiDraw'];
 let fi=0,autoT;
@@ -393,11 +501,10 @@ document.addEventListener('keydown',e=>{
   if(e.key==='ArrowLeft'){fi=(fi-1+fcards.length)%fcards.length;renderFeat();resetAuto();}
 });
 
-/* ── BUILD GRID ── */
+/* ── GRID ── */
 const grid=document.getElementById('wgrid');
 PROJECTS.forEach(p=>{
-  const d=document.createElement('div');
-  d.className='wc';d.dataset.id=p.id;
+  const d=document.createElement('div');d.className='wc';d.dataset.id=p.id;
   d.innerHTML=`<div class="wcin"><div class="wcbg" style="background:${p.bg}"></div><img class="wcimg" src="${p.cover}" alt="${p.name}" onload="this.classList.add('ok')" onerror="this.style.display='none'"><div class="wcico">${p.ico}</div><div class="wct">${p.name}</div></div>`;
   d.addEventListener('click',()=>openProject(p.id));
   grid.appendChild(d);
@@ -412,54 +519,42 @@ function openProject(id){
   const p=PMAP[id];if(!p)return;
   window.scrollTo(0,0);
   document.getElementById('home-view').style.display='none';
-  const pv=document.getElementById('project-view');
-  pv.style.display='block';
+  document.getElementById('project-view').style.display='block';
   document.getElementById('main-nav').style.display='none';
   document.getElementById('back-btn').style.display='flex';
   clearInterval(autoT);
 
-  // hero
   document.getElementById('pv-hero-bg').style.background=p.bg;
   document.getElementById('pv-cat').textContent=p.cat;
   document.getElementById('pv-title').textContent=p.name;
   document.getElementById('pv-tags').innerHTML=p.tags.map(t=>`<span class="pv-tag">${t}</span>`).join('');
+  document.getElementById('pv-caption').textContent=p.caption||'';
   document.getElementById('pv-desc').textContent=p.desc;
 
-  const img=document.getElementById('pv-hero-img');
-  const vid=document.getElementById('pv-hero-vid');
+  const img=document.getElementById('pv-hero-img'),vid=document.getElementById('pv-hero-vid');
   img.style.display='none';vid.style.display='none';vid.src='';
-  if(p.video){
-    vid.src=p.video;vid.style.display='block';
-  } else {
-    img.src=p.cover;
-  }
+  if(p.video){vid.src=p.video;vid.style.display='block';}
+  else{img.src=p.cover;}
 
-  // gallery — try loading 1.png through 10.png dynamically
-  const gal=document.getElementById('pv-gallery');
-  gal.innerHTML='';
-  const coverFile=p.cover.split('/').pop(); // e.g. '0.png' or '1.png'
+  // gallery
+  const gal=document.getElementById('pv-gallery');gal.innerHTML='';
   const folder=p.cover.substring(0,p.cover.lastIndexOf('/')+1);
-  const startNum=(id==='seereality')?1:2; // cover is 1.png, so extras start at 2 (seereality cover is 0.png, extras start at 1)
-  const tryLoad=(n)=>{
+  if(p.video){
+    const w=document.createElement('div');w.className='pv-gallery-item';
+    const v=document.createElement('video');v.src=p.video;v.controls=true;v.muted=true;v.style.cssText='width:100%;display:block;border-radius:14px;';
+    w.appendChild(v);gal.appendChild(w);
+  }
+  for(let n=p.extraStart;n<=12;n++){
     const src=folder+n+'.png';
     const w=document.createElement('div');w.className='pv-gallery-item';
-    const i=document.createElement('img');i.alt=p.name+' '+n;i.style.cssText='width:100%;display:block;border-radius:14px;';
-    i.onload=()=>{gal.appendChild(w);};
-    i.onerror=()=>{/* skip */};
+    const i=document.createElement('img');i.alt=p.name;i.style.cssText='width:100%;display:block;border-radius:14px;';
+    i.onload=()=>gal.appendChild(w);
+    i.onerror=()=>{};
     w.appendChild(i);i.src=src;
-  };
-  // also add video thumbnail if seereality has extra imgs
-  if(p.video){
-    // show the 0.png as first gallery image
-    const w=document.createElement('div');w.className='pv-gallery-item';
-    const vi=document.createElement('video');vi.src=p.video;vi.controls=true;vi.muted=true;vi.style.cssText='width:100%;display:block;border-radius:14px;';
-    w.appendChild(vi);gal.appendChild(w);
   }
-  for(let n=startNum;n<=12;n++) tryLoad(n);
 
-  // "More Projects" strip
-  const track=document.getElementById('pv-more-track');
-  track.innerHTML='';
+  // more strip
+  const track=document.getElementById('pv-more-track');track.innerHTML='';
   PROJECTS.filter(q=>q.id!==id).forEach(q=>{
     const mc=document.createElement('div');mc.className='pv-more-card';
     mc.innerHTML=`<div class="pv-more-card-bg" style="background:${q.bg}"></div><div class="pv-more-card-ico">${q.ico}</div><img class="pv-more-card-img" src="${q.cover}" alt="${q.name}" onload="this.classList.add('ok')" onerror="this.style.display='none'"><div class="pv-more-card-lbl">${q.name}</div>`;
@@ -473,22 +568,8 @@ function goHome(){
   document.getElementById('project-view').style.display='none';
   document.getElementById('main-nav').style.display='flex';
   document.getElementById('back-btn').style.display='none';
-  resetAuto();
-  window.scrollTo(0,0);
+  resetAuto();window.scrollTo(0,0);
 }
-
-/* ── CURSOR ── */
-const cur=document.getElementById('cur'),ring=document.getElementById('ring');
-let mx=0,my=0,rx=0,ry=0;
-document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px'});
-(function rl(){rx+=(mx-rx)*.11;ry+=(my-ry)*.11;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(rl)})();
-function updateHoverListeners(){
-  document.querySelectorAll('a,button,.fc,.wc,.sw,#pbtn,.hcard,.pv-more-card,.flabel').forEach(el=>{
-    el.onmouseenter=()=>document.body.classList.add('hov');
-    el.onmouseleave=()=>document.body.classList.remove('hov');
-  });
-}
-updateHoverListeners();
 
 /* ── PALETTE ── */
 function setTheme(t,el){document.body.dataset.theme=t;document.querySelectorAll('.sw').forEach(s=>s.classList.remove('on'));el.classList.add('on');document.getElementById('sw').classList.remove('open');}
