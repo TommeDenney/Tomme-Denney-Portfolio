@@ -11,110 +11,101 @@
 [data-theme=dark]{--bg:#0e0e0e;--text:#e8e4dc;--gr:#3a3a3a;--mt:#555;--cb:#1a1a1a;--b:rgba(255,255,255,.08)}
 [data-theme=sage]{--bg:#e8ede5;--text:#1a2a1a;--gr:#9ab29a;--mt:#6a836a;--cb:#dde6da;--b:rgba(26,40,26,.1)}
 [data-theme=night]{--bg:#07070e;--text:#c0bde0;--gr:#22223c;--mt:#44427a;--cb:#10101c;--b:rgba(130,125,220,.1)}
-
-*{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
+*{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--text);font-family:'Barlow','Helvetica Neue',Arial,sans-serif;cursor:none;overflow-x:hidden;transition:background .45s,color .45s;-webkit-font-smoothing:antialiased}
 
-/* ── CURSOR ── */
+/* CURSOR */
 #cur,#ring{position:fixed;pointer-events:none;z-index:9999;border-radius:50%;transform:translate(-50%,-50%)}
 #cur{width:8px;height:8px;background:var(--text);transition:width .15s,height .15s,background .35s}
 #ring{width:34px;height:34px;border:1.5px solid var(--text);opacity:.5;transition:width .3s,height .3s,border-color .35s}
 body.hov #cur{width:5px;height:5px}
 body.hov #ring{width:50px;height:50px;opacity:.22}
 
-/* ── NAV ── */
-nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content:space-between;align-items:center;padding:22px 44px}
-.logo{font-size:11.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--text);text-decoration:none;transition:opacity .2s}
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content:space-between;align-items:center;padding:22px 44px;transition:background .45s}
+.logo{font-size:11.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--text);text-decoration:none;cursor:pointer;transition:opacity .2s}
 .logo:hover{opacity:.4}
 .navr{display:flex;gap:26px;list-style:none}
-.navr a{font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--mt);text-decoration:none;transition:color .2s}
+.navr a{font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--mt);text-decoration:none;cursor:pointer;transition:color .2s}
 .navr a:hover,.navr a.on{color:var(--text)}
+.back-btn{display:none;align-items:center;gap:8px;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mt);cursor:pointer;transition:color .2s;background:none;border:none}
+.back-btn:hover{color:var(--text)}
+.back-btn svg{transition:transform .2s}
+.back-btn:hover svg{transform:translateX(-3px)}
 
-/* ── TICKER (above name) ── */
-.ticker{overflow:hidden;border-top:1px solid var(--b);border-bottom:1px solid var(--b);padding:11px 0;white-space:nowrap;background:var(--bg);transition:background .45s,border-color .45s}
+/* VIEWS */
+#home-view,#project-view{transition:opacity .4s,transform .4s}
+#project-view{display:none;min-height:100vh}
+
+/* TICKER */
+.ticker{overflow:hidden;border-top:1px solid var(--b);border-bottom:1px solid var(--b);padding:11px 0;white-space:nowrap;transition:background .45s,border-color .45s}
 .tickin{display:inline-flex;animation:tick 26s linear infinite}
-.tickin span{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--mt);padding:0 26px;transition:color .35s}
+.tickin span{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--mt);padding:0 24px;transition:color .35s}
 .tickin .dot{color:var(--text);padding:0 2px}
 @keyframes tick{to{transform:translateX(-50%)}}
 
-/* ── HERO ── */
-.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;padding-top:64px;position:relative;overflow:hidden}
+/* HERO */
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;padding-top:60px;position:relative;overflow:hidden}
 .hmeta{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--mt);text-align:center;line-height:2.1;margin-bottom:10px;position:relative;z-index:10;transition:opacity .3s}
-.hname{
-  font-family:'Barlow Condensed',Impact,'Arial Narrow',sans-serif;
-  font-weight:900;font-size:clamp(68px,15vw,220px);
-  letter-spacing:-.03em;text-transform:uppercase;text-align:center;
-  line-height:.88;color:var(--text);position:relative;z-index:10;
-  user-select:none;transition:color .35s,opacity .35s;
-  padding:0 32px;pointer-events:none;
-}
-/* cards layer — BELOW name */
-.clayer{position:relative;width:100%;height:320px;margin-top:36px;z-index:5;flex-shrink:0}
-.hcard{
-  position:absolute;width:160px;height:228px;border-radius:14px;overflow:hidden;
-  box-shadow:0 18px 48px rgba(0,0,0,.2),0 6px 14px rgba(0,0,0,.1);
-  will-change:transform;cursor:default;
-}
+.hname{font-family:'Barlow Condensed',Impact,'Arial Narrow',sans-serif;font-weight:900;font-size:clamp(68px,15vw,220px);letter-spacing:-.03em;text-transform:uppercase;text-align:center;line-height:.88;color:var(--text);position:relative;z-index:10;user-select:none;transition:color .35s,opacity .35s;padding:0 32px;pointer-events:none}
+.clayer{position:relative;width:100%;height:300px;margin-top:38px;z-index:5;flex-shrink:0}
+.hcard{position:absolute;width:158px;height:224px;border-radius:14px;overflow:hidden;box-shadow:0 18px 48px rgba(0,0,0,.2),0 6px 14px rgba(0,0,0,.1);will-change:transform;cursor:pointer}
+.hcard:hover .hclbl{opacity:1}
 .hcbg{position:absolute;inset:0}
-/* project image fills card */
-.hcimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:2;opacity:0;transition:opacity .4s}
-.hcimg.loaded{opacity:1}
-.hcico{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:48px;z-index:1}
-.hclbl{position:absolute;bottom:0;left:0;right:0;z-index:3;padding:9px 11px;font-size:9.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.92);text-shadow:0 1px 6px rgba(0,0,0,.5);background:linear-gradient(transparent,rgba(0,0,0,.38))}
+.hcimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:2;opacity:0;transition:opacity .5s}
+.hcimg.ok{opacity:1}
+.hcico{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:46px;z-index:1}
+.hclbl{position:absolute;bottom:0;left:0;right:0;z-index:3;padding:9px 11px;font-size:9.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.94);text-shadow:0 1px 6px rgba(0,0,0,.5);background:linear-gradient(transparent,rgba(0,0,0,.42));opacity:.85;transition:opacity .2s}
 
-/* ── ROLE ── */
+/* ROLE */
 .role{padding:72px 44px 64px}
 .rword{display:block;font-family:'Barlow Condensed',Impact,'Arial Narrow',sans-serif;font-weight:900;font-size:clamp(52px,10.5vw,148px);letter-spacing:-.02em;text-transform:uppercase;color:var(--gr);line-height:.9;transition:color .35s}
-.clients{margin-top:58px;text-align:center}
+.clients{margin-top:56px;text-align:center}
 .cl{font-size:10px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--text);margin-bottom:10px}
 .cv{font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--mt)}
 
-/* ── FEATURED ── */
+/* FEATURED */
 .featured{padding:80px 0 68px;text-align:center}
 .sh{font-family:'Barlow Condensed',Impact,'Arial Narrow',sans-serif;font-weight:900;font-size:clamp(40px,7vw,90px);letter-spacing:-.015em;text-transform:uppercase;margin-bottom:8px}
 .ss{font-size:13px;color:var(--mt);margin-bottom:44px;letter-spacing:.02em}
-.fcar{position:relative;height:460px;overflow:hidden}
-.fc{
-  position:absolute;left:50%;top:50%;border-radius:16px;overflow:hidden;
-  box-shadow:0 24px 60px rgba(0,0,0,.15);cursor:pointer;
-  transition:transform .62s cubic-bezier(.23,.92,.58,1),opacity .55s,width .55s,height .55s;
-}
-.fc.center{width:300px;height:424px;transform:translate(-50%,-50%);z-index:5;opacity:1}
-.fc.right{width:214px;height:308px;transform:translate(calc(-50% + 320px),-50%);z-index:3;opacity:.68}
-.fc.left{width:214px;height:308px;transform:translate(calc(-50% - 320px),-50%);z-index:3;opacity:.68}
-.fc.out-r{transform:translate(calc(-50% + 680px),-50%);opacity:0;z-index:0;pointer-events:none}
-.fc.out-l{transform:translate(calc(-50% - 680px),-50%);opacity:0;z-index:0;pointer-events:none}
+.fcar{position:relative;height:450px;overflow:hidden}
+.fc{position:absolute;left:50%;top:50%;border-radius:16px;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.15);cursor:pointer;transition:transform .62s cubic-bezier(.23,.92,.58,1),opacity .55s,width .55s,height .55s}
+.fc.center{width:290px;height:412px;transform:translate(-50%,-50%);z-index:5;opacity:1}
+.fc.right{width:208px;height:298px;transform:translate(calc(-50% + 308px),-50%);z-index:3;opacity:.65}
+.fc.left{width:208px;height:298px;transform:translate(calc(-50% - 308px),-50%);z-index:3;opacity:.65}
+.fc.out-r{transform:translate(calc(-50% + 660px),-50%);opacity:0;z-index:0;pointer-events:none}
+.fc.out-l{transform:translate(calc(-50% - 660px),-50%);opacity:0;z-index:0;pointer-events:none}
 .fcbg{position:absolute;inset:0}
-.fcimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:2;opacity:0;transition:opacity .4s}
-.fcimg.loaded{opacity:1}
-.fcico{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:56px;z-index:1}
-.flabel{display:inline-flex;margin-top:20px;padding:9px 24px;border-radius:100px;background:var(--cb);font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;transition:background .35s,opacity .25s}
+.fcimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:2;opacity:0;transition:opacity .5s}
+.fcimg.ok{opacity:1}
+.fcico{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:54px;z-index:1}
+.flabel{display:inline-flex;margin-top:18px;padding:9px 24px;border-radius:100px;background:var(--cb);font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;transition:background .35s;cursor:pointer}
+.flabel:hover{opacity:.7}
 
-/* ── MORE WORK ── */
+/* MORE WORK */
 .more{padding:80px 44px 72px;text-align:center}
 .wgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:44px;max-width:940px;margin-left:auto;margin-right:auto}
 .wc{aspect-ratio:1;border-radius:16px;overflow:hidden;cursor:pointer;transform:scale(.84) translateY(22px);opacity:0;transition:transform .72s cubic-bezier(.25,.46,.45,.94),opacity .72s,box-shadow .3s}
 .wc.in{transform:scale(1);opacity:1}
 .wc.in:hover{transform:scale(1.04)!important;box-shadow:0 20px 50px rgba(0,0,0,.14)}
-.wcin{width:100%;height:100%;position:relative;display:flex;align-items:center;justify-content:center;font-size:42px}
+.wcin{width:100%;height:100%;position:relative;display:flex;align-items:center;justify-content:center}
 .wcbg{position:absolute;inset:0}
-.wcimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:2;opacity:0;transition:opacity .4s}
-.wcimg.loaded{opacity:1}
-.wcico{position:relative;z-index:1;font-size:42px}
-.wct{position:absolute;bottom:0;left:0;right:0;z-index:3;padding:11px 13px;background:linear-gradient(transparent,rgba(0,0,0,.5));font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#fff;text-align:left}
+.wcimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:2;opacity:0;transition:opacity .5s}
+.wcimg.ok{opacity:1}
+.wcico{position:relative;z-index:1;font-size:40px}
+.wct{position:absolute;bottom:0;left:0;right:0;z-index:3;padding:11px 13px;background:linear-gradient(transparent,rgba(0,0,0,.52));font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#fff;text-align:left}
 
-/* ── CONTACT ── */
-.contact{background:#161411;padding:90px 44px 52px;text-align:center;overflow:hidden;transition:background .45s}
-.cword{font-family:'Barlow Condensed',Impact,'Arial Narrow',sans-serif;font-weight:900;font-size:min(21vw,300px);letter-spacing:-.04em;text-transform:uppercase;color:rgba(255,255,255,.15);line-height:.82;margin-bottom:64px;user-select:none}
-.ceml{display:block;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.65);text-decoration:none;margin-bottom:18px;transition:opacity .2s}
-.ceml:hover{opacity:.4}
+/* CONTACT */
+.contact{background:#161411;padding:88px 44px 52px;text-align:center;overflow:hidden}
+.cword{font-family:'Barlow Condensed',Impact,'Arial Narrow',sans-serif;font-weight:900;font-size:min(21vw,300px);letter-spacing:-.04em;text-transform:uppercase;color:rgba(255,255,255,.11);line-height:.82;margin-bottom:62px;user-select:none}
+.ceml{display:block;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.62);text-decoration:none;margin-bottom:18px;transition:opacity .2s}
+.ceml:hover{opacity:.38}
 .csoc{display:flex;gap:24px;justify-content:center;list-style:none;margin-bottom:44px}
-.csoc a{font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:rgba(255,255,255,.42);text-decoration:none;transition:color .2s}
+.csoc a{font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:rgba(255,255,255,.4);text-decoration:none;transition:color .2s}
 .csoc a:hover{color:rgba(255,255,255,.9)}
-.ccp{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.22)}
+.ccp{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.2)}
 
-/* ── PALETTE ── */
+/* PALETTE */
 #pal{position:fixed;bottom:28px;right:28px;z-index:400;display:flex;flex-direction:column;align-items:flex-end;gap:9px}
 #pbtn{width:44px;height:44px;border-radius:50%;background:var(--cb);border:1.5px solid var(--b);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 2px 20px rgba(0,0,0,.12);transition:transform .28s,background .35s}
 #pbtn:hover{transform:rotate(32deg) scale(1.07)}
@@ -125,136 +116,182 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content
 .sdot{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--b);transition:transform .18s}
 .sw:hover .sdot{transform:scale(1.22)}
 .sw.on .sdot{outline:2.5px solid var(--text);outline-offset:2px}
+
+/* ── PROJECT DETAIL VIEW ── */
+.pv-hero{width:100%;height:100vh;position:relative;overflow:hidden;display:flex;align-items:flex-end}
+.pv-hero-media{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.pv-hero-bg{position:absolute;inset:0}
+.pv-hero-grad{position:absolute;inset:0;background:linear-gradient(to top, rgba(0,0,0,.72) 0%, rgba(0,0,0,.1) 60%, transparent 100%);z-index:2}
+.pv-hero-info{position:relative;z-index:3;padding:0 52px 52px;width:100%}
+.pv-cat{font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:10px}
+.pv-title{font-family:'Barlow Condensed',Impact,'Arial Narrow',sans-serif;font-weight:900;font-size:clamp(56px,10vw,130px);letter-spacing:-.03em;text-transform:uppercase;color:#fff;line-height:.88;margin-bottom:18px}
+.pv-tags{display:flex;flex-wrap:wrap;gap:7px}
+.pv-tag{font-size:9.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:5px 12px;border-radius:100px;border:1.2px solid rgba(255,255,255,.3);color:rgba(255,255,255,.7)}
+
+.pv-body{max-width:1100px;margin:0 auto;padding:64px 52px}
+.pv-desc{font-size:16px;line-height:1.82;color:var(--text);max-width:640px;margin-bottom:56px;transition:color .35s}
+.pv-gallery{columns:2;gap:16px;margin-bottom:72px}
+.pv-gallery-item{break-inside:avoid;margin-bottom:16px;border-radius:14px;overflow:hidden;background:var(--cb)}
+.pv-gallery-item img,.pv-gallery-item video{width:100%;display:block;border-radius:14px;transition:transform .55s cubic-bezier(.25,.46,.45,.94)}
+.pv-gallery-item:hover img,.pv-gallery-item:hover video{transform:scale(1.025)}
+.pv-gallery-placeholder{aspect-ratio:4/3;background:var(--cb);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:42px;opacity:.4;margin-bottom:16px}
+
+/* More at bottom of project page */
+.pv-more{padding:0 0 80px}
+.pv-more-title{font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--mt);margin-bottom:24px;padding:0 52px}
+.pv-more-track{display:flex;gap:16px;padding:0 52px 16px;overflow-x:auto;scrollbar-width:none}
+.pv-more-track::-webkit-scrollbar{display:none}
+.pv-more-card{flex-shrink:0;width:240px;height:180px;border-radius:14px;overflow:hidden;cursor:pointer;position:relative;transition:transform .4s,box-shadow .4s}
+.pv-more-card:hover{transform:translateY(-6px) scale(1.02);box-shadow:0 18px 44px rgba(0,0,0,.14)}
+.pv-more-card-bg{position:absolute;inset:0}
+.pv-more-card-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:2;opacity:0;transition:opacity .5s}
+.pv-more-card-img.ok{opacity:1}
+.pv-more-card-ico{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:36px;z-index:1}
+.pv-more-card-lbl{position:absolute;bottom:0;left:0;right:0;z-index:3;padding:8px 12px;background:linear-gradient(transparent,rgba(0,0,0,.5));font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#fff}
+
 ::-webkit-scrollbar{width:3px}
-::-webkit-scrollbar-thumb{background:var(--b)}
+::-webkit-scrollbar-thumb{background:var(--b);border-radius:2px}
 </style>
 </head>
 <body>
 <div id="cur"></div>
 <div id="ring"></div>
 
-<nav>
-  <a class="logo" href="#">Tomme Denney</a>
-  <ul class="navr">
+<nav id="nav">
+  <span class="logo" onclick="goHome()">Tomme Denney</span>
+  <button class="back-btn" id="back-btn" onclick="goHome()">
+    <svg width="14" height="10" viewBox="0 0 14 10" fill="none"><path d="M13 5H1M1 5L5 1M1 5L5 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Back
+  </button>
+  <ul class="navr" id="main-nav">
     <li><a href="#hero" class="on" id="nw">Work</a></li>
     <li><a href="#info" id="ni">Info</a></li>
   </ul>
 </nav>
 
-<!-- ── TICKER above name ── -->
-<div style="padding-top:68px">
-  <div class="ticker">
-    <div class="tickin">
-      <span>XR Development</span><span class="dot">·</span><span>Gaussian Splatting</span><span class="dot">·</span><span>Meta Quest 3</span><span class="dot">·</span><span>Unity C#</span><span class="dot">·</span><span>Hand Tracking</span><span class="dot">·</span><span>Spatial Design</span><span class="dot">·</span><span>iOS Swift</span><span class="dot">·</span><span>HCI Research</span><span class="dot">·</span><span>See Reality</span><span class="dot">·</span><span>Northeastern University MS '26</span><span class="dot">·</span><span>Usurper Interactive</span><span class="dot">·</span>
-      <span>XR Development</span><span class="dot">·</span><span>Gaussian Splatting</span><span class="dot">·</span><span>Meta Quest 3</span><span class="dot">·</span><span>Unity C#</span><span class="dot">·</span><span>Hand Tracking</span><span class="dot">·</span><span>Spatial Design</span><span class="dot">·</span><span>iOS Swift</span><span class="dot">·</span><span>HCI Research</span><span class="dot">·</span><span>See Reality</span><span class="dot">·</span><span>Northeastern University MS '26</span><span class="dot">·</span><span>Usurper Interactive</span><span class="dot">·</span>
+<!-- ══ HOME VIEW ══ -->
+<div id="home-view">
+  <!-- TICKER -->
+  <div style="padding-top:68px">
+    <div class="ticker">
+      <div class="tickin">
+        <span>XR Development</span><span class="dot">·</span><span>Gaussian Splatting</span><span class="dot">·</span><span>Meta Quest 3</span><span class="dot">·</span><span>Unity C#</span><span class="dot">·</span><span>Hand Tracking</span><span class="dot">·</span><span>Spatial Design</span><span class="dot">·</span><span>iOS Swift</span><span class="dot">·</span><span>HCI Research</span><span class="dot">·</span><span>See Reality</span><span class="dot">·</span><span>Northeastern MS '26</span><span class="dot">·</span><span>Usurper Interactive</span><span class="dot">·</span><span>Game Design</span><span class="dot">·</span><span>Narrative XR</span><span class="dot">·</span>
+        <span>XR Development</span><span class="dot">·</span><span>Gaussian Splatting</span><span class="dot">·</span><span>Meta Quest 3</span><span class="dot">·</span><span>Unity C#</span><span class="dot">·</span><span>Hand Tracking</span><span class="dot">·</span><span>Spatial Design</span><span class="dot">·</span><span>iOS Swift</span><span class="dot">·</span><span>HCI Research</span><span class="dot">·</span><span>See Reality</span><span class="dot">·</span><span>Northeastern MS '26</span><span class="dot">·</span><span>Usurper Interactive</span><span class="dot">·</span><span>Game Design</span><span class="dot">·</span><span>Narrative XR</span><span class="dot">·</span>
+      </div>
     </div>
+  </div>
+
+  <section class="hero" id="hero">
+    <p class="hmeta" id="hmeta">Boston, Massachusetts<br><span style="opacity:.6">tomme@usurperinteractive.com</span></p>
+    <h1 class="hname" id="hname">TOMME DENNEY</h1>
+    <div class="clayer" id="clayer">
+      <!-- 4 hero cards: seereality, arworkofart, haptidraw, otherrealm -->
+      <div class="hcard" id="hc0" onclick="openProject('seereality')">
+        <div class="hcbg" style="background:linear-gradient(145deg,#050e1a,#0e2860,#1a449a)"></div>
+        <div class="hcico">🌐</div>
+        <img class="hcimg" src="projects/seereality/0.png" alt="See Reality" onload="this.classList.add('ok')" onerror="this.style.display='none'">
+        <div class="hclbl">See Reality</div>
+      </div>
+      <div class="hcard" id="hc1" onclick="openProject('arworkofart')">
+        <div class="hcbg" style="background:linear-gradient(145deg,#1a0a2e,#4a1888,#7040b5)"></div>
+        <div class="hcico">🎨</div>
+        <img class="hcimg" src="projects/arworkofart/1.png" alt="AR Work of Art" onload="this.classList.add('ok')" onerror="this.style.display='none'">
+        <div class="hclbl">AR Work of Art</div>
+      </div>
+      <div class="hcard" id="hc2" onclick="openProject('haptidraw')">
+        <div class="hcbg" style="background:linear-gradient(145deg,#1a1a05,#484810,#7a7a1a)"></div>
+        <div class="hcico">✏️</div>
+        <img class="hcimg" src="projects/haptidraw/1.png" alt="HaptiDraw" onload="this.classList.add('ok')" onerror="this.style.display='none'">
+        <div class="hclbl">HaptiDraw</div>
+      </div>
+      <div class="hcard" id="hc3" onclick="openProject('otherrealm')">
+        <div class="hcbg" style="background:linear-gradient(145deg,#0a1a0a,#1a4a1a,#2a7a2a)"></div>
+        <div class="hcico">🌿</div>
+        <img class="hcimg" src="projects/otherrealm/1.png" alt="Other Realm" onload="this.classList.add('ok')" onerror="this.style.display='none'">
+        <div class="hclbl">Other Realm</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="role" id="info">
+    <span class="rword">XR Developer,</span>
+    <span class="rword">Designer &amp;</span>
+    <span class="rword">Builder</span>
+    <div class="clients">
+      <p class="cl">Clients &amp; Collaborators</p>
+      <p class="cv">See Reality &nbsp;·&nbsp; Nashville Adventures &nbsp;·&nbsp; Town of Lexington, MA &nbsp;·&nbsp; Liverpool FC &nbsp;·&nbsp; Venice City Tours &nbsp;·&nbsp; Faneuil Hall</p>
+    </div>
+  </section>
+
+  <!-- FEATURED (3) -->
+  <section class="featured">
+    <h2 class="sh">Featured Work</h2>
+    <p class="ss">Select recent and notable projects</p>
+    <div class="fcar" id="fcar">
+      <div class="fc" data-id="seereality">
+        <div class="fcbg" style="background:linear-gradient(145deg,#050e1a,#0e2860,#1a449a)"></div>
+        <div class="fcico">🌐</div>
+        <img class="fcimg" src="projects/seereality/0.png" alt="See Reality" onload="this.classList.add('ok')" onerror="this.style.display='none'">
+      </div>
+      <div class="fc" data-id="arworkofart">
+        <div class="fcbg" style="background:linear-gradient(145deg,#1a0a2e,#4a1888,#7040b5)"></div>
+        <div class="fcico">🎨</div>
+        <img class="fcimg" src="projects/arworkofart/1.png" alt="AR Work of Art" onload="this.classList.add('ok')" onerror="this.style.display='none'">
+      </div>
+      <div class="fc" data-id="haptidraw">
+        <div class="fcbg" style="background:linear-gradient(145deg,#1a1a05,#484810,#7a7a1a)"></div>
+        <div class="fcico">✏️</div>
+        <img class="fcimg" src="projects/haptidraw/1.png" alt="HaptiDraw" onload="this.classList.add('ok')" onerror="this.style.display='none'">
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:18px">
+      <span class="flabel" id="flbl" onclick="openProjectFromFeat()">See Reality</span>
+    </div>
+  </section>
+
+  <!-- MORE WORK (all 15) -->
+  <section class="more">
+    <h2 class="sh">More Work</h2>
+    <p class="ss">Take a scroll, stay a while</p>
+    <div class="wgrid" id="wgrid"></div>
+  </section>
+
+  <section class="contact">
+    <div class="cword">Contact</div>
+    <a class="ceml" href="mailto:tomme@usurperinteractive.com">tomme@usurperinteractive.com</a>
+    <ul class="csoc">
+      <li><a href="https://github.com/TommeDenney" target="_blank">GitHub</a></li>
+      <li><a href="#" target="_blank">LinkedIn</a></li>
+      <li><a href="#" target="_blank">Instagram</a></li>
+    </ul>
+    <p class="ccp">All Rights Reserved 2026 Tomme Denney</p>
+  </section>
+</div>
+
+<!-- ══ PROJECT VIEW ══ -->
+<div id="project-view">
+  <div class="pv-hero" id="pv-hero">
+    <div class="pv-hero-bg" id="pv-hero-bg"></div>
+    <img class="pv-hero-media" id="pv-hero-img" alt="" style="display:none" onload="this.style.display='block'" onerror="this.style.display='none'">
+    <video class="pv-hero-media" id="pv-hero-vid" autoplay muted loop playsinline style="display:none"></video>
+    <div class="pv-hero-grad"></div>
+    <div class="pv-hero-info">
+      <p class="pv-cat" id="pv-cat"></p>
+      <h1 class="pv-title" id="pv-title"></h1>
+      <div class="pv-tags" id="pv-tags"></div>
+    </div>
+  </div>
+  <div class="pv-body">
+    <p class="pv-desc" id="pv-desc"></p>
+    <div class="pv-gallery" id="pv-gallery"></div>
+  </div>
+  <div class="pv-more">
+    <p class="pv-more-title">More Projects</p>
+    <div class="pv-more-track" id="pv-more-track"></div>
   </div>
 </div>
 
-<!-- ── HERO ── -->
-<section class="hero" id="hero">
-  <p class="hmeta" id="hmeta">Boston, Massachusetts<br><span style="opacity:.6">tomme@usurperinteractive.com</span></p>
-  <h1 class="hname" id="hname">TOMME DENNEY</h1>
-
-  <!-- 4 most recent: Gene XR, Boffum, FortNash, Lexington -->
-  <!-- UPDATE image src paths to match your /projects/ folder structure -->
-  <div class="clayer" id="clayer">
-    <div class="hcard" id="hc0">
-      <div class="hcbg" style="background:linear-gradient(145deg,#190c2c,#481888,#7040b5)"></div>
-      <div class="hcico" id="hico0">🧬</div>
-      <img class="hcimg" data-src="projects/gene-xr/01.jpg" alt="Gene XR">
-      <div class="hclbl">Gene XR</div>
-    </div>
-    <div class="hcard" id="hc1">
-      <div class="hcbg" style="background:linear-gradient(145deg,#050e05,#112211,#1e4820)"></div>
-      <div class="hcico" id="hico1">🎮</div>
-      <img class="hcimg" data-src="projects/boffum/01.jpg" alt="Boffum">
-      <div class="hclbl">Boffum</div>
-    </div>
-    <div class="hcard" id="hc2">
-      <div class="hcbg" style="background:linear-gradient(145deg,#2c1405,#884010,#c86820)"></div>
-      <div class="hcico" id="hico2">🏛️</div>
-      <img class="hcimg" data-src="projects/fort-nash/01.jpg" alt="FortNash XR">
-      <div class="hclbl">FortNash XR</div>
-    </div>
-    <div class="hcard" id="hc3">
-      <div class="hcbg" style="background:linear-gradient(145deg,#090f09,#182818,#255522)"></div>
-      <div class="hcico" id="hico3">🏘️</div>
-      <img class="hcimg" data-src="projects/lexington/01.jpg" alt="Lexington XR">
-      <div class="hclbl">Lexington XR</div>
-    </div>
-  </div>
-</section>
-
-<!-- ── ROLE ── -->
-<section class="role" id="info">
-  <span class="rword">XR Developer,</span>
-  <span class="rword">Designer &amp;</span>
-  <span class="rword">Builder</span>
-  <div class="clients">
-    <p class="cl">Clients Include</p>
-    <p class="cv">See Reality &nbsp;·&nbsp; Nashville Adventures &nbsp;·&nbsp; Town of Lexington &nbsp;·&nbsp; Liverpool FC &nbsp;·&nbsp; Venice City Tours &nbsp;·&nbsp; Faneuil Hall</p>
-  </div>
-</section>
-
-<!-- ── FEATURED (3 projects) ── -->
-<section class="featured">
-  <h2 class="sh">Featured Work</h2>
-  <p class="ss">Select recent and notable projects</p>
-  <div class="fcar" id="fcar">
-    <!-- UPDATE data-img paths to match your /projects/ folder -->
-    <div class="fc" data-fi="0" data-img="projects/gene-xr/01.jpg">
-      <div class="fcbg" style="background:linear-gradient(145deg,#190c2c,#481888,#7040b5)"></div>
-      <div class="fcico">🧬</div>
-      <img class="fcimg" alt="Gene XR">
-    </div>
-    <div class="fc" data-fi="1" data-img="projects/fort-nash/01.jpg">
-      <div class="fcbg" style="background:linear-gradient(145deg,#2c1405,#884010,#c86820)"></div>
-      <div class="fcico">🏛️</div>
-      <img class="fcimg" alt="FortNash XR">
-    </div>
-    <div class="fc" data-fi="2" data-img="projects/usurper/01.jpg">
-      <div class="fcbg" style="background:linear-gradient(145deg,#080818,#121238,#1c1c58)"></div>
-      <div class="fcico">✦</div>
-      <img class="fcimg" alt="Usurper Interactive">
-    </div>
-  </div>
-  <div style="text-align:center;margin-top:18px">
-    <span class="flabel" id="flbl">Gene XR</span>
-  </div>
-</section>
-
-<!-- ── MORE WORK ── -->
-<section class="more">
-  <h2 class="sh">More Work</h2>
-  <p class="ss">Take a scroll, stay a while</p>
-  <!-- UPDATE data-img paths -->
-  <div class="wgrid" id="wgrid">
-    <div class="wc" data-img="projects/gene-xr/01.jpg"><div class="wcin"><div class="wcbg" style="background:linear-gradient(145deg,#190c2c,#481888)"></div><img class="wcimg" alt="Gene XR"><div class="wcico">🧬</div><div class="wct">Gene XR — Capstone '26</div></div></div>
-    <div class="wc" data-img="projects/fort-nash/01.jpg"><div class="wcin"><div class="wcbg" style="background:linear-gradient(145deg,#2c1405,#884010)"></div><img class="wcimg" alt="FortNash XR"><div class="wcico">🏛️</div><div class="wct">FortNashBoroughXR</div></div></div>
-    <div class="wc" data-img="projects/usurper/01.jpg"><div class="wcin"><div class="wcbg" style="background:linear-gradient(145deg,#080818,#121238)"></div><img class="wcimg" alt="Usurper"><div class="wcico">✦</div><div class="wct">Usurper Interactive</div></div></div>
-    <div class="wc" data-img="projects/buddy-run/01.jpg"><div class="wcin"><div class="wcbg" style="background:linear-gradient(145deg,#050e1a,#0e2860)"></div><img class="wcimg" alt="Buddy Run"><div class="wcico">🏃</div><div class="wct">Buddy Run — iOS</div></div></div>
-    <div class="wc" data-img="projects/lexington/01.jpg"><div class="wcin"><div class="wcbg" style="background:linear-gradient(145deg,#090f09,#182818)"></div><img class="wcimg" alt="Lexington XR"><div class="wcico">🏘️</div><div class="wct">Lexington XR Tours</div></div></div>
-    <div class="wc" data-img="projects/dignity/01.jpg"><div class="wcin"><div class="wcbg" style="background:linear-gradient(145deg,#180505,#580f0f)"></div><img class="wcimg" alt="Design for Dignity"><div class="wcico">⚖️</div><div class="wct">Design for Dignity</div></div></div>
-    <div class="wc" data-img="projects/boffum/01.jpg"><div class="wcin"><div class="wcbg" style="background:linear-gradient(145deg,#050e05,#112211)"></div><img class="wcimg" alt="Boffum"><div class="wcico">🎮</div><div class="wct">Boffum — MIT Reality Hack</div></div></div>
-    <div class="wc" data-img="projects/360-video/01.jpg"><div class="wcin"><div class="wcbg" style="background:linear-gradient(145deg,#0e0e0e,#282828)"></div><img class="wcimg" alt="360 Video"><div class="wcico">🌐</div><div class="wct">360° Video XR</div></div></div>
-    <div class="wc" data-img="projects/design-research/01.jpg"><div class="wcin"><div class="wcbg" style="background:linear-gradient(145deg,#180f04,#3a2510)"></div><img class="wcimg" alt="Research"><div class="wcico">📐</div><div class="wct">XR Design Research</div></div></div>
-  </div>
-</section>
-
-<!-- ── CONTACT ── -->
-<section class="contact">
-  <div class="cword">Contact</div>
-  <a class="ceml" href="mailto:tomme@usurperinteractive.com">tomme@usurperinteractive.com</a>
-  <ul class="csoc">
-    <li><a href="https://github.com/TommeDenney" target="_blank">GitHub</a></li>
-    <li><a href="#" target="_blank">LinkedIn</a></li>
-    <li><a href="#" target="_blank">Instagram</a></li>
-  </ul>
-  <p class="ccp">All Rights Reserved 2026 Tomme Denney</p>
-</section>
-
-<!-- ── PALETTE ── -->
+<!-- PALETTE -->
 <div id="pal">
   <div class="swatches" id="sw">
     <div class="sw on" onclick="setTheme('',this)"><span>Warm</span><div class="sdot" style="background:#f2ede3"></div></div>
@@ -267,175 +304,196 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content
 </div>
 
 <script>
-/* ── LAZY LOAD IMAGES with onerror fallback ── */
-function loadImg(img, src) {
-  if (!src) return;
-  const tmp = new Image();
-  tmp.onload = () => { img.src = src; img.classList.add('loaded'); };
-  tmp.onerror = () => { /* gradient + emoji fallback stays visible */ };
-  tmp.src = src;
+/* ══ PROJECT DATA ══ */
+const PROJECTS = [
+  {id:'seereality',      name:'See Reality',                 cat:'XR Studio · Client Work',        cover:'projects/seereality/0.png',       video:'projects/seereality/0.mp4',    imgs:[], bg:'linear-gradient(145deg,#050e1a,#0e2860,#1a449a)', ico:'🌐', tags:['Unity C#','Meta Quest','URP','XR Experience','Client Work'], desc:'Immersive XR experiences built for world-class clients. Projects spanning heritage, sports, and entertainment — from Fort Nashborough colonial installations to Liverpool FC fan experiences. Built with Unity C#, Meta Quest hardware, and custom URP shader pipelines optimized for standalone passthrough.'},
+  {id:'arworkofart',     name:'AR Work of Art',              cat:'Augmented Reality · Art',         cover:'projects/arworkofart/1.png',      imgs:['2','3','4'],                   bg:'linear-gradient(145deg,#1a0a2e,#4a1888,#7040b5)', ico:'🎨', tags:['AR','Unity','Art Direction','Spatial'], desc:'An augmented reality art experience merging physical and digital mediums. Users interact with artworks that come alive through their device — blending the gallery wall with animated 3D layers, responsive to viewer position and gesture.'},
+  {id:'haptidraw',       name:'HaptiDraw',                   cat:'Haptic Interaction · HCI',        cover:'projects/haptidraw/1.png',        imgs:[],                              bg:'linear-gradient(145deg,#1a1a05,#484810,#7a7a1a)',   ico:'✏️', tags:['Haptics','HCI','Interaction Design','Prototype'], desc:'A haptic drawing experience exploring touch as a medium for digital creation. HaptiDraw investigates how force-feedback and tactile response can deepen the act of mark-making in virtual environments — giving users the feeling of texture, resistance, and weight in a digital canvas.'},
+  {id:'otherrealm',      name:'Other Realm',                 cat:'XR Experience',                   cover:'projects/otherrealm/1.png',       imgs:[],                              bg:'linear-gradient(145deg,#0a1a0a,#1a4a1a,#2a7a2a)',   ico:'🌿', tags:['XR','Immersive Environment','Spatial Audio','Unity'], desc:'A fully immersive journey into an otherworldly environment. Other Realm builds a sense of presence through layered spatial audio, hand-tracked interaction, and procedurally generated biomes that respond to the viewer\'s movement and attention.'},
+  {id:'unforgottenstories',name:'Unforgotten Stories',       cat:'Narrative XR · Memory',           cover:'projects/unforgottenstories/1.png',imgs:[],                             bg:'linear-gradient(145deg,#1a0a0a,#4a1a1a,#8a2a2a)',   ico:'📖', tags:['Narrative','XR','Spatial Memory','Heritage'], desc:'Preserving and sharing stories that history risks losing. Unforgotten Stories uses Gaussian splatting and spatial audio to reconstruct lived moments — placing viewers inside memories and letting them walk through time.'},
+  {id:'soulsolace',      name:'Soul Solace',                 cat:'Wellness XR',                     cover:'projects/soulsolace/1.png',       imgs:[],                              bg:'linear-gradient(145deg,#0a0a1a,#1a1a4a,#2a2a8a)',   ico:'🌊', tags:['Wellness','Meditative XR','Spatial Design','Unity'], desc:'A meditative XR space designed for emotional reset and inner stillness. Soul Solace uses generative soundscapes, particle environments, and breath-responsive interaction to create a sanctuary that responds to the user\'s presence and pace.'},
+  {id:'iamyou',          name:'I Am You',                    cat:'Interactive Experience',           cover:'projects/iamyou/1.png',           imgs:[],                              bg:'linear-gradient(145deg,#0a1a1a,#1a4a4a,#2a7a7a)',   ico:'👤', tags:['Identity','Empathy','Interactive','Perspective'], desc:'An intimate encounter with perspective and identity. I Am You places viewers inside another person\'s point of view through spatial audio, embodied motion capture, and first-person XR — challenging assumptions about self and other.'},
+  {id:'curse',           name:'Curse',                       cat:'Game Design · Atmosphere',        cover:'projects/curse/1.png',            imgs:[],                              bg:'linear-gradient(145deg,#0e0808,#201010,#341818)',    ico:'🌑', tags:['Game Design','Dark Atmosphere','Horror','Unity'], desc:'A dark, atmospheric game rooted in dread and discovery. Curse uses environmental storytelling, reactive lighting, and spatial sound design to craft an experience where the environment itself feels alive — and hostile.'},
+  {id:'flora',           name:'Flora',                       cat:'Environmental XR',                cover:'projects/flora/1.png',            imgs:[],                              bg:'linear-gradient(145deg,#0a1a0a,#1a3a1a,#2a5a2a)',   ico:'🌺', tags:['Nature','XR','Procedural','Environmental Design'], desc:'An XR exploration of natural systems and organic growth. Flora generates living, breathing environments in real-time — responding to the viewer\'s gaze and movement to produce ecosystems that feel discovered, not designed.'},
+  {id:'godsdrunkestdriver',name:"God's Drunkest Driver",     cat:'Game Design · Comedy',            cover:'projects/godsdrunkestdriver/1.png',imgs:['2'],                          bg:'linear-gradient(145deg,#1a0a05,#4a2010,#8a4020)',   ico:'🚗', tags:['Game Design','Comedy','Physics','Chaos'], desc:'A chaotic physics-based driving game channeling pure comedic mayhem. God\'s Drunkest Driver leans into ragdoll physics, unpredictable terrain, and escalating absurdity — because sometimes the point is just to crash beautifully.'},
+  {id:'greatvendingmachine',name:'Great Vending Machine',   cat:'Interactive Installation',        cover:'projects/greatvendingmachine/1.png',imgs:[],                             bg:'linear-gradient(145deg,#0a0a1a,#20201a,#403a10)',   ico:'🎰', tags:['Installation','Interactive','Art','Unexpected'], desc:'An interactive installation that reimagines the vending machine as a portal to unexpected experiences. Insert your selection — receive something you never anticipated. Great Vending Machine interrogates automation, desire, and surprise.'},
+  {id:'internshipintheafterlife',name:'Internship in the Afterlife',cat:'Narrative Game · Comedy', cover:'projects/internshipintheafterlife/1.png',imgs:[],                        bg:'linear-gradient(145deg,#10080a,#301818,#502828)',    ico:'👻', tags:['Narrative','Comedy','Game Design','Afterlife'], desc:'What happens when your internship is in the afterlife? Navigate a bureaucratic underworld, complete absurd tasks for your spectral supervisors, and try to survive your first performance review — from beyond the grave.'},
+  {id:'returnofthechickens',name:'Return of the Chickens',  cat:'Game Design',                     cover:'projects/returnofthechickens/1.png',imgs:[],                             bg:'linear-gradient(145deg,#1a1505,#4a3a10,#7a6020)',   ico:'🐔', tags:['Game Design','Comedy','Action','Physics'], desc:'They left. Now they\'re back. Return of the Chickens is a chaotic action game built on the premise that poultry has had enough — delivering feathered mayhem with tight controls, escalating challenge, and unreasonable satisfaction.'},
+  {id:'toweroffrankenfrog', name:'Tower of Frankenfrog',    cat:'Tower Defense · Strategy',        cover:'projects/toweroffrankenfrog/1.png',imgs:[],                              bg:'linear-gradient(145deg,#0a1a08,#1a3a12,#2a5a1a)',   ico:'🐸', tags:['Tower Defense','Strategy','Game Design','Monsters'], desc:'A tower defense game where Frankenfrog and his amphibian army hold the line against an increasingly unhinged parade of enemies. Strategic depth wrapped in a creature-feature aesthetic — every wave stranger than the last.'},
+  {id:'walk',            name:'Walk',                        cat:'Experiential Design · Minimal',  cover:'projects/walk/1.png',             imgs:[],                              bg:'linear-gradient(145deg,#101010,#1e1e1e,#2a2828)',   ico:'🚶', tags:['Experiential','Minimal','Spatial','Contemplative'], desc:'A contemplative piece about the act of walking. Walk strips back complexity to examine how movement through space creates meaning — using minimal visual language and immersive audio to turn one foot in front of the other into something meditative.'},
+];
+
+const PMAP = {};
+PROJECTS.forEach(p=>PMAP[p.id]=p);
+
+/* ── hero card layout ── */
+const HERO_IDS = ['seereality','arworkofart','haptidraw','otherrealm'];
+const cdata = HERO_IDS.map((id,i)=>({el:document.getElementById('hc'+i),id,ox:0,oy:0,vx:0,vy:0,rot:[-22,-7,8,21][i]}));
+function layoutCards(){
+  const cl=document.getElementById('clayer');
+  const cw=cl.offsetWidth, totalW=4*158+3*18;
+  const sx=(cw-totalW)/2, my=cl.offsetHeight/2;
+  cdata.forEach((c,i)=>{const bx=sx+i*(158+18);c.el.style.left=bx+'px';c.el.style.top=(my-112)+'px';c.baseX=bx+79;c.baseY=my;});
 }
-// Hero cards
-document.querySelectorAll('.hcimg').forEach(img => loadImg(img, img.dataset.src));
-// Featured carousel images loaded on demand (see below)
-// Grid cards
-document.querySelectorAll('.wc').forEach(wc => {
-  const img = wc.querySelector('.wcimg');
-  loadImg(img, wc.dataset.img);
+layoutCards();
+window.addEventListener('resize',layoutCards);
+
+let pmx=window.innerWidth/2,pmy=window.innerHeight/2;
+document.addEventListener('mousemove',e=>{
+  const dx=e.clientX-pmx,dy=e.clientY-pmy;pmx=e.clientX;pmy=e.clientY;
+  const cl=document.getElementById('clayer');
+  const r=cl.getBoundingClientRect();
+  cdata.forEach(c=>{
+    const cx=r.left+c.baseX,cy=r.top+c.baseY;
+    const dist=Math.hypot(e.clientX-cx,e.clientY-cy);
+    if(dist<210){const f=(1-dist/210)*.58;c.vx+=dx*f;c.vy+=dy*f;}
+  });
 });
+(function spring(){
+  cdata.forEach(c=>{c.vx+=(-c.ox)*.075;c.vy+=(-c.oy)*.075;c.vx*=.86;c.vy*=.86;c.ox+=c.vx;c.oy+=c.vy;
+    c.el.style.transform=`translate(${c.ox}px,${c.oy}px) rotate(${c.rot+c.ox*.015}deg)`;});
+  requestAnimationFrame(spring);
+})();
+
+/* scroll fade */
+const hname=document.getElementById('hname'),hmeta=document.getElementById('hmeta');
+window.addEventListener('scroll',()=>{
+  const p=Math.min(window.scrollY/480,1);
+  hname.style.opacity=Math.max(0,1-p*2);
+  hmeta.style.opacity=Math.max(0,1-p*3);
+  cdata.forEach(c=>c.el.style.opacity=Math.max(0,1-p*2.5));
+  const mid=window.scrollY+window.innerHeight*.4;
+  const it=document.getElementById('info').offsetTop;
+  document.getElementById('nw').classList.toggle('on',mid<it);
+  document.getElementById('ni').classList.toggle('on',mid>=it);
+},{passive:true});
+
+/* ── FEATURED CAROUSEL ── */
+const fcards=Array.from(document.querySelectorAll('.fc'));
+const FEAT_LABELS=['See Reality','AR Work of Art','HaptiDraw'];
+let fi=0,autoT;
+function renderFeat(){
+  const n=fcards.length;
+  fcards.forEach((c,i)=>{const r=((i-fi)%n+n)%n;c.className='fc';c.classList.add(r===0?'center':r===1?'right':r===n-1?'left':'out-r');});
+  document.getElementById('flbl').textContent=FEAT_LABELS[fi];
+}
+renderFeat();
+function nextFeat(){fi=(fi+1)%fcards.length;renderFeat();}
+function resetAuto(){clearInterval(autoT);autoT=setInterval(nextFeat,3000);}
+resetAuto();
+fcards.forEach(c=>{c.addEventListener('click',()=>{
+  if(c.classList.contains('center')){openProject(c.dataset.id);return;}
+  fi=c.classList.contains('right')?(fi+1)%fcards.length:(fi-1+fcards.length)%fcards.length;
+  renderFeat();resetAuto();
+});});
+function openProjectFromFeat(){openProject(fcards[fi].dataset.id);}
+document.addEventListener('keydown',e=>{
+  if(document.getElementById('project-view').style.display!=='none')return;
+  if(e.key==='ArrowRight'){fi=(fi+1)%fcards.length;renderFeat();resetAuto();}
+  if(e.key==='ArrowLeft'){fi=(fi-1+fcards.length)%fcards.length;renderFeat();resetAuto();}
+});
+
+/* ── BUILD GRID ── */
+const grid=document.getElementById('wgrid');
+PROJECTS.forEach(p=>{
+  const d=document.createElement('div');
+  d.className='wc';d.dataset.id=p.id;
+  d.innerHTML=`<div class="wcin"><div class="wcbg" style="background:${p.bg}"></div><img class="wcimg" src="${p.cover}" alt="${p.name}" onload="this.classList.add('ok')" onerror="this.style.display='none'"><div class="wcico">${p.ico}</div><div class="wct">${p.name}</div></div>`;
+  d.addEventListener('click',()=>openProject(p.id));
+  grid.appendChild(d);
+});
+const obs=new IntersectionObserver(entries=>entries.forEach(e=>{
+  if(e.isIntersecting){const i=Array.from(document.querySelectorAll('.wc')).indexOf(e.target);setTimeout(()=>e.target.classList.add('in'),i*60);}
+}),{threshold:.1});
+document.querySelectorAll('.wc').forEach(c=>obs.observe(c));
+
+/* ── PROJECT PAGE ── */
+function openProject(id){
+  const p=PMAP[id];if(!p)return;
+  window.scrollTo(0,0);
+  document.getElementById('home-view').style.display='none';
+  const pv=document.getElementById('project-view');
+  pv.style.display='block';
+  document.getElementById('main-nav').style.display='none';
+  document.getElementById('back-btn').style.display='flex';
+  clearInterval(autoT);
+
+  // hero
+  document.getElementById('pv-hero-bg').style.background=p.bg;
+  document.getElementById('pv-cat').textContent=p.cat;
+  document.getElementById('pv-title').textContent=p.name;
+  document.getElementById('pv-tags').innerHTML=p.tags.map(t=>`<span class="pv-tag">${t}</span>`).join('');
+  document.getElementById('pv-desc').textContent=p.desc;
+
+  const img=document.getElementById('pv-hero-img');
+  const vid=document.getElementById('pv-hero-vid');
+  img.style.display='none';vid.style.display='none';vid.src='';
+  if(p.video){
+    vid.src=p.video;vid.style.display='block';
+  } else {
+    img.src=p.cover;
+  }
+
+  // gallery — try loading 1.png through 10.png dynamically
+  const gal=document.getElementById('pv-gallery');
+  gal.innerHTML='';
+  const coverFile=p.cover.split('/').pop(); // e.g. '0.png' or '1.png'
+  const folder=p.cover.substring(0,p.cover.lastIndexOf('/')+1);
+  const startNum=(id==='seereality')?1:2; // cover is 1.png, so extras start at 2 (seereality cover is 0.png, extras start at 1)
+  const tryLoad=(n)=>{
+    const src=folder+n+'.png';
+    const w=document.createElement('div');w.className='pv-gallery-item';
+    const i=document.createElement('img');i.alt=p.name+' '+n;i.style.cssText='width:100%;display:block;border-radius:14px;';
+    i.onload=()=>{gal.appendChild(w);};
+    i.onerror=()=>{/* skip */};
+    w.appendChild(i);i.src=src;
+  };
+  // also add video thumbnail if seereality has extra imgs
+  if(p.video){
+    // show the 0.png as first gallery image
+    const w=document.createElement('div');w.className='pv-gallery-item';
+    const vi=document.createElement('video');vi.src=p.video;vi.controls=true;vi.muted=true;vi.style.cssText='width:100%;display:block;border-radius:14px;';
+    w.appendChild(vi);gal.appendChild(w);
+  }
+  for(let n=startNum;n<=12;n++) tryLoad(n);
+
+  // "More Projects" strip
+  const track=document.getElementById('pv-more-track');
+  track.innerHTML='';
+  PROJECTS.filter(q=>q.id!==id).forEach(q=>{
+    const mc=document.createElement('div');mc.className='pv-more-card';
+    mc.innerHTML=`<div class="pv-more-card-bg" style="background:${q.bg}"></div><div class="pv-more-card-ico">${q.ico}</div><img class="pv-more-card-img" src="${q.cover}" alt="${q.name}" onload="this.classList.add('ok')" onerror="this.style.display='none'"><div class="pv-more-card-lbl">${q.name}</div>`;
+    mc.addEventListener('click',()=>openProject(q.id));
+    track.appendChild(mc);
+  });
+  updateHoverListeners();
+}
+function goHome(){
+  document.getElementById('home-view').style.display='block';
+  document.getElementById('project-view').style.display='none';
+  document.getElementById('main-nav').style.display='flex';
+  document.getElementById('back-btn').style.display='none';
+  resetAuto();
+  window.scrollTo(0,0);
+}
 
 /* ── CURSOR ── */
 const cur=document.getElementById('cur'),ring=document.getElementById('ring');
 let mx=0,my=0,rx=0,ry=0;
 document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px'});
 (function rl(){rx+=(mx-rx)*.11;ry+=(my-ry)*.11;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(rl)})();
-document.querySelectorAll('a,button,.fc,.wc,.sw,#pbtn').forEach(el=>{
-  el.addEventListener('mouseenter',()=>document.body.classList.add('hov'));
-  el.addEventListener('mouseleave',()=>document.body.classList.remove('hov'));
-});
-
-/* ── HERO CARDS — independent proximity spring ── */
-const CARD_DEFS = [
-  {rot:-22, fallback:'🧬'},
-  {rot:-8,  fallback:'🎮'},
-  {rot:7,   fallback:'🏛️'},
-  {rot:20,  fallback:'🏘️'}
-];
-const cdata = CARD_DEFS.map((d,i)=>({
-  el:document.getElementById('hc'+i),
-  rot:d.rot, ox:0, oy:0, vx:0, vy:0
-}));
-
-function layoutCards(){
-  const cl = document.getElementById('clayer');
-  const cw = cl.offsetWidth;
-  const totalW = 4*160 + 3*18; // 4 cards + gaps
-  const startX = (cw - totalW) / 2;
-  const midY = cl.offsetHeight / 2;
-  cdata.forEach((c,i)=>{
-    const bx = startX + i*(160+18);
-    c.el.style.left = bx + 'px';
-    c.el.style.top  = (midY - 114) + 'px'; // 114 = half card height
-    c.baseX = bx + 80; // card center X
-    c.baseY = midY;
+function updateHoverListeners(){
+  document.querySelectorAll('a,button,.fc,.wc,.sw,#pbtn,.hcard,.pv-more-card,.flabel').forEach(el=>{
+    el.onmouseenter=()=>document.body.classList.add('hov');
+    el.onmouseleave=()=>document.body.classList.remove('hov');
   });
 }
-layoutCards();
-window.addEventListener('resize', layoutCards);
-
-let pmx2=window.innerWidth/2, pmy2=window.innerHeight/2;
-document.addEventListener('mousemove',e=>{
-  const dx=e.clientX-pmx2, dy=e.clientY-pmy2;
-  pmx2=e.clientX; pmy2=e.clientY;
-  const cl=document.getElementById('clayer');
-  const clRect=cl.getBoundingClientRect();
-  cdata.forEach(c=>{
-    const cardAbsX = clRect.left + c.baseX;
-    const cardAbsY = clRect.top  + c.baseY;
-    const dist = Math.hypot(e.clientX - cardAbsX, e.clientY - cardAbsY);
-    const radius = 200;
-    if(dist < radius){
-      const f = (1 - dist/radius) * 0.55;
-      c.vx += dx * f;
-      c.vy += dy * f;
-    }
-  });
-});
-
-(function spring(){
-  cdata.forEach(c=>{
-    c.vx += (-c.ox) * .075;
-    c.vy += (-c.oy) * .075;
-    c.vx *= .86; c.vy *= .86;
-    c.ox += c.vx; c.oy += c.vy;
-    c.el.style.transform = `translate(${c.ox}px,${c.oy}px) rotate(${c.rot + c.ox*.015}deg)`;
-  });
-  requestAnimationFrame(spring);
-})();
-
-/* Fade hero on scroll */
-const hname=document.getElementById('hname'), hmeta=document.getElementById('hmeta');
-window.addEventListener('scroll',()=>{
-  const p=Math.min(window.scrollY/500,1);
-  hname.style.opacity=Math.max(0,1-p*2);
-  hmeta.style.opacity=Math.max(0,1-p*3);
-  cdata.forEach(c=>c.el.style.opacity=Math.max(0,1-p*2.5));
-},{passive:true});
-
-/* ── FEATURED CAROUSEL ── */
-const FLABELS=['Gene XR','FortNashBoroughXR','Usurper Interactive'];
-const fcards=Array.from(document.querySelectorAll('.fc'));
-const FN=fcards.length;
-let fi=0, autoT=null, userActed=false;
-
-// Load featured images
-fcards.forEach(fc=>{
-  const img=fc.querySelector('.fcimg');
-  loadImg(img, fc.dataset.img);
-});
-
-function renderFeat(){
-  fcards.forEach((c,i)=>{
-    const rel=((i-fi)%FN+FN)%FN;
-    c.className='fc';
-    if(rel===0)       c.classList.add('center');
-    else if(rel===1)  c.classList.add('right');
-    else if(rel===2)  c.classList.add('left');
-    else              c.classList.add('out-r');
-  });
-  document.getElementById('flbl').textContent=FLABELS[fi];
-}
-renderFeat();
-
-function nextFeat(){ fi=(fi+1)%FN; renderFeat(); }
-function startAuto(){ autoT=setInterval(nextFeat,3000); }
-function resetAuto(){ clearInterval(autoT); startAuto(); }
-startAuto();
-
-fcards.forEach(c=>{
-  c.addEventListener('click',()=>{
-    if(c.classList.contains('center')) return;
-    if(c.classList.contains('right')) fi=(fi+1)%FN;
-    else fi=(fi-1+FN)%FN;
-    renderFeat(); resetAuto();
-  });
-});
-document.addEventListener('keydown',e=>{
-  if(e.key==='ArrowRight'){fi=(fi+1)%FN;renderFeat();resetAuto()}
-  if(e.key==='ArrowLeft'){fi=(fi-1+FN)%FN;renderFeat();resetAuto()}
-});
-
-/* ── SCROLL-IN GRID ── */
-const obs=new IntersectionObserver(entries=>{
-  entries.forEach(e=>{
-    if(e.isIntersecting){
-      const idx=Array.from(document.querySelectorAll('.wc')).indexOf(e.target);
-      setTimeout(()=>e.target.classList.add('in'),idx*65);
-    }
-  });
-},{threshold:0.12});
-document.querySelectorAll('.wc').forEach(c=>obs.observe(c));
-
-/* ── NAV ACTIVE ── */
-window.addEventListener('scroll',()=>{
-  const mid=window.scrollY+window.innerHeight*.4;
-  const infoTop=document.getElementById('info').offsetTop;
-  document.getElementById('nw').classList.toggle('on',mid<infoTop);
-  document.getElementById('ni').classList.toggle('on',mid>=infoTop);
-},{passive:true});
+updateHoverListeners();
 
 /* ── PALETTE ── */
-function setTheme(t,el){
-  document.body.dataset.theme=t;
-  document.querySelectorAll('.sw').forEach(s=>s.classList.remove('on'));
-  el.classList.add('on');
-  document.getElementById('sw').classList.remove('open');
-}
-function togglePal(){ document.getElementById('sw').classList.toggle('open'); }
-document.addEventListener('click',e=>{
-  if(!document.getElementById('pal').contains(e.target))
-    document.getElementById('sw').classList.remove('open');
-});
+function setTheme(t,el){document.body.dataset.theme=t;document.querySelectorAll('.sw').forEach(s=>s.classList.remove('on'));el.classList.add('on');document.getElementById('sw').classList.remove('open');}
+function togglePal(){document.getElementById('sw').classList.toggle('open');}
+document.addEventListener('click',e=>{if(!document.getElementById('pal').contains(e.target))document.getElementById('sw').classList.remove('open');});
 </script>
 </body>
 </html>
