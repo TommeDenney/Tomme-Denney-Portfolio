@@ -1,641 +1,441 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Tomme Denney | Portfolio</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            scroll-behavior: smooth;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tomme Denney</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Barlow:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f2ede3;--text:#1a1714;--gr:#b5ada3;--mt:#8a7e70;--cb:#e0dad0;--b:rgba(26,23,20,.1)}
+[data-theme=white]{--bg:#f7f7f5;--text:#111;--gr:#bbb;--mt:#999;--cb:#eaeae8;--b:rgba(0,0,0,.08)}
+[data-theme=dark]{--bg:#0e0e0e;--text:#e8e4dc;--gr:#3a3a3a;--mt:#555;--cb:#1a1a1a;--b:rgba(255,255,255,.08)}
+[data-theme=sage]{--bg:#e8ede5;--text:#1a2a1a;--gr:#9ab29a;--mt:#6a836a;--cb:#dde6da;--b:rgba(26,40,26,.1)}
+[data-theme=night]{--bg:#07070e;--text:#c0bde0;--gr:#22223c;--mt:#44427a;--cb:#10101c;--b:rgba(130,125,220,.1)}
 
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            background: #0f0f0f;
-            color: #f4f4f4;
-            line-height: 1.6;
-        }
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Barlow','Helvetica Neue',Arial,sans-serif;cursor:none;overflow-x:hidden;transition:background .45s,color .45s;-webkit-font-smoothing:antialiased}
 
-        /* Gradient animation */
-        @keyframes gradientShift {
-            0% {
-                background-position: 0% 50%;
-            }
+/* ── CURSOR ── */
+#cur,#ring{position:fixed;pointer-events:none;z-index:9999;border-radius:50%;transform:translate(-50%,-50%)}
+#cur{width:8px;height:8px;background:var(--text);transition:width .15s,height .15s,background .35s}
+#ring{width:34px;height:34px;border:1.5px solid var(--text);opacity:.5;transition:width .3s,height .3s,border-color .35s}
+body.hov #cur{width:5px;height:5px}
+body.hov #ring{width:50px;height:50px;opacity:.22}
 
-            50% {
-                background-position: 100% 50%;
-            }
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content:space-between;align-items:center;padding:22px 44px}
+.logo{font-size:11.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--text);text-decoration:none;transition:opacity .2s}
+.logo:hover{opacity:.4}
+.navr{display:flex;gap:26px;list-style:none}
+.navr a{font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--mt);text-decoration:none;transition:color .2s}
+.navr a:hover,.navr a.on{color:var(--text)}
 
-            100% {
-                background-position: 0% 50%;
-            }
-        }
+/* ── TICKER (above name) ── */
+.ticker{overflow:hidden;border-top:1px solid var(--b);border-bottom:1px solid var(--b);padding:11px 0;white-space:nowrap;background:var(--bg);transition:background .45s,border-color .45s}
+.tickin{display:inline-flex;animation:tick 26s linear infinite}
+.tickin span{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--mt);padding:0 26px;transition:color .35s}
+.tickin .dot{color:var(--text);padding:0 2px}
+@keyframes tick{to{transform:translateX(-50%)}}
 
-        :root {
-            --gradient-colors: linear-gradient(135deg, #8a2be2, #00bfff, #00ffcc);
-        }
+/* ── HERO ── */
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;padding-top:64px;position:relative;overflow:hidden}
+.hmeta{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--mt);text-align:center;line-height:2.1;margin-bottom:10px;position:relative;z-index:10;transition:opacity .3s}
+.hname{
+  font-family:'Barlow Condensed',Impact,'Arial Narrow',sans-serif;
+  font-weight:900;font-size:clamp(68px,15vw,220px);
+  letter-spacing:-.03em;text-transform:uppercase;text-align:center;
+  line-height:.88;color:var(--text);position:relative;z-index:10;
+  user-select:none;transition:color .35s,opacity .35s;
+  padding:0 32px;pointer-events:none;
+}
+/* cards layer — BELOW name */
+.clayer{position:relative;width:100%;height:320px;margin-top:36px;z-index:5;flex-shrink:0}
+.hcard{
+  position:absolute;width:160px;height:228px;border-radius:14px;overflow:hidden;
+  box-shadow:0 18px 48px rgba(0,0,0,.2),0 6px 14px rgba(0,0,0,.1);
+  will-change:transform;cursor:default;
+}
+.hcbg{position:absolute;inset:0}
+/* project image fills card */
+.hcimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:2;opacity:0;transition:opacity .4s}
+.hcimg.loaded{opacity:1}
+.hcico{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:48px;z-index:1}
+.hclbl{position:absolute;bottom:0;left:0;right:0;z-index:3;padding:9px 11px;font-size:9.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.92);text-shadow:0 1px 6px rgba(0,0,0,.5);background:linear-gradient(transparent,rgba(0,0,0,.38))}
 
-        /* Hero section */
-        .hero {
-            background: #1e1e1e; /* Change to background-image later */
-            padding: 6rem 2rem 4rem;
-            text-align: center;
-        }
+/* ── ROLE ── */
+.role{padding:72px 44px 64px}
+.rword{display:block;font-family:'Barlow Condensed',Impact,'Arial Narrow',sans-serif;font-weight:900;font-size:clamp(52px,10.5vw,148px);letter-spacing:-.02em;text-transform:uppercase;color:var(--gr);line-height:.9;transition:color .35s}
+.clients{margin-top:58px;text-align:center}
+.cl{font-size:10px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--text);margin-bottom:10px}
+.cv{font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--mt)}
 
-            .hero h1 {
-                font-size: 3rem;
-                font-weight: bold;
-                color: #fff;
-            }
+/* ── FEATURED ── */
+.featured{padding:80px 0 68px;text-align:center}
+.sh{font-family:'Barlow Condensed',Impact,'Arial Narrow',sans-serif;font-weight:900;font-size:clamp(40px,7vw,90px);letter-spacing:-.015em;text-transform:uppercase;margin-bottom:8px}
+.ss{font-size:13px;color:var(--mt);margin-bottom:44px;letter-spacing:.02em}
+.fcar{position:relative;height:460px;overflow:hidden}
+.fc{
+  position:absolute;left:50%;top:50%;border-radius:16px;overflow:hidden;
+  box-shadow:0 24px 60px rgba(0,0,0,.15);cursor:pointer;
+  transition:transform .62s cubic-bezier(.23,.92,.58,1),opacity .55s,width .55s,height .55s;
+}
+.fc.center{width:300px;height:424px;transform:translate(-50%,-50%);z-index:5;opacity:1}
+.fc.right{width:214px;height:308px;transform:translate(calc(-50% + 320px),-50%);z-index:3;opacity:.68}
+.fc.left{width:214px;height:308px;transform:translate(calc(-50% - 320px),-50%);z-index:3;opacity:.68}
+.fc.out-r{transform:translate(calc(-50% + 680px),-50%);opacity:0;z-index:0;pointer-events:none}
+.fc.out-l{transform:translate(calc(-50% - 680px),-50%);opacity:0;z-index:0;pointer-events:none}
+.fcbg{position:absolute;inset:0}
+.fcimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:2;opacity:0;transition:opacity .4s}
+.fcimg.loaded{opacity:1}
+.fcico{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:56px;z-index:1}
+.flabel{display:inline-flex;margin-top:20px;padding:9px 24px;border-radius:100px;background:var(--cb);font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;transition:background .35s,opacity .25s}
 
-                .hero h1 span {
-                    background: var(--gradient-colors);
-                    background-size: 300% 300%;
-                    -webkit-background-clip: text;
-                    -webkit-text-fill-color: transparent;
-                    animation: gradientShift 6s ease infinite;
-                }
+/* ── MORE WORK ── */
+.more{padding:80px 44px 72px;text-align:center}
+.wgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:44px;max-width:940px;margin-left:auto;margin-right:auto}
+.wc{aspect-ratio:1;border-radius:16px;overflow:hidden;cursor:pointer;transform:scale(.84) translateY(22px);opacity:0;transition:transform .72s cubic-bezier(.25,.46,.45,.94),opacity .72s,box-shadow .3s}
+.wc.in{transform:scale(1);opacity:1}
+.wc.in:hover{transform:scale(1.04)!important;box-shadow:0 20px 50px rgba(0,0,0,.14)}
+.wcin{width:100%;height:100%;position:relative;display:flex;align-items:center;justify-content:center;font-size:42px}
+.wcbg{position:absolute;inset:0}
+.wcimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:2;opacity:0;transition:opacity .4s}
+.wcimg.loaded{opacity:1}
+.wcico{position:relative;z-index:1;font-size:42px}
+.wct{position:absolute;bottom:0;left:0;right:0;z-index:3;padding:11px 13px;background:linear-gradient(transparent,rgba(0,0,0,.5));font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#fff;text-align:left}
 
-            .hero p {
-                font-size: 1.2rem;
-                margin-top: 1rem;
-                color: #ccc;
-            }
+/* ── CONTACT ── */
+.contact{background:#161411;padding:90px 44px 52px;text-align:center;overflow:hidden;transition:background .45s}
+.cword{font-family:'Barlow Condensed',Impact,'Arial Narrow',sans-serif;font-weight:900;font-size:min(21vw,300px);letter-spacing:-.04em;text-transform:uppercase;color:rgba(255,255,255,.15);line-height:.82;margin-bottom:64px;user-select:none}
+.ceml{display:block;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.65);text-decoration:none;margin-bottom:18px;transition:opacity .2s}
+.ceml:hover{opacity:.4}
+.csoc{display:flex;gap:24px;justify-content:center;list-style:none;margin-bottom:44px}
+.csoc a{font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:rgba(255,255,255,.42);text-decoration:none;transition:color .2s}
+.csoc a:hover{color:rgba(255,255,255,.9)}
+.ccp{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.22)}
 
-        .scroll-btn {
-            position: relative;
-            padding: 0.6rem 1.5rem;
-            font-weight: 600;
-            border: none;
-            background: none;
-            color: white;
-            border-radius: 25px;
-            cursor: pointer;
-            overflow: hidden;
-            z-index: 1;
-        }
-
-            .scroll-btn::before {
-                content: "";
-                position: absolute;
-                inset: 0;
-                border-radius: 25px;
-                padding: 2px; /* thickness of the border */
-                background: var(--gradient-colors);
-                background-size: 300% 300%;
-                animation: gradientShift 6s ease infinite;
-                -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-                -webkit-mask-composite: xor;
-                mask-composite: exclude;
-                z-index: -1;
-            }
-
-            .scroll-btn:hover {
-                background: var(--gradient-colors);
-                background-size: 300% 300%;
-                animation: gradientShift 6s ease infinite;
-                color: #000;
-            }
-
-
-        /* Section container spacing */
-        section {
-            padding: 3rem 2rem;
-        }
-
-        h2 {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-            background: var(--gradient-colors);
-            background-size: 300% 300%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: gradientShift 6s ease infinite;
-        }
-
-        p {
-            margin-bottom: 1rem;
-        }
-
-        .project-card {
-            background: #1b1b1b;
-            border-radius: 12px;
-            margin-top: 1rem;
-            padding: 1rem 1.5rem 1.5rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-            transform: translateY(0);
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-            margin-bottom: 2rem;
-        }
-
-            .project-card:hover {
-                transform: translateY(-8px);
-                box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
-            }
-
-
-        .project-title {
-            background: none;
-            border: none;
-            color: #00c2ff;
-            font-size: 1.25rem;
-            font-weight: 600;
-            cursor: pointer;
-            text-align: left;
-            width: 100%;
-            padding: 0;
-            margin-bottom: 0.5rem;
-            user-select: none;
-            outline-offset: 3px;
-        }
-
-            .project-title:focus {
-                outline: 2px solid #00bfff;
-                border-radius: 4px;
-            }
-
-        .project-summary {
-            color: #ccc;
-            margin-bottom: 0.5rem;
-            font-size: 1rem;
-        }
-
-        .project-details {
-            max-height: 0;
-            overflow: hidden;
-            opacity: 0;
-            padding-top: 0;
-            transition: max-height 0.5s ease, opacity 0.4s ease, padding-top 0.4s ease;
-            color: #ddd;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        /* Expand state */
-        .project-card.expanded .project-details {
-            max-height: none;
-            opacity: 1;
-            padding-top: 1rem;
-        }
-
-        /* Shared styling for images and videos */
-        .project-details img,
-        .project-details video {
-            flex: 1 1 calc(33.33% - 1rem);
-            max-width: calc(33.33% - 1rem);
-            height: auto;
-            border-radius: 10px;
-            margin-top: 0.5rem;
-            display: block;
-            object-fit: contain; 
-            max-height: 300px; /* ⬅️ LIMIT HEIGHT to prevent layout breaking */
-        }
-
-
-        /* Medium screens: 2 per row */
-        @media (max-width: 900px) {
-            .project-details img,
-            .project-details video {
-                flex: 1 1 calc(50% - 1rem);
-                max-width: calc(50% - 1rem);
-            }
-        }
-
-        /* Small screens: 1 per row */
-        @media (max-width: 500px) {
-            .project-details img,
-            .project-details video {
-                flex: 1 1 100%;
-                max-width: 100%;
-            }
-        }
-
-        .contact-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-
-            .contact-buttons .scroll-btn {
-                flex: 1 1 150px; /* responsive but prevents squishing */
-                text-align: center;
-            }
-
-
-        .email-link {
-            color: #00c2ff;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-            .email-link:hover {
-                color: #00ffff;
-                text-decoration: underline;
-            }
-
-        .twine-embed {
-            width: 100%;
-            min-height: 600px;
-            border: 2px solid #444;
-            border-radius: 10px;
-            margin-top: 1rem;
-        }
-
-        footer {
-            text-align: center;
-            padding: 3rem 1rem;
-            font-size: 0.9rem;
-            color: #666;
-            background: #111;
-        }
-    </style>
+/* ── PALETTE ── */
+#pal{position:fixed;bottom:28px;right:28px;z-index:400;display:flex;flex-direction:column;align-items:flex-end;gap:9px}
+#pbtn{width:44px;height:44px;border-radius:50%;background:var(--cb);border:1.5px solid var(--b);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 2px 20px rgba(0,0,0,.12);transition:transform .28s,background .35s}
+#pbtn:hover{transform:rotate(32deg) scale(1.07)}
+.swatches{display:flex;flex-direction:column;gap:9px;align-items:flex-end;opacity:0;transform:translateY(8px);pointer-events:none;transition:opacity .22s,transform .22s}
+.swatches.open{opacity:1;transform:none;pointer-events:all}
+.sw{display:flex;align-items:center;gap:9px;cursor:pointer;font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--mt);transition:color .2s}
+.sw:hover{color:var(--text)}
+.sdot{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--b);transition:transform .18s}
+.sw:hover .sdot{transform:scale(1.22)}
+.sw.on .sdot{outline:2.5px solid var(--text);outline-offset:2px}
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-thumb{background:var(--b)}
+</style>
 </head>
 <body>
+<div id="cur"></div>
+<div id="ring"></div>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <h1>Hello, I'm <span>Tomme Denney</span></h1>
-        <p>Creative Designer & Developer</p>
-        <a href="#projects" class="scroll-btn">View Projects ↓</a>
-    </section>
+<nav>
+  <a class="logo" href="#">Tomme Denney</a>
+  <ul class="navr">
+    <li><a href="#hero" class="on" id="nw">Work</a></li>
+    <li><a href="#info" id="ni">Info</a></li>
+  </ul>
+</nav>
 
-    <!-- About Section -->
-    <section id="about">
-        <h2>About Me</h2>
-        <p>
-            I’m an XR developer with a background in Game Design and a passion for crafting immersive, meaningful experiences across virtual and mixed reality. I'm currently pursuing a Master of Science in Extended Reality (XR) with a concentration in A.I. at Northeastern University.
-        </p>
-        <p>
-            My work spans across VR, AR, and MR — from controller-free hand interaction on Meta Quest 3 to AI-driven locomotion research in VR environments. Whether prototyping narrative-driven experiences or optimizing performance for low-spec hardware, I approach every challenge with a balance of creativity and technical precision.
-        </p>
-        <p>
-            I’ve contributed to XR projects in academic, professional, and hackathon settings, with a strong emphasis on accessibility, interaction design, and player immersion. Certified through XR Terra and trained in ethical research practices, I’m deeply interested in how immersive media can shape human experience, storytelling, and education.
-        </p>
-    </section>
+<!-- ── TICKER above name ── -->
+<div style="padding-top:68px">
+  <div class="ticker">
+    <div class="tickin">
+      <span>XR Development</span><span class="dot">·</span><span>Gaussian Splatting</span><span class="dot">·</span><span>Meta Quest 3</span><span class="dot">·</span><span>Unity C#</span><span class="dot">·</span><span>Hand Tracking</span><span class="dot">·</span><span>Spatial Design</span><span class="dot">·</span><span>iOS Swift</span><span class="dot">·</span><span>HCI Research</span><span class="dot">·</span><span>See Reality</span><span class="dot">·</span><span>Northeastern University MS '26</span><span class="dot">·</span><span>Usurper Interactive</span><span class="dot">·</span>
+      <span>XR Development</span><span class="dot">·</span><span>Gaussian Splatting</span><span class="dot">·</span><span>Meta Quest 3</span><span class="dot">·</span><span>Unity C#</span><span class="dot">·</span><span>Hand Tracking</span><span class="dot">·</span><span>Spatial Design</span><span class="dot">·</span><span>iOS Swift</span><span class="dot">·</span><span>HCI Research</span><span class="dot">·</span><span>See Reality</span><span class="dot">·</span><span>Northeastern University MS '26</span><span class="dot">·</span><span>Usurper Interactive</span><span class="dot">·</span>
+    </div>
+  </div>
+</div>
 
-    <!-- Projects -->
-    <section id="projects">
-        <h2>Projects</h2>
+<!-- ── HERO ── -->
+<section class="hero" id="hero">
+  <p class="hmeta" id="hmeta">Boston, Massachusetts<br><span style="opacity:.6">tomme@usurperinteractive.com</span></p>
+  <h1 class="hname" id="hname">TOMME DENNEY</h1>
 
-        <!-- See Reality -->
-        <div class="project-card">
-            <button class="project-title" aria-expanded="false" aria-controls="details1" id="title1">
-                See Reality | XR Developer Projects
-            </button>
-            <div class="project-summary">
-                A hand-tracked Mixed Reality collection that brings Revolutionary Boston to life through immersive historical reenactments along the Freedom Trail.
-            </div>
-            <div class="project-details" id="details1" role="region" aria-labelledby="title1">
-                <a href="https://www.seereality.world/" target="_blank" class="scroll-btn">View Project on our Site</a>
-                <p>
-                    The Relive 1776 Collection is a series of hand-tracked Mixed Reality experiences that immerse players in Revolutionary-era Boston.
-                    In Bunker Hill Cannon, players fire a Revolutionary War cannon to sink a British warship, while Bunker Hill Cannon (Kids Edition) provides a kid-friendly adaptation with scaled environments and accessible interactions.
-                    Five Shots at Midnight offers an interactive retelling of the Boston Massacre, where players confront soldiers through touch and thrown objects.
-                    In Sons of Liberty, players take part in a stealth mission to help colonial leaders recover a secret British document.
-                    Paul Revere’s Midnight Ride reenacts Paul Revere’s historic departure after the lantern signal at Old North Church,
-                    and 1700s Faneuil Hall Market reconstructs Boston’s original 18th-century marketplace, blending history with present-day context.
-                </p>
+  <!-- 4 most recent: Gene XR, Boffum, FortNash, Lexington -->
+  <!-- UPDATE image src paths to match your /projects/ folder structure -->
+  <div class="clayer" id="clayer">
+    <div class="hcard" id="hc0">
+      <div class="hcbg" style="background:linear-gradient(145deg,#190c2c,#481888,#7040b5)"></div>
+      <div class="hcico" id="hico0">🧬</div>
+      <img class="hcimg" data-src="projects/gene-xr/01.jpg" alt="Gene XR">
+      <div class="hclbl">Gene XR</div>
+    </div>
+    <div class="hcard" id="hc1">
+      <div class="hcbg" style="background:linear-gradient(145deg,#050e05,#112211,#1e4820)"></div>
+      <div class="hcico" id="hico1">🎮</div>
+      <img class="hcimg" data-src="projects/boffum/01.jpg" alt="Boffum">
+      <div class="hclbl">Boffum</div>
+    </div>
+    <div class="hcard" id="hc2">
+      <div class="hcbg" style="background:linear-gradient(145deg,#2c1405,#884010,#c86820)"></div>
+      <div class="hcico" id="hico2">🏛️</div>
+      <img class="hcimg" data-src="projects/fort-nash/01.jpg" alt="FortNash XR">
+      <div class="hclbl">FortNash XR</div>
+    </div>
+    <div class="hcard" id="hc3">
+      <div class="hcbg" style="background:linear-gradient(145deg,#090f09,#182818,#255522)"></div>
+      <div class="hcico" id="hico3">🏘️</div>
+      <img class="hcimg" data-src="projects/lexington/01.jpg" alt="Lexington XR">
+      <div class="hclbl">Lexington XR</div>
+    </div>
+  </div>
+</section>
 
-                <p>
-                    The Extra Experiences expand See Reality’s offerings beyond Revolutionary Boston with a mix of historical and family-friendly adventures.
-                    John Hamilton Gray (Canada / PEI) is an interactive historical encounter that allows players to meet and engage with both John Hamilton Grays of Canadian Confederation.
-                    The Flying Dragon is a kid-focused XR adventure where players battle a life-sized dragon using hand-tracked swordplay and dodge its fiery attacks.
-                    The Dino provides an awe-inspiring encounter with a full-scale dinosaur and its young, blending education with spectacle for audiences of all ages.
-                </p>
+<!-- ── ROLE ── -->
+<section class="role" id="info">
+  <span class="rword">XR Developer,</span>
+  <span class="rword">Designer &amp;</span>
+  <span class="rword">Builder</span>
+  <div class="clients">
+    <p class="cl">Clients Include</p>
+    <p class="cv">See Reality &nbsp;·&nbsp; Nashville Adventures &nbsp;·&nbsp; Town of Lexington &nbsp;·&nbsp; Liverpool FC &nbsp;·&nbsp; Venice City Tours &nbsp;·&nbsp; Faneuil Hall</p>
+  </div>
+</section>
 
-                <video controls>
-                    <source src="projects/seereality/0.mp4" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
-                <img src="projects/seereality/0.png" alt="see reality logo" />
-            </div>
-        </div>
+<!-- ── FEATURED (3 projects) ── -->
+<section class="featured">
+  <h2 class="sh">Featured Work</h2>
+  <p class="ss">Select recent and notable projects</p>
+  <div class="fcar" id="fcar">
+    <!-- UPDATE data-img paths to match your /projects/ folder -->
+    <div class="fc" data-fi="0" data-img="projects/gene-xr/01.jpg">
+      <div class="fcbg" style="background:linear-gradient(145deg,#190c2c,#481888,#7040b5)"></div>
+      <div class="fcico">🧬</div>
+      <img class="fcimg" alt="Gene XR">
+    </div>
+    <div class="fc" data-fi="1" data-img="projects/fort-nash/01.jpg">
+      <div class="fcbg" style="background:linear-gradient(145deg,#2c1405,#884010,#c86820)"></div>
+      <div class="fcico">🏛️</div>
+      <img class="fcimg" alt="FortNash XR">
+    </div>
+    <div class="fc" data-fi="2" data-img="projects/usurper/01.jpg">
+      <div class="fcbg" style="background:linear-gradient(145deg,#080818,#121238,#1c1c58)"></div>
+      <div class="fcico">✦</div>
+      <img class="fcimg" alt="Usurper Interactive">
+    </div>
+  </div>
+  <div style="text-align:center;margin-top:18px">
+    <span class="flabel" id="flbl">Gene XR</span>
+  </div>
+</section>
 
-        <!-- HaptiDraw -->
-        <div class="project-card">
-            <button class="project-title" aria-expanded="false" aria-controls="details1" id="title1">
-                HaptiDraw | MIT Reality Hack 2025
-            </button>
-            <div class="project-summary">
-                An inclusive XR art tool built with haptic feedback and multisensory interaction to support visually impaired creators.
-            </div>
-            <div class="project-details" id="details1" role="region" aria-labelledby="title1">
-                <a href="https://devpost.com/software/haptidraw" target="_blank" class="scroll-btn">View Project on Devpost</a>
-                <p>This project was born out of a desire to redefine artistic expression for visually impaired individuals, utilizing the principles of cognitive extension through touch, tactile communication, and multisensory integration. During the 2025 MIT Reality Hackathon, we aimed to create a tool that not only empowers users to create but also enables them to connect with their work in a deeply immersive and accessible way. By incorporating haptic feedback and spatial mapping, we sought to bridge the gap between art and accessibility, ensuring inclusivity for all creators.</p>
+<!-- ── MORE WORK ── -->
+<section class="more">
+  <h2 class="sh">More Work</h2>
+  <p class="ss">Take a scroll, stay a while</p>
+  <!-- UPDATE data-img paths -->
+  <div class="wgrid" id="wgrid">
+    <div class="wc" data-img="projects/gene-xr/01.jpg"><div class="wcin"><div class="wcbg" style="background:linear-gradient(145deg,#190c2c,#481888)"></div><img class="wcimg" alt="Gene XR"><div class="wcico">🧬</div><div class="wct">Gene XR — Capstone '26</div></div></div>
+    <div class="wc" data-img="projects/fort-nash/01.jpg"><div class="wcin"><div class="wcbg" style="background:linear-gradient(145deg,#2c1405,#884010)"></div><img class="wcimg" alt="FortNash XR"><div class="wcico">🏛️</div><div class="wct">FortNashBoroughXR</div></div></div>
+    <div class="wc" data-img="projects/usurper/01.jpg"><div class="wcin"><div class="wcbg" style="background:linear-gradient(145deg,#080818,#121238)"></div><img class="wcimg" alt="Usurper"><div class="wcico">✦</div><div class="wct">Usurper Interactive</div></div></div>
+    <div class="wc" data-img="projects/buddy-run/01.jpg"><div class="wcin"><div class="wcbg" style="background:linear-gradient(145deg,#050e1a,#0e2860)"></div><img class="wcimg" alt="Buddy Run"><div class="wcico">🏃</div><div class="wct">Buddy Run — iOS</div></div></div>
+    <div class="wc" data-img="projects/lexington/01.jpg"><div class="wcin"><div class="wcbg" style="background:linear-gradient(145deg,#090f09,#182818)"></div><img class="wcimg" alt="Lexington XR"><div class="wcico">🏘️</div><div class="wct">Lexington XR Tours</div></div></div>
+    <div class="wc" data-img="projects/dignity/01.jpg"><div class="wcin"><div class="wcbg" style="background:linear-gradient(145deg,#180505,#580f0f)"></div><img class="wcimg" alt="Design for Dignity"><div class="wcico">⚖️</div><div class="wct">Design for Dignity</div></div></div>
+    <div class="wc" data-img="projects/boffum/01.jpg"><div class="wcin"><div class="wcbg" style="background:linear-gradient(145deg,#050e05,#112211)"></div><img class="wcimg" alt="Boffum"><div class="wcico">🎮</div><div class="wct">Boffum — MIT Reality Hack</div></div></div>
+    <div class="wc" data-img="projects/360-video/01.jpg"><div class="wcin"><div class="wcbg" style="background:linear-gradient(145deg,#0e0e0e,#282828)"></div><img class="wcimg" alt="360 Video"><div class="wcico">🌐</div><div class="wct">360° Video XR</div></div></div>
+    <div class="wc" data-img="projects/design-research/01.jpg"><div class="wcin"><div class="wcbg" style="background:linear-gradient(145deg,#180f04,#3a2510)"></div><img class="wcimg" alt="Research"><div class="wcico">📐</div><div class="wct">XR Design Research</div></div></div>
+  </div>
+</section>
 
-                <video controls>
-                    <source src="projects/haptidraw/0.mp4" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
-                <img src="projects/haptidraw/1.jpg" alt="haptidraw project screenshot" />
-            </div>
-        </div>
+<!-- ── CONTACT ── -->
+<section class="contact">
+  <div class="cword">Contact</div>
+  <a class="ceml" href="mailto:tomme@usurperinteractive.com">tomme@usurperinteractive.com</a>
+  <ul class="csoc">
+    <li><a href="https://github.com/TommeDenney" target="_blank">GitHub</a></li>
+    <li><a href="#" target="_blank">LinkedIn</a></li>
+    <li><a href="#" target="_blank">Instagram</a></li>
+  </ul>
+  <p class="ccp">All Rights Reserved 2026 Tomme Denney</p>
+</section>
 
-        <!-- InternShip In The Afterlife -->
-        <div class="project-card">
-            <button class="project-title" aria-expanded="false" aria-controls="details2" id="title2">
-                Internship in the Afterlife | XR Final Project
-            </button>
-            <div class="project-summary">
-                A surreal VR narrative that explores bureaucracy, mortality, and spiritual limbo.
-            </div>
-            <div class="project-details" id="details2" role="region" aria-labelledby="title2">
-                <a href="https://tommedenney.itch.io/internship-in-the-afterlife" target="_blank" class="scroll-btn">Download on Itch.io</a>
-                <p>Players are placed in a metaphysical 'internship' in the afterlife, where they must evaluate the fates of souls. Designed for hand-tracking and immersive interaction, the experience draws on dark humor and social commentary, immersing players in a uniquely unsettling narrative space. Created in Unity with Meta Quest support.</p>
-                <video controls>
-                    <source src="projects/internshipintheafterlife/0.mp4" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
-                <img src="projects/internshipintheafterlife/1.png" alt="internshipintheafterlife project screenshot" />
-                <img src="projects/internshipintheafterlife/2.png" alt="internshipintheafterlife project screenshot" />
-                <img src="projects/internshipintheafterlife/3.jpg" alt="internshipintheafterlife project screenshot" />
-            </div>
-        </div>
+<!-- ── PALETTE ── -->
+<div id="pal">
+  <div class="swatches" id="sw">
+    <div class="sw on" onclick="setTheme('',this)"><span>Warm</span><div class="sdot" style="background:#f2ede3"></div></div>
+    <div class="sw" onclick="setTheme('white',this)"><span>White</span><div class="sdot" style="background:#f7f7f5"></div></div>
+    <div class="sw" onclick="setTheme('sage',this)"><span>Sage</span><div class="sdot" style="background:#e8ede5"></div></div>
+    <div class="sw" onclick="setTheme('dark',this)"><span>Dark</span><div class="sdot" style="background:#0e0e0e"></div></div>
+    <div class="sw" onclick="setTheme('night',this)"><span>Night</span><div class="sdot" style="background:#07070e"></div></div>
+  </div>
+  <button id="pbtn" onclick="togglePal()">🎨</button>
+</div>
 
-        <!-- I Am You -->
-        <div class="project-card">
-            <button class="project-title" aria-expanded="false" aria-controls="details3" id="title3">
-                I Am You | XR Empathy Simulation
-            </button>
-            <div class="project-summary">
-                A VR empathy simulator exploring body-swapping and emotional intelligence through first-person storytelling.
-            </div>
-            <div class="project-details" id="details3" role="region" aria-labelledby="title3">
-                <a href="https://tommedenney.itch.io/i-am-you" target="_blank" class="scroll-btn">Download on Itch.io</a>
-                <p>"I Am You" invites players to inhabit the perspectives of different characters in emotionally charged scenarios. By swapping avatars and engaging with reactive dialogue, users experience the power of point-of-view and bias. Built with Unity XR Interaction Toolkit, this project emphasizes narrative design and social impact in immersive media.</p>
-                <img src="projects/iamyou/1.png" alt="I Am You project screenshot" />
-                <img src="projects/iamyou/2.png" alt="I Am You project screenshot" />
-                <img src="projects/iamyou/3.png" alt="I Am You project screenshot" />
-                <img src="projects/iamyou/4.png" alt="I Am You project screenshot" />
-            </div>
-        </div>
+<script>
+/* ── LAZY LOAD IMAGES with onerror fallback ── */
+function loadImg(img, src) {
+  if (!src) return;
+  const tmp = new Image();
+  tmp.onload = () => { img.src = src; img.classList.add('loaded'); };
+  tmp.onerror = () => { /* gradient + emoji fallback stays visible */ };
+  tmp.src = src;
+}
+// Hero cards
+document.querySelectorAll('.hcimg').forEach(img => loadImg(img, img.dataset.src));
+// Featured carousel images loaded on demand (see below)
+// Grid cards
+document.querySelectorAll('.wc').forEach(wc => {
+  const img = wc.querySelector('.wcimg');
+  loadImg(img, wc.dataset.img);
+});
 
-        <!-- Return of the Chickens VR -->
-        <div class="project-card">
-            <button class="project-title" aria-expanded="false" aria-controls="details4" id="title4">
-                Return of the Chickens VR | XR Terra Final Project
-            </button>
-            <div class="project-summary">
-                A chaotic VR herding game with hand-tracking and AI-driven chicken behavior.
-            </div>
-            <div class="project-details" id="details4" role="region" aria-labelledby="title4">
-                <a href="https://tommedenney.itch.io/return-of-the-chickens-demo" target="_blank" class="scroll-btn">Download on Itch.io</a>
-                <p>This fast-paced VR comedy game puts players in charge of herding rogue chickens using only their hands. Featuring flocking algorithms, gesture recognition, and real-time physics, "Return of the Chickens" delivers slapstick action and unpredictable gameplay moments. Designed for Meta Quest standalone performance with no controllers required.</p>
-                <video controls>
-                    <source src="projects/returnofthechickens/0.mp4" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
-                <img src="projects/returnofthechickens/1.png" alt="Return of the Chickens VR screenshot" />
-            </div>
-        </div>
+/* ── CURSOR ── */
+const cur=document.getElementById('cur'),ring=document.getElementById('ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px'});
+(function rl(){rx+=(mx-rx)*.11;ry+=(my-ry)*.11;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(rl)})();
+document.querySelectorAll('a,button,.fc,.wc,.sw,#pbtn').forEach(el=>{
+  el.addEventListener('mouseenter',()=>document.body.classList.add('hov'));
+  el.addEventListener('mouseleave',()=>document.body.classList.remove('hov'));
+});
 
-        <!-- Interview with Eternity -->
-        <div class="project-card">
-            <button class="project-title" aria-expanded="false" aria-controls="details5" id="title5">
-                Interview With Eternity | AR Installation
-            </button>
-            <div class="project-summary">
-                A meditative augmented reality artwork exploring mortality, presence, and time.
-            </div>
-            <div class="project-details" id="details5" role="region" aria-labelledby="title5">
-                <a href="https://tommedenney.itch.io/interview-with-eternity" target="_blank" class="scroll-btn">Download on Itch.io</a>
-                <p>Presented as an ambient AR installation, users are prompted to answer philosophical questions from an unseen interviewer. The piece overlays digital text and animated visuals on physical environments, encouraging reflection and stillness. It fuses poetry, visual design, and interaction in an artistic mixed reality context.</p>
-                <img src="https://via.placeholder.com/400x200?text=Interview+With+Eternity" alt="Interview With Eternity" />
-            </div>
-        </div>
+/* ── HERO CARDS — independent proximity spring ── */
+const CARD_DEFS = [
+  {rot:-22, fallback:'🧬'},
+  {rot:-8,  fallback:'🎮'},
+  {rot:7,   fallback:'🏛️'},
+  {rot:20,  fallback:'🏘️'}
+];
+const cdata = CARD_DEFS.map((d,i)=>({
+  el:document.getElementById('hc'+i),
+  rot:d.rot, ox:0, oy:0, vx:0, vy:0
+}));
 
-        <!-- AR Work of Art -->
-        <div class="project-card">
-            <button class="project-title" aria-expanded="false" aria-controls="details6" id="title6">
-                AR Work of Art | MR Rhythm Experience
-            </button>
-            <div class="project-summary">
-                An MR rhythm-based experience on Meta Quest 3 where players build music by striking floating blocks in time with the beat.
-            </div>
-            <div class="project-details" id="details6" role="region" aria-labelledby="title6">
-                <a href="https://tommedenney.itch.io/ar-work-of-art" target="_blank" class="scroll-btn">Download on Itch.io</a>
-                <p>An MR rhythm-based experience on Meta Quest 3 where players build music by striking floating blocks in time with the beat.</p>
-                <img src="projects/arworkofart/1.png" alt="AR Work of Art" />
-                <img src="projects/arworkofart/2.png" alt="AR Work of Art" />
-                <img src="projects/arworkofart/3.png" alt="AR Work of Art" />
-                <img src="projects/arworkofart/4.png" alt="AR Work of Art" />
-            </div>
-        </div>
+function layoutCards(){
+  const cl = document.getElementById('clayer');
+  const cw = cl.offsetWidth;
+  const totalW = 4*160 + 3*18; // 4 cards + gaps
+  const startX = (cw - totalW) / 2;
+  const midY = cl.offsetHeight / 2;
+  cdata.forEach((c,i)=>{
+    const bx = startX + i*(160+18);
+    c.el.style.left = bx + 'px';
+    c.el.style.top  = (midY - 114) + 'px'; // 114 = half card height
+    c.baseX = bx + 80; // card center X
+    c.baseY = midY;
+  });
+}
+layoutCards();
+window.addEventListener('resize', layoutCards);
 
-        <!-- Tower of Franken Frog -->
-        <div class="project-card">
-            <button class="project-title" aria-expanded="false" aria-controls="details7" id="title7">
-                Tower of Franken Frog
-            </button>
-            <div class="project-summary">
-                A bizarre VR skee-ball horror experience combining arcade fun with spine-chilling storytelling.
-            </div>
-            <div class="project-details" id="details7" role="region" aria-labelledby="title7">
-                <a href="https://tommedenney.itch.io/tower-of-franken-frog" target="_blank" class="scroll-btn">Download on Itch.io</a>
-                <p>In this eerie tower ascent game, players use a VR skee-ball mechanic to destroy cursed structures while dodging grotesque frog monsters. The experience merges nostalgic gameplay with an unsettling horror aesthetic, blending humor and fear in a surreal, interactive spectacle.</p>
-                <img src="projects/toweroffrankenfrog/1.png" alt="Tower of Franken Frog" />
-                <img src="projects/toweroffrankenfrog/2.png" alt="Tower of Franken Frog" />
-                <img src="projects/toweroffrankenfrog/3.png" alt="Tower of Franken Frog" />
-                <img src="projects/toweroffrankenfrog/4.png" alt="Tower of Franken Frog" />
-            </div>
-        </div>
+let pmx2=window.innerWidth/2, pmy2=window.innerHeight/2;
+document.addEventListener('mousemove',e=>{
+  const dx=e.clientX-pmx2, dy=e.clientY-pmy2;
+  pmx2=e.clientX; pmy2=e.clientY;
+  const cl=document.getElementById('clayer');
+  const clRect=cl.getBoundingClientRect();
+  cdata.forEach(c=>{
+    const cardAbsX = clRect.left + c.baseX;
+    const cardAbsY = clRect.top  + c.baseY;
+    const dist = Math.hypot(e.clientX - cardAbsX, e.clientY - cardAbsY);
+    const radius = 200;
+    if(dist < radius){
+      const f = (1 - dist/radius) * 0.55;
+      c.vx += dx * f;
+      c.vy += dy * f;
+    }
+  });
+});
 
-        <!-- Soul Solace -->
-        <div class="project-card">
-            <button class="project-title" aria-expanded="false" aria-controls="details8" id="title8">
-                Soul Solace
-            </button>
-            <div class="project-summary">
-                A psychological horror VR experience exploring grief, memory, and disconnection.
-            </div>
-            <div class="project-details" id="details8" role="region" aria-labelledby="title8">
-                <a href="https://tommedenney.itch.io/soul-solace" target="_blank" class="scroll-btn">Download on Itch.io</a>
-                <p>Players journey through haunting dreamscapes as they piece together fragments of a fractured mind. Featuring eerie sound design, shifting architecture, and immersive metaphors, this project invites reflection on themes of loss and identity in surreal VR spaces.</p>
-                <img src="projects/soulsolace/1.png" alt="Soul Solace" />
-                <img src="projects/soulsolace/2.png" alt="Soul Solace" />
-                <img src="projects/soulsolace/2-5.png" alt="Soul Solace" />
-                <img src="projects/soulsolace/3.png" alt="Soul Solace" />
-                <img src="projects/soulsolace/4.png" alt="Soul Solace" />
-                <img src="projects/soulsolace/5.png" alt="Soul Solace" />
-            </div>
-        </div>
+(function spring(){
+  cdata.forEach(c=>{
+    c.vx += (-c.ox) * .075;
+    c.vy += (-c.oy) * .075;
+    c.vx *= .86; c.vy *= .86;
+    c.ox += c.vx; c.oy += c.vy;
+    c.el.style.transform = `translate(${c.ox}px,${c.oy}px) rotate(${c.rot + c.ox*.015}deg)`;
+  });
+  requestAnimationFrame(spring);
+})();
 
-        <!-- Gods Drunkest Driver -->
-        <div class="project-card">
-            <button class="project-title" aria-expanded="false" aria-controls="details9" id="title9">
-                Gods Drunkest Driver
-            </button>
-            <div class="project-summary">
-                A mythological racing game where divine chaos meets arcade racing.
-            </div>
-            <div class="project-details" id="details9" role="region" aria-labelledby="title9">
-                <a href="https://tommedenney.itch.io/gods-drunkest-driver" target="_blank" class="scroll-btn">Download on Itch.io</a>
-                <p>Race through Olympian trials with absurd physics, divine obstacles, and unpredictable environments. This myth-inspired game challenges players to earn the title of the gods’ fastest (and possibly most reckless) driver. Designed for fast-paced, replayable fun.</p>
-                <img src="projects/godsdrunkestdriver/1.png" alt="Gods Drunkest Driver" />
-                <img src="projects/godsdrunkestdriver/2.png" alt="Gods Drunkest Driver" />
-            </div>
-        </div>
+/* Fade hero on scroll */
+const hname=document.getElementById('hname'), hmeta=document.getElementById('hmeta');
+window.addEventListener('scroll',()=>{
+  const p=Math.min(window.scrollY/500,1);
+  hname.style.opacity=Math.max(0,1-p*2);
+  hmeta.style.opacity=Math.max(0,1-p*3);
+  cdata.forEach(c=>c.el.style.opacity=Math.max(0,1-p*2.5));
+},{passive:true});
 
-        <!-- Great Vending Machine -->
-        <div class="project-card">
-            <button class="project-title" aria-expanded="false" aria-controls="details10" id="title10">
-                Great Vending Machine
-            </button>
-            <div class="project-summary">
-                A surreal horror platformer inspired by urban Japanese vending machines.
-            </div>
-            <div class="project-details" id="details10" role="region" aria-labelledby="title10">
-                <a href="https://tommedenney.itch.io/great-vending-machine" target="_blank" class="scroll-btn">Download on Itch.io</a>
-                <p>Created during a study abroad in Japan, this eerie 3D platformer explores themes of disorientation and nostalgia. Players wander through dreamlike alleys, haunted vending machines, and mechanical spirits in search of escape—or meaning.</p>
-                <div style="max-width: 100%; height: 600px; overflow: hidden;">
-                    <iframe src="https://tommedenney.github.io/GVMHost/"
-                            width="100%"
-                            height="600"
-                            frameborder="0"
-                            allowfullscreen
-                            style="border: none;">
-                    </iframe>
-                </div>
+/* ── FEATURED CAROUSEL ── */
+const FLABELS=['Gene XR','FortNashBoroughXR','Usurper Interactive'];
+const fcards=Array.from(document.querySelectorAll('.fc'));
+const FN=fcards.length;
+let fi=0, autoT=null, userActed=false;
 
-                <img src="projects/greatvendingmachine/1.png" alt="Great Vending Machine" />
-                <img src="projects/greatvendingmachine/2.png" alt="Great Vending Machine" />
-                <img src="projects/greatvendingmachine/3.png" alt="Great Vending Machine" />
-                <img src="projects/greatvendingmachine/4.png" alt="Great Vending Machine" />
-                <img src="projects/greatvendingmachine/5.png" alt="Great Vending Machine" />
-                <img src="projects/greatvendingmachine/6.png" alt="Great Vending Machine" />
-            </div>
-        </div>
+// Load featured images
+fcards.forEach(fc=>{
+  const img=fc.querySelector('.fcimg');
+  loadImg(img, fc.dataset.img);
+});
 
-        <!-- Unforgotten Stories: The Partition -->
-        <div class="project-card">
-            <button class="project-title" aria-expanded="false" aria-controls="details11" id="title11">
-                Unforgotten Stories: The Partition
-            </button>
-            <div class="project-summary">
-                An immersive narrative project exploring the trauma of the India–Pakistan Partition.
-            </div>
-            <div class="project-details" id="details11" role="region" aria-labelledby="title11">
-                <a href="https://tommedenney.itch.io/unforgotten-stories-the-partition" target="_blank" class="scroll-btn">Download on Itch.io</a>
-                <p>This personal, historically grounded XR piece reflects on generational memory and the displacement of millions during the Partition. Based on oral history and family testimony, it blends interactive storytelling with archival textures and spatial audio to honor lost voices.</p>
-                <video controls>
-                    <source src="projects/unforgottenstories/0.mp4" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
-                <img src="projects/unforgottenstories/1.png" alt="Unforgotten Stories: The Partition" />
-            </div>
-        </div>
+function renderFeat(){
+  fcards.forEach((c,i)=>{
+    const rel=((i-fi)%FN+FN)%FN;
+    c.className='fc';
+    if(rel===0)       c.classList.add('center');
+    else if(rel===1)  c.classList.add('right');
+    else if(rel===2)  c.classList.add('left');
+    else              c.classList.add('out-r');
+  });
+  document.getElementById('flbl').textContent=FLABELS[fi];
+}
+renderFeat();
 
-        <!-- Flora Park Mystery -->
-        <div class="project-card">
-            <button class="project-title" aria-expanded="false" aria-controls="details12" id="title12">
-                Flora Park Mystery
-            </button>
-            <div class="project-summary">
-                A narrative-driven XR puzzle experience set in a lush, mysterious botanical park.
-            </div>
-            <div class="project-details" id="details12" role="region" aria-labelledby="title12">
-                <a href="https://tommedenney.itch.io/flora-park-mystery" target="_blank" class="scroll-btn">Download on Itch.io</a>
-                <p>Players investigate the disappearance of a park botanist by solving puzzles hidden among plants, creatures, and interactive environmental clues. Designed for AR and VR, the project combines natural exploration with mystery storytelling.</p>
-                <video controls>
-                    <source src="projects/flora/0.mp4" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
-                <img src="projects/flora/1.png" alt="Flora Park Mystery" />
-            </div>
-        </div>
+function nextFeat(){ fi=(fi+1)%FN; renderFeat(); }
+function startAuto(){ autoT=setInterval(nextFeat,3000); }
+function resetAuto(){ clearInterval(autoT); startAuto(); }
+startAuto();
 
-        <!-- Walk Among Us -->
-        <div class="project-card">
-            <button class="project-title" aria-expanded="false" aria-controls="details13" id="title13">
-                Walk Among Us
-            </button>
-            <div class="project-summary">
-                An educational XR experience that blends history and presence in interactive environments.
-            </div>
-            <div class="project-details" id="details13" role="region" aria-labelledby="title13">
-                <a href="https://tommedenney.itch.io/walkamongus" target="_blank" class="scroll-btn">Download on Itch.io</a>
-                <p>*Walk Among Us* lets users explore historically significant or culturally rich environments in AR and VR. Designed as an educational tool, it allows learners to interact with virtual reconstructions, layered narratives, and annotated content to deepen understanding.</p>
-                <video controls>
-                    <source src="projects/walk/0.mp4" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
-                <img src="projects/walk/1.png" alt="Walk Among Us" />
-                <img src="projects/walk/2.png" alt="Walk Among Us" />
-            </div>
-        </div>
+fcards.forEach(c=>{
+  c.addEventListener('click',()=>{
+    if(c.classList.contains('center')) return;
+    if(c.classList.contains('right')) fi=(fi+1)%FN;
+    else fi=(fi-1+FN)%FN;
+    renderFeat(); resetAuto();
+  });
+});
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'){fi=(fi+1)%FN;renderFeat();resetAuto()}
+  if(e.key==='ArrowLeft'){fi=(fi-1+FN)%FN;renderFeat();resetAuto()}
+});
 
-        <!-- The Other Realm -->
-        <div class="project-card">
-            <button class="project-title" aria-expanded="false" aria-controls="details14" id="title14">
-                The Other Realm
-            </button>
-            <div class="project-summary">
-                A branching VR visual novel that places players at the heart of supernatural decisions.
-            </div>
-            <div class="project-details" id="details14" role="region" aria-labelledby="title14">
-                <a href="https://tommedenney.itch.io/the-other-realm" target="_blank" class="scroll-btn">Download on Itch.io</a>
-                <p>Set in a liminal, ghostly space, this interactive visual novel invites players to shape the story through dialogue and moral choices. The experience blends visual storytelling, character-driven plotlines, and voice-acted scenes to explore themes of justice, guilt, and redemption.</p>
-                <iframe src="projects/otherrealm/otherrealm.html" class="twine-embed" title="Play Other Realm" loading="lazy" frameborder="0" allowfullscreen> </iframe>
-                <img src="projects/otherrealm/1.png" alt="The Other Realm" />
-            </div>
-        </div>
+/* ── SCROLL-IN GRID ── */
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const idx=Array.from(document.querySelectorAll('.wc')).indexOf(e.target);
+      setTimeout(()=>e.target.classList.add('in'),idx*65);
+    }
+  });
+},{threshold:0.12});
+document.querySelectorAll('.wc').forEach(c=>obs.observe(c));
 
-        <!-- Curse of the Mind -->
-        <div class="project-card">
-            <button class="project-title" aria-expanded="false" aria-controls="details15" id="title15">
-                Curse of the Mind (Demo)
-            </button>
-            <div class="project-summary">
-                A VR psychological adventure that explores trauma through spatial metaphor.
-            </div>
-            <div class="project-details" id="details15" role="region" aria-labelledby="title15">
-                <a href="https://tommedenney.itch.io/curse-of-the-mind-demo" target="_blank" class="scroll-btn">Download on Itch.io</a>
-                <p>This experimental XR demo invites users to traverse metaphorical environments representing inner fears and memories. Using light puzzles and symbolic design, *Curse of the Mind* creates an emotionally driven narrative space grounded in introspection and personal healing.</p>
-                <img src="projects/curse/1.png" alt="Curse of the Mind" />
-            </div>
-        </div>
+/* ── NAV ACTIVE ── */
+window.addEventListener('scroll',()=>{
+  const mid=window.scrollY+window.innerHeight*.4;
+  const infoTop=document.getElementById('info').offsetTop;
+  document.getElementById('nw').classList.toggle('on',mid<infoTop);
+  document.getElementById('ni').classList.toggle('on',mid>=infoTop);
+},{passive:true});
 
-
-    </section>
-
-    <!-- Contact -->
-    <section id="contact">
-        <h2>Contact</h2>
-        <p>
-            I'm always open to collaboration, freelance opportunities, or just a chat about immersive media and XR development.
-        </p>
-        <p>
-            <a href="mailto:Denney.t@northeastern.edu" class="email-link">Denney.t@northeastern.edu</a>
-        </p>
-
-        <div class="contact-buttons">
-            <a href="https://www.linkedin.com/in/tommedenney/" target="_blank" class="scroll-btn">Follow me on LinkedIn!</a>
-            <a href="https://tommedenney.itch.io/" target="_blank" class="scroll-btn">Check out my Itch.io!</a>
-        </div>
-
-    </section>
-
-    <!-- Footer -->
-    <footer>
-        <p>© 2025 Tomme Denney</p>
-    </footer>
-
-    <!-- Expand Project Cards Logic -->
-    <script>
-        document.querySelectorAll(".project-title").forEach(button => {
-            button.addEventListener("click", () => {
-                const card = button.closest(".project-card");
-                const expanded = card.classList.toggle("expanded");
-                button.setAttribute("aria-expanded", expanded);
-            });
-        });
-    </script>
-
+/* ── PALETTE ── */
+function setTheme(t,el){
+  document.body.dataset.theme=t;
+  document.querySelectorAll('.sw').forEach(s=>s.classList.remove('on'));
+  el.classList.add('on');
+  document.getElementById('sw').classList.remove('open');
+}
+function togglePal(){ document.getElementById('sw').classList.toggle('open'); }
+document.addEventListener('click',e=>{
+  if(!document.getElementById('pal').contains(e.target))
+    document.getElementById('sw').classList.remove('open');
+});
+</script>
 </body>
 </html>
