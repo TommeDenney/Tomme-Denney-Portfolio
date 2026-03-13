@@ -14,35 +14,38 @@
 *{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--text);font-family:'Barlow','Helvetica Neue',Arial,sans-serif;cursor:none;overflow-x:hidden;transition:background .45s,color .45s;-webkit-font-smoothing:antialiased}
 
-/* CURSOR */
+/* ── CURSOR — mix-blend-mode:difference auto-contrasts on any bg ── */
 #cur,#ring{position:fixed;pointer-events:none;z-index:9999;border-radius:50%;transform:translate(-50%,-50%);mix-blend-mode:difference}
-#cur{width:10px;height:10px;background:#fff;transition:width .15s,height .15s}
-#ring{width:36px;height:36px;border:1.8px solid #fff;opacity:.85;transition:width .32s cubic-bezier(.25,.46,.45,.94),height .32s cubic-bezier(.25,.46,.45,.94)}
+#cur{width:10px;height:10px;background:#fff;transition:width .15s,height .15s,transform .15s}
+#ring{width:36px;height:36px;border:1.8px solid #fff;opacity:.85;transition:width .32s cubic-bezier(.25,.46,.45,.94),height .32s cubic-bezier(.25,.46,.45,.94),opacity .3s}
 body.hov #cur{width:6px;height:6px}
 body.hov #ring{width:54px;height:54px;opacity:.5}
-body.shake #cur{width:28px;height:28px;opacity:.7;transition:width .18s,height .18s}
+/* shake-to-magnify */
+body.shake #cur{width:28px;height:28px;opacity:.7;transition:width .18s,height .18s,opacity .18s}
 body.shake #ring{width:88px;height:88px;opacity:.4;transition:width .18s,height .18s}
 
-/* NAV */
+/* ── NAV ── */
 nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content:space-between;align-items:center;padding:22px 44px}
 .logo{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--text);text-decoration:none;cursor:pointer;transition:opacity .2s}
 .logo:hover{opacity:.4}
 .navr{display:flex;gap:26px;list-style:none}
 .navr a{font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--mt);text-decoration:none;cursor:pointer;transition:color .2s}
 .navr a:hover,.navr a.on{color:var(--text)}
+
+/* back button — always visible, high contrast */
 .back-btn{display:none;align-items:center;gap:10px;font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;background:#fff;border:none;color:#111;padding:10px 20px;border-radius:100px;box-shadow:0 2px 18px rgba(0,0,0,.22);transition:transform .2s,box-shadow .2s}
 .back-btn:hover{transform:translateX(-3px);box-shadow:0 4px 28px rgba(0,0,0,.3)}
 .back-btn svg{transition:transform .2s}
 .back-btn:hover svg{transform:translateX(-3px)}
 
-/* TICKER */
-.ticker{overflow:hidden;border-top:1px solid var(--b);border-bottom:1px solid var(--b);padding:13px 0;white-space:nowrap}
+/* ── TICKER ── */
+.ticker{overflow:hidden;border-top:1px solid var(--b);border-bottom:1px solid var(--b);padding:13px 0;white-space:nowrap;transition:background .45s,border-color .45s}
 .tickin{display:inline-flex;animation:tick 26s linear infinite}
-.tickin span{font-size:13px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--mt);padding:0 24px}
+.tickin span{font-size:13px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--mt);padding:0 24px;transition:color .35s}
 .tickin .dot{color:var(--text);padding:0 2px}
 @keyframes tick{to{transform:translateX(-50%)}}
 
-/* HERO */
+/* ── HERO ── */
 .hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;padding-top:60px;position:relative;overflow:hidden}
 .hmeta{font-size:13px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--mt);text-align:center;line-height:2.1;margin-bottom:10px;position:relative;z-index:10;transition:opacity .3s}
 .hname{font-family:'Barlow Condensed',Impact,'Arial Narrow',sans-serif;font-weight:900;font-size:clamp(68px,15vw,220px);letter-spacing:-.03em;text-transform:uppercase;text-align:center;line-height:.88;color:var(--text);position:relative;z-index:10;user-select:none;transition:color .35s,opacity .35s;padding:0 32px;pointer-events:none}
@@ -52,16 +55,16 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content
 .hcimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:2;opacity:0;transition:opacity .5s}
 .hcimg.ok{opacity:1}
 .hcico{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:46px;z-index:1}
-.hclbl{position:absolute;bottom:0;left:0;right:0;z-index:3;padding:9px 11px;font-size:11px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:rgba(255,255,255,.94);text-shadow:0 1px 6px rgba(0,0,0,.5);background:linear-gradient(transparent,rgba(0,0,0,.42))}
+.hclbl{position:absolute;bottom:0;left:0;right:0;z-index:3;padding:9px 11px;font-size:11px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:rgba(255,255,255,.94);text-shadow:0 1px 6px rgba(0,0,0,.5);background:linear-gradient(transparent,rgba(0,0,0,.42));opacity:.9}
 
-/* ROLE */
+/* ── ROLE ── */
 .role{padding:72px 44px 64px}
-.rword{display:block;font-family:'Barlow Condensed',Impact,'Arial Narrow',sans-serif;font-weight:900;font-size:clamp(52px,10.5vw,148px);letter-spacing:-.02em;text-transform:uppercase;color:var(--gr);line-height:.9}
+.rword{display:block;font-family:'Barlow Condensed',Impact,'Arial Narrow',sans-serif;font-weight:900;font-size:clamp(52px,10.5vw,148px);letter-spacing:-.02em;text-transform:uppercase;color:var(--gr);line-height:.9;transition:color .35s}
 .clients{margin-top:56px;text-align:center}
 .cl{font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--text);margin-bottom:12px}
 .cv{font-size:13px;font-weight:500;letter-spacing:.11em;text-transform:uppercase;color:var(--mt)}
 
-/* FEATURED */
+/* ── FEATURED ── */
 .featured{padding:80px 0 68px;text-align:center}
 .sh{font-family:'Barlow Condensed',Impact,'Arial Narrow',sans-serif;font-weight:900;font-size:clamp(40px,7vw,90px);letter-spacing:-.015em;text-transform:uppercase;margin-bottom:8px}
 .ss{font-size:14px;font-weight:500;color:var(--mt);margin-bottom:44px;letter-spacing:.04em}
@@ -76,10 +79,10 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content
 .fcimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:2;opacity:0;transition:opacity .5s}
 .fcimg.ok{opacity:1}
 .fcico{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:54px;z-index:1}
-.flabel{display:inline-flex;margin-top:18px;padding:10px 26px;border-radius:100px;background:var(--cb);font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;cursor:pointer}
+.flabel{display:inline-flex;margin-top:18px;padding:10px 26px;border-radius:100px;background:var(--cb);font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;transition:background .35s;cursor:pointer}
 .flabel:hover{opacity:.7}
 
-/* MORE WORK */
+/* ── MORE WORK ── */
 .more{padding:80px 44px 72px;text-align:center}
 .wgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:44px;max-width:940px;margin-left:auto;margin-right:auto}
 .wc{aspect-ratio:1;border-radius:16px;overflow:hidden;cursor:pointer;transform:scale(.84) translateY(22px);opacity:0;transition:transform .72s cubic-bezier(.25,.46,.45,.94),opacity .72s,box-shadow .3s}
@@ -92,17 +95,17 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content
 .wcico{position:relative;z-index:1;font-size:40px}
 .wct{position:absolute;bottom:0;left:0;right:0;z-index:3;padding:12px 14px;background:linear-gradient(transparent,rgba(0,0,0,.54));font-size:11px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:#fff;text-align:left}
 
-/* CONTACT */
+/* ── CONTACT ── */
 .contact{background:#161411;padding:88px 44px 52px;text-align:center;overflow:hidden}
 .cword{font-family:'Barlow Condensed',Impact,'Arial Narrow',sans-serif;font-weight:900;font-size:min(21vw,300px);letter-spacing:-.04em;text-transform:uppercase;color:rgba(255,255,255,.11);line-height:.82;margin-bottom:62px;user-select:none}
-.ceml{display:block;font-size:13px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.62);text-decoration:none;margin-bottom:18px}
+.ceml{display:block;font-size:13px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.62);text-decoration:none;margin-bottom:18px;transition:opacity .2s}
 .ceml:hover{opacity:.38}
 .csoc{display:flex;gap:24px;justify-content:center;list-style:none;margin-bottom:44px}
 .csoc a{font-size:12px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:rgba(255,255,255,.4);text-decoration:none;transition:color .2s}
 .csoc a:hover{color:rgba(255,255,255,.9)}
 .ccp{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.2)}
 
-/* PALETTE */
+/* ── PALETTE ── */
 #pal{position:fixed;bottom:28px;right:28px;z-index:400;display:flex;flex-direction:column;align-items:flex-end;gap:9px}
 #pbtn{width:44px;height:44px;border-radius:50%;background:var(--cb);border:1.5px solid var(--b);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 2px 20px rgba(0,0,0,.12);transition:transform .28s,background .35s}
 #pbtn:hover{transform:rotate(32deg) scale(1.07)}
@@ -116,51 +119,26 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content
 
 /* ── PROJECT DETAIL ── */
 #project-view{display:none;min-height:100vh}
-
-/* Hero spotlight — holds slideshow, video, or game */
 .pv-hero{width:100%;height:100vh;position:relative;overflow:hidden;display:flex;align-items:flex-end}
-.pv-hero-bg{position:absolute;inset:0;z-index:0}
-.pv-hero-grad{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.82) 0%,rgba(0,0,0,.1) 60%,transparent 100%);z-index:3}
-.pv-hero-info{position:relative;z-index:4;padding:0 52px 52px;width:100%}
-
-/* Game embed hero */
-.pv-hero-game{position:absolute;inset:0;z-index:2;display:none;flex-direction:column}
-.pv-hero-game iframe{width:100%;flex:1;border:none;display:block}
-.pv-game-bar{display:flex;align-items:center;justify-content:space-between;padding:10px 20px;background:rgba(0,0,0,.75);backdrop-filter:blur(8px);flex-shrink:0;z-index:5}
-.pv-game-bar span{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.6)}
-.pv-game-fs{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#fff;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);padding:6px 16px;border-radius:100px;cursor:pointer;transition:background .2s}
-.pv-game-fs:hover{background:rgba(255,255,255,.28)}
-.pv-game-itchio{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#fff;background:#fa5c5c;border:none;padding:6px 16px;border-radius:100px;cursor:pointer;text-decoration:none;transition:background .2s}
-.pv-game-itchio:hover{background:#e84444}
-
-/* Slideshow */
-.pv-slide{position:absolute;inset:0;z-index:1}
-.pv-slide img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1.2s ease}
-.pv-slide img.active{opacity:1}
-
-/* Hero video */
-.pv-hero-vid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:2;display:none}
-
-/* Slideshow dots */
-.pv-dots{position:absolute;bottom:56px;right:52px;z-index:5;display:flex;gap:7px}
-.pv-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.35);cursor:pointer;transition:background .25s,transform .2s}
-.pv-dot.on{background:#fff;transform:scale(1.25)}
-
+.pv-hero-media{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.pv-hero-bg{position:absolute;inset:0}
+.pv-hero-grad{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.78) 0%,rgba(0,0,0,.12) 60%,transparent 100%);z-index:2}
+.pv-hero-info{position:relative;z-index:3;padding:0 52px 52px;width:100%}
 .pv-cat{font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:12px}
 .pv-title{font-family:'Barlow Condensed',Impact,'Arial Narrow',sans-serif;font-weight:900;font-size:clamp(56px,10vw,130px);letter-spacing:-.03em;text-transform:uppercase;color:#fff;line-height:.88;margin-bottom:20px}
 .pv-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
 .pv-tag{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:6px 14px;border-radius:100px;border:1.2px solid rgba(255,255,255,.3);color:rgba(255,255,255,.75)}
+/* short caption under tags */
 .pv-caption{font-size:14px;font-weight:500;color:rgba(255,255,255,.7);letter-spacing:.02em;line-height:1.55;max-width:520px;margin-top:6px}
 
-/* Body */
 .pv-body{max-width:1100px;margin:0 auto;padding:64px 52px}
-.pv-desc{font-size:17px;font-weight:400;line-height:1.84;color:var(--text);max-width:660px;margin-bottom:56px}
+/* bigger description */
+.pv-desc{font-size:17px;font-weight:400;line-height:1.84;color:var(--text);max-width:660px;margin-bottom:56px;transition:color .35s}
 .pv-gallery{columns:2;gap:16px;margin-bottom:72px}
 .pv-gallery-item{break-inside:avoid;margin-bottom:16px;border-radius:14px;overflow:hidden;background:var(--cb)}
 .pv-gallery-item img,.pv-gallery-item video{width:100%;display:block;border-radius:14px;transition:transform .55s cubic-bezier(.25,.46,.45,.94)}
 .pv-gallery-item:hover img,.pv-gallery-item:hover video{transform:scale(1.025)}
 
-/* More strip */
 .pv-more{padding:0 0 80px}
 .pv-more-title{font-size:12px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--mt);margin-bottom:24px;padding:0 52px}
 .pv-more-track{display:flex;gap:16px;padding:0 52px 16px;overflow-x:auto;scrollbar-width:none}
@@ -172,21 +150,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content
 .pv-more-card-img.ok{opacity:1}
 .pv-more-card-ico{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:36px;z-index:1}
 .pv-more-card-lbl{position:absolute;bottom:0;left:0;right:0;z-index:3;padding:9px 12px;background:linear-gradient(transparent,rgba(0,0,0,.52));font-size:11px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:#fff}
-
-function toggleGameFS(){
-  const iframe=document.getElementById('pv-game-iframe');
-  if(iframe.requestFullscreen)iframe.requestFullscreen();
-  else if(iframe.webkitRequestFullscreen)iframe.webkitRequestFullscreen();
-}
-
-/* ── LIGHTBOX ── */
-#lightbox{position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center;padding:24px}
-#lightbox.open{display:flex}
-#lb-ov{position:absolute;inset:0;background:rgba(255,255,255,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
-#lb-img{position:relative;z-index:1;max-width:min(700px,90vw);max-height:88vh;object-fit:contain;border-radius:16px;box-shadow:0 32px 80px rgba(0,0,0,.18);animation:lbIn .28s cubic-bezier(.25,.46,.45,.94)}
-#lb-close{position:absolute;top:18px;right:18px;z-index:2;width:42px;height:42px;border-radius:50%;background:#fff;border:none;cursor:pointer;font-size:20px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 14px rgba(0,0,0,.14);transition:transform .2s,box-shadow .2s;line-height:1}
-#lb-close:hover{transform:scale(1.1);box-shadow:0 4px 22px rgba(0,0,0,.2)}
-@keyframes lbIn{from{opacity:0;transform:scale(.93)}to{opacity:1;transform:scale(1)}}
 
 ::-webkit-scrollbar{width:3px}
 ::-webkit-scrollbar-thumb{background:var(--b);border-radius:2px}
@@ -208,7 +171,7 @@ function toggleGameFS(){
   </ul>
 </nav>
 
-<!-- HOME -->
+<!-- ══ HOME VIEW ══ -->
 <div id="home-view">
   <div style="padding-top:68px">
     <div class="ticker">
@@ -264,9 +227,21 @@ function toggleGameFS(){
     <h2 class="sh">Featured Work</h2>
     <p class="ss">Select recent and notable projects</p>
     <div class="fcar" id="fcar">
-      <div class="fc" data-id="seereality"><div class="fcbg" style="background:linear-gradient(145deg,#050e1a,#0e2860,#1a449a)"></div><div class="fcico">🌐</div><img class="fcimg" src="projects/seereality/0.png" onload="this.classList.add('ok')" onerror="this.style.display='none'"></div>
-      <div class="fc" data-id="arworkofart"><div class="fcbg" style="background:linear-gradient(145deg,#1a0a2e,#4a1888,#7040b5)"></div><div class="fcico">🎨</div><img class="fcimg" src="projects/arworkofart/1.png" onload="this.classList.add('ok')" onerror="this.style.display='none'"></div>
-      <div class="fc" data-id="haptidraw"><div class="fcbg" style="background:linear-gradient(145deg,#1a1a05,#484810,#7a7a1a)"></div><div class="fcico">✏️</div><img class="fcimg" src="projects/haptidraw/1.png" onload="this.classList.add('ok')" onerror="this.style.display='none'"></div>
+      <div class="fc" data-id="seereality">
+        <div class="fcbg" style="background:linear-gradient(145deg,#050e1a,#0e2860,#1a449a)"></div>
+        <div class="fcico">🌐</div>
+        <img class="fcimg" src="projects/seereality/0.png" alt="" onload="this.classList.add('ok')" onerror="this.style.display='none'">
+      </div>
+      <div class="fc" data-id="arworkofart">
+        <div class="fcbg" style="background:linear-gradient(145deg,#1a0a2e,#4a1888,#7040b5)"></div>
+        <div class="fcico">🎨</div>
+        <img class="fcimg" src="projects/arworkofart/1.png" alt="" onload="this.classList.add('ok')" onerror="this.style.display='none'">
+      </div>
+      <div class="fc" data-id="haptidraw">
+        <div class="fcbg" style="background:linear-gradient(145deg,#1a1a05,#484810,#7a7a1a)"></div>
+        <div class="fcico">✏️</div>
+        <img class="fcimg" src="projects/haptidraw/1.png" alt="" onload="this.classList.add('ok')" onerror="this.style.display='none'">
+      </div>
     </div>
     <div style="text-align:center;margin-top:18px">
       <span class="flabel" id="flbl" onclick="openProjectFromFeat()">See Reality</span>
@@ -291,28 +266,13 @@ function toggleGameFS(){
   </section>
 </div>
 
-<!-- PROJECT VIEW -->
+<!-- ══ PROJECT VIEW ══ -->
 <div id="project-view">
-  <div class="pv-hero" id="pv-hero">
+  <div class="pv-hero">
     <div class="pv-hero-bg" id="pv-hero-bg"></div>
-    <!-- slideshow layer (images) -->
-    <div class="pv-slide" id="pv-slide"></div>
-    <!-- video layer (one or chained mp4s) -->
-    <video class="pv-hero-vid" id="pv-hero-vid" autoplay muted playsinline></video>
-    <!-- game embed layer -->
-    <div class="pv-hero-game" id="pv-hero-game">
-      <div class="pv-game-bar">
-        <span id="pv-game-title">Great Vending Machine</span>
-        <div style="display:flex;gap:10px;align-items:center">
-          <a class="pv-game-itchio" href="https://tommedenney.itch.io/great-vending-machine" target="_blank">Itch.io ↗</a>
-          <button class="pv-game-fs" onclick="toggleGameFS()">⛶ Fullscreen</button>
-        </div>
-      </div>
-      <iframe id="pv-game-iframe" src="" allowfullscreen allow="autoplay; fullscreen"></iframe>
-    </div>
+    <img class="pv-hero-media" id="pv-hero-img" alt="" style="display:none" onload="this.style.display='block'" onerror="this.style.display='none'">
+    <video class="pv-hero-media" id="pv-hero-vid" autoplay muted loop playsinline style="display:none"></video>
     <div class="pv-hero-grad"></div>
-    <!-- slideshow dots -->
-    <div class="pv-dots" id="pv-dots"></div>
     <div class="pv-hero-info">
       <p class="pv-cat" id="pv-cat"></p>
       <h1 class="pv-title" id="pv-title"></h1>
@@ -330,13 +290,6 @@ function toggleGameFS(){
   </div>
 </div>
 
-<!-- LIGHTBOX -->
-<div id="lightbox">
-  <div id="lb-ov" onclick="closeLightbox()"></div>
-  <img id="lb-img" src="" alt="">
-  <button id="lb-close" onclick="closeLightbox()">✕</button>
-</div>
-
 <div id="pal">
   <div class="swatches" id="sw">
     <div class="sw on" onclick="setTheme('',this)"><span>Warm</span><div class="sdot" style="background:#f2ede3"></div></div>
@@ -349,279 +302,102 @@ function toggleGameFS(){
 </div>
 
 <script>
-const PROJECTS=[
-  {id:'seereality',         name:'See Reality',               cat:'XR Studio · Client Work',       cover:'projects/seereality/0.png',
+/* ══ PROJECT DATA — with short captions ══ */
+const PROJECTS = [
+  {id:'seereality',         name:'See Reality',               cat:'XR Studio · Client Work',       cover:'projects/seereality/0.png',        coverNum:0, extraStart:1,
    bg:'linear-gradient(145deg,#050e1a,#0e2860,#1a449a)', ico:'🌐',
    tags:['Unity C#','Meta Quest','URP','XR Experience','Client Work'],
    caption:'Real-world client XR — from colonial installations to stadium fan experiences.',
    desc:'Immersive XR experiences built for world-class clients. Projects spanning heritage, sports, and entertainment — from Fort Nashborough colonial installations to Liverpool FC fan experiences. Built with Unity C#, Meta Quest hardware, and custom URP shader pipelines optimized for standalone passthrough.'},
-  {id:'arworkofart',        name:'AR Work of Art',            cat:'Augmented Reality · Art',        cover:'projects/arworkofart/1.png',
+
+  {id:'arworkofart',        name:'AR Work of Art',            cat:'Augmented Reality · Art',        cover:'projects/arworkofart/1.png',       coverNum:1, extraStart:2,
    bg:'linear-gradient(145deg,#1a0a2e,#4a1888,#7040b5)', ico:'🎨',
    tags:['AR','Unity','Art Direction','Spatial Design'],
    caption:'Gallery walls that come alive — physical art extended into 3D space.',
-   desc:'An augmented reality art experience merging physical and digital mediums. Users interact with artworks that animate beyond the frame — blending the gallery wall with responsive 3D layers tied to viewer position and gesture.'},
-  {id:'haptidraw',          name:'HaptiDraw',                 cat:'Haptic Interaction · HCI',       cover:'projects/haptidraw/1.png',
+   desc:'An augmented reality art experience merging physical and digital mediums. Users interact with artworks that animate and extend beyond the frame — blending the gallery wall with responsive 3D layers tied to viewer position and gesture.'},
+
+  {id:'haptidraw',          name:'HaptiDraw',                 cat:'Haptic Interaction · HCI',       cover:'projects/haptidraw/1.png',         coverNum:1, extraStart:2,
    bg:'linear-gradient(145deg,#1a1a05,#484810,#7a7a1a)', ico:'✏️',
    tags:['Haptics','HCI','Interaction Design','Prototype'],
    caption:'Drawing with texture, resistance, and weight — in a fully digital canvas.',
    desc:'A haptic drawing experience exploring touch as a medium for digital creation. HaptiDraw investigates how force-feedback and tactile response can deepen the act of mark-making in virtual environments — giving users the sensation of texture and resistance with every stroke.'},
-  {id:'otherrealm',         name:'Other Realm',               cat:'XR Experience',                  cover:'projects/otherrealm/1.png',
+
+  {id:'otherrealm',         name:'Other Realm',               cat:'XR Experience',                  cover:'projects/otherrealm/1.png',        coverNum:1, extraStart:2,
    bg:'linear-gradient(145deg,#0a1a0a,#1a4a1a,#2a7a2a)', ico:'🌿',
    tags:['XR','Spatial Audio','Immersive Environment','Unity'],
    caption:'A living world that breathes and shifts in response to your presence.',
-   desc:'A fully immersive journey into an otherworldly environment. Other Realm builds presence through layered spatial audio, hand-tracked interaction, and procedurally generated biomes that respond to the viewer\'s movement and attention.'},
-  {id:'unforgottenstories', name:'Unforgotten Stories',       cat:'Narrative XR · Memory',          cover:'projects/unforgottenstories/1.png',
+   desc:'A fully immersive journey into an otherworldly environment. Other Realm builds a sense of presence through layered spatial audio, hand-tracked interaction, and procedurally generated biomes that respond to the viewer\'s movement and attention.'},
+
+  {id:'unforgottenstories', name:'Unforgotten Stories',       cat:'Narrative XR · Memory',          cover:'projects/unforgottenstories/1.png', coverNum:1, extraStart:2,
    bg:'linear-gradient(145deg,#1a0a0a,#4a1a1a,#8a2a2a)', ico:'📖',
    tags:['Narrative','XR','Spatial Memory','Heritage'],
    caption:'Walk through history before it disappears — memory preserved in 3D space.',
    desc:'Preserving and sharing stories that history risks losing. Unforgotten Stories uses Gaussian splatting and spatial audio to reconstruct lived moments — placing viewers inside memories and letting them walk through time.'},
-  {id:'soulsolace',         name:'Soul Solace',               cat:'Wellness XR',                    cover:'projects/soulsolace/1.png',
+
+  {id:'soulsolace',         name:'Soul Solace',               cat:'Wellness XR',                    cover:'projects/soulsolace/1.png',        coverNum:1, extraStart:2,
    bg:'linear-gradient(145deg,#0a0a1a,#1a1a4a,#2a2a8a)', ico:'🌊',
    tags:['Wellness','Meditative XR','Spatial Design','Unity'],
    caption:'A sanctuary that responds to your breath — built for stillness and reset.',
    desc:'A meditative XR space designed for emotional reset and inner stillness. Soul Solace uses generative soundscapes, particle environments, and breath-responsive interaction to create a sanctuary that adapts to the user\'s presence and pace.'},
-  {id:'iamyou',             name:'I Am You',                  cat:'Interactive Experience',         cover:'projects/iamyou/1.png',
+
+  {id:'iamyou',             name:'I Am You',                  cat:'Interactive Experience',         cover:'projects/iamyou/1.png',            coverNum:1, extraStart:2,
    bg:'linear-gradient(145deg,#0a1a1a,#1a4a4a,#2a7a7a)', ico:'👤',
    tags:['Identity','Empathy','Interactive','Perspective'],
    caption:'Step inside another point of view — and question what you thought you knew.',
    desc:'An intimate encounter with perspective and identity. I Am You places viewers inside another person\'s point of view through spatial audio, embodied motion capture, and first-person XR — challenging assumptions about self and other.'},
-  {id:'curse',              name:'Curse',                     cat:'Game Design · Atmosphere',       cover:'projects/curse/1.png',
+
+  {id:'curse',              name:'Curse',                     cat:'Game Design · Atmosphere',       cover:'projects/curse/1.png',             coverNum:1, extraStart:2,
    bg:'linear-gradient(145deg,#0e0808,#201010,#341818)', ico:'🌑',
    tags:['Game Design','Dark Atmosphere','Horror','Unity'],
    caption:'The environment is alive. It knows you are here. Proceed carefully.',
    desc:'A dark, atmospheric game rooted in dread and discovery. Curse uses environmental storytelling, reactive lighting, and spatial sound design to craft an experience where the environment itself feels aware — and hostile.'},
-  {id:'flora',              name:'Flora',                     cat:'Environmental XR',               cover:'projects/flora/1.png',
+
+  {id:'flora',              name:'Flora',                     cat:'Environmental XR',               cover:'projects/flora/1.png',             coverNum:1, extraStart:2,
    bg:'linear-gradient(145deg,#0a1a0a,#1a3a1a,#2a5a2a)', ico:'🌺',
    tags:['Nature','XR','Procedural','Environmental Design'],
    caption:'Ecosystems that grow in real time — discovered, not designed.',
    desc:'An XR exploration of natural systems and organic growth. Flora generates living, breathing environments in real-time — responding to the viewer\'s gaze and movement to produce ecosystems that feel found rather than built.'},
-  {id:'godsdrunkestdriver', name:"God's Drunkest Driver",     cat:'Game Design · Comedy',           cover:'projects/godsdrunkestdriver/1.png',
+
+  {id:'godsdrunkestdriver', name:"God's Drunkest Driver",     cat:'Game Design · Comedy',           cover:'projects/godsdrunkestdriver/1.png',coverNum:1, extraStart:2,
    bg:'linear-gradient(145deg,#1a0a05,#4a2010,#8a4020)', ico:'🚗',
    tags:['Game Design','Comedy','Physics','Chaos'],
    caption:'Ragdoll physics, impossible roads, zero apologies — crash beautifully.',
    desc:'A chaotic physics-based driving game channeling pure comedic mayhem. God\'s Drunkest Driver leans into ragdoll physics, unpredictable terrain, and escalating absurdity — because sometimes the point is just to crash beautifully.'},
-  {id:'greatvendingmachine',name:'Great Vending Machine',     cat:'Interactive Installation',       cover:'projects/greatvendingmachine/1.png',
+
+  {id:'greatvendingmachine',name:'Great Vending Machine',     cat:'Interactive Installation',       cover:'projects/greatvendingmachine/1.png',coverNum:1, extraStart:2,
    bg:'linear-gradient(145deg,#0a0a1a,#20201a,#403a10)', ico:'🎰',
    tags:['Installation','Interactive','Art','Unexpected'],
    caption:'Insert a selection. Receive something you never expected.',
-   desc:'An interactive installation reimagining the vending machine as a portal to unexpected experiences. Great Vending Machine interrogates automation, desire, and surprise — one transaction at a time.'},
-  {id:'internshipintheafterlife',name:'Internship in the Afterlife',cat:'Narrative Game · Comedy', cover:'projects/internshipintheafterlife/1.png',
+   desc:'An interactive installation that reimagines the vending machine as a portal to unexpected experiences. Great Vending Machine interrogates automation, desire, and surprise — one transaction at a time.'},
+
+  {id:'internshipintheafterlife',name:'Internship in the Afterlife',cat:'Narrative Game · Comedy', cover:'projects/internshipintheafterlife/1.png',coverNum:1, extraStart:2,
    bg:'linear-gradient(145deg,#10080a,#301818,#502828)', ico:'👻',
    tags:['Narrative','Comedy','Game Design','Afterlife'],
    caption:'Your first performance review is from beyond the grave. Good luck.',
-   desc:'What happens when your internship is in the afterlife? Navigate a bureaucratic underworld, complete absurd tasks for spectral supervisors, and survive your first performance review — from beyond the grave.'},
-  {id:'returnofthechickens', name:'Return of the Chickens',   cat:'Game Design',                   cover:'projects/returnofthechickens/1.png',
+   desc:'What happens when your internship is in the afterlife? Navigate a bureaucratic underworld, complete absurd tasks for spectral supervisors, and try to survive your first performance review — from beyond the grave.'},
+
+  {id:'returnofthechickens', name:'Return of the Chickens',   cat:'Game Design',                   cover:'projects/returnofthechickens/1.png',coverNum:1, extraStart:2,
    bg:'linear-gradient(145deg,#1a1505,#4a3a10,#7a6020)', ico:'🐔',
    tags:['Game Design','Comedy','Action','Physics'],
    caption:'They left. They regrouped. Now the chickens are back — and ready.',
-   desc:'They left. Now they\'re back. Return of the Chickens is a chaotic action game built on the premise that poultry has had enough — delivering feathered mayhem with tight controls and escalating challenge.'},
-  {id:'toweroffrankenfrog',  name:'Tower of Frankenfrog',     cat:'Tower Defense · Strategy',      cover:'projects/toweroffrankenfrog/1.png',
+   desc:'They left. Now they\'re back. Return of the Chickens is a chaotic action game built on the premise that poultry has had enough — delivering feathered mayhem with tight controls, escalating challenge, and unreasonable satisfaction.'},
+
+  {id:'toweroffrankenfrog',  name:'Tower of Frankenfrog',     cat:'Tower Defense · Strategy',      cover:'projects/toweroffrankenfrog/1.png', coverNum:1, extraStart:2,
    bg:'linear-gradient(145deg,#0a1a08,#1a3a12,#2a5a1a)', ico:'🐸',
    tags:['Tower Defense','Strategy','Game Design','Monsters'],
    caption:'Frankenfrog holds the line against waves stranger than the last.',
    desc:'A tower defense game where Frankenfrog and his amphibian army hold the line against an increasingly unhinged parade of enemies. Strategic depth wrapped in a creature-feature aesthetic.'},
-  {id:'walk',                name:'Walk',                     cat:'Experiential Design · Minimal',  cover:'projects/walk/1.png',
+
+  {id:'walk',                name:'Walk',                     cat:'Experiential Design · Minimal',  cover:'projects/walk/1.png',              coverNum:1, extraStart:2,
    bg:'linear-gradient(145deg,#101010,#1e1e1e,#2a2828)', ico:'🚶',
    tags:['Experiential','Minimal','Spatial','Contemplative'],
    caption:'One foot in front of the other — made into something worth sitting with.',
    desc:'A contemplative piece about the act of walking. Walk strips back complexity to examine how movement through space creates meaning — using minimal visual language and immersive audio to turn locomotion into something meditative.'},
 ];
+
 const PMAP={};PROJECTS.forEach(p=>PMAP[p.id]=p);
 
-/* ── PROBE helpers ── */
-// Returns promise resolving to array of valid src strings
-function probeFiles(srcs){
-  return Promise.all(srcs.map(src=>new Promise(res=>{
-    // Try video
-    if(src.endsWith('.mp4')){
-      const v=document.createElement('video');
-      v.oncanplaythrough=()=>res(src);
-      v.onerror=()=>res(null);
-      v.src=src;v.load();
-      // some browsers don't fire canplaythrough quickly, fallback after 1.5s
-      setTimeout(()=>res(src),1500); // optimistic: assume it exists if no error fast
-    } else {
-      const i=new Image();
-      i.onload=()=>res(src);
-      i.onerror=()=>res(null);
-      i.src=src;
-    }
-  }))).then(r=>r.filter(Boolean));
-}
-
-function probeImages(folder,max=12){
-  const nums=[];for(let i=1;i<=max;i++)nums.push(i);
-  return Promise.all(nums.map(n=>new Promise(res=>{
-    const i=new Image();const src=folder+n+'.png';
-    i.onload=()=>res(src);i.onerror=()=>res(null);i.src=src;
-  }))).then(r=>r.filter(Boolean));
-}
-
-function probeVideos(folder,max=5){
-  return Promise.all(Array.from({length:max},(_,i)=>new Promise(res=>{
-    const src=folder+i+'.mp4';
-    const v=document.createElement('video');
-    let done=false;
-    const ok=()=>{if(!done){done=true;res(src);}};
-    const fail=()=>{if(!done){done=true;res(null);}};
-    v.oncanplaythrough=ok;
-    v.onerror=fail;
-    v.src=src;v.load();
-    setTimeout(fail,2000); // give up after 2s
-  }))).then(r=>r.filter(Boolean));
-}
-
-/* ── SLIDESHOW state ── */
-let slideImgs=[],slideIdx=0,slideTimer=null;
-
-function buildSlideshow(imgs){
-  clearInterval(slideTimer);
-  const container=document.getElementById('pv-slide');
-  const dots=document.getElementById('pv-dots');
-  container.innerHTML='';dots.innerHTML='';
-  slideImgs=imgs;slideIdx=0;
-  if(!imgs.length)return;
-  imgs.forEach((src,i)=>{
-    const el=document.createElement('img');
-    el.src=src;el.alt='';
-    if(i===0)el.classList.add('active');
-    container.appendChild(el);
-  });
-  if(imgs.length>1){
-    imgs.forEach((_,i)=>{
-      const d=document.createElement('div');
-      d.className='pv-dot'+(i===0?' on':'');
-      d.onclick=()=>goSlide(i);
-      dots.appendChild(d);
-    });
-    slideTimer=setInterval(()=>goSlide((slideIdx+1)%imgs.length),4000);
-  }
-}
-
-function goSlide(idx){
-  const imgs=document.getElementById('pv-slide').querySelectorAll('img');
-  const dots=document.getElementById('pv-dots').querySelectorAll('.pv-dot');
-  if(imgs[slideIdx])imgs[slideIdx].classList.remove('active');
-  if(dots[slideIdx])dots[slideIdx].classList.remove('on');
-  slideIdx=idx;
-  if(imgs[slideIdx])imgs[slideIdx].classList.add('active');
-  if(dots[slideIdx])dots[slideIdx].classList.add('on');
-}
-
-/* ── VIDEO CHAIN state ── */
-let vidList=[],vidIdx=0;
-const heroVid=document.getElementById('pv-hero-vid');
-heroVid.addEventListener('ended',()=>{
-  if(vidList.length>1){
-    vidIdx=(vidIdx+1)%vidList.length;
-    heroVid.src=vidList[vidIdx];heroVid.play();
-  } else {
-    heroVid.play(); // loop single
-  }
-});
-
-/* ── OPEN PROJECT ── */
-async function openProject(id){
-  const p=PMAP[id];if(!p)return;
-  window.scrollTo(0,0);
-  document.getElementById('home-view').style.display='none';
-  document.getElementById('project-view').style.display='block';
-  document.getElementById('main-nav').style.display='none';
-  document.getElementById('back-btn').style.display='flex';
-  clearInterval(autoT);clearInterval(slideTimer);
-
-  // Set text
-  document.getElementById('pv-hero-bg').style.background=p.bg;
-  document.getElementById('pv-cat').textContent=p.cat;
-  document.getElementById('pv-title').textContent=p.name;
-  document.getElementById('pv-tags').innerHTML=p.tags.map(t=>`<span class="pv-tag">${t}</span>`).join('');
-  document.getElementById('pv-caption').textContent=p.caption||'';
-  document.getElementById('pv-desc').textContent=p.desc;
-
-  const folder=p.cover.substring(0,p.cover.lastIndexOf('/')+1);
-
-  // Reset ALL hero layers
-  heroVid.style.display='none';heroVid.src='';
-  heroVid.pause();
-  document.getElementById('pv-slide').innerHTML='';
-  document.getElementById('pv-dots').innerHTML='';
-  const gameEl=document.getElementById('pv-hero-game');
-  gameEl.style.display='none';
-  document.getElementById('pv-game-iframe').src='';
-  document.getElementById('pv-hero-grad').style.display='';
-  document.getElementById('pv-hero-info').style.display='';
-
-  // ── GAME EMBED: Great Vending Machine ──
-  if(p.id==='greatvendingmachine'){
-    gameEl.style.display='flex';
-    document.getElementById('pv-game-iframe').src='https://tommedenney.github.io/GVMHost/';
-    document.getElementById('pv-game-title').textContent=p.name;
-    // Hide the gradient overlay and info text so game fills cleanly
-    document.getElementById('pv-hero-grad').style.display='none';
-    document.getElementById('pv-hero-info').style.display='none';
-  } else {
-  // Probe all images (1.png – 12.png)
-  const images=await probeImages(folder,12);
-
-  // ── HERO: videos win; fallback to image slideshow ──
-  if(videos.length>0){
-    heroVid.style.display='block';
-    vidList=videos;vidIdx=0;
-    heroVid.src=videos[0];heroVid.play();
-    const dots=document.getElementById('pv-dots');
-    if(videos.length>1){
-      videos.forEach((_,i)=>{
-        const d=document.createElement('div');d.className='pv-dot'+(i===0?' on':'');
-        dots.appendChild(d);
-      });
-    }
-  } else {
-    buildSlideshow(images);
-  }
-
-  // ── GALLERY: all images from 1.png onwards ──
-  const gal=document.getElementById('pv-gallery');gal.innerHTML='';
-  // Add all videos as playable items first
-  videos.forEach(src=>{
-    const w=document.createElement('div');w.className='pv-gallery-item';
-    const v=document.createElement('video');v.src=src;v.controls=true;v.muted=true;v.style.cssText='width:100%;display:block;border-radius:14px;';
-    w.appendChild(v);gal.appendChild(w);
-  });
-  // Add all images — clicking opens lightbox
-  images.forEach(src=>{
-    const w=document.createElement('div');w.className='pv-gallery-item';
-    const i=document.createElement('img');i.src=src;i.alt=p.name;
-    i.style.cssText='width:100%;display:block;border-radius:14px;cursor:zoom-in;';
-    i.addEventListener('click',()=>openLightbox(src));
-    w.appendChild(i);gal.appendChild(w);
-  });
-
-  } // end non-game block
-
-  // ── MORE strip ──
-  const track=document.getElementById('pv-more-track');track.innerHTML='';
-  PROJECTS.filter(q=>q.id!==id).forEach(q=>{
-    const mc=document.createElement('div');mc.className='pv-more-card';
-    mc.innerHTML=`<div class="pv-more-card-bg" style="background:${q.bg}"></div><div class="pv-more-card-ico">${q.ico}</div><img class="pv-more-card-img" src="${q.cover}" alt="${q.name}" onload="this.classList.add('ok')" onerror="this.style.display='none'"><div class="pv-more-card-lbl">${q.name}</div>`;
-    mc.addEventListener('click',()=>openProject(q.id));
-    track.appendChild(mc);
-  });
-  updateHoverListeners();
-}
-
-function goHome(){
-  clearInterval(slideTimer);
-  heroVid.pause();heroVid.src='';
-  document.getElementById('pv-game-iframe').src='';
-  document.getElementById('pv-hero-game').style.display='none';
-  document.getElementById('home-view').style.display='block';
-  document.getElementById('project-view').style.display='none';
-  document.getElementById('main-nav').style.display='flex';
-  document.getElementById('back-btn').style.display='none';
-  resetAuto();window.scrollTo(0,0);
-}
-
-/* ── HERO SPRING CARDS ── */
+/* ── HERO CARD SPRING ── */
 const HERO_IDS=['seereality','arworkofart','haptidraw','otherrealm'];
 const cdata=HERO_IDS.map((id,i)=>({el:document.getElementById('hc'+i),id,ox:0,oy:0,vx:0,vy:0,rot:[-22,-7,8,21][i]}));
 function layoutCards(){
@@ -630,11 +406,12 @@ function layoutCards(){
   const sx=(cw-totalW)/2,my=cl.offsetHeight/2;
   cdata.forEach((c,i)=>{const bx=sx+i*(158+18);c.el.style.left=bx+'px';c.el.style.top=(my-112)+'px';c.baseX=bx+79;c.baseY=my;});
 }
-layoutCards();window.addEventListener('resize',layoutCards);
+layoutCards();
+window.addEventListener('resize',layoutCards);
 let pmx=window.innerWidth/2,pmy=window.innerHeight/2;
 document.addEventListener('mousemove',e=>{
   const dx=e.clientX-pmx,dy=e.clientY-pmy;pmx=e.clientX;pmy=e.clientY;
-  const cl=document.getElementById('clayer');if(!cl.isConnected)return;
+  const cl=document.getElementById('clayer');
   const r=cl.getBoundingClientRect();
   cdata.forEach(c=>{
     const cx=r.left+c.baseX,cy=r.top+c.baseY;
@@ -648,6 +425,7 @@ document.addEventListener('mousemove',e=>{
   requestAnimationFrame(spring);
 })();
 
+/* scroll fade */
 const hname=document.getElementById('hname'),hmeta=document.getElementById('hmeta');
 window.addEventListener('scroll',()=>{
   const p=Math.min(window.scrollY/480,1);
@@ -658,25 +436,37 @@ window.addEventListener('scroll',()=>{
   document.getElementById('ni').classList.toggle('on',mid>=it);
 },{passive:true});
 
-/* ── CURSOR ── */
+/* ── CURSOR — mix-blend-mode:difference handles contrast automatically ── */
 const cur=document.getElementById('cur'),ring=document.getElementById('ring');
 let mx=0,my=0,rx=0,ry=0;
+
+/* Shake detection */
 const xHist=[];let shakeTimer=null;
 document.addEventListener('mousemove',e=>{
   mx=e.clientX;my=e.clientY;
   cur.style.left=mx+'px';cur.style.top=my+'px';
+  // track x direction for shake
   xHist.push({x:e.clientX,t:Date.now()});
   if(xHist.length>30)xHist.shift();
-  const recent=xHist.slice(-12);
-  if(recent.length>=12&&recent[recent.length-1].t-recent[0].t<600){
-    let rev=0;
-    for(let i=1;i<recent.length-1;i++){
-      const d1=recent[i].x-recent[i-1].x,d2=recent[i+1].x-recent[i].x;
-      if(d1*d2<0&&(Math.abs(d1)>6||Math.abs(d2)>6))rev++;
-    }
-    if(rev>=4){document.body.classList.add('shake');clearTimeout(shakeTimer);shakeTimer=setTimeout(()=>document.body.classList.remove('shake'),600);}
-  }
+  detectShake();
 });
+function detectShake(){
+  if(xHist.length<12)return;
+  const recent=xHist.slice(-12);
+  const span=recent[recent.length-1].t-recent[0].t;
+  if(span>600)return; // too slow
+  let reversals=0;
+  for(let i=1;i<recent.length-1;i++){
+    const d1=recent[i].x-recent[i-1].x;
+    const d2=recent[i+1].x-recent[i].x;
+    if(d1*d2<0&&(Math.abs(d1)>6||Math.abs(d2)>6))reversals++;
+  }
+  if(reversals>=4){
+    document.body.classList.add('shake');
+    clearTimeout(shakeTimer);
+    shakeTimer=setTimeout(()=>document.body.classList.remove('shake'),600);
+  }
+}
 (function rl(){rx+=(mx-rx)*.11;ry+=(my-ry)*.11;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(rl)})();
 function updateHoverListeners(){
   document.querySelectorAll('a,button,.fc,.wc,.sw,#pbtn,.hcard,.pv-more-card,.flabel').forEach(el=>{
@@ -714,7 +504,7 @@ document.addEventListener('keydown',e=>{
 /* ── GRID ── */
 const grid=document.getElementById('wgrid');
 PROJECTS.forEach(p=>{
-  const d=document.createElement('div');d.className='wc';
+  const d=document.createElement('div');d.className='wc';d.dataset.id=p.id;
   d.innerHTML=`<div class="wcin"><div class="wcbg" style="background:${p.bg}"></div><img class="wcimg" src="${p.cover}" alt="${p.name}" onload="this.classList.add('ok')" onerror="this.style.display='none'"><div class="wcico">${p.ico}</div><div class="wct">${p.name}</div></div>`;
   d.addEventListener('click',()=>openProject(p.id));
   grid.appendChild(d);
@@ -724,17 +514,76 @@ const obs=new IntersectionObserver(entries=>entries.forEach(e=>{
 }),{threshold:.1});
 document.querySelectorAll('.wc').forEach(c=>obs.observe(c));
 
-/* ── LIGHTBOX ── */
-function openLightbox(src){
-  document.getElementById('lb-img').src=src;
-  document.getElementById('lightbox').classList.add('open');
-  document.body.style.overflow='hidden';
+/* ── PROJECT PAGE ── */
+function openProject(id){
+  const p=PMAP[id];if(!p)return;
+  window.scrollTo(0,0);
+  document.getElementById('home-view').style.display='none';
+  document.getElementById('project-view').style.display='block';
+  document.getElementById('main-nav').style.display='none';
+  document.getElementById('back-btn').style.display='flex';
+  clearInterval(autoT);
+
+  document.getElementById('pv-hero-bg').style.background=p.bg;
+  document.getElementById('pv-cat').textContent=p.cat;
+  document.getElementById('pv-title').textContent=p.name;
+  document.getElementById('pv-tags').innerHTML=p.tags.map(t=>`<span class="pv-tag">${t}</span>`).join('');
+  document.getElementById('pv-caption').textContent=p.caption||'';
+  document.getElementById('pv-desc').textContent=p.desc;
+
+  const folder=p.cover.substring(0,p.cover.lastIndexOf('/')+1);
+  const videoSrc=folder+'0.mp4';
+  const img=document.getElementById('pv-hero-img'),vid=document.getElementById('pv-hero-vid');
+  img.style.display='none';vid.style.display='none';vid.src='';
+
+  // Try loading 0.mp4 for every project — use it as hero if it exists
+  const testVid=document.createElement('video');
+  testVid.src=videoSrc;
+  testVid.oncanplaythrough=()=>{vid.src=videoSrc;vid.style.display='block';};
+  testVid.onerror=()=>{img.src=p.cover;}; // fallback to image
+  // Trigger load attempt
+  testVid.load();
+  // Also set a short timeout fallback in case oncanplaythrough is slow
+  setTimeout(()=>{if(vid.style.display==='none'&&img.style.display==='none'){img.src=p.cover;}},1200);
+
+  // gallery — always try adding 0.mp4 as first gallery item for every project
+  const gal=document.getElementById('pv-gallery');gal.innerHTML='';
+  const addVideoToGallery=()=>{
+    const w=document.createElement('div');w.className='pv-gallery-item';
+    const v=document.createElement('video');v.src=videoSrc;v.controls=true;v.muted=true;v.style.cssText='width:100%;display:block;border-radius:14px;';
+    w.appendChild(v);gal.insertBefore(w,gal.firstChild);
+  };
+  const galVidTest=document.createElement('video');
+  galVidTest.src=videoSrc;
+  galVidTest.oncanplaythrough=addVideoToGallery;
+  galVidTest.load();
+
+  for(let n=p.extraStart;n<=12;n++){
+    const src=folder+n+'.png';
+    const w=document.createElement('div');w.className='pv-gallery-item';
+    const i=document.createElement('img');i.alt=p.name;i.style.cssText='width:100%;display:block;border-radius:14px;';
+    i.onload=()=>gal.appendChild(w);
+    i.onerror=()=>{};
+    w.appendChild(i);i.src=src;
+  }
+
+  // more strip
+  const track=document.getElementById('pv-more-track');track.innerHTML='';
+  PROJECTS.filter(q=>q.id!==id).forEach(q=>{
+    const mc=document.createElement('div');mc.className='pv-more-card';
+    mc.innerHTML=`<div class="pv-more-card-bg" style="background:${q.bg}"></div><div class="pv-more-card-ico">${q.ico}</div><img class="pv-more-card-img" src="${q.cover}" alt="${q.name}" onload="this.classList.add('ok')" onerror="this.style.display='none'"><div class="pv-more-card-lbl">${q.name}</div>`;
+    mc.addEventListener('click',()=>openProject(q.id));
+    track.appendChild(mc);
+  });
+  updateHoverListeners();
 }
-function closeLightbox(){
-  document.getElementById('lightbox').classList.remove('open');
-  document.body.style.overflow='';
+function goHome(){
+  document.getElementById('home-view').style.display='block';
+  document.getElementById('project-view').style.display='none';
+  document.getElementById('main-nav').style.display='flex';
+  document.getElementById('back-btn').style.display='none';
+  resetAuto();window.scrollTo(0,0);
 }
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox();});
 
 /* ── PALETTE ── */
 function setTheme(t,el){document.body.dataset.theme=t;document.querySelectorAll('.sw').forEach(s=>s.classList.remove('on'));el.classList.add('on');document.getElementById('sw').classList.remove('open');}
