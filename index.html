@@ -5,6 +5,30 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Tomme Denney</title>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script>
+/* Defined in head so onerror attributes can call it before body script runs */
+function imgFallback(el){
+  var src=el.src;
+  var next=null;
+  if(src.endsWith('.png')) next=src.replace('.png','.jpg');
+  else if(src.endsWith('.jpg')||src.endsWith('.jpeg')) next=src.replace(/\.jpe?g$/,'.png');
+  if(next){
+    el.onload=function(){this.classList.add('ok');};
+    el.onerror=function(){this.style.display='none';};
+    el.src=next;
+  } else {
+    el.style.display='none';
+  }
+}
+function tryHaptiDrawFallback(el){
+  if(el.src.indexOf('1.jpg')!==-1){
+    el.src='projects/haptidraw/0.jpg';
+    el.onerror=function(){this.style.display='none';};
+  } else {
+    el.style.display='none';
+  }
+}
+</script>
 <style>
 :root{--bg:#f2ede3;--text:#1a1714;--gr:#b5ada3;--mt:#8a7e70;--cb:#e0dad0;--b:rgba(26,23,20,.1)}
 [data-theme=white]{--bg:#f7f7f5;--text:#111;--gr:#bbb;--mt:#999;--cb:#eaeae8;--b:rgba(0,0,0,.08)}
@@ -195,25 +219,25 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content
       <div class="hcard" id="hc0" onclick="openProject('seereality')">
         <div class="hcbg" style="background:linear-gradient(145deg,#050e1a,#0e2860,#1a449a)"></div>
         <div class="hcico">🌐</div>
-        <img class="hcimg" src="projects/seereality/0.png" alt="" onload="this.classList.add('ok')" onerror="this.style.display='none'">
+        <img class="hcimg" src="projects/seereality/0.png" alt="" onload="this.classList.add('ok')" onerror="imgFallback(this)">
         <div class="hclbl">See Reality</div>
       </div>
       <div class="hcard" id="hc1" onclick="openProject('genexr')">
         <div class="hcbg" style="background:linear-gradient(145deg,#0e0418,#2a0e48,#4a1888)"></div>
         <div class="hcico">🧬</div>
-        <img class="hcimg" src="projects/genexr/1.png" alt="" onload="this.classList.add('ok')" onerror="this.style.display='none'">
+        <img class="hcimg" src="projects/genexr/1.png" alt="" onload="this.classList.add('ok')" onerror="imgFallback(this)">
         <div class="hclbl">Gene' XR</div>
       </div>
       <div class="hcard" id="hc2" onclick="openProject('bofum')">
         <div class="hcbg" style="background:linear-gradient(145deg,#040c04,#0e2810,#1a4a1e)"></div>
         <div class="hcico">🎮</div>
-        <img class="hcimg" src="projects/bofum/1.png" alt="" onload="this.classList.add('ok')" onerror="this.style.display='none'">
+        <img class="hcimg" src="projects/bofum/1.png" alt="" onload="this.classList.add('ok')" onerror="imgFallback(this)">
         <div class="hclbl">BOFUM</div>
       </div>
       <div class="hcard" id="hc3" onclick="openProject('greatvendingmachine')">
         <div class="hcbg" style="background:linear-gradient(145deg,#0a0a1a,#20201a,#403a10)"></div>
         <div class="hcico">🎰</div>
-        <img class="hcimg" src="projects/greatvendingmachine/1.png" alt="" onload="this.classList.add('ok')" onerror="this.style.display='none'">
+        <img class="hcimg" src="projects/greatvendingmachine/1.png" alt="" onload="this.classList.add('ok')" onerror="imgFallback(this)">
         <div class="hclbl">Great Vending Machine</div>
       </div>
     </div>
@@ -246,7 +270,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content
       <div class="fc" data-id="bofum">
         <div class="fcbg" style="background:linear-gradient(145deg,#040c04,#0e2810,#1a4a1e)"></div>
         <div class="fcico">🎮</div>
-        <img class="fcimg" src="projects/bofum/1.png" alt="" onload="this.classList.add('ok')" onerror="this.style.display='none'">
+        <img class="fcimg" src="projects/bofum/1.png" alt="" onload="this.classList.add('ok')" onerror="imgFallback(this)">
       </div>
       <div class="fc" data-id="greatvendingmachine">
         <div class="fcbg" style="background:linear-gradient(145deg,#0a0a1a,#20201a,#403a10)"></div>
@@ -332,15 +356,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content
 
 <script>
 /* FIX 1: haptidraw card fallback — tries 1.png, then 0.png, then hides */
-function tryHaptiDrawFallback(el){
-  if(el.src.indexOf('1.jpg')!==-1){
-    el.src='projects/haptidraw/0.jpg';
-    el.onerror=function(){this.style.display='none';};
-  } else {
-    el.style.display='none';
-  }
-}
-
 const PROJECTS=[
   {id:'seereality',         name:'See Reality',               cat:'XR Studio · Client Work',       cover:'projects/seereality/0.png',        coverNum:0, extraStart:1,
    bg:'linear-gradient(145deg,#050e1a,#0e2860,#1a449a)', ico:'🌐',
@@ -532,7 +547,7 @@ document.addEventListener('keydown',e=>{
 const grid=document.getElementById('wgrid');
 PROJECTS.forEach(p=>{
   const d=document.createElement('div');d.className='wc';d.dataset.id=p.id;
-  d.innerHTML=`<div class="wcin"><div class="wcbg" style="background:${p.bg}"></div><img class="wcimg" src="${p.cover}" alt="${p.name}" onload="this.classList.add('ok')" onerror="this.style.display='none'"><div class="wcico">${p.ico}</div><div class="wct">${p.name}</div></div>`;
+  d.innerHTML=`<div class="wcin"><div class="wcbg" style="background:${p.bg}"></div><img class="wcimg" src="${p.cover}" alt="${p.name}" onload="this.classList.add('ok')" onerror="imgFallback(this)"><div class="wcico">${p.ico}</div><div class="wct">${p.name}</div></div>`;
   d.addEventListener('click',()=>openProject(p.id));
   grid.appendChild(d);
 });
