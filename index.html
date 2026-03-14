@@ -198,26 +198,23 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content
         <img class="hcimg" src="projects/seereality/0.png" alt="" onload="this.classList.add('ok')" onerror="this.style.display='none'">
         <div class="hclbl">See Reality</div>
       </div>
-      <div class="hcard" id="hc1" onclick="openProject('arworkofart')">
-        <div class="hcbg" style="background:linear-gradient(145deg,#1a0a2e,#4a1888,#7040b5)"></div>
-        <div class="hcico">🎨</div>
-        <img class="hcimg" src="projects/arworkofart/1.png" alt="" onload="this.classList.add('ok')" onerror="this.style.display='none'">
-        <div class="hclbl">AR Work of Art</div>
+      <div class="hcard" id="hc1" onclick="openProject('genexr')">
+        <div class="hcbg" style="background:linear-gradient(145deg,#0e0418,#2a0e48,#4a1888)"></div>
+        <div class="hcico">🧬</div>
+        <img class="hcimg" src="projects/genexr/1.png" alt="" onload="this.classList.add('ok')" onerror="this.style.display='none'">
+        <div class="hclbl">Gene' XR</div>
       </div>
-      <!-- FIX 1: haptidraw tries 1.png, falls back to 0.png via JS -->
-      <div class="hcard" id="hc2" onclick="openProject('haptidraw')">
-        <div class="hcbg" style="background:linear-gradient(145deg,#1a1a05,#484810,#7a7a1a)"></div>
-        <div class="hcico">✏️</div>
-        <img class="hcimg" id="haptidraw-card-img" src="projects/haptidraw/1.png" alt=""
-          onload="this.classList.add('ok')"
-          onerror="tryHaptiDrawFallback(this)">
-        <div class="hclbl">HaptiDraw</div>
+      <div class="hcard" id="hc2" onclick="openProject('bofum')">
+        <div class="hcbg" style="background:linear-gradient(145deg,#040c04,#0e2810,#1a4a1e)"></div>
+        <div class="hcico">🎮</div>
+        <img class="hcimg" src="projects/bofum/1.png" alt="" onload="this.classList.add('ok')" onerror="this.style.display='none'">
+        <div class="hclbl">BOFUM</div>
       </div>
-      <div class="hcard" id="hc3" onclick="openProject('otherrealm')">
-        <div class="hcbg" style="background:linear-gradient(145deg,#0a1a0a,#1a4a1a,#2a7a2a)"></div>
-        <div class="hcico">🌿</div>
-        <img class="hcimg" src="projects/otherrealm/1.png" alt="" onload="this.classList.add('ok')" onerror="this.style.display='none'">
-        <div class="hclbl">Other Realm</div>
+      <div class="hcard" id="hc3" onclick="openProject('greatvendingmachine')">
+        <div class="hcbg" style="background:linear-gradient(145deg,#0a0a1a,#20201a,#403a10)"></div>
+        <div class="hcico">🎰</div>
+        <img class="hcimg" src="projects/greatvendingmachine/1.png" alt="" onload="this.classList.add('ok')" onerror="this.style.display='none'">
+        <div class="hclbl">Great Vending Machine</div>
       </div>
     </div>
   </section>
@@ -241,17 +238,20 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content
         <div class="fcico">🌐</div>
         <img class="fcimg" src="projects/seereality/0.png" alt="" onload="this.classList.add('ok')" onerror="this.style.display='none'">
       </div>
-      <div class="fc" data-id="arworkofart">
-        <div class="fcbg" style="background:linear-gradient(145deg,#1a0a2e,#4a1888,#7040b5)"></div>
-        <div class="fcico">🎨</div>
-        <img class="fcimg" src="projects/arworkofart/1.png" alt="" onload="this.classList.add('ok')" onerror="this.style.display='none'">
+      <div class="fc" data-id="genexr">
+        <div class="fcbg" style="background:linear-gradient(145deg,#0e0418,#2a0e48,#4a1888)"></div>
+        <div class="fcico">🧬</div>
+        <img class="fcimg" src="projects/genexr/1.png" alt="" onload="this.classList.add('ok')" onerror="this.style.display='none'">
       </div>
-      <div class="fc" data-id="haptidraw">
-        <div class="fcbg" style="background:linear-gradient(145deg,#1a1a05,#484810,#7a7a1a)"></div>
-        <div class="fcico">✏️</div>
-        <img class="fcimg" src="projects/haptidraw/1.png" alt=""
-          onload="this.classList.add('ok')"
-          onerror="this.src='projects/haptidraw/0.png';this.onerror=function(){this.style.display='none'};">
+      <div class="fc" data-id="bofum">
+        <div class="fcbg" style="background:linear-gradient(145deg,#040c04,#0e2810,#1a4a1e)"></div>
+        <div class="fcico">🎮</div>
+        <img class="fcimg" src="projects/bofum/1.png" alt="" onload="this.classList.add('ok')" onerror="this.style.display='none'">
+      </div>
+      <div class="fc" data-id="greatvendingmachine">
+        <div class="fcbg" style="background:linear-gradient(145deg,#0a0a1a,#20201a,#403a10)"></div>
+        <div class="fcico">🎰</div>
+        <img class="fcimg" src="projects/greatvendingmachine/1.png" alt="" onload="this.classList.add('ok')" onerror="this.style.display='none'">
       </div>
     </div>
     <div style="text-align:center;margin-top:18px">
@@ -333,8 +333,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content
 <script>
 /* FIX 1: haptidraw card fallback — tries 1.png, then 0.png, then hides */
 function tryHaptiDrawFallback(el){
-  if(el.src.indexOf('1.png')!==-1){
-    el.src='projects/haptidraw/0.png';
+  if(el.src.indexOf('1.jpg')!==-1){
+    el.src='projects/haptidraw/0.jpg';
     el.onerror=function(){this.style.display='none';};
   } else {
     el.style.display='none';
@@ -347,6 +347,18 @@ const PROJECTS=[
    tags:['Unity C#','Meta Quest','URP','XR Experience','Client Work'],
    caption:'Real-world client XR — from colonial installations to stadium fan experiences.',
    desc:'Immersive XR experiences built for world-class clients. Projects spanning heritage, sports, and entertainment — from Fort Nashborough colonial installations to Liverpool FC fan experiences. Built with Unity C#, Meta Quest hardware, and custom URP shader pipelines optimized for standalone passthrough.'},
+  {id:'genexr',             name:"Gene' XR",                  cat:'XR · Gaussian Splatting · 2026', cover:'projects/genexr/1.png',            coverNum:1, extraStart:2,
+   bg:'linear-gradient(145deg,#0e0418,#2a0e48,#4a1888)', ico:'🧬',
+   tags:['Meta Quest 3','PCVR','Gaussian Splatting','Unity C#','Hand Tracking','URP','HCI','Capstone'],
+   caption:'Walk inside a family memory — photorealistic, spatial, and impossible.',
+   desc:'A Meta Quest 3 PCVR experience for exploring photorealistic 3D reconstructions of family memories using Gaussian splatting. Built around an impossible cube centerpiece with a spatial family timeline, hand tracking menus, and custom URP shader pipelines. Northeastern University Capstone 2026.'},
+
+  {id:'bofum',              name:'BOFUM',                     cat:'XR Game · MIT Reality Hack 2026',cover:'projects/bofum/1.png',             coverNum:1, extraStart:2,
+   bg:'linear-gradient(145deg,#040c04,#0e2810,#1a4a1e)', ico:'🎮',
+   tags:['XR','Unity','MIT Reality Hack','Multiplayer','Hackathon','Spatial Game'],
+   caption:'Built in 72 hours at MIT Reality Hack 2026 — spatial, wild, and alive.',
+   desc:'BOFUM is a spatial XR game built in 72 hours at MIT Reality Hack 2026. Designed for mixed reality with physical space as the playing field — fast, chaotic, and built to surprise. Check it out on Devpost.'},
+
   {id:'arworkofart',        name:'AR Work of Art',            cat:'Augmented Reality · Art',        cover:'projects/arworkofart/1.png',       coverNum:1, extraStart:2,
    bg:'linear-gradient(145deg,#1a0a2e,#4a1888,#7040b5)', ico:'🎨',
    tags:['AR','Unity','Art Direction','Spatial Design'],
@@ -417,6 +429,12 @@ const PROJECTS=[
    tags:['Experiential','Minimal','Spatial','Contemplative'],
    caption:'One foot in front of the other — made into something worth sitting with.',
    desc:'A contemplative piece about the act of walking. Walk strips back complexity to examine how movement through space creates meaning — using minimal visual language and immersive audio to turn locomotion into something meditative.'},
+
+  {id:'wallace',             name:'Wallace',                  cat:'Horror Game · Survival',         cover:'projects/wallace/1.png',            coverNum:1, extraStart:2,
+   bg:'linear-gradient(145deg,#080608,#140e10,#201418)', ico:'🐕',
+   tags:['Horror','Unity','Survival','Atmosphere','First Person'],
+   caption:'Give out candy. Do your tasks. Do not let Wallace out.',
+   desc:'You\'re watching your neighbor\'s house for the night. Give out candy to trick-or-treaters — or don\'t, but leave the lights off. Take care of their very special dog, Wallace. Keep the front and back doors open for visitors. Do your tasks or face the consequences. Wallace is real. WASD to move. Left Click to interact. Volume up.'},
 ];
 const PMAP={};PROJECTS.forEach(p=>PMAP[p.id]=p);
 
@@ -487,7 +505,7 @@ updateHoverListeners();
 
 /* FEATURED */
 const fcards=Array.from(document.querySelectorAll('.fc'));
-const FEAT_LABELS=['See Reality','AR Work of Art','HaptiDraw'];
+const FEAT_LABELS=["See Reality","Gene' XR","BOFUM","Great Vending Machine"];
 let fi=0,autoT;
 function renderFeat(){
   const n=fcards.length;
@@ -553,12 +571,22 @@ function openProject(id){
   testVid.load();
   setTimeout(()=>{if(vid.style.display==='none'&&img.style.display==='none'){img.src=p.cover;}},1200);
 
-  // FIX 2: show/hide game embed — only for greatvendingmachine
+  // Embedded playable builds — GVM, Unforgotten Stories, Other Realm
   const gameWrap=document.getElementById('pv-game-wrap');
   const gameIframe=document.getElementById('pv-game-iframe');
-  if(id==='greatvendingmachine'){
+  const EMBEDS={
+    'greatvendingmachine': {src:'https://tommedenney.github.io/GVMHost/',          itchio:'https://tommedenney.itch.io/great-vending-machine'},
+    'unforgottenstories':  {src:'https://tommedenney.github.io/UnforgottenStoriesWebGLHost/', itchio:null},
+    'otherrealm':          {src:'projects/otherrealm/index.html',                  itchio:null},
+  };
+  const embed=EMBEDS[id];
+  if(embed){
     gameWrap.style.display='block';
-    gameIframe.src='https://tommedenney.github.io/GVMHost/';
+    gameIframe.src=embed.src;
+    // update itch.io button visibility
+    const itchBtn=gameWrap.querySelector('.pv-game-itchio');
+    if(embed.itchio){itchBtn.href=embed.itchio;itchBtn.style.display='inline-flex';}
+    else{itchBtn.style.display='none';}
   } else {
     gameWrap.style.display='none';
     gameIframe.src='';
