@@ -6,7 +6,6 @@
 <title>Tomme Denney</title>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script>
-/* Defined in head so onerror attributes can call it before body script runs */
 function imgFallback(el){
   var src=el.src;
   var next=null;
@@ -75,7 +74,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content
 .hclbl{position:absolute;bottom:0;left:0;right:0;z-index:3;padding:9px 11px;font-size:11px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:rgba(255,255,255,.94);text-shadow:0 1px 6px rgba(0,0,0,.5);background:linear-gradient(transparent,rgba(0,0,0,.42));opacity:.9}
 
 .role{padding:72px 44px 64px}
-.rword{display:block;font-family:'Barlow Condensed',Impact,'Arial Narrow',sans-serif;font-weight:900;font-size:clamp(52px,10.5vw,148px);letter-spacing:-.02em;text-transform:uppercase;color:var(--gr);line-height:.9;transition:color .35s}
+/* FIXED: was var(--gr), now var(--text) to match other bold headings */
+.rword{display:block;font-family:'Barlow Condensed',Impact,'Arial Narrow',sans-serif;font-weight:900;font-size:clamp(52px,10.5vw,148px);letter-spacing:-.02em;text-transform:uppercase;color:var(--text);line-height:.9;transition:color .35s}
 .clients{margin-top:56px;text-align:center}
 .cl{font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--text);margin-bottom:12px}
 .cv{font-size:13px;font-weight:500;letter-spacing:.11em;text-transform:uppercase;color:var(--mt)}
@@ -125,11 +125,10 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content
 .swatches.open{opacity:1;transform:none;pointer-events:all}
 .sw{display:flex;align-items:center;gap:9px;cursor:pointer;font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--mt);transition:color .2s}
 .sw:hover{color:var(--text)}
-.sdot{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--b);transition:transform .18s}
+.sdot{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--b);transition:transform .18px}
 .sw:hover .sdot{transform:scale(1.22)}
 .sw.on .sdot{outline:2.5px solid var(--text);outline-offset:2px}
 
-/* PROJECT DETAIL */
 #project-view{display:none;min-height:100vh}
 .pv-hero{width:100%;height:100vh;position:relative;overflow:hidden;display:flex;align-items:flex-end}
 .pv-hero-media{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
@@ -143,8 +142,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content
 .pv-caption{font-size:14px;font-weight:500;color:rgba(255,255,255,.7);letter-spacing:.02em;line-height:1.55;max-width:520px;margin-top:6px}
 .pv-body{max-width:1100px;margin:0 auto;padding:64px 52px}
 .pv-desc{font-size:17px;font-weight:400;line-height:1.84;color:var(--text);max-width:660px;margin-bottom:40px;transition:color .35s}
-
-/* Game embed in description section */
 .pv-game-wrap{margin-bottom:40px;border-radius:16px;overflow:hidden;background:#000;position:relative}
 .pv-game-bar{display:flex;align-items:center;justify-content:space-between;padding:10px 18px;background:#111}
 .pv-game-bar span{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.5)}
@@ -154,13 +151,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content
 .pv-game-fs{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#fff;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);padding:6px 16px;border-radius:100px;cursor:pointer;transition:background .2s}
 .pv-game-fs:hover{background:rgba(255,255,255,.28)}
 .pv-game-wrap iframe{width:100%;height:560px;border:none;display:block}
-
 .pv-gallery{columns:2;gap:16px;margin-bottom:72px}
 .pv-gallery-item{break-inside:avoid;margin-bottom:16px;border-radius:14px;overflow:hidden;background:var(--cb)}
 .pv-gallery-item img,.pv-gallery-item video{width:100%;display:block;border-radius:14px;transition:transform .55s cubic-bezier(.25,.46,.45,.94)}
 .pv-gallery-item img{cursor:zoom-in}
 .pv-gallery-item:hover img,.pv-gallery-item:hover video{transform:scale(1.025)}
-
 .pv-more{padding:0 0 80px}
 .pv-more-title{font-size:12px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--mt);margin-bottom:24px;padding:0 52px}
 .pv-more-track{display:flex;gap:16px;padding:0 52px 16px;overflow-x:auto;scrollbar-width:none}
@@ -172,8 +167,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content
 .pv-more-card-img.ok{opacity:1}
 .pv-more-card-ico{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:36px;z-index:1}
 .pv-more-card-lbl{position:absolute;bottom:0;left:0;right:0;z-index:3;padding:9px 12px;background:linear-gradient(transparent,rgba(0,0,0,.52));font-size:11px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:#fff}
-
-/* LIGHTBOX */
 #lightbox{position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center;padding:24px}
 #lightbox.open{display:flex}
 #lb-ov{position:absolute;inset:0;background:rgba(255,255,255,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
@@ -181,7 +174,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content
 #lb-close{position:absolute;top:18px;right:18px;z-index:2;width:42px;height:42px;border-radius:50%;background:#fff;border:none;cursor:pointer;font-size:20px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 14px rgba(0,0,0,.14);transition:transform .2s}
 #lb-close:hover{transform:scale(1.1)}
 @keyframes lbIn{from{opacity:0;transform:scale(.93)}to{opacity:1;transform:scale(1)}}
-
 ::-webkit-scrollbar{width:3px}
 ::-webkit-scrollbar-thumb{background:var(--b);border-radius:2px}
 </style>
@@ -260,12 +252,12 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content
       <div class="fc" data-id="seereality">
         <div class="fcbg" style="background:linear-gradient(145deg,#050e1a,#0e2860,#1a449a)"></div>
         <div class="fcico">🌐</div>
-        <img class="fcimg" src="projects/seereality/0.png" alt="" onload="this.classList.add('ok')" onerror="this.style.display='none'">
+        <img class="fcimg" src="projects/seereality/0.png" alt="" onload="this.classList.add('ok')" onerror="imgFallback(this)">
       </div>
       <div class="fc" data-id="genexr">
         <div class="fcbg" style="background:linear-gradient(145deg,#0e0418,#2a0e48,#4a1888)"></div>
         <div class="fcico">🧬</div>
-        <img class="fcimg" src="projects/genexr/1.png" alt="" onload="this.classList.add('ok')" onerror="this.style.display='none'">
+        <img class="fcimg" src="projects/genexr/1.png" alt="" onload="this.classList.add('ok')" onerror="imgFallback(this)">
       </div>
       <div class="fc" data-id="bofum">
         <div class="fcbg" style="background:linear-gradient(145deg,#040c04,#0e2810,#1a4a1e)"></div>
@@ -275,7 +267,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content
       <div class="fc" data-id="greatvendingmachine">
         <div class="fcbg" style="background:linear-gradient(145deg,#0a0a1a,#20201a,#403a10)"></div>
         <div class="fcico">🎰</div>
-        <img class="fcimg" src="projects/greatvendingmachine/1.png" alt="" onload="this.classList.add('ok')" onerror="this.style.display='none'">
+        <img class="fcimg" src="projects/greatvendingmachine/1.png" alt="" onload="this.classList.add('ok')" onerror="imgFallback(this)">
       </div>
     </div>
     <div style="text-align:center;margin-top:18px">
@@ -301,7 +293,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content
   </section>
 </div>
 
-<!-- PROJECT VIEW -->
 <div id="project-view">
   <div class="pv-hero">
     <div class="pv-hero-bg" id="pv-hero-bg"></div>
@@ -317,7 +308,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content
   </div>
   <div class="pv-body">
     <p class="pv-desc" id="pv-desc"></p>
-    <!-- FIX 2: game embed lives here, hidden by default, shown only for GVM -->
     <div class="pv-game-wrap" id="pv-game-wrap" style="display:none">
       <div class="pv-game-bar">
         <span>Play in Browser</span>
@@ -336,7 +326,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content
   </div>
 </div>
 
-<!-- LIGHTBOX -->
 <div id="lightbox">
   <div id="lb-ov" onclick="closeLightbox()"></div>
   <img id="lb-img" src="" alt="">
@@ -355,106 +344,102 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content
 </div>
 
 <script>
-/* FIX 1: haptidraw card fallback — tries 1.png, then 0.png, then hides */
 const PROJECTS=[
-  {id:'seereality',         name:'See Reality',               cat:'XR Studio · Client Work',       cover:'projects/seereality/0.png',        coverNum:0, extraStart:1,
-   bg:'linear-gradient(145deg,#050e1a,#0e2860,#1a449a)', ico:'🌐',
-   tags:['Unity C#','Meta Quest','URP','XR Experience','Client Work'],
-   caption:'Real-world client XR — from colonial installations to stadium fan experiences.',
-   desc:'Immersive XR experiences built for world-class clients. Projects spanning heritage, sports, and entertainment — from Fort Nashborough colonial installations to Liverpool FC fan experiences. Built with Unity C#, Meta Quest hardware, and custom URP shader pipelines optimized for standalone passthrough.'},
   {id:'genexr',             name:"Gene' XR",                  cat:'XR · Gaussian Splatting · 2026', cover:'projects/genexr/1.png',            coverNum:1, extraStart:2,
    bg:'linear-gradient(145deg,#0e0418,#2a0e48,#4a1888)', ico:'🧬',
    tags:['Meta Quest 3','PCVR','Gaussian Splatting','Unity C#','Hand Tracking','URP','HCI','Capstone'],
    caption:'Walk inside a family memory — photorealistic, spatial, and impossible.',
    desc:'A Meta Quest 3 PCVR experience for exploring photorealistic 3D reconstructions of family memories using Gaussian splatting. Built around an impossible cube centerpiece with a spatial family timeline, hand tracking menus, and custom URP shader pipelines. Northeastern University Capstone 2026.'},
-
+  {id:'seereality',         name:'See Reality',               cat:'XR Studio · Client Work · 2024–Present',cover:'projects/seereality/0.png',   coverNum:0, extraStart:1,
+   bg:'linear-gradient(145deg,#050e1a,#0e2860,#1a449a)', ico:'🌐',
+   tags:['Unity C#','Meta Quest','URP','XR Experience','Client Work'],
+   caption:'Real-world client XR — from colonial installations to stadium fan experiences.',
+   desc:'Immersive XR experiences built for world-class clients spanning heritage, sports, and entertainment — from Fort Nashborough colonial installations to Liverpool FC fan experiences. Built with Unity C#, Meta Quest hardware, and custom URP shader pipelines optimized for standalone passthrough.'},
   {id:'bofum',              name:'BOFUM',                     cat:'XR Game · MIT Reality Hack 2026',cover:'projects/bofum/1.png',             coverNum:1, extraStart:2,
    bg:'linear-gradient(145deg,#040c04,#0e2810,#1a4a1e)', ico:'🎮',
    tags:['XR','Unity','MIT Reality Hack','Multiplayer','Hackathon','Spatial Game'],
    caption:'Built in 72 hours at MIT Reality Hack 2026 — spatial, wild, and alive.',
    desc:'BOFUM is a spatial XR game built in 72 hours at MIT Reality Hack 2026. Designed for mixed reality with physical space as the playing field — fast, chaotic, and built to surprise. Check it out on Devpost.'},
-
-  {id:'arworkofart',        name:'AR Work of Art',            cat:'Augmented Reality · Art',        cover:'projects/arworkofart/1.png',       coverNum:1, extraStart:2,
-   bg:'linear-gradient(145deg,#1a0a2e,#4a1888,#7040b5)', ico:'🎨',
-   tags:['AR','Unity','Art Direction','Spatial Design'],
-   caption:'Gallery walls that come alive — physical art extended into 3D space.',
-   desc:'An augmented reality art experience merging physical and digital mediums. Users interact with artworks that animate and extend beyond the frame — blending the gallery wall with responsive 3D layers tied to viewer position and gesture.'},
-  {id:'haptidraw',          name:'HaptiDraw',                 cat:'Haptic Interaction · HCI',       cover:'projects/haptidraw/1.png',         coverNum:1, extraStart:2,
-   bg:'linear-gradient(145deg,#1a1a05,#484810,#7a7a1a)', ico:'✏️',
-   tags:['Haptics','HCI','Interaction Design','Prototype'],
-   caption:'Drawing with texture, resistance, and weight — in a fully digital canvas.',
-   desc:'A haptic drawing experience exploring touch as a medium for digital creation. HaptiDraw investigates how force-feedback and tactile response can deepen the act of mark-making in virtual environments — giving users the sensation of texture and resistance with every stroke.'},
-  {id:'otherrealm',         name:'Other Realm',               cat:'XR Experience',                  cover:'projects/otherrealm/1.png',        coverNum:1, extraStart:2,
-   bg:'linear-gradient(145deg,#0a1a0a,#1a4a1a,#2a7a2a)', ico:'🌿',
-   tags:['XR','Spatial Audio','Immersive Environment','Unity'],
-   caption:'A living world that breathes and shifts in response to your presence.',
-   desc:'A fully immersive journey into an otherworldly environment. Other Realm builds a sense of presence through layered spatial audio, hand-tracked interaction, and procedurally generated biomes that respond to the viewer\'s movement and attention.'},
-  {id:'unforgottenstories', name:'Unforgotten Stories',       cat:'Narrative XR · Memory',          cover:'projects/unforgottenstories/1.png', coverNum:1, extraStart:2,
-   bg:'linear-gradient(145deg,#1a0a0a,#4a1a1a,#8a2a2a)', ico:'📖',
-   tags:['Narrative','XR','Spatial Memory','Heritage'],
-   caption:'Walk through history before it disappears — memory preserved in 3D space.',
-   desc:'Preserving and sharing stories that history risks losing. Unforgotten Stories uses Gaussian splatting and spatial audio to reconstruct lived moments — placing viewers inside memories and letting them walk through time.'},
-  {id:'soulsolace',         name:'Soul Solace',               cat:'Wellness XR',                    cover:'projects/soulsolace/1.png',        coverNum:1, extraStart:2,
-   bg:'linear-gradient(145deg,#0a0a1a,#1a1a4a,#2a2a8a)', ico:'🌊',
-   tags:['Wellness','Meditative XR','Spatial Design','Unity'],
-   caption:'A sanctuary that responds to your breath — built for stillness and reset.',
-   desc:'A meditative XR space designed for emotional reset and inner stillness. Soul Solace uses generative soundscapes, particle environments, and breath-responsive interaction to create a sanctuary that adapts to the user\'s presence and pace.'},
-  {id:'iamyou',             name:'I Am You',                  cat:'Interactive Experience',         cover:'projects/iamyou/1.png',            coverNum:1, extraStart:2,
-   bg:'linear-gradient(145deg,#0a1a1a,#1a4a4a,#2a7a7a)', ico:'👤',
-   tags:['Identity','Empathy','Interactive','Perspective'],
-   caption:'Step inside another point of view — and question what you thought you knew.',
-   desc:'An intimate encounter with perspective and identity. I Am You places viewers inside another person\'s point of view through spatial audio, embodied motion capture, and first-person XR — challenging assumptions about self and other.'},
-  {id:'curse',              name:'Curse',                     cat:'Game Design · Atmosphere',       cover:'projects/curse/1.png',             coverNum:1, extraStart:2,
-   bg:'linear-gradient(145deg,#0e0808,#201010,#341818)', ico:'🌑',
-   tags:['Game Design','Dark Atmosphere','Horror','Unity'],
-   caption:'The environment is alive. It knows you are here. Proceed carefully.',
-   desc:'A dark, atmospheric game rooted in dread and discovery. Curse uses environmental storytelling, reactive lighting, and spatial sound design to craft an experience where the environment itself feels aware — and hostile.'},
-  {id:'flora',              name:'Flora',                     cat:'Environmental XR',               cover:'projects/flora/1.png',             coverNum:1, extraStart:2,
-   bg:'linear-gradient(145deg,#0a1a0a,#1a3a1a,#2a5a2a)', ico:'🌺',
-   tags:['Nature','XR','Procedural','Environmental Design'],
-   caption:'Ecosystems that grow in real time — discovered, not designed.',
-   desc:'An XR exploration of natural systems and organic growth. Flora generates living, breathing environments in real-time — responding to the viewer\'s gaze and movement to produce ecosystems that feel found rather than built.'},
-  {id:'godsdrunkestdriver', name:"God's Drunkest Driver",     cat:'Game Design · Comedy',           cover:'projects/godsdrunkestdriver/1.png',coverNum:1, extraStart:2,
-   bg:'linear-gradient(145deg,#1a0a05,#4a2010,#8a4020)', ico:'🚗',
-   tags:['Game Design','Comedy','Physics','Chaos'],
-   caption:'Ragdoll physics, impossible roads, zero apologies — crash beautifully.',
-   desc:'A chaotic physics-based driving game channeling pure comedic mayhem. God\'s Drunkest Driver leans into ragdoll physics, unpredictable terrain, and escalating absurdity — because sometimes the point is just to crash beautifully.'},
-  {id:'greatvendingmachine',name:'Great Vending Machine',     cat:'Interactive WebGL · Game',       cover:'projects/greatvendingmachine/1.png',coverNum:1, extraStart:2,
-   bg:'linear-gradient(145deg,#0a0a1a,#20201a,#403a10)', ico:'🎰',
-   tags:['WebGL','Unity','Game','Interactive','Japan'],
-   caption:'Insert a selection. Receive something you never expected.',
-   desc:'Created during a study abroad in Japan, this eerie 3D platformer explores themes of disorientation and nostalgia. Players wander through dreamlike alleys, haunted vending machines, and mechanical spirits in search of escape — or meaning.'},
-  {id:'internshipintheafterlife',name:'Internship in the Afterlife',cat:'Narrative Game · Comedy', cover:'projects/internshipintheafterlife/1.png',coverNum:1, extraStart:2,
-   bg:'linear-gradient(145deg,#10080a,#301818,#502828)', ico:'👻',
-   tags:['Narrative','Comedy','Game Design','Afterlife'],
-   caption:'Your first performance review is from beyond the grave. Good luck.',
-   desc:'What happens when your internship is in the afterlife? Navigate a bureaucratic underworld, complete absurd tasks for spectral supervisors, and try to survive your first performance review — from beyond the grave.'},
-  {id:'returnofthechickens', name:'Return of the Chickens',   cat:'Game Design',                   cover:'projects/returnofthechickens/1.png',coverNum:1, extraStart:2,
-   bg:'linear-gradient(145deg,#1a1505,#4a3a10,#7a6020)', ico:'🐔',
-   tags:['Game Design','Comedy','Action','Physics'],
-   caption:'They left. They regrouped. Now the chickens are back — and ready.',
-   desc:'They left. Now they\'re back. Return of the Chickens is a chaotic action game built on the premise that poultry has had enough — delivering feathered mayhem with tight controls, escalating challenge, and unreasonable satisfaction.'},
-  {id:'toweroffrankenfrog',  name:'Tower of Frankenfrog',     cat:'Tower Defense · Strategy',      cover:'projects/toweroffrankenfrog/1.png', coverNum:1, extraStart:2,
-   bg:'linear-gradient(145deg,#0a1a08,#1a3a12,#2a5a1a)', ico:'🐸',
-   tags:['Tower Defense','Strategy','Game Design','Monsters'],
-   caption:'Frankenfrog holds the line against waves stranger than the last.',
-   desc:'A tower defense game where Frankenfrog and his amphibian army hold the line against an increasingly unhinged parade of enemies. Strategic depth wrapped in a creature-feature aesthetic.'},
-  {id:'walk',                name:'Walk',                     cat:'Experiential Design · Minimal',  cover:'projects/walk/1.png',              coverNum:1, extraStart:2,
-   bg:'linear-gradient(145deg,#101010,#1e1e1e,#2a2828)', ico:'🚶',
-   tags:['Experiential','Minimal','Spatial','Contemplative'],
-   caption:'One foot in front of the other — made into something worth sitting with.',
-   desc:'A contemplative piece about the act of walking. Walk strips back complexity to examine how movement through space creates meaning — using minimal visual language and immersive audio to turn locomotion into something meditative.'},
-
-  {id:'wallace',             name:'Wallace',                  cat:'Horror Game · Survival',         cover:'projects/wallace/1.png',            coverNum:1, extraStart:2,
+  {id:'haptidraw',          name:'Interview With Eternity',   cat:'VR Experience · XR 5010 · 2026', cover:'projects/haptidraw/1.jpg',         coverNum:1, extraStart:2,
+   bg:'linear-gradient(145deg,#08080e,#14122a,#1e1848)', ico:'✨',
+   tags:['VR','Avatar Embodiment','Existential','HCI','XR 5010','Gaze Interaction'],
+   caption:'Before you are born — choose mortality, or choose forever.',
+   desc:'A VR experience where you assume the identity of a soul before birth, confronting the existential choice between mortality and immortality. Using only gaze to respond, players are stripped of agency — heightening embodiment and isolation. Inspired by personal questions about faith, life after death, and what it means to begin. A submission for the VR Embodiment Project in XR 5010.'},
+  {id:'wallace',            name:'Wallace',                   cat:'Horror Game · Survival · 2025',  cover:'projects/wallace/1.png',           coverNum:1, extraStart:2,
    bg:'linear-gradient(145deg,#080608,#140e10,#201418)', ico:'🐕',
-   tags:['Horror','Unity','Survival','Atmosphere','First Person'],
+   tags:['Horror','Unity','Survival','Atmosphere','First Person','Halloween'],
    caption:'Give out candy. Do your tasks. Do not let Wallace out.',
-   desc:'You\'re watching your neighbor\'s house for the night. Give out candy to trick-or-treaters — or don\'t, but leave the lights off. Take care of their very special dog, Wallace. Keep the front and back doors open for visitors. Do your tasks or face the consequences. Wallace is real. WASD to move. Left Click to interact. Volume up.'},
+   desc:'You\'re watching your neighbor\'s house for the night. Give out candy to trick-or-treaters — or don\'t, but leave the lights off. Take care of their very special dog, Wallace. Keep the front and back doors open for visitors. Do your tasks or die. Wallace is a real dog, by the way. WASD to move, Left Click to interact. Volume up.'},
+  {id:'iamyou',             name:'I Am You',                  cat:'VR Horror · Dissociation · 2024',cover:'projects/iamyou/1.png',            coverNum:1, extraStart:2,
+   bg:'linear-gradient(145deg,#0a1a1a,#1a4a4a,#2a7a7a)', ico:'👤',
+   tags:['VR','Horror','Dissociation','Narrative','Trail Camera','Psychological'],
+   caption:'Control your body from the outside. Find the photos. Outrun the fear.',
+   desc:'A VR horror adventure where you play as an amateur photographer whose cherished photos are scattered by a sudden wind in Cityville National Forest — and a haunting manifestation of regret, the Ice Cream Man, begins to pursue you. Using trail cameras to direct your own body, you retrieve lost memories from the perspective of an external observer. A psychological rift that mirrors the protagonist\'s emotional struggle.'},
+  {id:'internshipintheafterlife',name:'Internship in the Afterlife',cat:'Narrative Game · XR 5020 · 2024',cover:'projects/internshipintheafterlife/1.png',coverNum:1, extraStart:2,
+   bg:'linear-gradient(145deg,#10080a,#301818,#502828)', ico:'👻',
+   tags:['Narrative','Comedy','Game Design','Afterlife','XR 5020','Interactive Fiction'],
+   caption:'Your first performance review is from beyond the grave. Good luck.',
+   desc:'What happens when your internship is in the afterlife? Navigate a bureaucratic underworld, complete absurd tasks for spectral supervisors, and try to survive your first performance review — from beyond the grave. Created as XR 5020 Course Final 2024.'},
+  {id:'toweroffrankenfrog',  name:'Tower of Frankenfrog',     cat:'Tower Defense · Husky Jam 2024', cover:'projects/toweroffrankenfrog/1.png', coverNum:1, extraStart:2,
+   bg:'linear-gradient(145deg,#0a1a08,#1a3a12,#2a5a1a)', ico:'🐸',
+   tags:['Tower Defense','Strategy','Game Design','Monsters','Husky Jam','2024'],
+   caption:'Frankenfrog holds the line against waves stranger than the last.',
+   desc:'A tower defense game where Frankenfrog and his amphibian army hold the line against an increasingly unhinged parade of enemies. Strategic depth wrapped in a creature-feature aesthetic — every wave stranger than the last. Created for Husky Jam 2024.'},
+  {id:'returnofthechickens', name:'Return of the Chickens',   cat:'VR Shooter · Demo · 2024',      cover:'projects/returnofthechickens/1.png',coverNum:1, extraStart:2,
+   bg:'linear-gradient(145deg,#1a1505,#4a3a10,#7a6020)', ico:'🐔',
+   tags:['VR Shooter','Meta Quest','Unity','Game Jam','Boston FIG 2024','SideQuest'],
+   caption:'Chi\'King and Chi\'Queen want your farm. Give them the Cluckshot Cannon.',
+   desc:'A VR shooter where you play as a farmer facing a full chicken invasion. The evil rulers Chi\'King and Chi\'Queen are coming for your farm — fight back with Foul Play Firearms like the Cluckshot Cannon. Final project for XR Terra VR Developer Certification, Northeastern Senior Games Showcase 2024, and Boston Festival of Indie Games 2024 Online Expo. Available on SideQuest.'},
+  {id:'arworkofart',        name:'AR Work of Art',            cat:'AR · Rhythm Game · XR 5010 · 2024',cover:'projects/arworkofart/1.png',     coverNum:1, extraStart:2,
+   bg:'linear-gradient(145deg,#1a0a2e,#4a1888,#7040b5)', ico:'🎨',
+   tags:['AR','MR','Rhythm Game','Unity','Particles','Immersive Media','XR 5010'],
+   caption:'Hit the beat, build the atmosphere — miss it and watch it fall apart.',
+   desc:'A class project for XR 5010: Immersive Media. An AR/MR rhythm game where players hit spawning cubes in a full 360° space — each hit activating one of ten unique particle effects and layering audio tracks. Miss a cube and the world dims. The goal: make players feel like they\'re building the rhythm themselves. Inspired by a lifelong love of Guitar Hero, Beat Saber, and Pistol Whip.'},
+  {id:'greatvendingmachine',name:'Great Vending Machine',     cat:'3D Platformer · Horror · 2023',  cover:'projects/greatvendingmachine/1.png',coverNum:1, extraStart:2,
+   bg:'linear-gradient(145deg,#0a0a1a,#20201a,#403a10)', ico:'🎰',
+   tags:['WebGL','Unity','3D Platformer','Horror','Japan','Study Abroad'],
+   caption:'A coin. A machine. Tokyo at midnight. Something is wrong inside.',
+   desc:'"Great Vending Machine" is a 3D platformer infused with horror, where you play as a coin navigating the inner workings of a vending machine. Conceived as the culminating project during a study abroad in Tokyo and Kyoto, Japan in 2023 — eerie, strange, and deeply personal.'},
+  {id:'soulsolace',         name:'Soul Solace',               cat:'Narrative Game · Brackeys 2023', cover:'projects/soulsolace/1.png',        coverNum:1, extraStart:2,
+   bg:'linear-gradient(145deg,#0a0a1a,#1a1a4a,#2a2a8a)', ico:'🌊',
+   tags:['Game Jam','Narrative','Unity','Keyboard & Mouse','Brackeys 2023'],
+   caption:'Introspection, hidden truths, and a family that holds more than it shows.',
+   desc:'Soul Solace immerses players in a journey of introspection, unearthing hidden truths and navigating complex moral dilemmas. Delving into the protagonist\'s soul and family dynamics, players seek redemption through self-discovery. Created as a submission to Brackeys Game Jam 2023. WASD to move, Left Click to interact, ESC to exit.'},
+  {id:'godsdrunkestdriver', name:"God's Drunkest Driver",     cat:'Racing · Husky Jam 2023',        cover:'projects/godsdrunkestdriver/1.png',coverNum:1, extraStart:2,
+   bg:'linear-gradient(145deg,#1a0a05,#4a2010,#8a4020)', ico:'🚗',
+   tags:['Racing','Arcade','Unity','Physics','Husky Jam 2023'],
+   caption:'A magic potion, a midnight road, and absolutely no plan.',
+   desc:'You are GOD\'S DRUNKEST DRIVER. Driving through midnight, you drink a "magic potion" to stay awake — but it makes the road trip far more than average. Avoid obstacles and drive like a bat out of hell when you\'re off the juice. A to steer left, D to steer right, Mouse to look, Spacebar to drink.'},
+  {id:'unforgottenstories', name:'Unforgotten Stories',       cat:'Narrative Game · Hidden Heroes Jam 2023',cover:'projects/unforgottenstories/1.png',coverNum:1, extraStart:2,
+   bg:'linear-gradient(145deg,#1a0a0a,#4a1a1a,#8a2a2a)', ico:'📖',
+   tags:['Narrative','Unity','WebGL','Heritage','Historical','Partition','Playable'],
+   caption:'Seven years old. Forced from home. The Partition, lived from the inside.',
+   desc:'Step into the shoes of one developer\'s grandmother during the Pakistani-Indian Partition. As a seven-year-old ripped from Karachi, you navigate the streets, survive the journey, and uncover the truth behind your family\'s past. Unforgotten Stories: The Partition makes history personal and immediate.'},
+  {id:'flora',              name:'Flora Park Mystery',        cat:'Murder Mystery · Global Game Jam 2023',cover:'projects/flora/1.png',        coverNum:1, extraStart:2,
+   bg:'linear-gradient(145deg,#0a1a0a,#1a3a1a,#2a5a2a)', ico:'🌺',
+   tags:['Murder Mystery','3D','Point & Click','Global Game Jam 2023','Northeastern'],
+   caption:'A murder in the park. Only you can piece it together.',
+   desc:'Flora Park Mystery is a 3D point-and-click murder mystery created for the 2023 Global Game Jam in Boston at Northeastern University, hosted by the Game Development Club. Investigate the scene, gather clues, and solve the case.'},
+  {id:'walk',               name:'Walk Among Us',             cat:'Museum Game · Personal · 2022',  cover:'projects/walk/1.png',              coverNum:1, extraStart:2,
+   bg:'linear-gradient(145deg,#101010,#1e1e1e,#2a2828)', ico:'🚶',
+   tags:['Educational','Museum','Black History','Game Design','Northeastern','AFAM Studies'],
+   caption:'A museum tribute to the history of Black characters in video games.',
+   desc:'Walk Among Us is a tribute to the history of Black characters in the world of video games. Explore the museum and immerse yourself in the rich tapestry it has to offer. Created as the culmination of studies in African American and Africana Studies under Prof. Dr. Layla Brown at Northeastern University. WASD to move, Left Click to interact.'},
+  {id:'otherrealm',         name:'Other Realm',               cat:'Narrative Game · Twine · 2021',  cover:'projects/otherrealm/1.png',        coverNum:1, extraStart:2,
+   bg:'linear-gradient(145deg,#0a1a0a,#1a4a1a,#2a7a2a)', ico:'🌿',
+   tags:['Narrative Design','Twine','Horror','Story','Playable','Web'],
+   caption:'Two teenagers. One demon. A bond that refuses to break.',
+   desc:'A narrative-driven script built in Twine 2.3, created as a final project for Narrative for Games under Prof. Brandon Sichling. The story follows two teenagers with a unique bond who are separated by a demon looking to feast on their souls — a branching horror narrative about connection, sacrifice, and the other realm.'},
+  {id:'curse',              name:'Curse of the Mind',         cat:'Platformer · Jam-O-Lantern 2021',cover:'projects/curse/1.png',             coverNum:1, extraStart:2,
+   bg:'linear-gradient(145deg,#0e0808,#201010,#341818)', ico:'🌑',
+   tags:['Platformer','Unity','First Game','Gravity','Dash','Jam-O-Lantern 2021'],
+   caption:'My first ever digital game — gravity-flipping, dash-dashing chaos.',
+   desc:'Curse of the Mind is my very first digital game. A platformer with a twist: flip gravity with R+F, dash with Shift, and navigate your way through. WASD to move, Shift to dash, R then F to flip gravity.'},
 ];
 const PMAP={};PROJECTS.forEach(p=>PMAP[p.id]=p);
 
 /* HERO CARD SPRING */
-const HERO_IDS=['seereality','arworkofart','haptidraw','otherrealm'];
+const HERO_IDS=['seereality','genexr','bofum','greatvendingmachine'];
 const cdata=HERO_IDS.map((id,i)=>({el:document.getElementById('hc'+i),id,ox:0,oy:0,vx:0,vy:0,rot:[-22,-7,8,21][i]}));
 function layoutCards(){
   const cl=document.getElementById('clayer');
@@ -577,8 +562,6 @@ function openProject(id){
   const videoSrc=folder+'0.mp4';
   const img=document.getElementById('pv-hero-img'),vid=document.getElementById('pv-hero-vid');
   img.style.display='none';vid.style.display='none';vid.src='';
-
-  // Try 0.mp4 as hero video, fallback to cover image
   const testVid=document.createElement('video');
   testVid.src=videoSrc;
   testVid.oncanplaythrough=()=>{vid.src=videoSrc;vid.style.display='block';};
@@ -586,19 +569,17 @@ function openProject(id){
   testVid.load();
   setTimeout(()=>{if(vid.style.display==='none'&&img.style.display==='none'){img.src=p.cover;}},1200);
 
-  // Embedded playable builds — GVM, Unforgotten Stories, Other Realm
   const gameWrap=document.getElementById('pv-game-wrap');
   const gameIframe=document.getElementById('pv-game-iframe');
   const EMBEDS={
-    'greatvendingmachine': {src:'https://tommedenney.github.io/GVMHost/',          itchio:'https://tommedenney.itch.io/great-vending-machine'},
-    'unforgottenstories':  {src:'https://tommedenney.github.io/UnforgottenStoriesWebGLHost/', itchio:null},
-    'otherrealm':          {src:'projects/otherrealm/index.html',                  itchio:null},
+    'greatvendingmachine':{src:'https://tommedenney.github.io/GVMHost/',itchio:'https://tommedenney.itch.io/great-vending-machine'},
+    'unforgottenstories': {src:'https://tommedenney.github.io/UnforgottenStoriesWebGLHost/',itchio:null},
+    'otherrealm':         {src:'projects/otherrealm/index.html',itchio:null},
   };
   const embed=EMBEDS[id];
   if(embed){
     gameWrap.style.display='block';
     gameIframe.src=embed.src;
-    // update itch.io button visibility
     const itchBtn=gameWrap.querySelector('.pv-game-itchio');
     if(embed.itchio){itchBtn.href=embed.itchio;itchBtn.style.display='inline-flex';}
     else{itchBtn.style.display='none';}
@@ -607,7 +588,6 @@ function openProject(id){
     gameIframe.src='';
   }
 
-  // Gallery — try 0.mp4 as first item, then images from extraStart
   const gal=document.getElementById('pv-gallery');
   gal.innerHTML='';
   const addVideoToGallery=()=>{
@@ -628,15 +608,25 @@ function openProject(id){
     i.style.cssText='width:100%;display:block;border-radius:14px;cursor:zoom-in;';
     i.addEventListener('click',()=>openLightbox(src));
     i.onload=()=>gal.appendChild(w);
-    i.onerror=()=>{};
+    i.onerror=()=>{
+      // try .jpg fallback for gallery images too
+      if(src.endsWith('.png')){
+        const jpgSrc=src.replace('.png','.jpg');
+        const j=document.createElement('img');j.alt=p.name;
+        j.style.cssText='width:100%;display:block;border-radius:14px;cursor:zoom-in;';
+        j.addEventListener('click',()=>openLightbox(jpgSrc));
+        j.onload=()=>{w.innerHTML='';w.appendChild(j);gal.appendChild(w);};
+        j.onerror=()=>{};
+        j.src=jpgSrc;
+      }
+    };
     w.appendChild(i);i.src=src;
   }
 
-  // More strip
   const track=document.getElementById('pv-more-track');track.innerHTML='';
   PROJECTS.filter(q=>q.id!==id).forEach(q=>{
     const mc=document.createElement('div');mc.className='pv-more-card';
-    mc.innerHTML=`<div class="pv-more-card-bg" style="background:${q.bg}"></div><div class="pv-more-card-ico">${q.ico}</div><img class="pv-more-card-img" src="${q.cover}" alt="${q.name}" onload="this.classList.add('ok')" onerror="this.style.display='none'"><div class="pv-more-card-lbl">${q.name}</div>`;
+    mc.innerHTML=`<div class="pv-more-card-bg" style="background:${q.bg}"></div><div class="pv-more-card-ico">${q.ico}</div><img class="pv-more-card-img" src="${q.cover}" onload="this.classList.add('ok')" onerror="imgFallback(this)"><div class="pv-more-card-lbl">${q.name}</div>`;
     mc.addEventListener('click',()=>openProject(q.id));
     track.appendChild(mc);
   });
@@ -652,12 +642,10 @@ function goHome(){
   resetAuto();window.scrollTo(0,0);
 }
 
-/* LIGHTBOX */
 function openLightbox(src){document.getElementById('lb-img').src=src;document.getElementById('lightbox').classList.add('open');document.body.style.overflow='hidden';}
 function closeLightbox(){document.getElementById('lightbox').classList.remove('open');document.body.style.overflow='';}
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox();});
 
-/* PALETTE */
 function setTheme(t,el){document.body.dataset.theme=t;document.querySelectorAll('.sw').forEach(s=>s.classList.remove('on'));el.classList.add('on');document.getElementById('sw').classList.remove('open');}
 function togglePal(){document.getElementById('sw').classList.toggle('open');}
 document.addEventListener('click',e=>{if(!document.getElementById('pal').contains(e.target))document.getElementById('sw').classList.remove('open');});
