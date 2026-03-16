@@ -149,7 +149,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content
 .pv-tag{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:6px 14px;border-radius:100px;border:1.2px solid rgba(255,255,255,.3);color:rgba(255,255,255,.75)}
 .pv-caption{font-size:14px;font-weight:500;color:rgba(255,255,255,.7);letter-spacing:.02em;line-height:1.55;max-width:520px;margin-top:6px}
 .pv-body{max-width:1100px;margin:0 auto;padding:64px 52px}
-.pv-desc{font-size:17px;font-weight:400;line-height:1.84;color:var(--text);max-width:660px;margin-bottom:40px;transition:color .35s}
+.pv-desc{font-size:17px;font-weight:400;line-height:1.84;color:var(--text);max-width:660px;margin-bottom:24px;transition:color .35s}
+.pv-dl-btn{display:inline-flex;align-items:center;gap:10px;margin-bottom:36px;padding:14px 28px;border-radius:100px;background:var(--text);color:var(--bg);font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;transition:opacity .2s,transform .2s}
+.pv-dl-btn:hover{opacity:.78;transform:translateY(-2px)}
+.pv-dl-btn svg{flex-shrink:0}
+.pv-ext-btn{display:inline-flex;align-items:center;gap:9px;padding:13px 26px;border-radius:100px;background:var(--text);color:var(--bg);font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;margin-bottom:32px;transition:opacity .2s,transform .2s}.pv-ext-btn:hover{opacity:.75;transform:translateY(-2px)}
 .pv-game-wrap{margin-bottom:40px;border-radius:16px;overflow:hidden;background:#000}
 .pv-game-bar{display:flex;align-items:center;justify-content:space-between;padding:10px 18px;background:#111}
 .pv-game-bar span{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.5)}
@@ -347,6 +351,15 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content
   </div>
   <div class="pv-body">
     <p class="pv-desc" id="pv-desc"></p>
+    <div id="pv-ext-wrap"></div>
+    <a class="pv-dl-btn" id="pv-dl-btn" href="#" target="_blank" style="display:none">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1v9M8 10l-3-3M8 10l3-3M2 13h12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span id="pv-dl-label">Download</span>
+    </a>
+    <a class="pv-dl-btn" id="pv-dl-btn" href="#" target="_blank" style="display:none">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1v9M8 10l-3-3M8 10l3-3M2 12h12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span id="pv-dl-label">Download</span>
+    </a>
     <div class="pv-game-wrap" id="pv-game-wrap" style="display:none">
       <div class="pv-game-bar">
         <span>Play in Browser</span>
@@ -622,6 +635,41 @@ function openProject(id){
   document.getElementById('pv-tags').innerHTML=p.tags.map(t=>`<span class="pv-tag">${t}</span>`).join('');
   document.getElementById('pv-caption').textContent=p.caption||'';
   document.getElementById('pv-desc').textContent=p.desc;
+  // External link button
+  const EXT={
+    'arworkofart':              {url:'https://tommedenney.itch.io/ar-work-of-art',           label:'View on Itch.io ↗'},
+    'curse':                    {url:'https://tommedenney.itch.io/curse-of-the-mind-demo',   label:'Download on Itch.io ↗'},
+    'flora':                    {url:'https://tommedenney.itch.io/flora-park-mystery',        label:'Download on Itch.io ↗'},
+    'godsdrunkestdriver':       {url:'https://tommedenney.itch.io/gods-drunkest-driver',     label:'Download on Itch.io ↗'},
+    'greatvendingmachine':      {url:'https://tommedenney.itch.io/great-vending-machine',    label:'View on Itch.io ↗'},
+    'iamyou':                   {url:'https://tommedenney.itch.io/i-am-you',                 label:'Download on Itch.io ↗'},
+    'internshipintheafterlife': {url:'https://tommedenney.itch.io/internship-in-the-afterlife',label:'Download on Itch.io ↗'},
+    'haptidraw':                {url:'https://devpost.com/software/haptidraw',               label:'View on Devpost ↗'},
+    'returnofthechickens':      {url:'https://tommedenney.itch.io/return-of-the-chickens-demo',label:'Download on Itch.io ↗'},
+    'soulsolace':               {url:'https://tommedenney.itch.io/soul-solace',               label:'Download on Itch.io ↗'},
+    'otherrealm':               {url:'https://tommedenney.itch.io/the-other-realm',           label:'Play on Itch.io ↗'},
+    'toweroffrankenfrog':       {url:'https://tommedenney.itch.io/tower-of-franken-frog',    label:'Download on Itch.io ↗'},
+    'unforgottenstories':       {url:'https://tommedenney.itch.io/unforgotten-stories-the-partition',label:'Play on Itch.io ↗'},
+    'walk':                     {url:'https://tommedenney.itch.io/walkamongus',               label:'Download on Itch.io ↗'},
+    'wallace':                  {url:'https://tommedenney.itch.io/wallace',                   label:'Download on Itch.io ↗'},
+    'bofum':                    {url:'https://devpost.com/software/bofum',                    label:'View on Devpost ↗'},
+  };
+  const extWrap=document.getElementById('pv-ext-wrap');
+  const extData=EXT[id];
+  if(extData){
+    extWrap.innerHTML=`<a class="pv-ext-btn" href="${extData.url}" target="_blank" rel="noopener">${extData.label}</a>`;
+  } else {
+    extWrap.innerHTML='';
+  }
+  // Download / external button
+  const dlBtn=document.getElementById('pv-dl-btn');
+  if(p.dl){
+    dlBtn.href=p.dl;
+    document.getElementById('pv-dl-label').textContent=p.dlLabel||'Download';
+    dlBtn.style.display='inline-flex';
+  } else {
+    dlBtn.style.display='none';
+  }
   pvHero.classList.remove('paused');
 
   // Hero media
