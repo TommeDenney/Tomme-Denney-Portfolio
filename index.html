@@ -78,8 +78,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content
 .fcico{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:54px;z-index:1}
 .flabel{display:inline-flex;margin-top:18px;padding:10px 26px;border-radius:100px;background:var(--cb);font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;transition:background .35s;cursor:pointer}.flabel:hover{opacity:.7}
 
-/* PLAY ON WEB */
-.playweb{padding:72px 44px 64px;text-align:center}
+/* Tighter section spacing */
+.role{padding:44px 44px 40px}
+.featured{padding:48px 0 44px;text-align:center}
+.playweb{padding:44px 44px 40px;text-align:center}
+.more{padding:48px 44px 56px;text-align:center}
 .pwtrack{display:flex;gap:20px;justify-content:center;margin-top:40px;flex-wrap:wrap}
 .pwcard{width:260px;aspect-ratio:1;border-radius:18px;overflow:hidden;cursor:pointer;position:relative;box-shadow:0 16px 40px rgba(0,0,0,.14);transition:transform .4s,box-shadow .4s;flex-shrink:0}
 .pwcard:hover{transform:translateY(-10px) scale(1.04);box-shadow:0 28px 60px rgba(0,0,0,.22)}
@@ -149,12 +152,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content
 .pv-game-itchio{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#fff;background:#fa5c5c;border:none;padding:6px 16px;border-radius:100px;cursor:pointer;text-decoration:none;transition:background .2s}.pv-game-itchio:hover{background:#e84444}
 .pv-game-fs{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#fff;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);padding:6px 16px;border-radius:100px;cursor:pointer;transition:background .2s}.pv-game-fs:hover{background:rgba(255,255,255,.28)}
 .pv-game-wrap iframe{width:100%;height:560px;border:none;display:block}
-/* HORIZONTAL gallery */
-.pv-gallery{display:flex;gap:14px;overflow-x:auto;padding:0 0 16px;margin-bottom:64px;scrollbar-width:thin;scrollbar-color:var(--b) transparent}
-.pv-gallery::-webkit-scrollbar{height:4px}.pv-gallery::-webkit-scrollbar-thumb{background:var(--b);border-radius:2px}
-.pv-gallery-item{flex-shrink:0;height:260px;border-radius:14px;overflow:hidden;background:var(--cb);cursor:zoom-in;transition:transform .4s,box-shadow .4s}.pv-gallery-item:hover{transform:scale(1.03);box-shadow:0 16px 40px rgba(0,0,0,.18)}
-.pv-gallery-item img{height:100%;width:auto;max-width:420px;display:block;border-radius:14px;object-fit:cover}
-.pv-gallery-item video{height:100%;width:auto;max-width:560px;display:block;border-radius:14px;cursor:default}
+/* HORIZONTAL gallery → full-width masonry grid */
+.pv-gallery{columns:3;gap:14px;margin-bottom:64px}
+.pv-gallery-item{break-inside:avoid;margin-bottom:14px;border-radius:14px;overflow:hidden;background:var(--cb);cursor:zoom-in;transition:transform .4s,box-shadow .4s}.pv-gallery-item:hover{transform:scale(1.02);box-shadow:0 16px 40px rgba(0,0,0,.18)}
+.pv-gallery-item img{width:100%;display:block;border-radius:14px;object-fit:cover}
+.pv-gallery-item video{width:100%;display:block;border-radius:14px;cursor:default}
 .pv-more{padding:0 0 80px}
 .pv-more-title{font-size:12px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--mt);margin-bottom:24px;padding:0 52px}
 .pv-more-track{display:flex;gap:16px;padding:0 52px 16px;overflow-x:auto;scrollbar-width:none}.pv-more-track::-webkit-scrollbar{display:none}
@@ -706,6 +708,8 @@ function goHome(){
   document.getElementById('main-nav').style.display='flex';
   document.getElementById('back-btn').style.display='none';
   resetAuto();window.scrollTo(0,0);
+  // Re-layout hero cards after returning — fixes left-drift glitch
+  requestAnimationFrame(()=>{ layoutCards(); });
 }
 
 function openLightbox(src){document.getElementById('lb-img').src=src;document.getElementById('lightbox').classList.add('open');document.body.style.overflow='hidden';}
