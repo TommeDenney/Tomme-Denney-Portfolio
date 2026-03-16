@@ -7,134 +7,134 @@
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script>
 function imgFallback(el){
-  var src=el.src;
-  var next=null;
+  var src=el.src,next=null;
   if(src.endsWith('.png')) next=src.replace('.png','.jpg');
   else if(src.endsWith('.jpg')||src.endsWith('.jpeg')) next=src.replace(/\.jpe?g$/,'.png');
-  if(next){
-    el.onload=function(){this.classList.add('ok');};
-    el.onerror=function(){this.style.display='none';};
-    el.src=next;
-  } else {
-    el.style.display='none';
-  }
-}
-function tryHaptiDrawFallback(el){
-  if(el.src.indexOf('1.jpg')!==-1){
-    el.src='projects/haptidraw/0.jpg';
-    el.onerror=function(){this.style.display='none';};
-  } else {
-    el.style.display='none';
-  }
+  if(next){el.onload=function(){this.classList.add('ok');};el.onerror=function(){this.style.display='none';};el.src=next;}
+  else el.style.display='none';
 }
 </script>
 <style>
-:root{--bg:#f2ede3;--text:#1a1714;--gr:#b5ada3;--mt:#8a7e70;--cb:#e0dad0;--b:rgba(26,23,20,.1)}
-[data-theme=white]{--bg:#f7f7f5;--text:#111;--gr:#bbb;--mt:#999;--cb:#eaeae8;--b:rgba(0,0,0,.08)}
-[data-theme=dark]{--bg:#0e0e0e;--text:#e8e4dc;--gr:#3a3a3a;--mt:#555;--cb:#1a1a1a;--b:rgba(255,255,255,.08)}
-[data-theme=sage]{--bg:#e8ede5;--text:#1a2a1a;--gr:#9ab29a;--mt:#6a836a;--cb:#dde6da;--b:rgba(26,40,26,.1)}
-[data-theme=night]{--bg:#07070e;--text:#c0bde0;--gr:#22223c;--mt:#44427a;--cb:#10101c;--b:rgba(130,125,220,.1)}
+:root{--bg:#f2ede3;--text:#1a1714;--gr:#b5ada3;--mt:#8a7e70;--cb:#e0dad0;--b:rgba(26,23,20,.1);--contact-bg:#161411}
+[data-theme=white]{--bg:#f7f7f5;--text:#111;--gr:#bbb;--mt:#999;--cb:#eaeae8;--b:rgba(0,0,0,.08);--contact-bg:#1a1a1a}
+[data-theme=dark]{--bg:#0e0e0e;--text:#e8e4dc;--gr:#3a3a3a;--mt:#555;--cb:#1a1a1a;--b:rgba(255,255,255,.08);--contact-bg:#050505}
+[data-theme=sage]{--bg:#e8ede5;--text:#1a2a1a;--gr:#9ab29a;--mt:#6a836a;--cb:#dde6da;--b:rgba(26,40,26,.1);--contact-bg:#0d1a0d}
+[data-theme=night]{--bg:#07070e;--text:#c0bde0;--gr:#22223c;--mt:#44427a;--cb:#10101c;--b:rgba(130,125,220,.1);--contact-bg:#030308}
 *{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--text);font-family:'Barlow','Helvetica Neue',Arial,sans-serif;cursor:none;overflow-x:hidden;transition:background .45s,color .45s;-webkit-font-smoothing:antialiased}
-
 #cur,#ring{position:fixed;pointer-events:none;z-index:9999;border-radius:50%;transform:translate(-50%,-50%);mix-blend-mode:difference}
-#cur{width:10px;height:10px;background:#fff;transition:width .15s,height .15s,transform .15s}
-#ring{width:36px;height:36px;border:1.8px solid #fff;opacity:.85;transition:width .32s cubic-bezier(.25,.46,.45,.94),height .32s cubic-bezier(.25,.46,.45,.94),opacity .3s}
-body.hov #cur{width:6px;height:6px}
-body.hov #ring{width:54px;height:54px;opacity:.5}
-body.shake #cur{width:28px;height:28px;opacity:.7;transition:width .18s,height .18s,opacity .18s}
-body.shake #ring{width:88px;height:88px;opacity:.4;transition:width .18s,height .18s}
+#cur{width:10px;height:10px;background:#fff;transition:width .15s,height .15s}
+#ring{width:36px;height:36px;border:1.8px solid #fff;opacity:.85;transition:width .32s cubic-bezier(.25,.46,.45,.94),height .32s cubic-bezier(.25,.46,.45,.94)}
+body.hov #cur{width:6px;height:6px}body.hov #ring{width:54px;height:54px;opacity:.5}
+body.shake #cur{width:28px;height:28px;opacity:.7}body.shake #ring{width:88px;height:88px;opacity:.4}
 
 nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content:space-between;align-items:center;padding:22px 44px}
-.logo{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--text);text-decoration:none;cursor:pointer;transition:opacity .2s}
-.logo:hover{opacity:.4}
+.logo{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--text);cursor:pointer;transition:opacity .2s}.logo:hover{opacity:.4}
 .navr{display:flex;gap:26px;list-style:none}
 .navr a{font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--mt);text-decoration:none;cursor:pointer;transition:color .2s}
 .navr a:hover,.navr a.on{color:var(--text)}
 .back-btn{display:none;align-items:center;gap:10px;font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;background:#fff;border:none;color:#111;padding:10px 20px;border-radius:100px;box-shadow:0 2px 18px rgba(0,0,0,.22);transition:transform .2s,box-shadow .2s}
 .back-btn:hover{transform:translateX(-3px);box-shadow:0 4px 28px rgba(0,0,0,.3)}
-.back-btn svg{transition:transform .2s}
-.back-btn:hover svg{transform:translateX(-3px)}
+.back-btn svg{transition:transform .2s}.back-btn:hover svg{transform:translateX(-3px)}
 
-.ticker{overflow:hidden;border-top:1px solid var(--b);border-bottom:1px solid var(--b);padding:13px 0;white-space:nowrap;transition:background .45s,border-color .45s}
+.ticker{overflow:hidden;border-top:1px solid var(--b);border-bottom:1px solid var(--b);padding:13px 0;white-space:nowrap;transition:border-color .45s}
 .tickin{display:inline-flex;animation:tick 26s linear infinite}
-.tickin span{font-size:13px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--mt);padding:0 24px;transition:color .35s}
+.tickin span{font-size:13px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--mt);padding:0 24px}
 .tickin .dot{color:var(--text);padding:0 2px}
 @keyframes tick{to{transform:translateX(-50%)}}
 
+/* HERO */
 .hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;padding-top:60px;position:relative;overflow:hidden}
 .hmeta{font-size:13px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--mt);text-align:center;line-height:2.1;margin-bottom:10px;position:relative;z-index:10;transition:opacity .3s}
-.hname{font-family:'Barlow Condensed',Impact,'Arial Narrow',sans-serif;font-weight:900;font-size:clamp(68px,15vw,220px);letter-spacing:-.03em;text-transform:uppercase;text-align:center;line-height:.88;color:var(--text);position:relative;z-index:10;user-select:none;transition:color .35s,opacity .35s;padding:0 32px;pointer-events:none}
-.clayer{position:relative;width:100%;height:300px;margin-top:38px;z-index:5;flex-shrink:0}
-.hcard{position:absolute;width:158px;height:224px;border-radius:14px;overflow:hidden;box-shadow:0 18px 48px rgba(0,0,0,.2),0 6px 14px rgba(0,0,0,.1);will-change:transform;cursor:pointer}
+.hname{font-family:'Barlow Condensed',Impact,'Arial Narrow',sans-serif;font-weight:900;font-size:clamp(68px,15vw,220px);letter-spacing:-.03em;text-transform:uppercase;text-align:center;line-height:.88;color:var(--text);position:relative;z-index:10;user-select:none;transition:opacity .35s;padding:0 32px;pointer-events:none}
+.clayer{position:relative;width:100%;height:280px;margin-top:38px;z-index:5;flex-shrink:0}
+/* SQUARE hero cards */
+.hcard{position:absolute;width:180px;height:180px;border-radius:14px;overflow:hidden;box-shadow:0 18px 48px rgba(0,0,0,.2),0 6px 14px rgba(0,0,0,.1);will-change:transform;cursor:pointer}
 .hcbg{position:absolute;inset:0}
-.hcimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:2;opacity:0;transition:opacity .5s}
-.hcimg.ok{opacity:1}
+.hcimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:2;opacity:0;transition:opacity .5s}.hcimg.ok{opacity:1}
 .hcico{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:46px;z-index:1}
-.hclbl{position:absolute;bottom:0;left:0;right:0;z-index:3;padding:9px 11px;font-size:11px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:rgba(255,255,255,.94);text-shadow:0 1px 6px rgba(0,0,0,.5);background:linear-gradient(transparent,rgba(0,0,0,.42));opacity:.9}
+.hclbl{position:absolute;bottom:0;left:0;right:0;z-index:3;padding:9px 11px;font-size:11px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:rgba(255,255,255,.94);text-shadow:0 1px 6px rgba(0,0,0,.5);background:linear-gradient(transparent,rgba(0,0,0,.42))}
 
+/* ROLE */
 .role{padding:72px 44px 64px}
-/* FIXED: was var(--gr), now var(--text) to match other bold headings */
 .rword{display:block;font-family:'Barlow Condensed',Impact,'Arial Narrow',sans-serif;font-weight:900;font-size:clamp(52px,10.5vw,148px);letter-spacing:-.02em;text-transform:uppercase;color:var(--text);line-height:.9;transition:color .35s}
 .clients{margin-top:56px;text-align:center}
 .cl{font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--text);margin-bottom:12px}
 .cv{font-size:13px;font-weight:500;letter-spacing:.11em;text-transform:uppercase;color:var(--mt)}
 
+/* FEATURED — SQUARE cards */
 .featured{padding:80px 0 68px;text-align:center}
 .sh{font-family:'Barlow Condensed',Impact,'Arial Narrow',sans-serif;font-weight:900;font-size:clamp(40px,7vw,90px);letter-spacing:-.015em;text-transform:uppercase;margin-bottom:8px}
 .ss{font-size:14px;font-weight:500;color:var(--mt);margin-bottom:44px;letter-spacing:.04em}
-.fcar{position:relative;height:450px;overflow:hidden}
+.fcar{position:relative;height:370px;overflow:hidden}
 .fc{position:absolute;left:50%;top:50%;border-radius:16px;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.15);cursor:pointer;transition:transform .62s cubic-bezier(.23,.92,.58,1),opacity .55s,width .55s,height .55s}
-.fc.center{width:290px;height:412px;transform:translate(-50%,-50%);z-index:5;opacity:1}
-.fc.right{width:208px;height:298px;transform:translate(calc(-50% + 308px),-50%);z-index:3;opacity:.65}
-.fc.left{width:208px;height:298px;transform:translate(calc(-50% - 308px),-50%);z-index:3;opacity:.65}
-.fc.out-r{transform:translate(calc(-50% + 660px),-50%);opacity:0;z-index:0;pointer-events:none}
-.fc.out-l{transform:translate(calc(-50% - 660px),-50%);opacity:0;z-index:0;pointer-events:none}
+.fc.center{width:280px;height:280px;transform:translate(-50%,-50%);z-index:5;opacity:1}
+.fc.right{width:200px;height:200px;transform:translate(calc(-50% + 290px),-50%);z-index:3;opacity:.65}
+.fc.left{width:200px;height:200px;transform:translate(calc(-50% - 290px),-50%);z-index:3;opacity:.65}
+.fc.out-r{width:180px;height:180px;transform:translate(calc(-50% + 620px),-50%);opacity:0;z-index:0;pointer-events:none}
+.fc.out-l{width:180px;height:180px;transform:translate(calc(-50% - 620px),-50%);opacity:0;z-index:0;pointer-events:none}
 .fcbg{position:absolute;inset:0}
-.fcimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:2;opacity:0;transition:opacity .5s}
-.fcimg.ok{opacity:1}
+.fcimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:2;opacity:0;transition:opacity .5s}.fcimg.ok{opacity:1}
 .fcico{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:54px;z-index:1}
-.flabel{display:inline-flex;margin-top:18px;padding:10px 26px;border-radius:100px;background:var(--cb);font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;transition:background .35s;cursor:pointer}
-.flabel:hover{opacity:.7}
+.flabel{display:inline-flex;margin-top:18px;padding:10px 26px;border-radius:100px;background:var(--cb);font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;transition:background .35s;cursor:pointer}.flabel:hover{opacity:.7}
 
+/* PLAY ON WEB */
+.playweb{padding:72px 44px 64px;text-align:center}
+.pwtrack{display:flex;gap:20px;justify-content:center;margin-top:40px;flex-wrap:wrap}
+.pwcard{width:260px;aspect-ratio:1;border-radius:18px;overflow:hidden;cursor:pointer;position:relative;box-shadow:0 16px 40px rgba(0,0,0,.14);transition:transform .4s,box-shadow .4s;flex-shrink:0}
+.pwcard:hover{transform:translateY(-10px) scale(1.04);box-shadow:0 28px 60px rgba(0,0,0,.22)}
+.pwcard-bg{position:absolute;inset:0}
+.pwcard-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:2;opacity:0;transition:opacity .5s}.pwcard-img.ok{opacity:1}
+.pwcard-ico{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:44px;z-index:1}
+.pwcard-overlay{position:absolute;inset:0;background:rgba(0,0,0,.3);z-index:3;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .3s}
+.pwcard:hover .pwcard-overlay{opacity:1}
+.pwcard-play{width:58px;height:58px;border-radius:50%;background:rgba(255,255,255,.92);display:flex;align-items:center;justify-content:center;font-size:24px;color:#111}
+.pwcard-lbl{position:absolute;bottom:0;left:0;right:0;z-index:4;padding:14px 16px;background:linear-gradient(transparent,rgba(0,0,0,.68));font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#fff;text-align:left}
+.pwcard-sub{font-size:9.5px;opacity:.65;margin-top:3px;letter-spacing:.08em;font-weight:500}
+
+/* ALL PROJECTS GRID */
 .more{padding:80px 44px 72px;text-align:center}
 .wgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:44px;max-width:940px;margin-left:auto;margin-right:auto}
 .wc{aspect-ratio:1;border-radius:16px;overflow:hidden;cursor:pointer;transform:scale(.84) translateY(22px);opacity:0;transition:transform .72s cubic-bezier(.25,.46,.45,.94),opacity .72s,box-shadow .3s}
-.wc.in{transform:scale(1);opacity:1}
-.wc.in:hover{transform:scale(1.04)!important;box-shadow:0 20px 50px rgba(0,0,0,.14)}
+.wc.in{transform:scale(1);opacity:1}.wc.in:hover{transform:scale(1.04)!important;box-shadow:0 20px 50px rgba(0,0,0,.14)}
 .wcin{width:100%;height:100%;position:relative;display:flex;align-items:center;justify-content:center}
 .wcbg{position:absolute;inset:0}
-.wcimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:2;opacity:0;transition:opacity .5s}
-.wcimg.ok{opacity:1}
+.wcimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:2;opacity:0;transition:opacity .5s}.wcimg.ok{opacity:1}
 .wcico{position:relative;z-index:1;font-size:40px}
 .wct{position:absolute;bottom:0;left:0;right:0;z-index:3;padding:12px 14px;background:linear-gradient(transparent,rgba(0,0,0,.54));font-size:11px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:#fff;text-align:left}
 
-.contact{background:#161411;padding:88px 44px 52px;text-align:center;overflow:hidden}
-.cword{font-family:'Barlow Condensed',Impact,'Arial Narrow',sans-serif;font-weight:900;font-size:min(21vw,300px);letter-spacing:-.04em;text-transform:uppercase;color:rgba(255,255,255,.11);line-height:.82;margin-bottom:62px;user-select:none}
-.ceml{display:block;font-size:13px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.62);text-decoration:none;margin-bottom:18px;transition:opacity .2s}
-.ceml:hover{opacity:.38}
+/* CONTACT */
+.contact{background:var(--contact-bg);padding:88px 44px 52px;text-align:center;overflow:hidden;transition:background .45s}
+.cword{font-family:'Barlow Condensed',Impact,'Arial Narrow',sans-serif;font-weight:900;font-size:min(21vw,300px);letter-spacing:-.04em;text-transform:uppercase;color:rgba(255,255,255,.88);line-height:.82;margin-bottom:62px;user-select:none}
+.ceml{display:block;font-size:13px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.62);text-decoration:none;margin-bottom:12px;transition:opacity .2s}.ceml:hover{opacity:.38}
+.cphone{display:block;font-size:13px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.62);text-decoration:none;margin-bottom:24px;transition:opacity .2s}.cphone:hover{opacity:.38}
 .csoc{display:flex;gap:24px;justify-content:center;list-style:none;margin-bottom:44px}
-.csoc a{font-size:12px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:rgba(255,255,255,.4);text-decoration:none;transition:color .2s}
-.csoc a:hover{color:rgba(255,255,255,.9)}
+.csoc a{font-size:12px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:rgba(255,255,255,.4);text-decoration:none;transition:color .2s}.csoc a:hover{color:rgba(255,255,255,.9)}
 .ccp{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.2)}
 
+/* PALETTE */
 #pal{position:fixed;bottom:28px;right:28px;z-index:400;display:flex;flex-direction:column;align-items:flex-end;gap:9px}
 #pbtn{width:44px;height:44px;border-radius:50%;background:var(--cb);border:1.5px solid var(--b);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 2px 20px rgba(0,0,0,.12);transition:transform .28s,background .35s}
 #pbtn:hover{transform:rotate(32deg) scale(1.07)}
 .swatches{display:flex;flex-direction:column;gap:9px;align-items:flex-end;opacity:0;transform:translateY(8px);pointer-events:none;transition:opacity .22s,transform .22s}
 .swatches.open{opacity:1;transform:none;pointer-events:all}
-.sw{display:flex;align-items:center;gap:9px;cursor:pointer;font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--mt);transition:color .2s}
-.sw:hover{color:var(--text)}
-.sdot{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--b);transition:transform .18px}
-.sw:hover .sdot{transform:scale(1.22)}
+.sw{display:flex;align-items:center;gap:9px;cursor:pointer;font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--mt);transition:color .2s}.sw:hover{color:var(--text)}
+.sdot{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--b);transition:transform .18s}.sw:hover .sdot{transform:scale(1.22)}
 .sw.on .sdot{outline:2.5px solid var(--text);outline-offset:2px}
 
+/* PROJECT DETAIL */
 #project-view{display:none;min-height:100vh}
-.pv-hero{width:100%;height:100vh;position:relative;overflow:hidden;display:flex;align-items:flex-end}
+.pv-hero{width:100%;height:100vh;position:relative;overflow:hidden;display:flex;align-items:flex-end;cursor:pointer}
 .pv-hero-media{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .pv-hero-bg{position:absolute;inset:0}
-.pv-hero-grad{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.78) 0%,rgba(0,0,0,.12) 60%,transparent 100%);z-index:2}
-.pv-hero-info{position:relative;z-index:3;padding:0 52px 52px;width:100%}
+.pv-hero-grad{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.78) 0%,rgba(0,0,0,.12) 60%,transparent 100%);z-index:2;pointer-events:none}
+.pv-hero-info{position:relative;z-index:3;padding:0 52px 52px;width:100%;pointer-events:none}
+/* Sound + pause UI */
+.pv-hero-controls{position:absolute;top:88px;right:28px;z-index:10;display:none;flex-direction:column;gap:8px;align-items:flex-end}
+.pv-ctrl-btn{background:rgba(0,0,0,.55);color:#fff;border:1px solid rgba(255,255,255,.25);padding:7px 16px;border-radius:100px;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;backdrop-filter:blur(8px);transition:background .2s;pointer-events:all}
+.pv-ctrl-btn:hover{background:rgba(0,0,0,.8)}
+.pv-pause-hint{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:4;background:rgba(0,0,0,.55);color:#fff;width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;opacity:0;transition:opacity .3s;pointer-events:none;backdrop-filter:blur(4px)}
+.pv-hero.paused .pv-pause-hint{opacity:1}
 .pv-cat{font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:12px}
 .pv-title{font-family:'Barlow Condensed',Impact,'Arial Narrow',sans-serif;font-weight:900;font-size:clamp(56px,10vw,130px);letter-spacing:-.03em;text-transform:uppercase;color:#fff;line-height:.88;margin-bottom:20px}
 .pv-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
@@ -142,45 +142,39 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content
 .pv-caption{font-size:14px;font-weight:500;color:rgba(255,255,255,.7);letter-spacing:.02em;line-height:1.55;max-width:520px;margin-top:6px}
 .pv-body{max-width:1100px;margin:0 auto;padding:64px 52px}
 .pv-desc{font-size:17px;font-weight:400;line-height:1.84;color:var(--text);max-width:660px;margin-bottom:40px;transition:color .35s}
-.pv-game-wrap{margin-bottom:40px;border-radius:16px;overflow:hidden;background:#000;position:relative}
+.pv-game-wrap{margin-bottom:40px;border-radius:16px;overflow:hidden;background:#000}
 .pv-game-bar{display:flex;align-items:center;justify-content:space-between;padding:10px 18px;background:#111}
 .pv-game-bar span{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.5)}
 .pv-game-bar-btns{display:flex;gap:10px}
-.pv-game-itchio{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#fff;background:#fa5c5c;border:none;padding:6px 16px;border-radius:100px;cursor:pointer;text-decoration:none;transition:background .2s}
-.pv-game-itchio:hover{background:#e84444}
-.pv-game-fs{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#fff;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);padding:6px 16px;border-radius:100px;cursor:pointer;transition:background .2s}
-.pv-game-fs:hover{background:rgba(255,255,255,.28)}
+.pv-game-itchio{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#fff;background:#fa5c5c;border:none;padding:6px 16px;border-radius:100px;cursor:pointer;text-decoration:none;transition:background .2s}.pv-game-itchio:hover{background:#e84444}
+.pv-game-fs{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#fff;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);padding:6px 16px;border-radius:100px;cursor:pointer;transition:background .2s}.pv-game-fs:hover{background:rgba(255,255,255,.28)}
 .pv-game-wrap iframe{width:100%;height:560px;border:none;display:block}
-.pv-gallery{columns:2;gap:16px;margin-bottom:72px}
-.pv-gallery-item{break-inside:avoid;margin-bottom:16px;border-radius:14px;overflow:hidden;background:var(--cb)}
-.pv-gallery-item img,.pv-gallery-item video{width:100%;display:block;border-radius:14px;transition:transform .55s cubic-bezier(.25,.46,.45,.94)}
-.pv-gallery-item img{cursor:zoom-in}
-.pv-gallery-item:hover img,.pv-gallery-item:hover video{transform:scale(1.025)}
+/* HORIZONTAL gallery */
+.pv-gallery{display:flex;gap:14px;overflow-x:auto;padding:0 0 16px;margin-bottom:64px;scrollbar-width:thin;scrollbar-color:var(--b) transparent}
+.pv-gallery::-webkit-scrollbar{height:4px}.pv-gallery::-webkit-scrollbar-thumb{background:var(--b);border-radius:2px}
+.pv-gallery-item{flex-shrink:0;height:260px;border-radius:14px;overflow:hidden;background:var(--cb);cursor:zoom-in;transition:transform .4s,box-shadow .4s}.pv-gallery-item:hover{transform:scale(1.03);box-shadow:0 16px 40px rgba(0,0,0,.18)}
+.pv-gallery-item img{height:100%;width:auto;max-width:420px;display:block;border-radius:14px;object-fit:cover}
+.pv-gallery-item video{height:100%;width:auto;max-width:560px;display:block;border-radius:14px;cursor:default}
 .pv-more{padding:0 0 80px}
 .pv-more-title{font-size:12px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--mt);margin-bottom:24px;padding:0 52px}
-.pv-more-track{display:flex;gap:16px;padding:0 52px 16px;overflow-x:auto;scrollbar-width:none}
-.pv-more-track::-webkit-scrollbar{display:none}
-.pv-more-card{flex-shrink:0;width:240px;height:180px;border-radius:14px;overflow:hidden;cursor:pointer;position:relative;transition:transform .4s,box-shadow .4s}
-.pv-more-card:hover{transform:translateY(-6px) scale(1.02);box-shadow:0 18px 44px rgba(0,0,0,.14)}
+.pv-more-track{display:flex;gap:16px;padding:0 52px 16px;overflow-x:auto;scrollbar-width:none}.pv-more-track::-webkit-scrollbar{display:none}
+.pv-more-card{flex-shrink:0;width:240px;height:180px;border-radius:14px;overflow:hidden;cursor:pointer;position:relative;transition:transform .4s,box-shadow .4s}.pv-more-card:hover{transform:translateY(-6px) scale(1.02);box-shadow:0 18px 44px rgba(0,0,0,.14)}
 .pv-more-card-bg{position:absolute;inset:0}
-.pv-more-card-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:2;opacity:0;transition:opacity .5s}
-.pv-more-card-img.ok{opacity:1}
+.pv-more-card-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:2;opacity:0;transition:opacity .5s}.pv-more-card-img.ok{opacity:1}
 .pv-more-card-ico{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:36px;z-index:1}
 .pv-more-card-lbl{position:absolute;bottom:0;left:0;right:0;z-index:3;padding:9px 12px;background:linear-gradient(transparent,rgba(0,0,0,.52));font-size:11px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:#fff}
+/* LIGHTBOX */
 #lightbox{position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center;padding:24px}
 #lightbox.open{display:flex}
-#lb-ov{position:absolute;inset:0;background:rgba(255,255,255,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
-#lb-img{position:relative;z-index:1;max-width:min(700px,90vw);max-height:88vh;object-fit:contain;border-radius:16px;box-shadow:0 32px 80px rgba(0,0,0,.18);animation:lbIn .28s cubic-bezier(.25,.46,.45,.94)}
-#lb-close{position:absolute;top:18px;right:18px;z-index:2;width:42px;height:42px;border-radius:50%;background:#fff;border:none;cursor:pointer;font-size:20px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 14px rgba(0,0,0,.14);transition:transform .2s}
-#lb-close:hover{transform:scale(1.1)}
+#lb-ov{position:absolute;inset:0;background:rgba(0,0,0,.88);backdrop-filter:blur(12px)}
+#lb-img{position:relative;z-index:1;max-width:min(900px,92vw);max-height:90vh;object-fit:contain;border-radius:12px;box-shadow:0 32px 80px rgba(0,0,0,.5);animation:lbIn .28s cubic-bezier(.25,.46,.45,.94)}
+#lb-close{position:absolute;top:18px;right:18px;z-index:2;width:42px;height:42px;border-radius:50%;background:#fff;border:none;cursor:pointer;font-size:20px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 14px rgba(0,0,0,.3);transition:transform .2s}.#lb-close:hover{transform:scale(1.1)}
 @keyframes lbIn{from{opacity:0;transform:scale(.93)}to{opacity:1;transform:scale(1)}}
-::-webkit-scrollbar{width:3px}
-::-webkit-scrollbar-thumb{background:var(--b);border-radius:2px}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-thumb{background:var(--b);border-radius:2px}
 </style>
 </head>
 <body>
-<div id="cur"></div>
-<div id="ring"></div>
+<div id="cur"></div><div id="ring"></div>
 
 <nav id="nav">
   <span class="logo" onclick="goHome()">Tomme Denney</span>
@@ -194,6 +188,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content
   </ul>
 </nav>
 
+<!-- HOME -->
 <div id="home-view">
   <div style="padding-top:68px">
     <div class="ticker">
@@ -205,7 +200,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content
   </div>
 
   <section class="hero" id="hero">
-    <p class="hmeta" id="hmeta">Boston, Massachusetts<br><span style="opacity:.6">tomme@usurperinteractive.com</span></p>
+    <p class="hmeta" id="hmeta">Boston, Massachusetts<br><span style="opacity:.6">Denney.t@northeastern.edu</span></p>
     <h1 class="hname" id="hname">TOMME DENNEY</h1>
     <div class="clayer" id="clayer">
       <div class="hcard" id="hc0" onclick="openProject('seereality')">
@@ -245,6 +240,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content
     </div>
   </section>
 
+  <!-- FEATURED — Unforgotten Stories replaces BOFUM -->
   <section class="featured">
     <h2 class="sh">Featured Work</h2>
     <p class="ss">Select recent and notable projects</p>
@@ -259,10 +255,10 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content
         <div class="fcico">🧬</div>
         <img class="fcimg" src="projects/genexr/1.png" alt="" onload="this.classList.add('ok')" onerror="imgFallback(this)">
       </div>
-      <div class="fc" data-id="bofum">
-        <div class="fcbg" style="background:linear-gradient(145deg,#040c04,#0e2810,#1a4a1e)"></div>
-        <div class="fcico">🎮</div>
-        <img class="fcimg" src="projects/bofum/1.png" alt="" onload="this.classList.add('ok')" onerror="imgFallback(this)">
+      <div class="fc" data-id="unforgottenstories">
+        <div class="fcbg" style="background:linear-gradient(145deg,#1a0a0a,#4a1a1a,#8a2a2a)"></div>
+        <div class="fcico">📖</div>
+        <img class="fcimg" src="projects/unforgottenstories/1.png" alt="" onload="this.classList.add('ok')" onerror="imgFallback(this)">
       </div>
       <div class="fc" data-id="greatvendingmachine">
         <div class="fcbg" style="background:linear-gradient(145deg,#0a0a1a,#20201a,#403a10)"></div>
@@ -275,30 +271,65 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content
     </div>
   </section>
 
+  <!-- PLAY ON WEB -->
+  <section class="playweb">
+    <h2 class="sh">Play Now on Web</h2>
+    <p class="ss">Try these right in your browser</p>
+    <div class="pwtrack">
+      <div class="pwcard" onclick="openProject('wallace')">
+        <div class="pwcard-bg" style="background:linear-gradient(145deg,#080608,#140e10,#201418)"></div>
+        <div class="pwcard-ico">🐕</div>
+        <img class="pwcard-img" src="projects/wallace/1.png" alt="" onload="this.classList.add('ok')" onerror="imgFallback(this)">
+        <div class="pwcard-overlay"><div class="pwcard-play">▶</div></div>
+        <div class="pwcard-lbl">Wallace<div class="pwcard-sub">Horror · Survival</div></div>
+      </div>
+      <div class="pwcard" onclick="openProject('greatvendingmachine')">
+        <div class="pwcard-bg" style="background:linear-gradient(145deg,#0a0a1a,#20201a,#403a10)"></div>
+        <div class="pwcard-ico">🎰</div>
+        <img class="pwcard-img" src="projects/greatvendingmachine/1.png" alt="" onload="this.classList.add('ok')" onerror="imgFallback(this)">
+        <div class="pwcard-overlay"><div class="pwcard-play">▶</div></div>
+        <div class="pwcard-lbl">Great Vending Machine<div class="pwcard-sub">3D Platformer · Horror</div></div>
+      </div>
+      <div class="pwcard" onclick="openProject('unforgottenstories')">
+        <div class="pwcard-bg" style="background:linear-gradient(145deg,#1a0a0a,#4a1a1a,#8a2a2a)"></div>
+        <div class="pwcard-ico">📖</div>
+        <img class="pwcard-img" src="projects/unforgottenstories/1.png" alt="" onload="this.classList.add('ok')" onerror="imgFallback(this)">
+        <div class="pwcard-overlay"><div class="pwcard-play">▶</div></div>
+        <div class="pwcard-lbl">Unforgotten Stories<div class="pwcard-sub">Narrative · Heritage</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ALL PROJECTS -->
   <section class="more">
-    <h2 class="sh">More Work</h2>
-    <p class="ss">Take a scroll, stay a while</p>
+    <h2 class="sh">All Projects</h2>
+    <p class="ss">Every build, in order</p>
     <div class="wgrid" id="wgrid"></div>
   </section>
 
   <section class="contact">
     <div class="cword">Contact</div>
-    <a class="ceml" href="mailto:tomme@usurperinteractive.com">tomme@usurperinteractive.com</a>
+    <a class="ceml" href="mailto:Denney.t@northeastern.edu">Denney.t@northeastern.edu</a>
+    <a class="cphone" href="tel:+15042179782">504-217-9782</a>
     <ul class="csoc">
-      <li><a href="https://github.com/TommeDenney" target="_blank">GitHub</a></li>
-      <li><a href="#" target="_blank">LinkedIn</a></li>
-      <li><a href="#" target="_blank">Instagram</a></li>
+      <li><a href="https://www.linkedin.com/in/tommedenney/" target="_blank">LinkedIn</a></li>
+      <li><a href="https://www.instagram.com/tommedenney/" target="_blank">Instagram</a></li>
     </ul>
     <p class="ccp">All Rights Reserved 2026 Tomme Denney</p>
   </section>
 </div>
 
+<!-- PROJECT VIEW -->
 <div id="project-view">
-  <div class="pv-hero">
+  <div class="pv-hero" id="pv-hero">
     <div class="pv-hero-bg" id="pv-hero-bg"></div>
     <img class="pv-hero-media" id="pv-hero-img" alt="" style="display:none" onload="this.style.display='block'" onerror="this.style.display='none'">
     <video class="pv-hero-media" id="pv-hero-vid" autoplay muted loop playsinline style="display:none"></video>
+    <div class="pv-pause-hint" id="pv-pause-hint">⏸</div>
     <div class="pv-hero-grad"></div>
+    <div class="pv-hero-controls" id="pv-hero-controls">
+      <button class="pv-ctrl-btn" id="pv-sound-btn" onclick="toggleHeroSound(event)">🔇 Sound Off</button>
+    </div>
     <div class="pv-hero-info">
       <p class="pv-cat" id="pv-cat"></p>
       <h1 class="pv-title" id="pv-title"></h1>
@@ -312,7 +343,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content
       <div class="pv-game-bar">
         <span>Play in Browser</span>
         <div class="pv-game-bar-btns">
-          <a class="pv-game-itchio" href="https://tommedenney.itch.io/great-vending-machine" target="_blank">Itch.io ↗</a>
+          <a class="pv-game-itchio" id="pv-itch-btn" href="#" target="_blank">Itch.io ↗</a>
           <button class="pv-game-fs" onclick="document.getElementById('pv-game-iframe').requestFullscreen()">⛶ Fullscreen</button>
         </div>
       </div>
@@ -326,6 +357,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content
   </div>
 </div>
 
+<!-- LIGHTBOX -->
 <div id="lightbox">
   <div id="lb-ov" onclick="closeLightbox()"></div>
   <img id="lb-img" src="" alt="">
@@ -345,118 +377,116 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content
 
 <script>
 const PROJECTS=[
-  {id:'genexr',             name:"Gene' XR",                  cat:'XR · Gaussian Splatting · 2026', cover:'projects/genexr/1.png',            coverNum:1, extraStart:2,
-   bg:'linear-gradient(145deg,#0e0418,#2a0e48,#4a1888)', ico:'🧬',
+  {id:'genexr',name:"Gene' XR",cat:'XR · Gaussian Splatting · 2026',cover:'projects/genexr/1.png',
+   bg:'linear-gradient(145deg,#0e0418,#2a0e48,#4a1888)',ico:'🧬',
    tags:['Meta Quest 3','PCVR','Gaussian Splatting','Unity C#','Hand Tracking','URP','HCI','Capstone'],
    caption:'Walk inside a family memory — photorealistic, spatial, and impossible.',
    desc:'A Meta Quest 3 PCVR experience for exploring photorealistic 3D reconstructions of family memories using Gaussian splatting. Built around an impossible cube centerpiece with a spatial family timeline, hand tracking menus, and custom URP shader pipelines. Northeastern University Capstone 2026.'},
-  {id:'seereality',         name:'See Reality',               cat:'XR Studio · Client Work · 2024–Present',cover:'projects/seereality/0.png',   coverNum:0, extraStart:1,
-   bg:'linear-gradient(145deg,#050e1a,#0e2860,#1a449a)', ico:'🌐',
+  {id:'seereality',name:'See Reality',cat:'XR Studio · Client Work · 2024–Present',cover:'projects/seereality/0.png',
+   bg:'linear-gradient(145deg,#050e1a,#0e2860,#1a449a)',ico:'🌐',
    tags:['Unity C#','Meta Quest','URP','XR Experience','Client Work'],
    caption:'Real-world client XR — from colonial installations to stadium fan experiences.',
    desc:'Immersive XR experiences built for world-class clients spanning heritage, sports, and entertainment — from Fort Nashborough colonial installations to Liverpool FC fan experiences. Built with Unity C#, Meta Quest hardware, and custom URP shader pipelines optimized for standalone passthrough.'},
-  {id:'bofum',              name:'BOFUM',                     cat:'XR Game · MIT Reality Hack 2026',cover:'projects/bofum/1.png',             coverNum:1, extraStart:2,
-   bg:'linear-gradient(145deg,#040c04,#0e2810,#1a4a1e)', ico:'🎮',
+  {id:'bofum',name:'BOFUM',cat:'XR Game · MIT Reality Hack 2026',cover:'projects/bofum/1.png',
+   bg:'linear-gradient(145deg,#040c04,#0e2810,#1a4a1e)',ico:'🎮',
    tags:['XR','Unity','MIT Reality Hack','Multiplayer','Hackathon','Spatial Game'],
    caption:'Built in 72 hours at MIT Reality Hack 2026 — spatial, wild, and alive.',
    desc:'BOFUM is a spatial XR game built in 72 hours at MIT Reality Hack 2026. Designed for mixed reality with physical space as the playing field — fast, chaotic, and built to surprise. Check it out on Devpost.'},
-  {id:'haptidraw',          name:'Interview With Eternity',   cat:'VR Experience · XR 5010 · 2026', cover:'projects/haptidraw/1.jpg',         coverNum:1, extraStart:2,
-   bg:'linear-gradient(145deg,#08080e,#14122a,#1e1848)', ico:'✨',
+  {id:'haptidraw',name:'Interview With Eternity',cat:'VR Experience · XR 5010 · 2026',cover:'projects/haptidraw/1.jpg',
+   bg:'linear-gradient(145deg,#08080e,#14122a,#1e1848)',ico:'✨',
    tags:['VR','Avatar Embodiment','Existential','HCI','XR 5010','Gaze Interaction'],
    caption:'Before you are born — choose mortality, or choose forever.',
-   desc:'A VR experience where you assume the identity of a soul before birth, confronting the existential choice between mortality and immortality. Using only gaze to respond, players are stripped of agency — heightening embodiment and isolation. Inspired by personal questions about faith, life after death, and what it means to begin. A submission for the VR Embodiment Project in XR 5010.'},
-  {id:'wallace',            name:'Wallace',                   cat:'Horror Game · Survival · 2025',  cover:'projects/wallace/1.png',           coverNum:1, extraStart:2,
-   bg:'linear-gradient(145deg,#080608,#140e10,#201418)', ico:'🐕',
-   tags:['Horror','Unity','Survival','Atmosphere','First Person','Halloween'],
+   desc:'A VR experience where you assume the identity of a soul before birth, confronting the existential choice between mortality and immortality. Using only gaze to respond, players are stripped of agency — heightening embodiment and isolation. A submission for the VR Embodiment Project in XR 5010.'},
+  {id:'wallace',name:'Wallace',cat:'Horror Game · Survival · 2025',cover:'projects/wallace/1.png',
+   bg:'linear-gradient(145deg,#080608,#140e10,#201418)',ico:'🐕',
+   tags:['Horror','Unity','Survival','Atmosphere','First Person','Halloween','WebGL'],
    caption:'Give out candy. Do your tasks. Do not let Wallace out.',
    desc:'You\'re watching your neighbor\'s house for the night. Give out candy to trick-or-treaters — or don\'t, but leave the lights off. Take care of their very special dog, Wallace. Keep the front and back doors open for visitors. Do your tasks or die. Wallace is a real dog, by the way. WASD to move, Left Click to interact. Volume up.'},
-  {id:'iamyou',             name:'I Am You',                  cat:'VR Horror · Dissociation · 2024',cover:'projects/iamyou/1.png',            coverNum:1, extraStart:2,
-   bg:'linear-gradient(145deg,#0a1a1a,#1a4a4a,#2a7a7a)', ico:'👤',
+  {id:'iamyou',name:'I Am You',cat:'VR Horror · Dissociation · 2024',cover:'projects/iamyou/1.png',
+   bg:'linear-gradient(145deg,#0a1a1a,#1a4a4a,#2a7a7a)',ico:'👤',
    tags:['VR','Horror','Dissociation','Narrative','Trail Camera','Psychological'],
    caption:'Control your body from the outside. Find the photos. Outrun the fear.',
-   desc:'A VR horror adventure where you play as an amateur photographer whose cherished photos are scattered by a sudden wind in Cityville National Forest — and a haunting manifestation of regret, the Ice Cream Man, begins to pursue you. Using trail cameras to direct your own body, you retrieve lost memories from the perspective of an external observer. A psychological rift that mirrors the protagonist\'s emotional struggle.'},
-  {id:'internshipintheafterlife',name:'Internship in the Afterlife',cat:'Narrative Game · XR 5020 · 2024',cover:'projects/internshipintheafterlife/1.png',coverNum:1, extraStart:2,
-   bg:'linear-gradient(145deg,#10080a,#301818,#502828)', ico:'👻',
+   desc:'A VR horror adventure where you play as an amateur photographer whose cherished photos are scattered by a sudden wind — and the Ice Cream Man, a haunting manifestation of regret, begins to pursue you. Using trail cameras to direct your own body, you retrieve lost memories from the perspective of an external observer.'},
+  {id:'internshipintheafterlife',name:'Internship in the Afterlife',cat:'Narrative Game · XR 5020 · 2024',cover:'projects/internshipintheafterlife/1.png',
+   bg:'linear-gradient(145deg,#10080a,#301818,#502828)',ico:'👻',
    tags:['Narrative','Comedy','Game Design','Afterlife','XR 5020','Interactive Fiction'],
    caption:'Your first performance review is from beyond the grave. Good luck.',
    desc:'What happens when your internship is in the afterlife? Navigate a bureaucratic underworld, complete absurd tasks for spectral supervisors, and try to survive your first performance review — from beyond the grave. Created as XR 5020 Course Final 2024.'},
-  {id:'toweroffrankenfrog',  name:'Tower of Frankenfrog',     cat:'Tower Defense · Husky Jam 2024', cover:'projects/toweroffrankenfrog/1.png', coverNum:1, extraStart:2,
-   bg:'linear-gradient(145deg,#0a1a08,#1a3a12,#2a5a1a)', ico:'🐸',
+  {id:'toweroffrankenfrog',name:'Tower of Frankenfrog',cat:'Tower Defense · Husky Jam 2024',cover:'projects/toweroffrankenfrog/1.png',
+   bg:'linear-gradient(145deg,#0a1a08,#1a3a12,#2a5a1a)',ico:'🐸',
    tags:['Tower Defense','Strategy','Game Design','Monsters','Husky Jam','2024'],
    caption:'Frankenfrog holds the line against waves stranger than the last.',
-   desc:'A tower defense game where Frankenfrog and his amphibian army hold the line against an increasingly unhinged parade of enemies. Strategic depth wrapped in a creature-feature aesthetic — every wave stranger than the last. Created for Husky Jam 2024.'},
-  {id:'returnofthechickens', name:'Return of the Chickens',   cat:'VR Shooter · Demo · 2024',      cover:'projects/returnofthechickens/1.png',coverNum:1, extraStart:2,
-   bg:'linear-gradient(145deg,#1a1505,#4a3a10,#7a6020)', ico:'🐔',
-   tags:['VR Shooter','Meta Quest','Unity','Game Jam','Boston FIG 2024','SideQuest'],
+   desc:'A tower defense game where Frankenfrog and his amphibian army hold the line against an increasingly unhinged parade of enemies. Strategic depth wrapped in a creature-feature aesthetic. Created for Husky Jam 2024.'},
+  {id:'returnofthechickens',name:'Return of the Chickens',cat:'VR Shooter · Demo · 2024',cover:'projects/returnofthechickens/1.png',
+   bg:'linear-gradient(145deg,#1a1505,#4a3a10,#7a6020)',ico:'🐔',
+   tags:['VR Shooter','Meta Quest','Unity','Boston FIG 2024','SideQuest'],
    caption:'Chi\'King and Chi\'Queen want your farm. Give them the Cluckshot Cannon.',
-   desc:'A VR shooter where you play as a farmer facing a full chicken invasion. The evil rulers Chi\'King and Chi\'Queen are coming for your farm — fight back with Foul Play Firearms like the Cluckshot Cannon. Final project for XR Terra VR Developer Certification, Northeastern Senior Games Showcase 2024, and Boston Festival of Indie Games 2024 Online Expo. Available on SideQuest.'},
-  {id:'arworkofart',        name:'AR Work of Art',            cat:'AR · Rhythm Game · XR 5010 · 2024',cover:'projects/arworkofart/1.png',     coverNum:1, extraStart:2,
-   bg:'linear-gradient(145deg,#1a0a2e,#4a1888,#7040b5)', ico:'🎨',
+   desc:'A VR shooter where you play as a farmer facing a full chicken invasion. Fight back with Foul Play Firearms like the Cluckshot Cannon. Northeastern Senior Games Showcase 2024 and Boston Festival of Indie Games 2024 Online Expo. Available on SideQuest.'},
+  {id:'arworkofart',name:'AR Work of Art',cat:'AR · Rhythm Game · XR 5010 · 2024',cover:'projects/arworkofart/1.png',
+   bg:'linear-gradient(145deg,#1a0a2e,#4a1888,#7040b5)',ico:'🎨',
    tags:['AR','MR','Rhythm Game','Unity','Particles','Immersive Media','XR 5010'],
    caption:'Hit the beat, build the atmosphere — miss it and watch it fall apart.',
-   desc:'A class project for XR 5010: Immersive Media. An AR/MR rhythm game where players hit spawning cubes in a full 360° space — each hit activating one of ten unique particle effects and layering audio tracks. Miss a cube and the world dims. The goal: make players feel like they\'re building the rhythm themselves. Inspired by a lifelong love of Guitar Hero, Beat Saber, and Pistol Whip.'},
-  {id:'greatvendingmachine',name:'Great Vending Machine',     cat:'3D Platformer · Horror · 2023',  cover:'projects/greatvendingmachine/1.png',coverNum:1, extraStart:2,
-   bg:'linear-gradient(145deg,#0a0a1a,#20201a,#403a10)', ico:'🎰',
+   desc:'An AR/MR rhythm game where players hit spawning cubes in a full 360° space — each hit activating one of ten unique particle effects and layering audio tracks. Miss a cube and the world dims. Inspired by Guitar Hero, Beat Saber, and Pistol Whip. Class project for XR 5010.'},
+  {id:'greatvendingmachine',name:'Great Vending Machine',cat:'3D Platformer · Horror · 2023',cover:'projects/greatvendingmachine/1.png',
+   bg:'linear-gradient(145deg,#0a0a1a,#20201a,#403a10)',ico:'🎰',
    tags:['WebGL','Unity','3D Platformer','Horror','Japan','Study Abroad'],
    caption:'A coin. A machine. Tokyo at midnight. Something is wrong inside.',
-   desc:'"Great Vending Machine" is a 3D platformer infused with horror, where you play as a coin navigating the inner workings of a vending machine. Conceived as the culminating project during a study abroad in Tokyo and Kyoto, Japan in 2023 — eerie, strange, and deeply personal.'},
-  {id:'soulsolace',         name:'Soul Solace',               cat:'Narrative Game · Brackeys 2023', cover:'projects/soulsolace/1.png',        coverNum:1, extraStart:2,
-   bg:'linear-gradient(145deg,#0a0a1a,#1a1a4a,#2a2a8a)', ico:'🌊',
-   tags:['Game Jam','Narrative','Unity','Keyboard & Mouse','Brackeys 2023'],
+   desc:'"Great Vending Machine" is a 3D platformer infused with horror, where you play as a coin navigating the inner workings of a vending machine. Conceived as the culminating project during a study abroad in Tokyo and Kyoto, Japan in 2023.'},
+  {id:'soulsolace',name:'Soul Solace',cat:'Narrative Game · Brackeys 2023',cover:'projects/soulsolace/1.png',
+   bg:'linear-gradient(145deg,#0a0a1a,#1a1a4a,#2a2a8a)',ico:'🌊',
+   tags:['Game Jam','Narrative','Unity','Brackeys 2023'],
    caption:'Introspection, hidden truths, and a family that holds more than it shows.',
-   desc:'Soul Solace immerses players in a journey of introspection, unearthing hidden truths and navigating complex moral dilemmas. Delving into the protagonist\'s soul and family dynamics, players seek redemption through self-discovery. Created as a submission to Brackeys Game Jam 2023. WASD to move, Left Click to interact, ESC to exit.'},
-  {id:'godsdrunkestdriver', name:"God's Drunkest Driver",     cat:'Racing · Husky Jam 2023',        cover:'projects/godsdrunkestdriver/1.png',coverNum:1, extraStart:2,
-   bg:'linear-gradient(145deg,#1a0a05,#4a2010,#8a4020)', ico:'🚗',
+   desc:'Soul Solace immerses players in a journey of introspection, unearthing hidden truths and navigating complex moral dilemmas. Created as a submission to Brackeys Game Jam 2023. WASD to move, Left Click to interact, ESC to exit.'},
+  {id:'godsdrunkestdriver',name:"God's Drunkest Driver",cat:'Racing · Husky Jam 2023',cover:'projects/godsdrunkestdriver/1.png',
+   bg:'linear-gradient(145deg,#1a0a05,#4a2010,#8a4020)',ico:'🚗',
    tags:['Racing','Arcade','Unity','Physics','Husky Jam 2023'],
    caption:'A magic potion, a midnight road, and absolutely no plan.',
-   desc:'You are GOD\'S DRUNKEST DRIVER. Driving through midnight, you drink a "magic potion" to stay awake — but it makes the road trip far more than average. Avoid obstacles and drive like a bat out of hell when you\'re off the juice. A to steer left, D to steer right, Mouse to look, Spacebar to drink.'},
-  {id:'unforgottenstories', name:'Unforgotten Stories',       cat:'Narrative Game · Hidden Heroes Jam 2023',cover:'projects/unforgottenstories/1.png',coverNum:1, extraStart:2,
-   bg:'linear-gradient(145deg,#1a0a0a,#4a1a1a,#8a2a2a)', ico:'📖',
-   tags:['Narrative','Unity','WebGL','Heritage','Historical','Partition','Playable'],
+   desc:'You are GOD\'S DRUNKEST DRIVER. Driving through midnight, you drink a "magic potion" to stay awake — but it makes the road trip far more than average. A to steer, Mouse to look, Spacebar to drink.'},
+  {id:'unforgottenstories',name:'Unforgotten Stories',cat:'Narrative Game · Hidden Heroes Jam 2023',cover:'projects/unforgottenstories/1.png',
+   bg:'linear-gradient(145deg,#1a0a0a,#4a1a1a,#8a2a2a)',ico:'📖',
+   tags:['Narrative','Unity','WebGL','Heritage','Partition','Playable'],
    caption:'Seven years old. Forced from home. The Partition, lived from the inside.',
-   desc:'Step into the shoes of one developer\'s grandmother during the Pakistani-Indian Partition. As a seven-year-old ripped from Karachi, you navigate the streets, survive the journey, and uncover the truth behind your family\'s past. Unforgotten Stories: The Partition makes history personal and immediate.'},
-  {id:'flora',              name:'Flora Park Mystery',        cat:'Murder Mystery · Global Game Jam 2023',cover:'projects/flora/1.png',        coverNum:1, extraStart:2,
-   bg:'linear-gradient(145deg,#0a1a0a,#1a3a1a,#2a5a2a)', ico:'🌺',
-   tags:['Murder Mystery','3D','Point & Click','Global Game Jam 2023','Northeastern'],
+   desc:'Step into the shoes of one developer\'s grandmother during the Pakistani-Indian Partition. As a seven-year-old ripped from Karachi, you navigate the streets, survive the journey, and uncover the truth behind your family\'s past.'},
+  {id:'flora',name:'Flora Park Mystery',cat:'Murder Mystery · Global Game Jam 2023',cover:'projects/flora/1.png',
+   bg:'linear-gradient(145deg,#0a1a0a,#1a3a1a,#2a5a2a)',ico:'🌺',
+   tags:['Murder Mystery','3D','Point & Click','Global Game Jam 2023'],
    caption:'A murder in the park. Only you can piece it together.',
-   desc:'Flora Park Mystery is a 3D point-and-click murder mystery created for the 2023 Global Game Jam in Boston at Northeastern University, hosted by the Game Development Club. Investigate the scene, gather clues, and solve the case.'},
-  {id:'walk',               name:'Walk Among Us',             cat:'Museum Game · Personal · 2022',  cover:'projects/walk/1.png',              coverNum:1, extraStart:2,
-   bg:'linear-gradient(145deg,#101010,#1e1e1e,#2a2828)', ico:'🚶',
-   tags:['Educational','Museum','Black History','Game Design','Northeastern','AFAM Studies'],
+   desc:'A 3D point-and-click murder mystery created for the 2023 Global Game Jam in Boston at Northeastern University, hosted by the Game Development Club.'},
+  {id:'walk',name:'Walk Among Us',cat:'Museum Game · Personal · 2022',cover:'projects/walk/1.png',
+   bg:'linear-gradient(145deg,#101010,#1e1e1e,#2a2828)',ico:'🚶',
+   tags:['Educational','Museum','Black History','Northeastern','AFAM Studies'],
    caption:'A museum tribute to the history of Black characters in video games.',
-   desc:'Walk Among Us is a tribute to the history of Black characters in the world of video games. Explore the museum and immerse yourself in the rich tapestry it has to offer. Created as the culmination of studies in African American and Africana Studies under Prof. Dr. Layla Brown at Northeastern University. WASD to move, Left Click to interact.'},
-  {id:'otherrealm',         name:'Other Realm',               cat:'Narrative Game · Twine · 2021',  cover:'projects/otherrealm/1.png',        coverNum:1, extraStart:2,
-   bg:'linear-gradient(145deg,#0a1a0a,#1a4a1a,#2a7a2a)', ico:'🌿',
+   desc:'Walk Among Us is a tribute to the history of Black characters in the world of video games. Created as the culmination of studies in African American and Africana Studies under Prof. Dr. Layla Brown at Northeastern University. WASD to move, Left Click to interact.'},
+  {id:'otherrealm',name:'Other Realm',cat:'Narrative Game · Twine · 2021',cover:'projects/otherrealm/1.png',
+   bg:'linear-gradient(145deg,#0a1a0a,#1a4a1a,#2a7a2a)',ico:'🌿',
    tags:['Narrative Design','Twine','Horror','Story','Playable','Web'],
    caption:'Two teenagers. One demon. A bond that refuses to break.',
-   desc:'A narrative-driven script built in Twine 2.3, created as a final project for Narrative for Games under Prof. Brandon Sichling. The story follows two teenagers with a unique bond who are separated by a demon looking to feast on their souls — a branching horror narrative about connection, sacrifice, and the other realm.'},
-  {id:'curse',              name:'Curse of the Mind',         cat:'Platformer · Jam-O-Lantern 2021',cover:'projects/curse/1.png',             coverNum:1, extraStart:2,
-   bg:'linear-gradient(145deg,#0e0808,#201010,#341818)', ico:'🌑',
+   desc:'A narrative-driven script built in Twine 2.3, created as a final project for Narrative for Games under Prof. Brandon Sichling. Two teenagers with a unique bond are separated by a demon looking to feast on their souls.'},
+  {id:'curse',name:'Curse of the Mind',cat:'Platformer · Jam-O-Lantern 2021',cover:'projects/curse/1.png',
+   bg:'linear-gradient(145deg,#0e0808,#201010,#341818)',ico:'🌑',
    tags:['Platformer','Unity','First Game','Gravity','Dash','Jam-O-Lantern 2021'],
    caption:'My first ever digital game — gravity-flipping, dash-dashing chaos.',
-   desc:'Curse of the Mind is my very first digital game. A platformer with a twist: flip gravity with R+F, dash with Shift, and navigate your way through. WASD to move, Shift to dash, R then F to flip gravity.'},
+   desc:'Curse of the Mind is my very first digital game. A platformer with a gravity-flip mechanic. WASD to move, Shift to dash, R then F to flip gravity.'},
 ];
 const PMAP={};PROJECTS.forEach(p=>PMAP[p.id]=p);
 
-/* HERO CARD SPRING */
+/* HERO SPRING — square 180×180 cards */
 const HERO_IDS=['seereality','genexr','bofum','greatvendingmachine'];
 const cdata=HERO_IDS.map((id,i)=>({el:document.getElementById('hc'+i),id,ox:0,oy:0,vx:0,vy:0,rot:[-22,-7,8,21][i]}));
 function layoutCards(){
   const cl=document.getElementById('clayer');
-  const cw=cl.offsetWidth,totalW=4*158+3*18;
+  const cw=cl.offsetWidth,totalW=4*180+3*18;
   const sx=(cw-totalW)/2,my=cl.offsetHeight/2;
-  cdata.forEach((c,i)=>{const bx=sx+i*(158+18);c.el.style.left=bx+'px';c.el.style.top=(my-112)+'px';c.baseX=bx+79;c.baseY=my;});
+  cdata.forEach((c,i)=>{const bx=sx+i*(180+18);c.el.style.left=bx+'px';c.el.style.top=(my-90)+'px';c.baseX=bx+90;c.baseY=my;});
 }
-layoutCards();
-window.addEventListener('resize',layoutCards);
+layoutCards();window.addEventListener('resize',layoutCards);
 let pmx=window.innerWidth/2,pmy=window.innerHeight/2;
 document.addEventListener('mousemove',e=>{
   const dx=e.clientX-pmx,dy=e.clientY-pmy;pmx=e.clientX;pmy=e.clientY;
   const cl=document.getElementById('clayer');
   const r=cl.getBoundingClientRect();
   cdata.forEach(c=>{
-    const cx=r.left+c.baseX,cy=r.top+c.baseY;
-    const dist=Math.hypot(e.clientX-cx,e.clientY-cy);
+    const dist=Math.hypot(e.clientX-(r.left+c.baseX),e.clientY-(r.top+c.baseY));
     if(dist<210){const f=(1-dist/210)*.58;c.vx+=dx*f;c.vy+=dy*f;}
   });
 });
@@ -466,11 +496,19 @@ document.addEventListener('mousemove',e=>{
   requestAnimationFrame(spring);
 })();
 
+/* SCROLL FADE — wait until XR DEV section is mid-screen */
+let fadeDist=900;
+function calcFadeDist(){
+  const it=document.getElementById('info');
+  if(it) fadeDist=Math.max(it.offsetTop-window.innerHeight*0.5,500);
+}
+calcFadeDist();window.addEventListener('resize',calcFadeDist);
 const hname=document.getElementById('hname'),hmeta=document.getElementById('hmeta');
 window.addEventListener('scroll',()=>{
-  const p=Math.min(window.scrollY/480,1);
-  hname.style.opacity=Math.max(0,1-p*2);hmeta.style.opacity=Math.max(0,1-p*3);
-  cdata.forEach(c=>c.el.style.opacity=Math.max(0,1-p*2.5));
+  const p=Math.max(0,Math.min(1,window.scrollY/fadeDist));
+  hname.style.opacity=Math.max(0,1-p*1.4);
+  hmeta.style.opacity=Math.max(0,1-p*1.8);
+  cdata.forEach(c=>c.el.style.opacity=Math.max(0,1-p*1.8));
   const mid=window.scrollY+window.innerHeight*.4,it=document.getElementById('info').offsetTop;
   document.getElementById('nw').classList.toggle('on',mid<it);
   document.getElementById('ni').classList.toggle('on',mid>=it);
@@ -481,22 +519,19 @@ const cur=document.getElementById('cur'),ring=document.getElementById('ring');
 let mx=0,my=0,rx=0,ry=0;
 const xHist=[];let shakeTimer=null;
 document.addEventListener('mousemove',e=>{
-  mx=e.clientX;my=e.clientY;
-  cur.style.left=mx+'px';cur.style.top=my+'px';
-  xHist.push({x:e.clientX,t:Date.now()});
-  if(xHist.length>30)xHist.shift();
+  mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';
+  xHist.push({x:e.clientX,t:Date.now()});if(xHist.length>30)xHist.shift();
   if(xHist.length>=12){
     const rec=xHist.slice(-12);
     if(rec[11].t-rec[0].t<600){
-      let rev=0;
-      for(let i=1;i<rec.length-1;i++){const d1=rec[i].x-rec[i-1].x,d2=rec[i+1].x-rec[i].x;if(d1*d2<0&&(Math.abs(d1)>6||Math.abs(d2)>6))rev++;}
+      let rev=0;for(let i=1;i<rec.length-1;i++){const d1=rec[i].x-rec[i-1].x,d2=rec[i+1].x-rec[i].x;if(d1*d2<0&&(Math.abs(d1)>6||Math.abs(d2)>6))rev++;}
       if(rev>=4){document.body.classList.add('shake');clearTimeout(shakeTimer);shakeTimer=setTimeout(()=>document.body.classList.remove('shake'),600);}
     }
   }
 });
 (function rl(){rx+=(mx-rx)*.11;ry+=(my-ry)*.11;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(rl)})();
 function updateHoverListeners(){
-  document.querySelectorAll('a,button,.fc,.wc,.sw,#pbtn,.hcard,.pv-more-card,.flabel').forEach(el=>{
+  document.querySelectorAll('a,button,.fc,.wc,.sw,#pbtn,.hcard,.pv-more-card,.flabel,.pwcard').forEach(el=>{
     el.onmouseenter=()=>document.body.classList.add('hov');
     el.onmouseleave=()=>document.body.classList.remove('hov');
   });
@@ -505,7 +540,7 @@ updateHoverListeners();
 
 /* FEATURED */
 const fcards=Array.from(document.querySelectorAll('.fc'));
-const FEAT_LABELS=["See Reality","Gene' XR","BOFUM","Great Vending Machine"];
+const FEAT_LABELS=["See Reality","Gene' XR","Unforgotten Stories","Great Vending Machine"];
 let fi=0,autoT;
 function renderFeat(){
   const n=fcards.length;
@@ -541,6 +576,22 @@ const obs=new IntersectionObserver(entries=>entries.forEach(e=>{
 }),{threshold:.1});
 document.querySelectorAll('.wc').forEach(c=>obs.observe(c));
 
+/* HERO VIDEO SOUND + CLICK TO PAUSE */
+const pvHero=document.getElementById('pv-hero');
+pvHero.addEventListener('click',function(e){
+  if(e.target.closest('#pv-sound-btn')||e.target.closest('.pv-hero-info')||e.target.closest('.pv-hero-controls'))return;
+  const v=document.getElementById('pv-hero-vid');
+  if(v.style.display==='none')return;
+  if(v.paused){v.play();pvHero.classList.remove('paused');document.getElementById('pv-pause-hint').textContent='⏸';}
+  else{v.pause();pvHero.classList.add('paused');document.getElementById('pv-pause-hint').textContent='▶';}
+});
+function toggleHeroSound(e){
+  e.stopPropagation();
+  const v=document.getElementById('pv-hero-vid');
+  v.muted=!v.muted;
+  document.getElementById('pv-sound-btn').textContent=v.muted?'🔇 Sound Off':'🔊 Sound On';
+}
+
 /* PROJECT PAGE */
 function openProject(id){
   const p=PMAP[id];if(!p)return;
@@ -557,72 +608,86 @@ function openProject(id){
   document.getElementById('pv-tags').innerHTML=p.tags.map(t=>`<span class="pv-tag">${t}</span>`).join('');
   document.getElementById('pv-caption').textContent=p.caption||'';
   document.getElementById('pv-desc').textContent=p.desc;
+  pvHero.classList.remove('paused');
 
+  // Hero media
   const folder=p.cover.substring(0,p.cover.lastIndexOf('/')+1);
   const videoSrc=folder+'0.mp4';
   const img=document.getElementById('pv-hero-img'),vid=document.getElementById('pv-hero-vid');
-  img.style.display='none';vid.style.display='none';vid.src='';
+  img.style.display='none';vid.style.display='none';vid.src='';vid.muted=true;
+  document.getElementById('pv-hero-controls').style.display='none';
+  document.getElementById('pv-sound-btn').textContent='🔇 Sound Off';
+
   const testVid=document.createElement('video');
   testVid.src=videoSrc;
-  testVid.oncanplaythrough=()=>{vid.src=videoSrc;vid.style.display='block';};
+  testVid.oncanplaythrough=()=>{
+    vid.src=videoSrc;vid.muted=true;vid.style.display='block';
+    document.getElementById('pv-hero-controls').style.display='flex';
+  };
   testVid.onerror=()=>{img.src=p.cover;};
   testVid.load();
-  setTimeout(()=>{if(vid.style.display==='none'&&img.style.display==='none'){img.src=p.cover;}},1200);
+  setTimeout(()=>{if(vid.style.display==='none'&&img.style.display==='none')img.src=p.cover;},1200);
 
-  const gameWrap=document.getElementById('pv-game-wrap');
-  const gameIframe=document.getElementById('pv-game-iframe');
+  // Embedded game
   const EMBEDS={
     'greatvendingmachine':{src:'https://tommedenney.github.io/GVMHost/',itchio:'https://tommedenney.itch.io/great-vending-machine'},
     'unforgottenstories': {src:'https://tommedenney.github.io/UnforgottenStoriesWebGLHost/',itchio:null},
     'otherrealm':         {src:'projects/otherrealm/index.html',itchio:null},
+    'wallace':            {src:'https://tommedenney.github.io/WallaceWebGLHost/',itchio:'https://tommedenney.itch.io/wallace'},
   };
   const embed=EMBEDS[id];
+  const gameWrap=document.getElementById('pv-game-wrap');
+  const itchBtn=document.getElementById('pv-itch-btn');
   if(embed){
     gameWrap.style.display='block';
-    gameIframe.src=embed.src;
-    const itchBtn=gameWrap.querySelector('.pv-game-itchio');
+    document.getElementById('pv-game-iframe').src=embed.src;
     if(embed.itchio){itchBtn.href=embed.itchio;itchBtn.style.display='inline-flex';}
-    else{itchBtn.style.display='none';}
+    else itchBtn.style.display='none';
   } else {
     gameWrap.style.display='none';
-    gameIframe.src='';
+    document.getElementById('pv-game-iframe').src='';
   }
 
+  // Gallery — horizontal, all images 0–12 (png then jpg fallback), plus video
   const gal=document.getElementById('pv-gallery');
   gal.innerHTML='';
-  const addVideoToGallery=()=>{
-    const w=document.createElement('div');w.className='pv-gallery-item';
-    const v=document.createElement('video');v.src=videoSrc;v.controls=true;v.muted=true;
-    v.style.cssText='width:100%;display:block;border-radius:14px;';
-    w.appendChild(v);gal.insertBefore(w,gal.firstChild);
-  };
-  const galVidTest=document.createElement('video');
-  galVidTest.src=videoSrc;
-  galVidTest.oncanplaythrough=addVideoToGallery;
-  galVidTest.load();
 
-  for(let n=p.extraStart;n<=12;n++){
-    const src=folder+n+'.png';
-    const w=document.createElement('div');w.className='pv-gallery-item';
-    const i=document.createElement('img');i.alt=p.name;
-    i.style.cssText='width:100%;display:block;border-radius:14px;cursor:zoom-in;';
-    i.addEventListener('click',()=>openLightbox(src));
-    i.onload=()=>gal.appendChild(w);
-    i.onerror=()=>{
-      // try .jpg fallback for gallery images too
-      if(src.endsWith('.png')){
-        const jpgSrc=src.replace('.png','.jpg');
-        const j=document.createElement('img');j.alt=p.name;
-        j.style.cssText='width:100%;display:block;border-radius:14px;cursor:zoom-in;';
-        j.addEventListener('click',()=>openLightbox(jpgSrc));
-        j.onload=()=>{w.innerHTML='';w.appendChild(j);gal.appendChild(w);};
-        j.onerror=()=>{};
-        j.src=jpgSrc;
+  // Video item
+  const vidContainer=document.createElement('div');
+  vidContainer.className='pv-gallery-item';vidContainer.style.display='none';
+  gal.appendChild(vidContainer);
+  const vt=document.createElement('video');
+  vt.oncanplaythrough=function(){
+    if(vidContainer._done)return;vidContainer._done=true;
+    const v2=document.createElement('video');v2.src=videoSrc;v2.controls=true;
+    v2.style.cssText='height:100%;width:auto;max-width:500px;display:block;border-radius:14px;';
+    vidContainer.appendChild(v2);vidContainer.style.display='';
+  };
+  vt.onerror=()=>vidContainer.remove();
+  vt.src=videoSrc;vt.load();
+
+  // Image items in order
+  for(let n=0;n<=12;n++){
+    const cont=document.createElement('div');cont.className='pv-gallery-item';cont.style.display='none';
+    gal.appendChild(cont);
+    (function(container,num){
+      const pngSrc=folder+num+'.png';
+      const jpgSrc=folder+num+'.jpg';
+      function makeImg(src,fallback){
+        const i=document.createElement('img');i.alt=p.name;
+        i.style.cssText='height:100%;width:auto;max-width:420px;display:block;border-radius:14px;object-fit:cover;';
+        i.onload=function(){
+          i.onclick=()=>openLightbox(i.src);
+          container.appendChild(i);container.style.display='';
+        };
+        i.onerror=fallback||function(){container.remove();};
+        i.src=src;
       }
-    };
-    w.appendChild(i);i.src=src;
+      makeImg(pngSrc,()=>makeImg(jpgSrc,()=>container.remove()));
+    })(cont,n);
   }
 
+  // More strip
   const track=document.getElementById('pv-more-track');track.innerHTML='';
   PROJECTS.filter(q=>q.id!==id).forEach(q=>{
     const mc=document.createElement('div');mc.className='pv-more-card';
@@ -634,6 +699,7 @@ function openProject(id){
 }
 
 function goHome(){
+  const vid=document.getElementById('pv-hero-vid');vid.pause();vid.src='';
   document.getElementById('pv-game-iframe').src='';
   document.getElementById('home-view').style.display='block';
   document.getElementById('project-view').style.display='none';
