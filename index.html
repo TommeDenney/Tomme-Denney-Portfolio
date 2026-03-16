@@ -13,6 +13,11 @@ function imgFallback(el){
   if(next){el.onload=function(){this.classList.add('ok');};el.onerror=function(){this.style.display='none';};el.src=next;}
   else el.style.display='none';
 }
+function smoothTo(id){
+  var el=document.getElementById(id);
+  if(el)el.scrollIntoView({behavior:'smooth',block:'start'});
+  return false;
+}
 </script>
 <style>
 :root{--bg:#f2ede3;--text:#1a1714;--gr:#b5ada3;--mt:#8a7e70;--cb:#e0dad0;--b:rgba(26,23,20,.1);--contact-bg:#161411}
@@ -185,8 +190,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content
     All Work
   </button>
   <ul class="navr" id="main-nav">
-    <li><a href="#hero" class="on" id="nw">Work</a></li>
-    <li><a href="#info" id="ni">Info</a></li>
+    <li><a href="#hero" id="nw" class="on" onclick="smoothTo('hero')">Info</a></li>
+    <li><a href="#sect-featured" onclick="smoothTo('sect-featured')">Featured</a></li>
+    <li><a href="#sect-play" onclick="smoothTo('sect-play')">Play</a></li>
+    <li><a href="#sect-projects" onclick="smoothTo('sect-projects')">Projects</a></li>
+    <li><a href="#sect-contact" onclick="smoothTo('sect-contact')">Contact</a></li>
   </ul>
 </nav>
 
@@ -232,49 +240,47 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content
     </div>
   </section>
 
-  <section class="role" id="info">
-    <span class="rword">XR Developer,</span>
-    <span class="rword">Designer &amp;</span>
-    <span class="rword">Builder</span>
-    <div class="clients">
-      <p class="cl">Clients &amp; Collaborators</p>
-      <p class="cv">See Reality &nbsp;·&nbsp; Nashville Adventures &nbsp;·&nbsp; Town of Lexington, MA &nbsp;·&nbsp; Liverpool FC &nbsp;·&nbsp; Venice City Tours &nbsp;·&nbsp; Faneuil Hall</p>
-    </div>
-  </section>
+  <div class="role-feat" id="info">
+    <section class="role">
+      <span class="rword">XR Developer,</span>
+      <span class="rword">Designer &amp;</span>
+      <span class="rword">Builder</span>
+    </section>
 
-  <!-- FEATURED — Unforgotten Stories replaces BOFUM -->
-  <section class="featured">
-    <h2 class="sh">Featured Work</h2>
-    <p class="ss">Select recent and notable projects</p>
-    <div class="fcar" id="fcar">
-      <div class="fc" data-id="seereality">
-        <div class="fcbg" style="background:linear-gradient(145deg,#050e1a,#0e2860,#1a449a)"></div>
-        <div class="fcico">🌐</div>
-        <img class="fcimg" src="projects/seereality/0.png" alt="" onload="this.classList.add('ok')" onerror="imgFallback(this)">
+  <!-- FEATURED sits right of role — id for nav -->
+    <section class="featured" id="sect-featured" style="scroll-margin-top:70px">
+      <h2 class="sh">Featured Work</h2>
+      <p class="ss">Select recent and notable projects</p>
+      <div class="fcar" id="fcar">
+        <div class="fc" data-id="seereality">
+          <div class="fcbg" style="background:linear-gradient(145deg,#050e1a,#0e2860,#1a449a)"></div>
+          <div class="fcico">🌐</div>
+          <img class="fcimg" src="projects/seereality/0.png" alt="" onload="this.classList.add('ok')" onerror="imgFallback(this)">
+        </div>
+        <div class="fc" data-id="genexr">
+          <div class="fcbg" style="background:linear-gradient(145deg,#0e0418,#2a0e48,#4a1888)"></div>
+          <div class="fcico">🧬</div>
+          <img class="fcimg" src="projects/genexr/1.png" alt="" onload="this.classList.add('ok')" onerror="imgFallback(this)">
+        </div>
+        <div class="fc" data-id="unforgottenstories">
+          <div class="fcbg" style="background:linear-gradient(145deg,#1a0a0a,#4a1a1a,#8a2a2a)"></div>
+          <div class="fcico">📖</div>
+          <img class="fcimg" src="projects/unforgottenstories/1.png" alt="" onload="this.classList.add('ok')" onerror="imgFallback(this)">
+        </div>
+        <div class="fc" data-id="greatvendingmachine">
+          <div class="fcbg" style="background:linear-gradient(145deg,#0a0a1a,#20201a,#403a10)"></div>
+          <div class="fcico">🎰</div>
+          <img class="fcimg" src="projects/greatvendingmachine/1.png" alt="" onload="this.classList.add('ok')" onerror="imgFallback(this)">
+        </div>
       </div>
-      <div class="fc" data-id="genexr">
-        <div class="fcbg" style="background:linear-gradient(145deg,#0e0418,#2a0e48,#4a1888)"></div>
-        <div class="fcico">🧬</div>
-        <img class="fcimg" src="projects/genexr/1.png" alt="" onload="this.classList.add('ok')" onerror="imgFallback(this)">
+      <div style="text-align:center;margin-top:14px">
+        <span class="flabel" id="flbl" onclick="openProjectFromFeat()">See Reality</span>
       </div>
-      <div class="fc" data-id="unforgottenstories">
-        <div class="fcbg" style="background:linear-gradient(145deg,#1a0a0a,#4a1a1a,#8a2a2a)"></div>
-        <div class="fcico">📖</div>
-        <img class="fcimg" src="projects/unforgottenstories/1.png" alt="" onload="this.classList.add('ok')" onerror="imgFallback(this)">
-      </div>
-      <div class="fc" data-id="greatvendingmachine">
-        <div class="fcbg" style="background:linear-gradient(145deg,#0a0a1a,#20201a,#403a10)"></div>
-        <div class="fcico">🎰</div>
-        <img class="fcimg" src="projects/greatvendingmachine/1.png" alt="" onload="this.classList.add('ok')" onerror="imgFallback(this)">
-      </div>
-    </div>
-    <div style="text-align:center;margin-top:18px">
-      <span class="flabel" id="flbl" onclick="openProjectFromFeat()">See Reality</span>
-    </div>
-  </section>
+    </section>
+  </div>
 
   <!-- PLAY ON WEB -->
-  <section class="playweb">
+  <section class="playweb" id="sect-play" style="scroll-margin-top:70px">
     <h2 class="sh">Play Now on Web</h2>
     <p class="ss">Try these right in your browser</p>
     <div class="pwtrack">
@@ -303,13 +309,13 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content
   </section>
 
   <!-- ALL PROJECTS -->
-  <section class="more">
+  <section class="more" id="sect-projects" style="scroll-margin-top:70px">
     <h2 class="sh">All Projects</h2>
     <p class="ss">Every build, in order</p>
     <div class="wgrid" id="wgrid"></div>
   </section>
 
-  <section class="contact">
+  <section class="contact" id="sect-contact" style="scroll-margin-top:70px">
     <div class="cword">Contact</div>
     <a class="ceml" href="mailto:Denney.t@northeastern.edu">Denney.t@northeastern.edu</a>
     <a class="cphone" href="tel:+15042179782">504-217-9782</a>
@@ -388,7 +394,7 @@ const PROJECTS=[
    bg:'linear-gradient(145deg,#050e1a,#0e2860,#1a449a)',ico:'🌐',
    tags:['Unity C#','Meta Quest','URP','XR Experience','Client Work'],
    caption:'Real-world client XR — from colonial installations to stadium fan experiences.',
-   desc:'Immersive XR experiences built for world-class clients spanning heritage, sports, and entertainment — from Fort Nashborough colonial installations to Liverpool FC fan experiences. Built with Unity C#, Meta Quest hardware, and custom URP shader pipelines optimized for standalone passthrough.'},
+   desc:'Immersive XR experiences built for world-class clients spanning heritage, sports, and entertainment — from Fort Nashborough colonial installations to Liverpool FC fan experiences. Built with Unity C#, Meta Quest hardware, and custom URP shader pipelines optimized for standalone passthrough.\n\nClients & Collaborators: See Reality · Nashville Adventures · Town of Lexington, MA · Liverpool FC · Venice City Tours · Faneuil Hall'},
   {id:'bofum',name:'BOFUM',cat:'XR Game · MIT Reality Hack 2026',cover:'projects/bofum/1.png',
    bg:'linear-gradient(145deg,#040c04,#0e2810,#1a4a1e)',ico:'🎮',
    tags:['XR','Unity','MIT Reality Hack','Multiplayer','Hackathon','Spatial Game'],
@@ -507,13 +513,20 @@ function calcFadeDist(){
 calcFadeDist();window.addEventListener('resize',calcFadeDist);
 const hname=document.getElementById('hname'),hmeta=document.getElementById('hmeta');
 window.addEventListener('scroll',()=>{
+  if(document.getElementById('project-view').style.display!=='none')return;
   const p=Math.max(0,Math.min(1,window.scrollY/fadeDist));
   hname.style.opacity=Math.max(0,1-p*1.4);
   hmeta.style.opacity=Math.max(0,1-p*1.8);
   cdata.forEach(c=>c.el.style.opacity=Math.max(0,1-p*1.8));
-  const mid=window.scrollY+window.innerHeight*.4,it=document.getElementById('info').offsetTop;
-  document.getElementById('nw').classList.toggle('on',mid<it);
-  document.getElementById('ni').classList.toggle('on',mid>=it);
+  // update active nav link based on scroll position
+  const mid=window.scrollY+80;
+  let active='hero';
+  ['hero','info','sect-featured','sect-play','sect-projects','sect-contact'].forEach(id=>{
+    const el=document.getElementById(id);if(el&&el.offsetTop<=mid)active=id;
+  });
+  document.querySelectorAll('.navr a').forEach(a=>{
+    a.classList.toggle('on',a.getAttribute('href')==='#'+active);
+  });
 },{passive:true});
 
 /* CURSOR */
@@ -593,7 +606,6 @@ function toggleHeroSound(e){
   v.muted=!v.muted;
   document.getElementById('pv-sound-btn').textContent=v.muted?'🔇 Sound Off':'🔊 Sound On';
 }
-
 /* PROJECT PAGE */
 function openProject(id){
   const p=PMAP[id];if(!p)return;
@@ -618,17 +630,34 @@ function openProject(id){
   const img=document.getElementById('pv-hero-img'),vid=document.getElementById('pv-hero-vid');
   img.style.display='none';vid.style.display='none';vid.src='';vid.muted=true;
   document.getElementById('pv-hero-controls').style.display='none';
-  document.getElementById('pv-sound-btn').textContent='🔇 Sound Off';
+  document.getElementById('pv-sound-btn').textContent='🔊 Sound On';
 
   const testVid=document.createElement('video');
   testVid.src=videoSrc;
   testVid.oncanplaythrough=()=>{
-    vid.src=videoSrc;vid.muted=true;vid.style.display='block';
+    vid.src=videoSrc;
+    vid.muted=false; // sound ON by default
+    vid.style.display='block';
     document.getElementById('pv-hero-controls').style.display='flex';
   };
   testVid.onerror=()=>{img.src=p.cover;};
   testVid.load();
   setTimeout(()=>{if(vid.style.display==='none'&&img.style.display==='none')img.src=p.cover;},1200);
+
+  // Scroll: mute+pause when user reaches description
+  const pvBody=document.querySelector('.pv-body');
+  const scrollHandler=()=>{
+    if(!pvBody||vid.style.display==='none')return;
+    const bodyTop=pvBody.getBoundingClientRect().top;
+    if(bodyTop<window.innerHeight*0.6){
+      if(!vid.paused){vid.pause();pvHero.classList.add('paused');document.getElementById('pv-pause-hint').textContent='▶';}
+      if(!vid.muted){vid.muted=true;document.getElementById('pv-sound-btn').textContent='🔇 Sound Off';}
+    }
+  };
+  // Remove old scroll handler and attach new one
+  window._pvScrollHandler&&window.removeEventListener('scroll',window._pvScrollHandler);
+  window._pvScrollHandler=scrollHandler;
+  window.addEventListener('scroll',scrollHandler,{passive:true});
 
   // Embedded game
   const EMBEDS={
