@@ -6,12 +6,25 @@
 <title>Tomme Denney</title>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script>
+/* Image fallback chain: tries .jpg, .jpeg, .png */
+var IMG_EXTS=['.jpg','.jpeg','.png'];
 function imgFallback(el){
-  var src=el.src,next=null;
-  if(src.endsWith('.png')) next=src.replace('.png','.jpg');
-  else if(src.endsWith('.jpg')||src.endsWith('.jpeg')) next=src.replace(/\.jpe?g$/,'.png');
-  if(next){el.onload=function(){this.classList.add('ok');};el.onerror=function(){this.style.display='none';};el.src=next;}
-  else el.style.display='none';
+  var src=el.src;
+  var base=src.replace(/\.(jpg|jpeg|png)$/i,'');
+  if(!el._triedExts) el._triedExts=[];
+  var failedExt=src.match(/\.(jpg|jpeg|png)$/i);
+  if(failedExt) el._triedExts.push(failedExt[0].toLowerCase());
+  var next=null;
+  for(var i=0;i<IMG_EXTS.length;i++){
+    if(el._triedExts.indexOf(IMG_EXTS[i])===-1){next=IMG_EXTS[i];break;}
+  }
+  if(next){
+    el.onload=function(){this.classList.add('ok');};
+    el.onerror=function(){imgFallback(this);};
+    el.src=base+next;
+  } else {
+    el.style.display='none';
+  }
 }
 function smoothTo(id){
   var el=document.getElementById(id);
@@ -27,7 +40,7 @@ function smoothTo(id){
 [data-theme=night]{--bg:#07070e;--text:#c0bde0;--gr:#22223c;--mt:#44427a;--cb:#10101c;--b:rgba(130,125,220,.1);--contact-bg:#030308}
 *{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--text);font-family:'Barlow','Helvetica Neue',Arial,sans-serif;cursor:none;overflow-x:hidden;transition:background .45s,color .45s;-webkit-font-smoothing:antialiased}
-#cur,#ring{position:fixed;pointer-events:none;z-index:9999;border-radius:50%;transform:translate(-50%,-50%);mix-blend-mode:difference}
+#cur,#ring{position:fixed;top:0;left:0;pointer-events:none;z-index:9999;border-radius:50%;mix-blend-mode:difference;will-change:transform}
 #cur{width:10px;height:10px;background:#fff;transition:width .15s,height .15s}
 #ring{width:36px;height:36px;border:1.8px solid #fff;opacity:.85;transition:width .32s cubic-bezier(.25,.46,.45,.94),height .32s cubic-bezier(.25,.46,.45,.94)}
 body.hov #cur{width:6px;height:6px}body.hov #ring{width:54px;height:54px;opacity:.5}
@@ -182,7 +195,53 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content
 #lb-close{position:absolute;top:18px;right:18px;z-index:2;width:42px;height:42px;border-radius:50%;background:#fff;border:none;cursor:pointer;font-size:20px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 14px rgba(0,0,0,.3);transition:transform .2s}.#lb-close:hover{transform:scale(1.1)}
 @keyframes lbIn{from{opacity:0;transform:scale(.93)}to{opacity:1;transform:scale(1)}}
 ::-webkit-scrollbar{width:3px}::-webkit-scrollbar-thumb{background:var(--b);border-radius:2px}
+
+/* MODE SWITCHER — bottom-left pill */
+#mode-switch{position:fixed;bottom:28px;left:28px;z-index:400;display:flex;align-items:center;background:var(--cb);border:1.5px solid var(--b);border-radius:100px;padding:4px;gap:0;box-shadow:0 2px 20px rgba(0,0,0,.12);transition:background .35s,border-color .35s,opacity .3s}
+.mode-opt{font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--mt);padding:8px 16px;border-radius:100px;cursor:pointer;transition:all .28s;white-space:nowrap;user-select:none}
+.mode-opt.active{background:var(--text);color:var(--bg)}
+.mode-opt:not(.active):hover{color:var(--text)}
+
+/* PHOTO HOME */
+#photo-view{display:none;min-height:100vh}
+.photo-ticker .tickin{animation:tick 32s linear infinite}
+.photo-hero{padding:100px 44px 40px;text-align:center}
+.photo-hero .hmeta{margin-bottom:10px}
+.photo-hero .hname{margin-bottom:0}
+
+/* Featured strip */
+.photo-feat{padding:48px 0 44px;text-align:center}
+.photo-feat-track{display:flex;gap:14px;padding:0 44px 16px;overflow-x:auto;scrollbar-width:none}.photo-feat-track::-webkit-scrollbar{display:none}
+.photo-feat-card{flex-shrink:0;height:280px;border-radius:16px;overflow:hidden;cursor:pointer;position:relative;box-shadow:0 16px 40px rgba(0,0,0,.14);transition:transform .4s,box-shadow .4s}
+.photo-feat-card:hover{transform:translateY(-8px) scale(1.03);box-shadow:0 28px 60px rgba(0,0,0,.22)}
+.photo-feat-card img{height:100%;width:auto;min-width:100%;display:block;object-fit:cover}
+
+/* 3D Viewer section */
+.photo-3d{padding:48px 44px 44px;text-align:center}
+.photo-3d-grid{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-top:40px;max-width:1200px;margin-left:auto;margin-right:auto}
+.viewer-item{position:relative;height:340px;flex:1 1 400px;max-width:100%;border-radius:18px;overflow:hidden;background:var(--contact-bg);box-shadow:0 16px 40px rgba(0,0,0,.14);transition:height .5s cubic-bezier(.25,.46,.45,.94),flex-basis .5s cubic-bezier(.25,.46,.45,.94)}
+.viewer-item.expanded{height:650px;flex-basis:100%!important}
+.viewer-item canvas{width:100%!important;height:100%!important;display:block}
+.viewer-label{position:absolute;bottom:0;left:0;right:0;padding:14px 16px;background:linear-gradient(transparent,rgba(0,0,0,.55));font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#fff;pointer-events:none;z-index:2;text-align:left}
+.viewer-label-sub{font-size:9.5px;opacity:.6;margin-top:3px;letter-spacing:.08em;font-weight:500}
+.viewer-expand{position:absolute;top:12px;right:12px;z-index:3;width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,.5);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.2);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;transition:background .2s,transform .2s}
+.viewer-expand:hover{background:rgba(0,0,0,.8);transform:scale(1.1)}
+.viewer-loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.4);font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;z-index:1;pointer-events:none}
+
+/* All Works justified flex grid */
+.photo-grid-section{padding:80px 44px 72px;text-align:center}
+.photo-grid{display:flex;flex-wrap:wrap;gap:12px;margin-top:44px;max-width:1200px;margin-left:auto;margin-right:auto}
+.photo-grid::after{content:'';flex-grow:999}
+.photo-grid-item{height:220px;border-radius:14px;overflow:hidden;cursor:pointer;position:relative;opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s cubic-bezier(.25,.46,.45,.94),box-shadow .3s}
+.photo-grid-item.in{opacity:1;transform:translateY(0)}
+.photo-grid-item:hover{transform:scale(1.03);box-shadow:0 16px 40px rgba(0,0,0,.18);z-index:1}
+.photo-grid-item.in:hover{transform:translateY(0) scale(1.03)}
+.photo-grid-item.expanded{z-index:2}
+.photo-grid-item img{width:100%;height:100%;object-fit:cover;display:block;border-radius:14px}
 </style>
+<script type="importmap">
+{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}
+</script>
 </head>
 <body>
 <div id="cur"></div><div id="ring"></div>
@@ -198,6 +257,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content
     <li><a href="#sect-featured" onclick="smoothTo('sect-featured')">Featured</a></li>
     <li><a href="#sect-play" onclick="smoothTo('sect-play')">Play</a></li>
     <li><a href="#sect-projects" onclick="smoothTo('sect-projects')">Projects</a></li>
+    <li><a href="#" onclick="switchMode('photo');return false;" id="nav-photo-link">Photography</a></li>
     <li><a href="#sect-contact" onclick="smoothTo('sect-contact')">Contact</a></li>
   </ul>
 </nav>
@@ -324,6 +384,65 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content
     </ul>
     <p class="ccp">All Rights Reserved 2026 Tomme Denney</p>
   </section>
+</div>
+
+<!-- PHOTOGRAPHY HOME -->
+<div id="photo-view">
+  <div style="padding-top:68px">
+    <div class="ticker photo-ticker">
+      <div class="tickin">
+        <span>Real Estate Photography</span><span class="dot">·</span><span>Gaussian Splatting</span><span class="dot">·</span><span>Photogrammetry</span><span class="dot">·</span><span>Matterport</span><span class="dot">·</span><span>Insta360 X4</span><span class="dot">·</span><span>Sony A7 III</span><span class="dot">·</span><span>Usurper Interactive</span><span class="dot">·</span><span>Spatial Capture</span><span class="dot">·</span><span>3D Reconstruction</span><span class="dot">·</span><span>Architecture</span><span class="dot">·</span><span>Interiors</span><span class="dot">·</span>
+        <span>Real Estate Photography</span><span class="dot">·</span><span>Gaussian Splatting</span><span class="dot">·</span><span>Photogrammetry</span><span class="dot">·</span><span>Matterport</span><span class="dot">·</span><span>Insta360 X4</span><span class="dot">·</span><span>Sony A7 III</span><span class="dot">·</span><span>Usurper Interactive</span><span class="dot">·</span><span>Spatial Capture</span><span class="dot">·</span><span>3D Reconstruction</span><span class="dot">·</span><span>Architecture</span><span class="dot">·</span><span>Interiors</span><span class="dot">·</span>
+      </div>
+    </div>
+  </div>
+
+  <section class="photo-hero" id="photo-hero">
+    <p class="hmeta">Boston, Massachusetts<br><span style="opacity:.6">Usurper Interactive</span></p>
+    <h1 class="hname">PHOTOGRAPHY<br>&amp; SPATIAL</h1>
+  </section>
+
+  <!-- FEATURED -->
+  <section class="photo-feat" id="sect-photo-featured" style="scroll-margin-top:70px">
+    <h2 class="sh">Featured</h2>
+    <p class="ss">Recent shoots and captures</p>
+    <div class="photo-feat-track" id="photo-feat-track"></div>
+  </section>
+
+  <!-- ALL WORKS -->
+  <section class="photo-grid-section" id="sect-photo-all" style="scroll-margin-top:70px">
+    <h2 class="sh">All Works</h2>
+    <p class="ss">Every shot, every angle</p>
+    <div class="photo-grid" id="photo-grid"></div>
+  </section>
+
+  <!-- 3D & SPATIAL VIEWERS (coming soon)
+  <section class="photo-3d" id="sect-photo-3d" style="scroll-margin-top:70px">
+    <h2 class="sh">3D &amp; Spatial</h2>
+    <p class="ss">Gaussian splats, photogrammetry, and 3D scans</p>
+    <div class="photo-3d-grid" id="photo-3d-grid"></div>
+  </section>
+  -->
+  <section class="photo-3d" id="sect-photo-3d" style="scroll-margin-top:70px">
+    <h2 class="sh">3D &amp; Spatial Reconstruction Coming Soon!</h2>
+  </section>
+
+  <section class="contact" id="sect-photo-contact" style="scroll-margin-top:70px">
+    <div class="cword">Contact</div>
+    <a class="ceml" href="mailto:Denney.t@northeastern.edu">Denney.t@northeastern.edu</a>
+    <a class="cphone" href="tel:+15042179782">504-217-9782</a>
+    <ul class="csoc">
+      <li><a href="https://www.linkedin.com/in/tommedenney/" target="_blank">LinkedIn</a></li>
+      <li><a href="https://www.instagram.com/tommedenney/" target="_blank">Instagram</a></li>
+    </ul>
+    <p class="ccp">All Rights Reserved 2026 Tomme Denney</p>
+  </section>
+</div>
+
+<!-- MODE SWITCHER — bottom-left -->
+<div id="mode-switch">
+  <div class="mode-opt active" id="mode-dev" onclick="switchMode('dev')">XR / Dev</div>
+  <div class="mode-opt" id="mode-photo" onclick="switchMode('photo')">Photography</div>
 </div>
 
 <!-- PROJECT VIEW -->
@@ -542,7 +661,7 @@ const cur=document.getElementById('cur'),ring=document.getElementById('ring');
 let mx=0,my=0,rx=0,ry=0;
 const xHist=[];let shakeTimer=null;
 document.addEventListener('mousemove',e=>{
-  mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';
+  mx=e.clientX;my=e.clientY;cur.style.transform='translate('+mx+'px,'+my+'px) translate(-50%,-50%)';
   xHist.push({x:e.clientX,t:Date.now()});if(xHist.length>30)xHist.shift();
   if(xHist.length>=12){
     const rec=xHist.slice(-12);
@@ -552,9 +671,9 @@ document.addEventListener('mousemove',e=>{
     }
   }
 });
-(function rl(){rx+=(mx-rx)*.11;ry+=(my-ry)*.11;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(rl)})();
+(function rl(){rx+=(mx-rx)*.11;ry+=(my-ry)*.11;ring.style.transform='translate('+rx+'px,'+ry+'px) translate(-50%,-50%)';requestAnimationFrame(rl)})();
 function updateHoverListeners(){
-  document.querySelectorAll('a,button,.fc,.wc,.sw,#pbtn,.hcard,.pv-more-card,.flabel,.pwcard').forEach(el=>{
+  document.querySelectorAll('a,button,.fc,.wc,.sw,#pbtn,.hcard,.pv-more-card,.flabel,.pwcard,.photo-feat-card,.photo-grid-item,.viewer-item,.viewer-expand,.mode-opt').forEach(el=>{
     el.onmouseenter=()=>document.body.classList.add('hov');
     el.onmouseleave=()=>document.body.classList.remove('hov');
   });
@@ -788,9 +907,530 @@ function openLightbox(src){document.getElementById('lb-img').src=src;document.ge
 function closeLightbox(){document.getElementById('lightbox').classList.remove('open');document.body.style.overflow='';}
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox();});
 
-function setTheme(t,el){document.body.dataset.theme=t;document.querySelectorAll('.sw').forEach(s=>s.classList.remove('on'));el.classList.add('on');document.getElementById('sw').classList.remove('open');}
+/* Per-mode palette tracking */
+const modeThemes={dev:'',photo:'sage'}; // defaults: Warm for dev, Sage for photo
+let userPickedTheme={dev:false,photo:false};
+
+function setTheme(t,el){
+  document.body.dataset.theme=t;
+  document.querySelectorAll('.sw').forEach(s=>s.classList.remove('on'));
+  if(el) el.classList.add('on');
+  document.getElementById('sw').classList.remove('open');
+  // Track that the user manually picked a palette for this mode
+  modeThemes[currentMode]=t;
+  userPickedTheme[currentMode]=true;
+}
+function applyThemeForMode(mode){
+  const t=modeThemes[mode];
+  document.body.dataset.theme=t;
+  // Update swatch highlight
+  const swatches=document.querySelectorAll('.sw');
+  swatches.forEach(s=>s.classList.remove('on'));
+  const themeNames={'':'Warm','white':'White','sage':'Sage','dark':'Dark','night':'Night'};
+  const targetName=themeNames[t]||'Warm';
+  swatches.forEach(s=>{if(s.querySelector('span').textContent===targetName)s.classList.add('on');});
+}
 function togglePal(){document.getElementById('sw').classList.toggle('open');}
 document.addEventListener('click',e=>{if(!document.getElementById('pal').contains(e.target))document.getElementById('sw').classList.remove('open');});
+
+/* ============================
+   PHOTOGRAPHY PORTFOLIO MODE
+   ============================ */
+
+let currentMode='dev'; // 'dev' or 'photo'
+
+/*
+  PHOTO CONFIG
+  ────────────
+  Folder structure:
+    photography/Featured/0.webp, 1.webp, 2.webp ...
+    photography/All Works/0.webp, 1.webp, 2.webp ...
+    photography/3D & Spatial/model.ply, scan.obj, scene.fbx
+
+  Just set the counts below to match how many .jpg files are in each folder.
+  Files MUST be numbered starting from 0.
+*/
+
+const FEATURED_PHOTO_COUNT = 6;   // photography/Featured/0.webp through 5.webp
+const ALL_WORKS_PHOTO_COUNT = 37; // photography/All Works/0.webp through 36.webp
+
+const MODELS_3D = [];
+// Auto-generate from count — all PLY files numbered 0.ply through 18.ply
+const MODELS_3D_COUNT = 19;
+for(let i=0;i<MODELS_3D_COUNT;i++){
+  MODELS_3D.push({ name:'3D Scan '+i, file:'photography/3D%20%26%20Spatial/'+i+'.ply' });
+}
+window.MODELS_3D=MODELS_3D;
+
+const BASE_ROW_H=220, EXPAND_ROW_H=500;
+
+/* ── Render Featured Strip ── */
+function renderFeatured(){
+  const track=document.getElementById('photo-feat-track');
+  track.innerHTML='';
+  for(let i=0;i<FEATURED_PHOTO_COUNT;i++){
+    const card=document.createElement('div');
+    card.className='photo-feat-card';
+    const img=document.createElement('img');
+    img.src='photography/Featured/'+i+'.webp';
+    img.alt='Featured photo '+i;
+    img.decoding='async';
+    img.onerror=function(){card.remove();};
+    card.appendChild(img);
+    card.addEventListener('click',function(){openLightbox(img.src);});
+    track.appendChild(card);
+  }
+}
+
+/* ── Render All Works Justified Grid ── */
+let photoGridObserver=null;
+function renderAllWorks(){
+  const grid=document.getElementById('photo-grid');
+  grid.innerHTML='';
+  if(photoGridObserver) photoGridObserver.disconnect();
+
+  // IntersectionObserver for fade-in reveal
+  photoGridObserver=new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        entry.target.classList.add('in');
+        photoGridObserver.unobserve(entry.target);
+      }
+    });
+  },{threshold:0.05,rootMargin:'50px'});
+
+  for(let i=0;i<ALL_WORKS_PHOTO_COUNT;i++){
+    const item=document.createElement('div');
+    item.className='photo-grid-item';
+    item.style.flexGrow='1';
+    item.style.flexShrink='1';
+    item.style.flexBasis='180px';
+    const img=document.createElement('img');
+    img.alt='Photo '+i;
+    img.decoding='async';
+    img.src='photography/All%20Works/'+i+'.webp';
+    img.onload=function(){
+      const ratio=this.naturalWidth/this.naturalHeight;
+      item._ratio=ratio;
+      item.style.flexBasis=(BASE_ROW_H*ratio)+'px';
+      item.style.flexGrow=ratio;
+    };
+    img.onerror=function(){item.remove();};
+    item.addEventListener('click',function(){
+      flipExpandPhoto(item, grid);
+    });
+    item.appendChild(img);
+    grid.appendChild(item);
+    // Observe for scroll-triggered fade-in
+    photoGridObserver.observe(item);
+  }
+}
+
+/*
+  FLIP Animation for photo expand/collapse
+  Captures all item positions before layout change,
+  applies the change instantly, then animates every
+  item from its old position to its new one.
+*/
+function flipExpandPhoto(clickedItem, grid){
+  const items=Array.from(grid.querySelectorAll('.photo-grid-item'));
+
+  // FIRST: snapshot every item's rect
+  const firstRects=new Map();
+  items.forEach(el=>firstRects.set(el, el.getBoundingClientRect()));
+
+  // Apply layout change instantly
+  const wasExpanded=clickedItem.classList.contains('expanded');
+  const prev=grid.querySelector('.photo-grid-item.expanded');
+  if(prev&&prev!==clickedItem){
+    prev.classList.remove('expanded');
+    prev.style.height=BASE_ROW_H+'px';
+    if(prev._ratio) prev.style.flexBasis=(BASE_ROW_H*prev._ratio)+'px';
+  }
+  clickedItem.classList.toggle('expanded',!wasExpanded);
+  if(!wasExpanded){
+    clickedItem.style.height=EXPAND_ROW_H+'px';
+    if(clickedItem._ratio) clickedItem.style.flexBasis=(EXPAND_ROW_H*clickedItem._ratio)+'px';
+  } else {
+    clickedItem.style.height=BASE_ROW_H+'px';
+    if(clickedItem._ratio) clickedItem.style.flexBasis=(BASE_ROW_H*clickedItem._ratio)+'px';
+  }
+
+  // Force the browser to compute the new layout
+  void grid.offsetHeight;
+
+  // LAST + INVERT + PLAY
+  const animOpts={duration:420, easing:'cubic-bezier(.22,.61,.36,1)'};
+
+  items.forEach(el=>{
+    const f=firstRects.get(el);
+    if(!f) return;
+    const l=el.getBoundingClientRect();
+
+    const dx=f.left-l.left;
+    const dy=f.top-l.top;
+    const dw=f.width/(l.width||1);
+    const dh=f.height/(l.height||1);
+
+    const moved=Math.abs(dx)>1||Math.abs(dy)>1;
+    const sized=Math.abs(dw-1)>0.02||Math.abs(dh-1)>0.02;
+
+    if(!moved&&!sized) return;
+
+    if(sized){
+      // Item changed size (the one expanding or collapsing)
+      el.style.transformOrigin='0 0';
+      const anim=el.animate([
+        {transform:'translate('+dx+'px,'+dy+'px) scale('+dw+','+dh+')'},
+        {transform:'translate(0,0) scale(1,1)'}
+      ],animOpts);
+      anim.onfinish=()=>{el.style.transformOrigin='';};
+    } else {
+      // Item only moved position (surrounding items reflowing)
+      el.animate([
+        {transform:'translate('+dx+'px,'+dy+'px)'},
+        {transform:'translate(0,0)'}
+      ],animOpts);
+    }
+  });
+}
+
+/* ── Render 3D Viewers ── */
+function render3DSection(){
+  const container=document.getElementById('photo-3d-grid');
+  container.innerHTML='';
+  if(MODELS_3D.length===0){
+    document.getElementById('sect-photo-3d').style.display='none';
+    return;
+  }
+  document.getElementById('sect-photo-3d').style.display='';
+  MODELS_3D.forEach((m,idx)=>{
+    const item=document.createElement('div');
+    item.className='viewer-item';
+    item.id='viewer-'+idx;
+    item.dataset.modelIdx=idx;
+    // Loading text
+    const loading=document.createElement('div');
+    loading.className='viewer-loading';
+    loading.textContent='Scroll to load';
+    item.appendChild(loading);
+    // Label
+    const lbl=document.createElement('div');
+    lbl.className='viewer-label';
+    const ext=m.file.split('.').pop().toUpperCase();
+    lbl.innerHTML=m.name+'<div class="viewer-label-sub">'+ext+' Model</div>';
+    item.appendChild(lbl);
+    // Expand button
+    const expBtn=document.createElement('button');
+    expBtn.className='viewer-expand';
+    expBtn.innerHTML='⛶';
+    expBtn.title='Toggle fullwidth';
+    expBtn.addEventListener('click',function(e){
+      e.stopPropagation();
+      item.classList.toggle('expanded');
+      if(window._viewerResize) window._viewerResize(idx);
+    });
+    item.appendChild(expBtn);
+    container.appendChild(item);
+  });
+  // Lazy load: only init viewers when scrolled into view
+  if(window.initLazyViewers) window.initLazyViewers();
+}
+
+/* ── Master render ── */
+function renderPhotoSections(){
+  renderFeatured();
+  // render3DSection(); // commented out until 3D viewers are ready
+  renderAllWorks();
+  updateHoverListeners();
+}
+
+/* MODE SWITCHING */
+function switchMode(mode){
+  if(mode===currentMode)return;
+  currentMode=mode;
+  window.scrollTo(0,0);
+  const homeView=document.getElementById('home-view');
+  const photoView=document.getElementById('photo-view');
+  const projectView=document.getElementById('project-view');
+  const mainNav=document.getElementById('main-nav');
+  const backBtn=document.getElementById('back-btn');
+  const vid=document.getElementById('pv-hero-vid');vid.pause();vid.src='';
+  document.getElementById('pv-game-iframe').src='';
+  projectView.style.display='none';
+  mainNav.style.display='flex';
+  backBtn.style.display='none';
+  document.getElementById('mode-dev').classList.toggle('active',mode==='dev');
+  document.getElementById('mode-photo').classList.toggle('active',mode==='photo');
+  if(mode==='dev'){
+    homeView.style.display='block';
+    photoView.style.display='none';
+    updateDevNav();
+    applyThemeForMode('dev');
+    resetAuto();
+    requestAnimationFrame(()=>layoutCards());
+  } else {
+    homeView.style.display='none';
+    photoView.style.display='block';
+    updatePhotoNav();
+    applyThemeForMode('photo');
+    clearInterval(autoT);
+    renderPhotoSections();
+  }
+  updateHoverListeners();
+}
+
+function updateDevNav(){
+  const nav=document.getElementById('main-nav');
+  nav.innerHTML=`
+    <li><a href="#hero" class="on" onclick="smoothTo('hero')">Info</a></li>
+    <li><a href="#sect-featured" onclick="smoothTo('sect-featured')">Featured</a></li>
+    <li><a href="#sect-play" onclick="smoothTo('sect-play')">Play</a></li>
+    <li><a href="#sect-projects" onclick="smoothTo('sect-projects')">Projects</a></li>
+    <li><a href="#" onclick="switchMode('photo');return false;">Photography</a></li>
+    <li><a href="#sect-contact" onclick="smoothTo('sect-contact')">Contact</a></li>
+  `;
+  updateHoverListeners();
+}
+
+function updatePhotoNav(){
+  const nav=document.getElementById('main-nav');
+  nav.innerHTML=`
+    <li><a href="#photo-hero" class="on" onclick="smoothTo('photo-hero')">Info</a></li>
+    <li><a href="#sect-photo-featured" onclick="smoothTo('sect-photo-featured')">Featured</a></li>
+    <li><a href="#sect-photo-all" onclick="smoothTo('sect-photo-all')">All Works</a></li>
+    <li><a href="#sect-photo-3d" onclick="smoothTo('sect-photo-3d')">3D / Spatial</a></li>
+    <li><a href="#" onclick="switchMode('dev');return false;">XR / Dev</a></li>
+    <li><a href="#sect-photo-contact" onclick="smoothTo('sect-photo-contact')">Contact</a></li>
+  `;
+  updateHoverListeners();
+}
+
+/* Patch goHome to be mode-aware */
+goHome=function(){
+  const vid=document.getElementById('pv-hero-vid');vid.pause();vid.src='';
+  document.getElementById('pv-game-iframe').src='';
+  document.getElementById('project-view').style.display='none';
+  document.getElementById('back-btn').style.display='none';
+  document.getElementById('main-nav').style.display='flex';
+  document.getElementById('mode-switch').style.opacity='1';
+  document.getElementById('mode-switch').style.pointerEvents='all';
+  window.scrollTo(0,0);
+  if(currentMode==='photo'){
+    document.getElementById('home-view').style.display='none';
+    document.getElementById('photo-view').style.display='block';
+    updatePhotoNav();
+    applyThemeForMode('photo');
+    renderPhotoSections();
+  } else {
+    document.getElementById('home-view').style.display='block';
+    document.getElementById('photo-view').style.display='none';
+    updateDevNav();
+    applyThemeForMode('dev');
+    resetAuto();
+    requestAnimationFrame(()=>layoutCards());
+  }
+  updateHoverListeners();
+};
+
+/* Hide mode switch when in project detail */
+const _origOpenProject=openProject;
+openProject=function(id){
+  document.getElementById('mode-switch').style.opacity='0';
+  document.getElementById('mode-switch').style.pointerEvents='none';
+  _origOpenProject(id);
+};
+</script>
+
+<!-- THREE.JS 3D VIEWER MODULE -->
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
+import { PLYLoader } from 'three/addons/loaders/PLYLoader.js';
+import { FBXLoader } from 'three/addons/loaders/FBXLoader.js';
+
+const viewers={};
+const resizeFns={};
+let lazyObserver=null;
+
+function getThemeBg(){
+  const s=getComputedStyle(document.body);
+  return s.getPropertyValue('--contact-bg').trim()||'#111';
+}
+
+function createViewer(idx, modelInfo){
+  const container=document.getElementById('viewer-'+idx);
+  if(!container||viewers[idx])return; // already created
+  const loading=container.querySelector('.viewer-loading');
+  if(loading) loading.textContent='Loading 3D...';
+
+  const canvas=document.createElement('canvas');
+  container.insertBefore(canvas,container.firstChild);
+
+  const w=container.clientWidth||400, h=container.clientHeight||340;
+  const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false});
+  renderer.setSize(w,h);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+  renderer.setClearColor(new THREE.Color(getThemeBg()));
+
+  const scene=new THREE.Scene();
+  const camera=new THREE.PerspectiveCamera(50,w/h,0.01,5000);
+  camera.position.set(0,0,5);
+
+  const controls=new OrbitControls(camera,canvas);
+  controls.enableDamping=true;
+  controls.dampingFactor=0.08;
+  controls.enableZoom=false;
+  controls.minDistance=0.5;
+  controls.maxDistance=500;
+
+  // Scroll zoom only when hovering
+  container.addEventListener('mouseenter',()=>{controls.enableZoom=true;});
+  container.addEventListener('mouseleave',()=>{controls.enableZoom=false;});
+
+  // Lighting
+  scene.add(new THREE.AmbientLight(0xffffff,0.7));
+  const dir=new THREE.DirectionalLight(0xffffff,0.9);
+  dir.position.set(5,10,7);scene.add(dir);
+  const dir2=new THREE.DirectionalLight(0xffffff,0.4);
+  dir2.position.set(-5,-5,-5);scene.add(dir2);
+
+  // Load model
+  const ext=modelInfo.file.split('.').pop().toLowerCase();
+  let loader;
+  if(ext==='obj') loader=new OBJLoader();
+  else if(ext==='ply') loader=new PLYLoader();
+  else if(ext==='fbx') loader=new FBXLoader();
+  else return;
+
+  loader.load(modelInfo.file,function(result){
+    let obj;
+    if(ext==='ply'){
+      const geo=result;
+      const hasColor=geo.hasAttribute('color');
+      const vertexCount=geo.attributes.position?geo.attributes.position.count:0;
+
+      // Detect if this is a dense point cloud (no face indices or very high vertex count)
+      const isPointCloud=(!geo.index&&vertexCount>50000)||vertexCount>500000;
+
+      if(isPointCloud){
+        // Render as point cloud
+        const mat=new THREE.PointsMaterial({
+          size:0.01,
+          sizeAttenuation:true,
+          vertexColors:hasColor,
+          color:hasColor?0xffffff:0xcccccc
+        });
+        obj=new THREE.Points(geo,mat);
+      } else {
+        // Render as mesh
+        geo.computeVertexNormals();
+        const mat=new THREE.MeshStandardMaterial({
+          color:0xcccccc,
+          flatShading:false,
+          vertexColors:hasColor
+        });
+        obj=new THREE.Mesh(geo,mat);
+      }
+    } else {
+      obj=result;
+    }
+    scene.add(obj);
+
+    // Center and fit to view
+    const box=new THREE.Box3().setFromObject(obj);
+    const center=box.getCenter(new THREE.Vector3());
+    const size=box.getSize(new THREE.Vector3());
+    obj.position.sub(center);
+    const maxDim=Math.max(size.x,size.y,size.z)||1;
+
+    // Adjust point size for point clouds based on model scale
+    if(obj.isPoints){
+      obj.material.size=maxDim*0.003;
+    }
+
+    camera.position.set(0,maxDim*0.5,maxDim*1.8);
+    camera.far=maxDim*20;
+    camera.updateProjectionMatrix();
+    controls.target.set(0,0,0);
+    controls.minDistance=maxDim*0.3;
+    controls.maxDistance=maxDim*6;
+    controls.update();
+
+    if(loading) loading.style.display='none';
+  },
+  function(progress){
+    // Progress callback
+    if(loading&&progress.total){
+      const pct=Math.round((progress.loaded/progress.total)*100);
+      loading.textContent='Loading... '+pct+'%';
+    }
+  },
+  function(err){
+    console.error('3D load error for',modelInfo.file,err);
+    if(loading) loading.textContent='Failed to load';
+  });
+
+  // Resize handler
+  function onResize(){
+    const w2=container.clientWidth, h2=container.clientHeight;
+    if(w2===0||h2===0)return;
+    camera.aspect=w2/h2;
+    camera.updateProjectionMatrix();
+    renderer.setSize(w2,h2);
+  }
+  resizeFns[idx]=onResize;
+
+  // Animate
+  let active=true;
+  function animate(){
+    if(!active)return;
+    requestAnimationFrame(animate);
+    controls.update();
+    renderer.setClearColor(new THREE.Color(getThemeBg()));
+    renderer.render(scene,camera);
+  }
+  animate();
+
+  viewers[idx]={renderer,scene,camera,controls,destroy:()=>{active=false;renderer.dispose();}};
+}
+
+// Lazy loading: only create viewer when scrolled into view
+window.initLazyViewers=function(){
+  // Disconnect old observer
+  if(lazyObserver) lazyObserver.disconnect();
+
+  const models=window.MODELS_3D||[];
+  if(models.length===0)return;
+
+  lazyObserver=new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        const idx=parseInt(entry.target.dataset.modelIdx);
+        if(!isNaN(idx)&&models[idx]&&!viewers[idx]){
+          createViewer(idx,models[idx]);
+        }
+        lazyObserver.unobserve(entry.target);
+      }
+    });
+  },{rootMargin:'200px'}); // start loading 200px before visible
+
+  document.querySelectorAll('.viewer-item[data-model-idx]').forEach(el=>{
+    lazyObserver.observe(el);
+  });
+};
+
+// Legacy fallback
+window.initViewers=window.initLazyViewers;
+
+window._viewerResize=function(idx){
+  setTimeout(()=>{if(resizeFns[idx])resizeFns[idx]();},550);
+};
+
+window.addEventListener('resize',()=>{
+  Object.values(resizeFns).forEach(fn=>{if(fn)fn();});
+});
 </script>
 </body>
 </html>
