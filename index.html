@@ -211,7 +211,10 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content
 
 /* Featured strip */
 .photo-feat{padding:48px 0 44px;text-align:center}
-.photo-feat-track{display:flex;gap:14px;padding:0 44px 16px;overflow-x:auto;scrollbar-width:none}.photo-feat-track::-webkit-scrollbar{display:none}
+.photo-feat-track{display:flex;overflow:hidden;padding:20px 0 16px;scrollbar-width:none;-webkit-mask-image:linear-gradient(to right,transparent,#000 44px,#000 calc(100% - 44px),transparent);mask-image:linear-gradient(to right,transparent,#000 44px,#000 calc(100% - 44px),transparent)}.photo-feat-track::-webkit-scrollbar{display:none}
+.photo-feat-inner{display:flex;gap:14px;animation:featScroll var(--feat-dur,80s) linear infinite;padding:0 7px}
+.photo-feat-inner:hover{animation-play-state:paused}
+@keyframes featScroll{to{transform:translateX(-50%)}}
 .photo-feat-card{flex-shrink:0;height:280px;border-radius:16px;overflow:hidden;cursor:pointer;position:relative;box-shadow:0 16px 40px rgba(0,0,0,.14);transition:transform .4s,box-shadow .4s}
 .photo-feat-card:hover{transform:translateY(-8px) scale(1.03);box-shadow:0 28px 60px rgba(0,0,0,.22)}
 .photo-feat-card img{height:100%;width:auto;min-width:100%;display:block;object-fit:cover}
@@ -399,7 +402,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content
 
   <section class="photo-hero" id="photo-hero">
     <p class="hmeta">Boston, Massachusetts<br><span style="opacity:.6">Usurper Interactive</span></p>
-    <h1 class="hname">PHOTOGRAPHY<br>&amp; SPATIAL</h1>
+    <h1 class="hname">PHOTOGRAPHY</h1>
   </section>
 
   <!-- FEATURED -->
@@ -951,8 +954,8 @@ let currentMode='dev'; // 'dev' or 'photo'
   Files MUST be numbered starting from 0.
 */
 
-const FEATURED_PHOTO_COUNT = 6;   // photography/Featured/0.webp through 5.webp
-const ALL_WORKS_PHOTO_COUNT = 37; // photography/All Works/0.webp through 36.webp
+const FEATURED_PHOTO_COUNT = 7;   // photography/Featured/0.webp through 6.webp
+const ALL_WORKS_PHOTO_COUNT = 30; // photography/All Works/0.webp through 29.webp
 
 const MODELS_3D = [];
 // Auto-generate from count — all PLY files numbered 0.ply through 18.ply
@@ -964,11 +967,14 @@ window.MODELS_3D=MODELS_3D;
 
 const BASE_ROW_H=220, EXPAND_ROW_H=500;
 
-/* ── Render Featured Strip ── */
+/* ── Render Featured Strip (auto-scrolling) ── */
 function renderFeatured(){
   const track=document.getElementById('photo-feat-track');
   track.innerHTML='';
-  for(let i=0;i<FEATURED_PHOTO_COUNT;i++){
+  const inner=document.createElement('div');
+  inner.className='photo-feat-inner';
+
+  function makeCard(i){
     const card=document.createElement('div');
     card.className='photo-feat-card';
     const img=document.createElement('img');
@@ -978,8 +984,22 @@ function renderFeatured(){
     img.onerror=function(){card.remove();};
     card.appendChild(img);
     card.addEventListener('click',function(){openLightbox(img.src);});
-    track.appendChild(card);
+    return card;
   }
+
+  // First set
+  for(let i=0;i<FEATURED_PHOTO_COUNT;i++) inner.appendChild(makeCard(i));
+  // Duplicate set for seamless loop
+  for(let i=0;i<FEATURED_PHOTO_COUNT;i++) inner.appendChild(makeCard(i));
+
+  track.appendChild(inner);
+
+  // Adjust scroll speed based on content width (slower for fewer items)
+  requestAnimationFrame(()=>{
+    const totalW=inner.scrollWidth/2;
+    const dur=Math.max(totalW/20, 40); // ~20px/sec, minimum 40s
+    inner.style.setProperty('--feat-dur', dur+'s');
+  });
 }
 
 /* ── Render All Works Justified Grid ── */
