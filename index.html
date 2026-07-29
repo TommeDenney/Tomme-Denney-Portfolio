@@ -1425,7 +1425,7 @@
                 border-radius: 14px;
                 cursor: default
             }
-
+        /* EXTERNAL PROJECT SITE EMBED */
         .pv-more {
             padding: 0 0 80px
         }
@@ -1911,7 +1911,7 @@
         </div>
 
         <section class="hero" id="hero">
-            <p class="hmeta" id="hmeta">Boston, Massachusetts<br><span style="opacity:.6">Denney.t@northeastern.edu</span></p>
+            <p class="hmeta" id="hmeta">Boston, Massachusetts<br><span style="opacity:.6">denneytomme@gmail.com</span></p>
             <h1 class="hname" id="hname">TOMME DENNEY</h1>
             <div class="clayer" id="clayer">
                 <div class="hcard" id="hc0" onclick="openProject('seereality')">
@@ -2049,7 +2049,7 @@
 
         <section class="contact" id="sect-contact" style="scroll-margin-top:70px">
             <div class="cword">Contact</div>
-            <a class="ceml" href="mailto:Denney.t@northeastern.edu">Denney.t@northeastern.edu</a>
+            <a class="ceml" href="mailto:denneytomme@gmail.com">denneytomme@gmail.com</a>
             <a class="cphone" href="tel:+15042179782">504-217-9782</a>
             <ul class="csoc">
                 <li><a href="https://www.linkedin.com/in/tommedenney/" target="_blank">LinkedIn</a></li>
@@ -2102,7 +2102,7 @@
 
         <section class="contact" id="sect-photo-contact" style="scroll-margin-top:70px">
             <div class="cword">Contact</div>
-            <a class="ceml" href="mailto:Denney.t@northeastern.edu">Denney.t@northeastern.edu</a>
+            <a class="ceml" href="mailto:denneytomme@gmail.com">denneytomme@gmail.com</a>
             <a class="cphone" href="tel:+15042179782">504-217-9782</a>
             <ul class="csoc">
                 <li><a href="https://www.linkedin.com/in/tommedenney/" target="_blank">LinkedIn</a></li>
@@ -2358,6 +2358,24 @@
             },
         ];
         const PMAP = {}; PROJECTS.forEach(p => PMAP[p.id] = p);
+        const PROJECT_EXTERNAL_SITES = {
+            arworkofart: { url: 'https://tommedenney.itch.io/ar-work-of-art', label: 'View on Itch.io ↗' },
+            curse: { url: 'https://tommedenney.itch.io/curse-of-the-mind-demo', label: 'Download on Itch.io ↗' },
+            flora: { url: 'https://tommedenney.itch.io/flora-park-mystery', label: 'Download on Itch.io ↗' },
+            godsdrunkestdriver: { url: 'https://tommedenney.itch.io/gods-drunkest-driver', label: 'Download on Itch.io ↗' },
+            greatvendingmachine: { url: 'https://tommedenney.itch.io/great-vending-machine', label: 'View on Itch.io ↗' },
+            iamyou: { url: 'https://tommedenney.itch.io/i-am-you', label: 'Download on Itch.io ↗' },
+            internshipintheafterlife: { url: 'https://tommedenney.itch.io/internship-in-the-afterlife', label: 'Download on Itch.io ↗' },
+            haptidraw: { url: 'https://devpost.com/software/haptidraw', label: 'View on Devpost ↗' },
+            returnofthechickens: { url: 'https://tommedenney.itch.io/return-of-the-chickens-demo', label: 'Download on Itch.io ↗' },
+            soulsolace: { url: 'https://tommedenney.itch.io/soul-solace', label: 'Download on Itch.io ↗' },
+            otherrealm: { url: 'https://tommedenney.itch.io/the-other-realm', label: 'Play on Itch.io ↗' },
+            toweroffrankenfrog: { url: 'https://tommedenney.itch.io/tower-of-franken-frog', label: 'Download on Itch.io ↗' },
+            unforgottenstories: { url: 'https://tommedenney.itch.io/unforgotten-stories-the-partition', label: 'Play on Itch.io ↗' },
+            walk: { url: 'https://tommedenney.itch.io/walkamongus', label: 'Download on Itch.io ↗' },
+            wallace: { url: 'https://tommedenney.itch.io/wallace', label: 'Download on Itch.io ↗' },
+            bofum: { url: 'https://devpost.com/software/bofum', label: 'View on Devpost ↗' }
+        };
 
         /* HERO SPRING — square 180×180 cards */
         const HERO_IDS = ['seereality', 'genexr', 'bofum', 'greatvendingmachine'];
@@ -2546,27 +2564,9 @@
             paperOpen.href = p.paper || '#';
             presentationIframe.src = p.presentation ? p.presentation + '#view=FitH&page=1' : '';
             presentationOpen.href = p.presentation || '#';
-            // External link button
-            const EXT = {
-                'arworkofart': { url: 'https://tommedenney.itch.io/ar-work-of-art', label: 'View on Itch.io ↗' },
-                'curse': { url: 'https://tommedenney.itch.io/curse-of-the-mind-demo', label: 'Download on Itch.io ↗' },
-                'flora': { url: 'https://tommedenney.itch.io/flora-park-mystery', label: 'Download on Itch.io ↗' },
-                'godsdrunkestdriver': { url: 'https://tommedenney.itch.io/gods-drunkest-driver', label: 'Download on Itch.io ↗' },
-                'greatvendingmachine': { url: 'https://tommedenney.itch.io/great-vending-machine', label: 'View on Itch.io ↗' },
-                'iamyou': { url: 'https://tommedenney.itch.io/i-am-you', label: 'Download on Itch.io ↗' },
-                'internshipintheafterlife': { url: 'https://tommedenney.itch.io/internship-in-the-afterlife', label: 'Download on Itch.io ↗' },
-                'haptidraw': { url: 'https://devpost.com/software/haptidraw', label: 'View on Devpost ↗' },
-                'returnofthechickens': { url: 'https://tommedenney.itch.io/return-of-the-chickens-demo', label: 'Download on Itch.io ↗' },
-                'soulsolace': { url: 'https://tommedenney.itch.io/soul-solace', label: 'Download on Itch.io ↗' },
-                'otherrealm': { url: 'https://tommedenney.itch.io/the-other-realm', label: 'Play on Itch.io ↗' },
-                'toweroffrankenfrog': { url: 'https://tommedenney.itch.io/tower-of-franken-frog', label: 'Download on Itch.io ↗' },
-                'unforgottenstories': { url: 'https://tommedenney.itch.io/unforgotten-stories-the-partition', label: 'Play on Itch.io ↗' },
-                'walk': { url: 'https://tommedenney.itch.io/walkamongus', label: 'Download on Itch.io ↗' },
-                'wallace': { url: 'https://tommedenney.itch.io/wallace', label: 'Download on Itch.io ↗' },
-                'bofum': { url: 'https://devpost.com/software/bofum', label: 'View on Devpost ↗' },
-            };
+            // External project button
             const extWrap = document.getElementById('pv-ext-wrap');
-            const extData = EXT[id];
+            const extData = PROJECT_EXTERNAL_SITES[id];
             if (extData) {
                 extWrap.innerHTML = `<a class="pv-ext-btn" href="${extData.url}" target="_blank" rel="noopener">${extData.label}</a>`;
             } else {
