@@ -1247,6 +1247,149 @@
             border: none;
             display: block
         }
+        /* THESIS RESEARCH — full-width embedded documents */
+        .thesis-research {
+            padding: 72px 32px 80px;
+            scroll-margin-top: 70px
+        }
+
+        .thesis-research-inner {
+            width: min(1840px,calc(100vw - 64px));
+            margin: 0 auto
+        }
+
+        .thesis-research-head {
+            text-align: center;
+            margin-bottom: 42px
+        }
+
+        .thesis-research-grid {
+            display: grid;
+            grid-template-columns: minmax(0,1fr) minmax(0,1fr);
+            gap: 28px;
+            align-items: start
+        }
+
+        .pv-documents {
+            display: none;
+            width: calc(100vw - 64px);
+            max-width: 1840px;
+            margin: 46px 0 72px 50%;
+            transform: translateX(-50%)
+        }
+
+        .pv-documents-grid {
+            display: grid;
+            grid-template-columns: minmax(0,1fr) minmax(0,1fr);
+            gap: 28px;
+            align-items: start
+        }
+
+        .pv-document {
+            min-width: 0
+        }
+
+        .pv-paper-head {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 18px;
+            margin-bottom: 18px
+        }
+
+        .pv-paper-title {
+            font-family: 'Barlow Condensed',Impact,'Arial Narrow',sans-serif;
+            font-weight: 900;
+            font-size: clamp(34px,4vw,60px);
+            letter-spacing: -.015em;
+            text-transform: uppercase;
+            line-height: .95
+        }
+
+        .pv-paper-sub {
+            font-size: 13px;
+            color: var(--mt);
+            margin-top: 8px;
+            letter-spacing: .03em;
+            line-height: 1.5
+        }
+
+        .pv-paper-open {
+            flex-shrink: 0;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 11px 20px;
+            border-radius: 100px;
+            background: var(--text);
+            color: var(--bg);
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: .11em;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: opacity .2s,transform .2s
+        }
+
+            .pv-paper-open:hover {
+                opacity: .76;
+                transform: translateY(-2px)
+            }
+
+        .pv-paper-frame {
+            width: 100%;
+            height: min(82vh,940px);
+            min-height: 680px;
+            border: 1px solid var(--b);
+            border-radius: 18px;
+            background: #fff;
+            overflow: hidden;
+            box-shadow: 0 18px 50px rgba(0,0,0,.12)
+        }
+
+            .pv-paper-frame iframe {
+                width: 100%;
+                height: 100%;
+                border: 0;
+                display: block;
+                background: #fff
+            }
+
+        @media(max-width:1050px) {
+            .thesis-research-grid, .pv-documents-grid {
+                grid-template-columns: 1fr
+            }
+
+            .pv-paper-frame {
+                height: 76vh;
+                min-height: 560px
+            }
+        }
+
+        @media(max-width:700px) {
+            .thesis-research {
+                padding: 56px 18px 64px
+            }
+
+            .thesis-research-inner {
+                width: 100%
+            }
+
+            .pv-documents {
+                width: calc(100vw - 36px)
+            }
+
+            .pv-paper-head {
+                align-items: flex-start;
+                flex-direction: column
+            }
+
+            .pv-paper-frame {
+                height: 68vh;
+                min-height: 460px
+            }
+        }
+
         /* HORIZONTAL gallery → full-width masonry grid */
         .pv-gallery {
             columns: 3;
@@ -1781,7 +1924,7 @@
                     <div class="hcbg" style="background:linear-gradient(145deg,#0e0418,#2a0e48,#4a1888)"></div>
                     <div class="hcico">🧬</div>
                     <img class="hcimg" src="projects/genexr/1.png" alt="" onload="this.classList.add('ok')" onerror="imgFallback(this)">
-                    <div class="hclbl">Gene' XR</div>
+                    <div class="hclbl">Inhabiting Memory</div>
                 </div>
                 <div class="hcard" id="hc2" onclick="openProject('bofum')">
                     <div class="hcbg" style="background:linear-gradient(145deg,#040c04,#0e2810,#1a4a1e)"></div>
@@ -1857,6 +2000,42 @@
                     <img class="pwcard-img" src="projects/unforgottenstories/1.png" alt="" onload="this.classList.add('ok')" onerror="imgFallback(this)">
                     <div class="pwcard-overlay"><div class="pwcard-play">▶</div></div>
                     <div class="pwcard-lbl">Unforgotten Stories<div class="pwcard-sub">Narrative · Heritage</div></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- THESIS RESEARCH -->
+        <section class="thesis-research" id="sect-thesis-research">
+            <div class="thesis-research-inner">
+                <div class="thesis-research-head">
+                    <h2 class="sh">Thesis Research</h2>
+                    <p class="ss">Inhabiting Memory — master’s thesis and presentation</p>
+                </div>
+                <div class="thesis-research-grid">
+                    <article class="pv-document">
+                        <div class="pv-paper-head">
+                            <div>
+                                <h3 class="pv-paper-title">Research Paper</h3>
+                                <p class="pv-paper-sub">Read the complete Inhabiting Memory master’s thesis.</p>
+                            </div>
+                            <a class="pv-paper-open" href="projects/genexr/Inhabiting Memory.pdf" target="_blank" rel="noopener">Open PDF ↗</a>
+                        </div>
+                        <div class="pv-paper-frame">
+                            <iframe src="projects/genexr/Inhabiting Memory.pdf#view=FitH" title="Inhabiting Memory research paper" loading="lazy"></iframe>
+                        </div>
+                    </article>
+                    <article class="pv-document">
+                        <div class="pv-paper-head">
+                            <div>
+                                <h3 class="pv-paper-title">Presentation</h3>
+                                <p class="pv-paper-sub">Page through the complete thesis presentation deck.</p>
+                            </div>
+                            <a class="pv-paper-open" href="projects/genexr/Inhabiting Memory Presentation.pdf" target="_blank" rel="noopener">Open PDF ↗</a>
+                        </div>
+                        <div class="pv-paper-frame">
+                            <iframe src="projects/genexr/Inhabiting Memory Presentation.pdf#view=FitH" title="Inhabiting Memory presentation" loading="lazy"></iframe>
+                        </div>
+                    </article>
                 </div>
             </div>
         </section>
@@ -1989,6 +2168,38 @@
                 <iframe id="pv-game-iframe" src="" allowfullscreen allow="autoplay; fullscreen *; gamepad"></iframe>
             </div>
             <div class="pv-gallery" id="pv-gallery"></div>
+            <section class="pv-documents" id="pv-documents">
+                <div class="thesis-research-head">
+                    <h2 class="sh">Thesis Research</h2>
+                    <p class="ss">Inhabiting Memory — master’s thesis and presentation</p>
+                </div>
+                <div class="pv-documents-grid">
+                    <article class="pv-document" id="pv-paper">
+                        <div class="pv-paper-head">
+                            <div>
+                                <h2 class="pv-paper-title">Research Paper</h2>
+                                <p class="pv-paper-sub">Read the complete Inhabiting Memory master’s thesis.</p>
+                            </div>
+                            <a class="pv-paper-open" id="pv-paper-open" href="#" target="_blank" rel="noopener">Open PDF ↗</a>
+                        </div>
+                        <div class="pv-paper-frame">
+                            <iframe id="pv-paper-iframe" title="Inhabiting Memory research paper" loading="lazy"></iframe>
+                        </div>
+                    </article>
+                    <article class="pv-document" id="pv-presentation">
+                        <div class="pv-paper-head">
+                            <div>
+                                <h2 class="pv-paper-title">Presentation</h2>
+                                <p class="pv-paper-sub">Page through the complete thesis presentation deck.</p>
+                            </div>
+                            <a class="pv-paper-open" id="pv-presentation-open" href="#" target="_blank" rel="noopener">Open PDF ↗</a>
+                        </div>
+                        <div class="pv-paper-frame">
+                            <iframe id="pv-presentation-iframe" title="Inhabiting Memory presentation" loading="lazy"></iframe>
+                        </div>
+                    </article>
+                </div>
+            </section>
         </div>
         <div class="pv-more">
             <p class="pv-more-title">More Projects</p>
@@ -2017,11 +2228,14 @@
     <script>
         const PROJECTS = [
             {
-                id: 'genexr', name: "Gene' XR", cat: 'XR · Gaussian Splatting · 2026', cover: 'projects/genexr/1.png',
+                id: 'genexr', name: 'Inhabiting Memory', cat: 'Master’s Thesis · XR · Gaussian Splatting · 2026', cover: 'projects/genexr/1.png',
                 bg: 'linear-gradient(145deg,#0e0418,#2a0e48,#4a1888)', ico: '🧬',
                 tags: ['Meta Quest 3', 'PCVR', 'Gaussian Splatting', 'Unity C#', 'Hand Tracking', 'URP', 'HCI', 'Capstone'],
                 caption: 'Walk inside a family memory — photorealistic, spatial, and impossible.',
-                desc: 'A Meta Quest 3 PCVR experience for exploring photorealistic 3D reconstructions of family memories using Gaussian splatting. Built around an impossible cube centerpiece with a spatial family timeline, hand tracking menus, and custom URP shader pipelines. Northeastern University Capstone 2026.'
+                desc: 'Inhabiting Memory is a Meta Quest 3 PCVR thesis experience exploring how immersive technology can preserve and reinhabit personal memories through photorealistic Gaussian splatting. Built in Unity with a spatial family timeline, hand-tracking interactions, and custom URP rendering pipelines. Northeastern University M.S. in Extended Reality thesis, 2026.',
+                paper: 'projects/genexr/Inhabiting Memory.pdf',
+                presentation: 'projects/genexr/Inhabiting Memory Presentation.pdf',
+                galleryImages: false
             },
             {
                 id: 'seereality', name: 'See Reality', cat: 'XR Studio · Client Work · 2024–Present', cover: 'projects/seereality/0.png',
@@ -2190,7 +2404,7 @@
             // update active nav link based on scroll position
             const mid = window.scrollY + 80;
             let active = 'hero';
-            ['hero', 'info', 'sect-featured', 'sect-play', 'sect-projects', 'sect-contact'].forEach(id => {
+            ['hero', 'info', 'sect-featured', 'sect-play', 'sect-thesis-research', 'sect-projects', 'sect-contact'].forEach(id => {
                 const el = document.getElementById(id); if (el && el.offsetTop <= mid) active = id;
             });
             document.querySelectorAll('.navr a').forEach(a => {
@@ -2224,7 +2438,7 @@
 
         /* FEATURED */
         const fcards = Array.from(document.querySelectorAll('.fc'));
-        const FEAT_LABELS = ["See Reality", "Gene' XR", "Unforgotten Stories", "Great Vending Machine"];
+        const FEAT_LABELS = ["See Reality", "Inhabiting Memory", "Unforgotten Stories", "Great Vending Machine"];
         let fi = 0, autoT;
         function renderFeat() {
             const n = fcards.length;
@@ -2299,6 +2513,9 @@
                 normalProjectSections.forEach(el => { if (el) el.style.display = 'none'; });
                 seeRealityEmbed.style.display = 'block';
                 seeRealityIframe.src = 'https://www.seereality.world/';
+                document.getElementById('pv-paper-iframe').src = '';
+                document.getElementById('pv-presentation-iframe').src = '';
+                document.getElementById('pv-documents').style.display = 'none';
                 return;
             }
 
@@ -2312,6 +2529,23 @@
             document.getElementById('pv-tags').innerHTML = p.tags.map(t => `<span class="pv-tag">${t}</span>`).join('');
             document.getElementById('pv-caption').textContent = p.caption || '';
             document.getElementById('pv-desc').textContent = p.desc;
+            // Optional thesis paper and presentation embeds
+            const documentsSection = document.getElementById('pv-documents');
+            const paperSection = document.getElementById('pv-paper');
+            const paperIframe = document.getElementById('pv-paper-iframe');
+            const paperOpen = document.getElementById('pv-paper-open');
+            const presentationSection = document.getElementById('pv-presentation');
+            const presentationIframe = document.getElementById('pv-presentation-iframe');
+            const presentationOpen = document.getElementById('pv-presentation-open');
+
+            paperSection.style.display = p.paper ? 'block' : 'none';
+            presentationSection.style.display = p.presentation ? 'block' : 'none';
+            documentsSection.style.display = (p.paper || p.presentation) ? 'block' : 'none';
+
+            paperIframe.src = p.paper ? p.paper + '#view=FitH' : '';
+            paperOpen.href = p.paper || '#';
+            presentationIframe.src = p.presentation ? p.presentation + '#view=FitH&page=1' : '';
+            presentationOpen.href = p.presentation || '#';
             // External link button
             const EXT = {
                 'arworkofart': { url: 'https://tommedenney.itch.io/ar-work-of-art', label: 'View on Itch.io ↗' },
@@ -2422,8 +2656,8 @@
             vt.onerror = () => vidContainer.remove();
             vt.src = videoSrc; vt.load();
 
-            // Image items in order
-            for (let n = 0; n <= 12; n++) {
+            // Image items in order (projects can disable still-image galleries)
+            if (p.galleryImages !== false) for (let n = 0; n <= 12; n++) {
                 const cont = document.createElement('div'); cont.className = 'pv-gallery-item'; cont.style.display = 'none';
                 gal.appendChild(cont);
                 (function (container, num) {
