@@ -1,0 +1,59 @@
+---
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import HomeView from '../components/HomeView.astro';
+import PhotoView from '../components/PhotoView.astro';
+import ProjectView from '../components/ProjectView.astro';
+import Overlays from '../components/Overlays.astro';
+
+import siteScript from '../scripts/site.js?raw';
+import {
+    PROJECTS, PROJECT_EXTERNAL_SITES, PROJECT_EMBEDS,
+    HERO_IDS, FEATURED_IDS,
+} from '../data/projects';
+import {
+    FEATURED_PHOTO_COUNT, ALL_WORKS_PHOTO_COUNT,
+    BASE_ROW_H, EXPAND_ROW_H, MODELS_3D,
+} from '../data/photography';
+import { ASSET_BASE, OFFLOADED_ASSETS } from '../lib/assets';
+
+/**
+ * One payload, so the markup Astro rendered and the script that manipulates it
+ * are reading the same objects. Serialised into the page rather than fetched:
+ * it is a couple of kilobytes and the script needs it before first paint.
+ */
+const SITE_DATA = {
+    projects: PROJECTS,
+    externalSites: PROJECT_EXTERNAL_SITES,
+    embeds: PROJECT_EMBEDS,
+    heroIds: HERO_IDS,
+    featuredIds: FEATURED_IDS,
+    featuredPhotoCount: FEATURED_PHOTO_COUNT,
+    allWorksPhotoCount: ALL_WORKS_PHOTO_COUNT,
+    baseRowH: BASE_ROW_H,
+    expandRowH: EXPAND_ROW_H,
+    models3d: MODELS_3D,
+    assetBase: ASSET_BASE,
+    offloaded: OFFLOADED_ASSETS,
+};
+
+// is:inline, and the data prepended by hand rather than through define:vars,
+// because this has to stay a classic global-scope script: the markup calls
+// openProject, switchMode, setTheme and the rest from inline attributes.
+const inlineScript = `const SITE_DATA = ${JSON.stringify(SITE_DATA)};\n${siteScript}`;
+---
+
+<Base>
+    <Nav />
+    <HomeView />
+    <PhotoView />
+    <Overlays />
+    <ProjectView />
+
+    <script is:inline set:html={inlineScript} />
+    <script>
+        // Bundled, deferred and code-split: three.js is only fetched if a 3D
+        // tile actually scrolls into view.
+        import '../scripts/viewer3d.js';
+    </script>
+</Base>

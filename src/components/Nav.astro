@@ -1,0 +1,25 @@
+---
+/**
+ * The nav is rewritten in place by updateDevNav/updatePhotoNav when the mode
+ * changes, so what is rendered here is the dev list — the state the page loads
+ * in. The markup must match what those functions produce, or the first switch
+ * back would silently change the bar.
+ */
+---
+<nav id="nav">
+    <span class="logo" onclick="goHome()">Tomme Denney</span>
+    <button class="back-btn" id="back-btn" onclick="goHome()">
+        <svg width="16" height="12" viewBox="0 0 16 12" fill="none"
+            ><path d="M15 6H1M1 6L6 1M1 6L6 11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg
+        >
+        All Work
+    </button>
+    <ul class="navr" id="main-nav">
+        <li><a href="#hero" id="nw" class="on" onclick="smoothTo('hero')">Info</a></li>
+        <li><a href="#sect-featured" onclick="smoothTo('sect-featured')">Featured</a></li>
+        <li><a href="#sect-play" onclick="smoothTo('sect-play')">Play</a></li>
+        <li><a href="#sect-projects" onclick="smoothTo('sect-projects')">Projects</a></li>
+        <li><a href="#" onclick="switchMode('photo');return false;" id="nav-photo-link">Photography</a></li>
+        <li><a href="#sect-contact" onclick="smoothTo('sect-contact')">Contact</a></li>
+    </ul>
+</nav>

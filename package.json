@@ -1,0 +1,25 @@
+{
+  "name": "tomme-denney-portfolio",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Portfolio site for Tomme Denney — XR development and photography.",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "deploy": "astro build && wrangler pages deploy dist --project-name=tommedenney --branch=main",
+    "assets:push": "node scripts/push-assets.mjs"
+  },
+  "dependencies": {
+    "astro": "^5.0.0",
+    "three": "^0.160.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.0.0",
+    "tailwindcss": "^4.0.0",
+    "@aws-sdk/client-s3": "^3.700.0",
+    "wrangler": "^4.0.0"
+  }
+}

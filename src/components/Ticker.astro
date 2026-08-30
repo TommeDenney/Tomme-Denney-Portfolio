@@ -1,0 +1,19 @@
+---
+/**
+ * The scrolling strip under the nav. The list is rendered twice because the
+ * CSS animation translates by exactly half the track — one copy would snap
+ * back visibly at the wrap.
+ */
+interface Props {
+    items: string[];
+    class?: string;
+}
+const { items, class: className = '' } = Astro.props;
+---
+<div style="padding-top:68px">
+    <div class:list={['ticker', className]}>
+        <div class="tickin">
+            {[0, 1].map(() => items.map((item) => (<><span>{item}</span><span class="dot">·</span></>)))}
+        </div>
+    </div>
+</div>

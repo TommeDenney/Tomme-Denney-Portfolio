@@ -1,0 +1,48 @@
+---
+import Ticker from './Ticker.astro';
+import Contact from './Contact.astro';
+import { SHOW_3D_SECTION } from '../data/photography';
+
+const TICKER = [
+    'Real Estate Photography', 'Gaussian Splatting', 'Photogrammetry',
+    'Matterport', 'Insta360 X4', 'Sony A7 III', 'Usurper Interactive',
+    'Spatial Capture', '3D Reconstruction', 'Architecture', 'Interiors',
+];
+---
+
+{/* Hidden until switchMode('photo'); the tiles inside are built at that point,
+    so nothing here decodes an image for a mode the visitor never opens. */}
+<div id="photo-view">
+    <Ticker items={TICKER} class="photo-ticker" />
+
+    <section class="photo-hero" id="photo-hero">
+        <p class="hmeta">Boston, Massachusetts<br /><span style="opacity:.6">Usurper Interactive</span></p>
+        <h1 class="hname">PHOTOGRAPHY</h1>
+    </section>
+
+    <section class="photo-feat" id="sect-photo-featured" style="scroll-margin-top:70px">
+        <h2 class="sh">Featured</h2>
+        <p class="ss">Recent shoots and captures</p>
+        <div class="photo-feat-track" id="photo-feat-track"></div>
+    </section>
+
+    <section class="photo-grid-section" id="sect-photo-all" style="scroll-margin-top:70px">
+        <h2 class="sh">All Works</h2>
+        <p class="ss">Every shot, every angle</p>
+        <div class="photo-grid" id="photo-grid"></div>
+    </section>
+
+    {SHOW_3D_SECTION ? (
+        <section class="photo-3d" id="sect-photo-3d" style="scroll-margin-top:70px">
+            <h2 class="sh">3D &amp; Spatial</h2>
+            <p class="ss">Gaussian splats, photogrammetry, and 3D scans</p>
+            <div class="photo-3d-grid" id="photo-3d-grid"></div>
+        </section>
+    ) : (
+        <section class="photo-3d" id="sect-photo-3d" style="scroll-margin-top:70px">
+            <h2 class="sh">3D &amp; Spatial Reconstruction Coming Soon!</h2>
+        </section>
+    )}
+
+    <Contact id="sect-photo-contact" />
+</div>

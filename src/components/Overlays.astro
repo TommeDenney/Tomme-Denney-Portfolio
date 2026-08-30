@@ -1,0 +1,31 @@
+---
+/**
+ * The chrome that sits above every mode: the custom cursor, the dev/photo
+ * switch, the lightbox and the palette picker.
+ */
+---
+{/* Two elements, not one: #cur tracks the pointer exactly while #ring eases
+    toward it, which is what produces the trailing ring. */}
+<div id="cur"></div><div id="ring"></div>
+
+<div id="mode-switch">
+    <div class="mode-opt active" id="mode-dev" onclick="switchMode('dev')">XR / Dev</div>
+    <div class="mode-opt" id="mode-photo" onclick="switchMode('photo')">Photography</div>
+</div>
+
+<div id="lightbox">
+    <div id="lb-ov" onclick="closeLightbox()"></div>
+    <img id="lb-img" src="" alt="" />
+    <button id="lb-close" onclick="closeLightbox()">✕</button>
+</div>
+
+<div id="pal">
+    <div class="swatches" id="sw">
+        <div class="sw on" onclick="setTheme('',this)"><span>Warm</span><div class="sdot" style="background:#f2ede3"></div></div>
+        <div class="sw" onclick="setTheme('white',this)"><span>White</span><div class="sdot" style="background:#f7f7f5"></div></div>
+        <div class="sw" onclick="setTheme('sage',this)"><span>Sage</span><div class="sdot" style="background:#e8ede5"></div></div>
+        <div class="sw" onclick="setTheme('dark',this)"><span>Dark</span><div class="sdot" style="background:#0e0e0e"></div></div>
+        <div class="sw" onclick="setTheme('night',this)"><span>Night</span><div class="sdot" style="background:#07070e"></div></div>
+    </div>
+    <button id="pbtn" onclick="togglePal()">🎨</button>
+</div>

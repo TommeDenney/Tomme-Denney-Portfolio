@@ -1,0 +1,109 @@
+---
+/**
+ * The project detail page.
+ *
+ * It is one reusable shell that openProject() fills in, not a page per project
+ * — which is why it is markup with empty slots rather than a route. Every id
+ * here is read by that function.
+ */
+---
+<div id="project-view">
+    {/* See Reality is a live site rather than a case study, so it replaces the
+        whole detail layout instead of appearing inside it. */}
+    <div id="see-reality-embed">
+        <iframe
+            id="see-reality-iframe"
+            title="See Reality website"
+            loading="eager"
+            allow="fullscreen; autoplay; clipboard-write"
+            referrerpolicy="strict-origin-when-cross-origin"></iframe>
+        <div id="see-reality-fallback">
+            <div>
+                <h2 class="sh">See Reality</h2>
+                <p class="ss">The website could not be displayed inside this page.</p>
+                <a href="https://www.seereality.world/" target="_blank" rel="noopener">Open See Reality ↗</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="pv-hero" id="pv-hero">
+        <div class="pv-hero-bg" id="pv-hero-bg"></div>
+        <img class="pv-hero-media" id="pv-hero-img" alt="" style="display:none" onload="this.style.display='block'" onerror="this.style.display='none'" />
+        <video class="pv-hero-media" id="pv-hero-vid" autoplay muted loop playsinline style="display:none"></video>
+        <div class="pv-pause-hint" id="pv-pause-hint">⏸</div>
+        <div class="pv-hero-grad"></div>
+        <div class="pv-hero-controls" id="pv-hero-controls">
+            <button class="pv-ctrl-btn" id="pv-sound-btn" onclick="toggleHeroSound(event)">🔇 Sound Off</button>
+        </div>
+        <div class="pv-hero-info">
+            <p class="pv-cat" id="pv-cat"></p>
+            <h1 class="pv-title" id="pv-title"></h1>
+            <div class="pv-tags" id="pv-tags"></div>
+            <p class="pv-caption" id="pv-caption"></p>
+        </div>
+    </div>
+
+    <div class="pv-body">
+        <p class="pv-desc" id="pv-desc"></p>
+        <div id="pv-ext-wrap"></div>
+        {/* The original repeated this anchor twice with the same id; only the
+            first was ever reachable by getElementById. */}
+        <a class="pv-dl-btn" id="pv-dl-btn" href="#" target="_blank" rel="noopener" style="display:none">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
+                ><path d="M8 1v9M8 10l-3-3M8 10l3-3M2 13h12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg
+            >
+            <span id="pv-dl-label">Download</span>
+        </a>
+
+        <div class="pv-game-wrap" id="pv-game-wrap" style="display:none">
+            <div class="pv-game-bar">
+                <span>Play in Browser</span>
+                <div class="pv-game-bar-btns">
+                    <a class="pv-game-itchio" id="pv-itch-btn" href="#" target="_blank" rel="noopener">Itch.io ↗</a>
+                    <button class="pv-game-fs" onclick="document.getElementById('pv-game-iframe').requestFullscreen()">⛶ Fullscreen</button>
+                </div>
+            </div>
+            <iframe id="pv-game-iframe" src="" allowfullscreen allow="autoplay; fullscreen *; gamepad"></iframe>
+        </div>
+
+        <div class="pv-gallery" id="pv-gallery"></div>
+
+        <section class="pv-documents" id="pv-documents">
+            <div class="thesis-research-head">
+                <h2 class="sh">Thesis Research</h2>
+                <p class="ss">Inhabiting Memory — master’s thesis and presentation</p>
+            </div>
+            <div class="pv-documents-grid">
+                <article class="pv-document" id="pv-paper">
+                    <div class="pv-paper-head">
+                        <div>
+                            <h2 class="pv-paper-title">Research Paper</h2>
+                            <p class="pv-paper-sub">Read the complete Inhabiting Memory master’s thesis.</p>
+                        </div>
+                        <a class="pv-paper-open" id="pv-paper-open" href="#" target="_blank" rel="noopener">Open PDF ↗</a>
+                    </div>
+                    <div class="pv-paper-frame">
+                        <iframe id="pv-paper-iframe" title="Inhabiting Memory research paper" loading="lazy"></iframe>
+                    </div>
+                </article>
+                <article class="pv-document" id="pv-presentation">
+                    <div class="pv-paper-head">
+                        <div>
+                            <h2 class="pv-paper-title">Presentation</h2>
+                            <p class="pv-paper-sub">Page through the complete thesis presentation deck.</p>
+                        </div>
+                        <a class="pv-paper-open" id="pv-presentation-open" href="#" target="_blank" rel="noopener">Open PDF ↗</a>
+                    </div>
+                    <div class="pv-paper-frame">
+                        <iframe id="pv-presentation-iframe" title="Inhabiting Memory presentation" loading="lazy"></iframe>
+                    </div>
+                </article>
+            </div>
+        </section>
+    </div>
+
+    <div class="pv-more">
+        <p class="pv-more-title">More Projects</p>
+        <div class="pv-more-track" id="pv-more-track"></div>
+    </div>
+</div>

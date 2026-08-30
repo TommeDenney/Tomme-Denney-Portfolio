@@ -1,0 +1,49 @@
+---
+/**
+ * The page shell.
+ *
+ * head.js has to be inline and in the head: the markup calls imgFallback and
+ * smoothTo from inline attributes, and every card image's onerror fires during
+ * parse. A deferred module would be too late and, being module-scoped, invisible
+ * to those attributes anyway.
+ */
+import headScript from '../scripts/head.js?raw';
+import '../styles/global.css';
+
+interface Props {
+    title?: string;
+    description?: string;
+}
+
+const {
+    title = 'Tomme Denney',
+    description = 'XR developer and photographer in Boston, Massachusetts. Extended reality, Gaussian splatting, and game design.',
+} = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <title>{title}</title>
+        <meta name="description" content={description} />
+        <link rel="canonical" href={Astro.site} />
+
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Barlow:wght@400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
+
+        <script is:inline set:html={headScript} />
+    </head>
+    <body>
+        <slot />
+    </body>
+</html>

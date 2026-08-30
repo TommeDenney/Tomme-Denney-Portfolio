@@ -1,0 +1,129 @@
+---
+import Ticker from './Ticker.astro';
+import Contact from './Contact.astro';
+import { PROJECTS, PMAP, HERO_IDS, FEATURED_IDS, PLAY_WEB } from '../data/projects';
+
+const TICKER = [
+    'XR Development', 'Gaussian Splatting', 'Meta Quest 3', 'Unity C#',
+    'Hand Tracking', 'Spatial Design', 'iOS Swift', 'HCI Research',
+    'See Reality', "Northeastern MS '26", 'Usurper Interactive',
+    'Game Design', 'Narrative XR',
+];
+
+const hero = HERO_IDS.map((id) => PMAP[id]);
+const featured = FEATURED_IDS.map((id) => PMAP[id]);
+const play = PLAY_WEB.map((entry) => ({ ...PMAP[entry.id], sub: entry.sub }));
+
+const thesis = PMAP.genexr;
+---
+
+<div id="home-view">
+    <Ticker items={TICKER} />
+
+    <section class="hero" id="hero">
+        <p class="hmeta" id="hmeta">
+            Boston, Massachusetts<br /><span style="opacity:.6">denneytomme@gmail.com</span>
+        </p>
+        <h1 class="hname" id="hname">TOMME DENNEY</h1>
+        <div class="clayer" id="clayer">
+            {hero.map((p, i) => (
+                <div class="hcard" id={`hc${i}`} onclick={`openProject('${p.id}')`}>
+                    <div class="hcbg" style={`background:${p.bg}`}></div>
+                    <div class="hcico">{p.ico}</div>
+                    <img class="hcimg" src={p.cover} alt="" onload="this.classList.add('ok')" onerror="imgFallback(this)" />
+                    <div class="hclbl">{p.name}</div>
+                </div>
+            ))}
+        </div>
+    </section>
+
+    <section class="featured" id="sect-featured" style="scroll-margin-top:70px">
+        <h2 class="sh">Featured Work</h2>
+        <p class="ss">Select recent and notable projects</p>
+        <div class="fcar" id="fcar">
+            {featured.map((p) => (
+                <div class="fc" data-id={p.id}>
+                    <div class="fcbg" style={`background:${p.bg}`}></div>
+                    <div class="fcico">{p.ico}</div>
+                    <img class="fcimg" src={p.cover} alt="" onload="this.classList.add('ok')" onerror="imgFallback(this)" />
+                </div>
+            ))}
+        </div>
+        <div style="text-align:center;margin-top:14px">
+            <span class="flabel" id="flbl" onclick="openProjectFromFeat()">{featured[0].name}</span>
+        </div>
+    </section>
+
+    <section class="playweb" id="sect-play" style="scroll-margin-top:70px">
+        <h2 class="sh">Play Now on Web</h2>
+        <p class="ss">Try these right in your browser</p>
+        <div class="pwtrack">
+            {play.map((p) => (
+                <div class="pwcard" onclick={`openProject('${p.id}')`}>
+                    <div class="pwcard-bg" style={`background:${p.bg}`}></div>
+                    <div class="pwcard-ico">{p.ico}</div>
+                    <img class="pwcard-img" src={p.cover} alt="" onload="this.classList.add('ok')" onerror="imgFallback(this)" />
+                    <div class="pwcard-overlay"><div class="pwcard-play">▶</div></div>
+                    <div class="pwcard-lbl">{p.name}<div class="pwcard-sub">{p.sub}</div></div>
+                </div>
+            ))}
+        </div>
+    </section>
+
+    <section class="thesis-research" id="sect-thesis-research">
+        <div class="thesis-research-inner">
+            <div class="thesis-research-head">
+                <h2 class="sh">Thesis Research</h2>
+                <p class="ss">Inhabiting Memory — master’s thesis and presentation</p>
+            </div>
+            <div class="thesis-research-grid">
+                <article class="pv-document">
+                    <div class="pv-paper-head">
+                        <div>
+                            <h3 class="pv-paper-title">Research Paper</h3>
+                            <p class="pv-paper-sub">Read the complete Inhabiting Memory master’s thesis.</p>
+                        </div>
+                        <a class="pv-paper-open" href={thesis.paper} target="_blank" rel="noopener">Open PDF ↗</a>
+                    </div>
+                    <div class="pv-paper-frame">
+                        <iframe src={`${thesis.paper}#view=FitH`} title="Inhabiting Memory research paper" loading="lazy"></iframe>
+                    </div>
+                </article>
+                <article class="pv-document">
+                    <div class="pv-paper-head">
+                        <div>
+                            <h3 class="pv-paper-title">Presentation</h3>
+                            <p class="pv-paper-sub">Page through the complete thesis presentation deck.</p>
+                        </div>
+                        <a class="pv-paper-open" href={thesis.presentation} target="_blank" rel="noopener">Open PDF ↗</a>
+                    </div>
+                    <div class="pv-paper-frame">
+                        <iframe src={`${thesis.presentation}#view=FitH`} title="Inhabiting Memory presentation" loading="lazy"></iframe>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <section class="more" id="sect-projects" style="scroll-margin-top:70px">
+        <h2 class="sh">All Projects</h2>
+        <p class="ss">Every build, in order</p>
+        {/* Rendered here rather than built in JS, so the full list is in the
+            HTML for crawlers and there is no empty grid on first paint. The
+            script only attaches the click and reveal behaviour. */}
+        <div class="wgrid" id="wgrid">
+            {PROJECTS.map((p) => (
+                <div class="wc" data-id={p.id}>
+                    <div class="wcin">
+                        <div class="wcbg" style={`background:${p.bg}`}></div>
+                        <img class="wcimg" src={p.cover} alt={p.name} onload="this.classList.add('ok')" onerror="imgFallback(this)" />
+                        <div class="wcico">{p.ico}</div>
+                        <div class="wct">{p.name}</div>
+                    </div>
+                </div>
+            ))}
+        </div>
+    </section>
+
+    <Contact id="sect-contact" />
+</div>
