@@ -13,9 +13,19 @@ pixel. What changed is the structure around it.
 
 | | |
 |---|---|
-| Site | **https://tommedenney.pages.dev** (Cloudflare Pages, project `tommedenney`) |
+| Site | **https://tommedenney.com** (and `www.`) |
+| Pages preview | `https://tommedenney.pages.dev` — same deployment, useful before DNS |
 | Assets | `https://pub-79a19cf8cac944149fa1ef5d044ae792.r2.dev` (R2 `tommedenney-portfolio`) |
-| Intended domain | `tommedenney.com` — still pointing at GitHub Pages, see below |
+
+Both names are proxied CNAMEs to the Pages project. A CNAME at the apex works
+because Cloudflare flattens it, which is also why the record must stay
+**proxied** — an unproxied apex CNAME is not something Cloudflare can serve.
+
+**GitHub is version control only.** Nothing in the publish path touches it.
+The three WebGL games embedded on project pages *are* still served from
+separate GitHub Pages repos (`GVMHost`, `UnforgottenStoriesWebGLHost`,
+`WallaceWebGLHost`) — those are unrelated to this site's hosting, but turning
+GitHub Pages off for them would empty those three embeds.
 
 ## Deploying
 
@@ -50,6 +60,21 @@ npm run assets:push              # upload what is missing
 node scripts/push-assets.mjs --dry-run
 ```
 
+## DNS
+
+```bash
+node scripts/point-dns.mjs --dry-run
+node scripts/point-dns.mjs
+```
+
+Deletes whatever sits on the apex and `www` and replaces both with a proxied
+CNAME to the Pages project. Run once, on 2026-08-30, to take the domain off
+GitHub Pages; kept because it documents the intended shape of the zone and
+converges rather than churning — a record already correct is left alone.
+
+Needs `CLOUDFLARE_API_TOKEN` with Zone > DNS > Edit. Wrangler's own login
+cannot do this: it reads zones but not records.
+
 Uploads use the S3 API in 5 MiB parts, each retried separately, and resume from
 the parts already stored. This is not the same flakiness as the Pages deploy but
 it has the same cause, and a single 63 MB PUT has no way to recover from one
@@ -63,10 +88,6 @@ dropped connection.
   needed; then `npm run assets:push` finishes it. Until then the four project
   hero videos fall back to their cover images, which the viewer already does on
   video error, and the `.ply` scans are unreferenced anyway.
-- **`tommedenney.com` still resolves to GitHub Pages** (`185.199.108–111.153`).
-  The nameservers are already Cloudflare's, so this is a record change in the
-  dashboard, not a migration. The local wrangler token can read DNS but not
-  write it.
 - **The r2.dev address is a staging one** and is rate-limited by Cloudflare. Put
   the bucket behind a custom domain and set `PUBLIC_ASSET_BASE`; nothing else
   needs to change.
