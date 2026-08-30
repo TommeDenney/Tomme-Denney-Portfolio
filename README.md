@@ -78,16 +78,26 @@ cannot do this: it reads zones but not records.
 Uploads use the S3 API in 5 MiB parts, each retried separately, and resume from
 the parts already stored. This is not the same flakiness as the Pages deploy but
 it has the same cause, and a single 63 MB PUT has no way to recover from one
-dropped connection.
+dropped connection. All 23 objects went up on 2026-08-30 and were verified
+byte-exact over the public URL; the run needed several per-part retries and
+lost nothing, which is the design working.
+
+**R2 S3 tokens are scoped per bucket.** The Recollection token will not reach
+this bucket and vice versa — a 403 here means the wrong token, not a wrong key.
 
 ## What is not done
 
-- **`assets-r2/` has not been uploaded.** The R2 S3 token in `.env` was carried
-  over from the Recollection project and is scoped to that bucket — it returns
-  403 here. A token with Object Read & Write on `tommedenney-portfolio` is
-  needed; then `npm run assets:push` finishes it. Until then the four project
-  hero videos fall back to their cover images, which the viewer already does on
-  video error, and the `.ply` scans are unreferenced anyway.
+- **The 3D & Spatial section is still off.** `SHOW_3D_SECTION` in
+  `src/data/photography.ts` is `false` and the section renders a "Coming Soon"
+  heading, which is how the original shipped. The nineteen scans are now in R2
+  and the three.js viewer is wired up, so flipping that flag is the whole
+  switch — but each scan is 63 MB, so consider what nineteen lazy-loading
+  viewers cost a visitor before turning it on.
+- **A hero video can be overwritten by a previous one** if you open two
+  projects within a couple of seconds while a large video is still loading:
+  `openProject` sets the source from a `canplaythrough` handler that is not
+  cancelled when you navigate away. Pre-existing, carried over unchanged, and
+  it needs deliberately fast clicking to see.
 - **The r2.dev address is a staging one** and is rate-limited by Cloudflare. Put
   the bucket behind a custom domain and set `PUBLIC_ASSET_BASE`; nothing else
   needs to change.
