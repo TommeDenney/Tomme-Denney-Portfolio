@@ -239,49 +239,47 @@ const description = p.caption ?? `${p.desc.slice(0, 175).trimEnd()}…`;
                 </section>
             )}
 
-            <section class="cs-body">
-                <div class="band-grid">
-                    <p class="label band-label">{Content ? 'Case study' : 'Overview'}</p>
-                    <div>
-                        {Content ? <Content /> : <div class="prose"><p>{p.desc}</p></div>}
+            {/* Prose left, evidence in a rail on the right. Stacked, the page
+                was as tall as the writing plus the pictures; side by side it is
+                as tall as whichever is taller, and the figures are in view
+                while the argument they support is being read. The rail
+                collapses under the prose on narrow screens, and the whole
+                thing falls back to one column when a case study has no
+                evidence yet. */}
+            <section class={slots.length > 0 ? 'cs-body cs-split' : 'cs-body'}>
+                <div class="cs-main">
+                    <p class="label" style="margin-bottom:22px">{Content ? 'Case study' : 'Overview'}</p>
+                    {Content ? <Content /> : <div class="prose"><p>{p.desc}</p></div>}
 
-                        {(ext || p.dl) && (
-                            <p class="stack" style="margin-top:44px">
-                                {ext && <a class="btn" href={ext.url} target="_blank" rel="noopener">{ext.label}</a>}
-                                {p.dl && (
-                                    <a class="btn" href={assetUrl(p.dl)} target="_blank" rel="noopener">{p.dlLabel ?? 'Download'}</a>
-                                )}
-                            </p>
-                        )}
-                    </div>
+                    {(ext || p.dl) && (
+                        <p class="stack" style="margin-top:44px">
+                            {ext && <a class="btn" href={ext.url} target="_blank" rel="noopener">{ext.label}</a>}
+                            {p.dl && (
+                                <a class="btn" href={assetUrl(p.dl)} target="_blank" rel="noopener">{p.dlLabel ?? 'Download'}</a>
+                            )}
+                        </p>
+                    )}
                 </div>
-            </section>
 
-            {slots.length > 0 && (
-                <section class="band" aria-labelledby="ev-h">
-                    <div class="band-grid">
-                        <p class="label band-label" id="ev-h">Evidence</p>
-                        <div>
-                            {slots.map((s) => (
-                                <figure class="fig">
-                                    {s.isVideo ? (
-                                        <video src={s.url} poster={s.posterUrl} controls muted loop playsinline preload="none"></video>
-                                    ) : (
-                                        <img src={s.url} alt={s.caption} loading="lazy" decoding="async" />
-                                    )}
-                                    <figcaption>
-                                        <span class="label">Proves</span>
-                                        <span>
-                                            {s.caption}
-                                            <span class="fig-proves" style="display:block;margin-top:4px">{s.proves}</span>
-                                        </span>
-                                    </figcaption>
-                                </figure>
-                            ))}
-                        </div>
-                    </div>
-                </section>
-            )}
+                {slots.length > 0 && (
+                    <aside class="cs-side" aria-labelledby="ev-h">
+                        <p class="label" id="ev-h" style="margin-bottom:22px">Evidence</p>
+                        {slots.map((s) => (
+                            <figure class="fig fig-rail">
+                                {s.isVideo ? (
+                                    <video src={s.url} poster={s.posterUrl} controls muted loop playsinline preload="none"></video>
+                                ) : (
+                                    <img src={s.url} alt={s.caption} loading="lazy" decoding="async" />
+                                )}
+                                <figcaption>
+                                    {s.caption}
+                                    <span class="fig-proves">{s.proves}</span>
+                                </figcaption>
+                            </figure>
+                        ))}
+                    </aside>
+                )}
+            </section>
 
             {embed && (
                 <section class="band" aria-labelledby="play-h">

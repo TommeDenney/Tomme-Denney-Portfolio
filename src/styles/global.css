@@ -655,24 +655,70 @@ h3.display {
 }
 
 .fig figcaption {
-    display: grid;
-    grid-template-columns: 168px minmax(0, 1fr);
-    gap: 48px;
-    margin-top: 16px;
-    padding-top: 14px;
+    margin-top: 14px;
+    padding-top: 12px;
     border-top: 1px solid var(--rule);
     font-size: 14px;
     line-height: 1.55;
 }
 
 .fig-proves {
+    display: block;
+    margin-top: 5px;
     color: var(--mt);
 }
 
-@media (max-width: 900px) {
-    .fig figcaption {
+.fig-proves {
+    color: var(--mt);
+}
+
+/* ── PROSE + EVIDENCE RAIL ───────────────────────────────────────────────── */
+
+.cs-split {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 400px);
+    gap: clamp(32px, 5vw, 76px);
+    align-items: start;
+}
+
+.cs-main {
+    min-width: 0;
+}
+
+/* Deliberately not sticky. Two figures come to roughly 750px, which is taller
+   than the usable height of a 800px window — pinning it would trap the scroll
+   wheel inside the rail and clip the lower caption with no way to reach it.
+   It flows, and the page is still only as tall as the prose. */
+.cs-side {
+    min-width: 0;
+    /* Its own rule, so the rail reads as an aside rather than a second column
+       of the argument. */
+    border-left: 1px solid var(--rule);
+    padding-left: clamp(20px, 2.4vw, 34px);
+}
+
+.fig-rail {
+    margin: 0 0 30px;
+}
+
+.fig-rail figcaption {
+    font-size: 13px;
+}
+
+@media (max-width: 1000px) {
+    .cs-split {
         grid-template-columns: minmax(0, 1fr);
-        gap: 6px;
+    }
+
+    .cs-side {
+        border-left: 0;
+        padding-left: 0;
+        padding-top: 34px;
+        border-top: 1px solid var(--rule);
+    }
+
+    .fig-rail {
+        max-width: 560px;
     }
 }
 
