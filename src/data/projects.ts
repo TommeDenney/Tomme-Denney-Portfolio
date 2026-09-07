@@ -33,6 +33,18 @@ export type Project = {
     caseStudy?: string;
     /** Overrides the keyword derivation in projectDisciplines(). */
     disciplines?: Discipline[];
+    /**
+     * Suppresses the still-image hero. Only Inhabiting Memory sets this: a
+     * static splat render reads as a noisy photograph and undersells spatial
+     * work to anyone who has never worn a headset. A screenshot of a UI has no
+     * such problem, so other case studies keep their still.
+     */
+    noStillHero?: boolean;
+    /**
+     * Supporting documents, for projects with more than the one paper and one
+     * deck that `paper` and `presentation` cover. Rendered in order.
+     */
+    documents?: { label: string; file: string; note?: string }[];
 };
 
 /**
@@ -140,6 +152,7 @@ export const PROJECTS: Project[] = [
         caption: 'A family museum you enter on foot — built from interviews, tested against flat photographs.',
         desc: 'Photographs preserve the surface of a moment and discard the thing memory actually uses to find it again: the space. Inhabiting Memory is a VR family museum you enter on foot — six rooms, one per family member, each designed from an interview with the person it belongs to, so a visitor stands inside a reconstructed room instead of looking at a picture of one. I built the locomotion around the visitor’s real play space so nobody trades comfort for presence, and I tested the premise directly: six participants viewed their own photographs on a screen, then stood inside spatial reconstructions built from those same photographs. My master’s thesis at Northeastern, presented for open critique. Built solo in Unity for Quest 3 using Gaussian splatting — a capture technique that rebuilds a real place as a cloud of points you can walk through.',
         caseStudy: 'inhabiting-memory',
+        noStillHero: true,
         // The thesis PDF is withheld, not missing. Page 22 asserts that
         // "Participants consistently report stronger spatial presence,
         // familiarity, and a sense of return" — a finding written in a paper
@@ -151,6 +164,33 @@ export const PROJECTS: Project[] = [
         // paper: '/projects/genexr/Inhabiting Memory.pdf',
         presentation: '/projects/genexr/Inhabiting Memory Presentation.pdf',
         galleryImages: false
+    },
+    {
+        id: 'buddyrun', name: 'Buddy Run', cat: 'Design Research · Biometrics · GSND6340 · 2025', cover: '/projects/buddyrun/1.jpg',
+        bg: 'linear-gradient(145deg,#04151f,#432534,#c44900)', ico: '🏃',
+        tags: ['Design Research', 'Biometrics', 'Behaviour Change', 'Haptics & Audio', 'Mobile Product', 'Whoop', 'iOS'],
+        caption: 'A running coach that guides by rhythm instead of telling you to speed up.',
+        desc: 'Most running apps hand you a number and leave you to interpret it mid-stride. Buddy Run is an iPhone coach that reads live heart rate from a Whoop strap and answers with rhythm instead: a haptic and audio tempo you match your steps to, so the guidance arrives through the same channel as the running itself. I worked on it in a three-person team for a graduate Biometrics of Design course. The design turns on one decision — cadence is the lever, not heart rate, because cadence is the one thing a runner can change on command and optical heart-rate sensors lag five to fifteen seconds behind a change in effort. Grounded in running biomechanics and behaviour-change research, and honest about what the sensor could not do.',
+        caseStudy: 'buddy-run',
+        documents: [
+            {
+                label: 'Final presentation',
+                file: '/projects/buddyrun/Buddy Run Final Slides.pdf',
+                note: 'The deck as presented, including what the study actually became.',
+            },
+            {
+                label: 'Heart-rate integration proposal',
+                file: '/projects/buddyrun/Buddy Run Heart Rate Proposal.pdf',
+                note: 'My individual proposal: the AI buddy, HRV trends, and the three data-consent models.',
+            },
+            {
+                label: 'Method plan',
+                file: '/projects/buddyrun/Buddy Run Project Prep.pdf',
+                note: 'The protocol we designed, against which the autoethnographic fallback should be read.',
+            },
+        ],
+        dl: '/projects/buddyrun/Buddy Run App Demo.MOV',
+        dlLabel: 'Original screen recording'
     },
     {
         id: 'seereality', name: 'See Reality', cat: 'XR Studio · Client Work · 2024–Present', cover: '/projects/seereality/0.png',

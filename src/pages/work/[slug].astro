@@ -61,6 +61,25 @@ const Content = caseStudy?.Content;
  * page. Video first: the argument is about what happens when the visitor
  * moves, and a still cannot carry that.
  */
+/**
+ * A portrait screen recording, shown alongside its notes rather than as a
+ * full-width hero. An iPhone capture is 588x1280; stretched across the top it
+ * would be four fifths letterbox, and shrunk to fit it would be unreadable.
+ */
+type Demo = { src: string; poster?: string; caption: string; notes: string[] };
+const DEMOS: Record<string, Demo> = {
+    'buddy-run': {
+        src: '/case-studies/buddy-run/app-demo.mp4',
+        poster: '/case-studies/buddy-run/app-demo.jpg',
+        caption: 'Three minutes through the app: intake, baseline run, sprint, and the live run screen.',
+        notes: [
+            'The whole screen is the readout. Background colour carries the heart-rate zone, so the state is legible at a glance mid-stride rather than needing a number read off a chart.',
+            'The zone is named in words — "Above Target", "Below Target", "run at a pace where you can hold a conversation" — because a runner at effort has no attention spare for arithmetic.',
+            'Target cadence has plus and minus controls and the tempo guide has an off switch. The algorithm proposes; the runner decides.',
+        ],
+    },
+};
+
 type Slot = { src: string; poster?: string; caption: string; proves: string };
 const SLOTS: Record<string, Slot[]> = {
     'inhabiting-memory': [
@@ -131,8 +150,10 @@ const slots = (p.caseStudy ? SLOTS[p.caseStudy] ?? [] : [])
 // and undersells the work to anyone who has never worn a headset, so the hero
 // falls back to type on the project's own gradient instead.
 const heroVideo = media.video;
-const heroStill = p.caseStudy ? null : media.poster;
+const heroStill = p.noStillHero ? null : media.poster;
 const disciplines = projectDisciplines(p);
+const demo = p.caseStudy ? DEMOS[p.caseStudy] : undefined;
+const demoOk = demo && hasAsset(demo.src);
 const others = PROJECTS.filter((o) => o.id !== p.id).slice(0, 4);
 
 const title = `${p.name} — Tomme Denney`;
@@ -175,6 +196,33 @@ const description = p.caption ?? `${p.desc.slice(0, 175).trimEnd()}…`;
                 </div>
             </header>
 
+            {demoOk && demo && (
+                <section class="band" aria-labelledby="demo-h">
+                    <div class="band-grid">
+                        <p class="label band-label" id="demo-h">Prototype</p>
+                        <div class="demo">
+                            <div class="demo-phone">
+                                <video
+                                    src={assetUrl(demo.src)}
+                                    poster={demo.poster && hasAsset(demo.poster) ? assetUrl(demo.poster) : undefined}
+                                    controls
+                                    muted
+                                    loop
+                                    playsinline
+                                    preload="metadata"
+                                    aria-label={demo.caption}></video>
+                            </div>
+                            <div class="demo-notes">
+                                <p class="muted" style="font-size:14px">{demo.caption}</p>
+                                <ul>
+                                    {demo.notes.map((n) => <li set:html={n.replace(/"([^"]+)"/g, '<em>$1</em>')} />)}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            )}
+
             <section class="cs-body">
                 <div class="band-grid">
                     <p class="label band-label">{Content ? 'Case study' : 'Overview'}</p>
@@ -185,7 +233,7 @@ const description = p.caption ?? `${p.desc.slice(0, 175).trimEnd()}…`;
                             <p class="stack" style="margin-top:44px">
                                 {ext && <a class="btn" href={ext.url} target="_blank" rel="noopener">{ext.label}</a>}
                                 {p.dl && (
-                                    <a class="btn" href={p.dl} target="_blank" rel="noopener">{p.dlLabel ?? 'Download'}</a>
+                                    <a class="btn" href={assetUrl(p.dl)} target="_blank" rel="noopener">{p.dlLabel ?? 'Download'}</a>
                                 )}
                             </p>
                         )}
@@ -254,14 +302,25 @@ const description = p.caption ?? `${p.desc.slice(0, 175).trimEnd()}…`;
                 </section>
             )}
 
-            {p.presentation && (
+            {(p.presentation || p.documents?.length) && (
                 <section class="band" aria-labelledby="doc-h">
                     <div class="band-grid">
                         <p class="label band-label" id="doc-h">Documents</p>
                         <div>
-                            <h3 class="display">Thesis presentation</h3>
-                            <p class="prose muted" style="margin-top:10px">The deck as presented at the showcase.</p>
-                            <p style="margin-top:20px"><a class="btn" href={p.presentation} target="_blank" rel="noopener">Open PDF ↗</a></p>
+                            <ul class="docs">
+                                {p.presentation && (
+                                    <li>
+                                        <a href={p.presentation} target="_blank" rel="noopener">Thesis presentation</a>
+                                        <span>The deck as presented at the showcase.</span>
+                                    </li>
+                                )}
+                                {p.documents?.map((d) => (
+                                    <li>
+                                        <a href={d.file} target="_blank" rel="noopener">{d.label}</a>
+                                        {d.note && <span>{d.note}</span>}
+                                    </li>
+                                ))}
+                            </ul>
                         </div>
                     </div>
                 </section>
