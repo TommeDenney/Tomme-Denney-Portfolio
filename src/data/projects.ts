@@ -294,6 +294,36 @@ export const PROJECTS: Project[] = [
         ]
     },
     {
+        id: 'arworkofart', name: 'AR Work of Art', cat: 'MR Art · Rhythm · XR 5010 · 2024', cover: '/projects/arworkofart/1.png',
+        bg: 'linear-gradient(145deg,#04151f,#432534,#c44900)', ico: '🎵',
+        tags: ['Interactive Art', 'Mixed Reality', 'Rhythm', 'Co-Creation', 'Meta Quest 3', 'Unity C#', 'XR 5010'],
+        caption: 'The artwork is not what you look at \u2014 it is what your playing builds.',
+        desc: 'Most virtual art asks you to look at it. This asks whether the audience can hold the pen: a 360\u00b0 mixed-reality rhythm game where hitting blocks fires particle effects into the room and missing them lets those effects fade, with three audio tracks layering in as you sustain it. There is no score, because the state of the artwork is the score \u2014 if it is dark and quiet, that describes your performance rather than judging it. Came out of a podcast interview with Nancy Baker Cahill about siting AR art in contested places in New Orleans, which is where I am from.',
+        caseStudy: 'ar-work-of-art',
+        documents: [
+            {
+                label: 'Project write-up',
+                file: '/projects/arworkofart/AR Work of Art Write-Up.pdf',
+                note: 'The argument as submitted: co-creation, Cahill, and the rhythm-game lineage.',
+            },
+        ]
+    },
+    {
+        id: 'interviewwitheternity', name: 'Interview With Eternity', cat: 'VR Embodiment · XR 5010 · 2024', cover: '/projects/interviewwitheternity/1.jpg',
+        bg: 'linear-gradient(145deg,#04151f,#183a37,#432534)', ico: '♾️',
+        tags: ['VR', 'Embodiment', 'Accessibility', 'Existential', 'Gaze Interaction', 'Unity C#', 'XR 5010'],
+        caption: 'A soul before birth, choosing whether to be mortal \u2014 and all you can do is look.',
+        desc: 'You wake as a soul in an eternal void, before a life, and you are asked whether you want to be born mortal. There are no hands, no controllers and nothing to pick up: agency is removed on purpose, so that the player\u2019s physical helplessness matches the avatar\u2019s condition rather than merely describing it. The mirrors in the void have no reflection, which came from a research finding about how people choose avatars that resemble or idealise themselves \u2014 I wanted to know what happens when there is no appearance to choose at all. Gaze is the only input, which also makes it the most accessible thing I have built.',
+        caseStudy: 'interview-with-eternity',
+        documents: [
+            {
+                label: 'Project write-up',
+                file: '/projects/interviewwitheternity/Interview With Eternity Write-Up.pdf',
+                note: 'The embodiment reasoning, the two cited readings, and where the idea came from.',
+            },
+        ]
+    },
+    {
         id: 'truthancientforest', name: 'Truth of the Ancient Forest', cat: 'Board Game · Rapid Idea Prototyping · 2021', cover: '/projects/truthancientforest/1.jpg',
         bg: 'linear-gradient(145deg,#04151f,#183a37,#432534)', ico: '🌲',
         tags: ['Rapid Prototyping', 'Game Design', 'Systems Design', 'Physical Prototyping', 'Laser Cutting', 'Board Game', 'Iteration'],
@@ -326,18 +356,11 @@ export const PROJECTS: Project[] = [
         desc: 'Immersive XR experiences built for world-class clients spanning heritage, sports, and entertainment — from Fort Nashborough colonial installations to Liverpool FC fan experiences. Built with Unity C#, Meta Quest hardware, and custom URP shader pipelines optimized for standalone passthrough.\n\nClients & Collaborators: See Reality · Nashville Adventures · Town of Lexington, MA · Liverpool FC · Venice City Tours · Faneuil Hall'
     },
     {
-        id: 'bofum', name: 'BOFUM', cat: 'XR Game · MIT Reality Hack 2026', cover: '/projects/bofum/1.png',
-        bg: 'linear-gradient(145deg,#040c04,#0e2810,#1a4a1e)', ico: '🎮',
-        tags: ['XR', 'Unity', 'MIT Reality Hack', 'Multiplayer', 'Hackathon', 'Spatial Game'],
-        caption: 'Built in 72 hours at MIT Reality Hack 2026 — spatial, wild, and alive.',
-        desc: 'BOFUM is a spatial XR game built in 72 hours at MIT Reality Hack 2026. Designed for mixed reality with physical space as the playing field — fast, chaotic, and built to surprise. Check it out on Devpost.'
-    },
-    {
-        id: 'interviewwitheternity', name: 'Interview With Eternity', cat: 'VR Experience · XR 5010 · 2026', cover: '/projects/interviewwitheternity/1.jpg',
-        bg: 'linear-gradient(145deg,#08080e,#14122a,#1e1848)', ico: '✨',
-        tags: ['VR', 'Avatar Embodiment', 'Existential', 'HCI', 'XR 5010', 'Gaze Interaction'],
-        caption: 'Before you are born — choose mortality, or choose forever.',
-        desc: 'A VR experience where you assume the identity of a soul before birth, confronting the existential choice between mortality and immortality. Using only gaze to respond, players are stripped of agency — heightening embodiment and isolation. A submission for the VR Embodiment Project in XR 5010.'
+        id: 'bofum', name: 'BOFUM', cat: 'Asymmetric Co-op · MIT Reality Hack 2026', cover: '/projects/bofum/1.png',
+        bg: 'linear-gradient(145deg,#04151f,#183a37,#c44900)', ico: '🎲',
+        tags: ['Asymmetric Co-op', 'Physical Computing', 'Custom Hardware', 'Arduino', 'Hackathon', 'Unity C#', 'MIT Reality Hack'],
+        caption: 'One ball, one maze, two players — and neither of them can do it alone.',
+        desc: 'A two-player labyrinth built on a deliberate split: the player in the headset can see the maze and cannot move it, and the player holding the board can tilt the whole world but cannot see any of it. Getting the ball through tight passages, drops and dead ends is therefore a conversation rather than a skill \u2014 the design makes talking to each other the only available mechanic. The controller is handmade from foam board, felt and duct tape around an Arduino, and the useful thing we learned is that incomplete information invites creativity rather than frustration, provided the maze is tuned so communication is necessary but not punishing. Made with a team of five at MIT Reality Hack 2026.'
     },
     {
         id: 'wallace', name: 'Wallace', cat: 'Horror Game · Survival · 2025', cover: '/projects/wallace/1.png',
@@ -366,13 +389,6 @@ export const PROJECTS: Project[] = [
         tags: ['VR Shooter', 'Meta Quest', 'Unity', 'Boston FIG 2024', 'SideQuest'],
         caption: 'Chi\'King and Chi\'Queen want your farm. Give them the Cluckshot Cannon.',
         desc: 'A VR shooter where you play as a farmer facing a full chicken invasion. Fight back with Foul Play Firearms like the Cluckshot Cannon. Northeastern Senior Games Showcase 2024 and Boston Festival of Indie Games 2024 Online Expo. Available on SideQuest.'
-    },
-    {
-        id: 'arworkofart', name: 'AR Work of Art', cat: 'AR · Rhythm Game · XR 5010 · 2024', cover: '/projects/arworkofart/1.png',
-        bg: 'linear-gradient(145deg,#1a0a2e,#4a1888,#7040b5)', ico: '🎨',
-        tags: ['AR', 'MR', 'Rhythm Game', 'Unity', 'Particles', 'Immersive Media', 'XR 5010'],
-        caption: 'Hit the beat, build the atmosphere — miss it and watch it fall apart.',
-        desc: 'An AR/MR rhythm game where players hit spawning cubes in a full 360° space — each hit activating one of ten unique particle effects and layering audio tracks. Miss a cube and the world dims. Inspired by Guitar Hero, Beat Saber, and Pistol Whip. Class project for XR 5010.'
     },
     {
         id: 'greatvendingmachine', name: 'Great Vending Machine', cat: '3D Platformer · Horror · 2023', cover: '/projects/greatvendingmachine/1.png',
