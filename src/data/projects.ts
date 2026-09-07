@@ -24,15 +24,45 @@ export type Project = {
     galleryImages?: boolean;
     dl?: string;
     dlLabel?: string;
+    /**
+     * Filename stem of a long-form case study in case-studies/. When set, the
+     * project's page renders that Markdown under the summary and the overlay
+     * on / grows a link to it. The prose lives only in the .md — `desc` is a
+     * hand-written short version, not an excerpt, so the two cannot drift.
+     */
+    caseStudy?: string;
 };
+
+/**
+ * A project's URL is derived from its name, not its id: the ids are historical
+ * ('genexr' is Inhabiting Memory, 'haptidraw' is Interview With Eternity) and
+ * would make for URLs that misname the work in the one place a recruiter
+ * actually reads. Names are unique across PROJECTS, so slugs are too.
+ */
+export function projectSlug(name: string): string {
+    return name
+        .toLowerCase()
+        .normalize('NFKD')
+        // Apostrophes are dropped rather than replaced: "God's" has to become
+        // "gods", not "god-s".
+        .replace(/['\u2019]/g, '')
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+}
+
+/** `/work/<slug>` for a project, which is where its own page lives. */
+export function projectHref(name: string): string {
+    return `/work/${projectSlug(name)}`;
+}
 
 export const PROJECTS: Project[] = [
     {
-        id: 'genexr', name: 'Inhabiting Memory', cat: 'Master’s Thesis · XR · Gaussian Splatting · 2026', cover: '/projects/genexr/1.png',
+        id: 'genexr', name: 'Inhabiting Memory', cat: 'Master’s Thesis · Spatial Design · Design Research · 2026', cover: '/projects/genexr/1.png',
         bg: 'linear-gradient(145deg,#0e0418,#2a0e48,#4a1888)', ico: '🧬',
-        tags: ['Meta Quest 3', 'PCVR', 'Gaussian Splatting', 'Unity C#', 'Hand Tracking', 'URP', 'HCI', 'Capstone'],
-        caption: 'Walk inside a family memory — photorealistic, spatial, and impossible.',
-        desc: 'Inhabiting Memory is a Meta Quest 3 PCVR thesis experience exploring how immersive technology can preserve and reinhabit personal memories through photorealistic Gaussian splatting. Built in Unity with a spatial family timeline, hand-tracking interactions, and custom URP rendering pipelines. Northeastern University M.S. in Extended Reality thesis, 2026.',
+        tags: ['Spatial Design', 'Design Research', 'Immersive Genealogy', 'Comfort & Locomotion', 'Interview-Led Design', 'Master’s Thesis', 'Meta Quest 3', 'Unity C#', 'Gaussian Splatting'],
+        caption: 'A family museum you enter on foot — built from interviews, tested against flat photographs.',
+        desc: 'Photographs preserve the surface of a moment and discard the thing memory actually uses to find it again: the space. Inhabiting Memory is a VR family museum you enter on foot — six rooms, one per family member, each designed from an interview with the person it belongs to, so a visitor stands inside a reconstructed room instead of looking at a picture of one. I built the locomotion around the visitor’s real play space so nobody trades comfort for presence, and I tested the premise directly: six participants viewed their own photographs on a screen, then stood inside spatial reconstructions built from those same photographs. My master’s thesis at Northeastern, presented for open critique. Built solo in Unity for Quest 3 using Gaussian splatting — a capture technique that rebuilds a real place as a cloud of points you can walk through.',
+        caseStudy: 'inhabiting-memory',
         paper: '/projects/genexr/Inhabiting Memory.pdf',
         presentation: '/projects/genexr/Inhabiting Memory Presentation.pdf',
         galleryImages: false

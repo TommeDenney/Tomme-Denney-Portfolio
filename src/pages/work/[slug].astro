@@ -1,0 +1,298 @@
+---
+/**
+ * A project's own page, one per entry in PROJECTS.
+ *
+ * The overlay views on / are still the way the site is browsed, but overlay
+ * state has no URL: nothing about the address changes when a project opens, so
+ * a project could not be linked, shared or indexed. These routes exist so it
+ * can be. They read the same PROJECTS objects the overlay does — nothing here
+ * is a second copy of the content — and index.astro is untouched.
+ *
+ * Where a project has a `caseStudy`, the long-form Markdown in case-studies/
+ * replaces the short `desc` rather than sitting next to it, so the prose has
+ * exactly one home.
+ */
+import Base from '../../layouts/Base.astro';
+import {
+    PROJECTS, PROJECT_EXTERNAL_SITES, PROJECT_EMBEDS,
+    projectSlug, projectHref, type Project,
+} from '../../data/projects';
+import { projectMedia, hasAsset } from '../../lib/projectMedia';
+import { assetUrl } from '../../lib/assets';
+
+export function getStaticPaths() {
+    return PROJECTS.map((project) => ({
+        params: { slug: projectSlug(project.name) },
+        props: { project },
+    }));
+}
+
+interface Props { project: Project }
+const { project: p } = Astro.props;
+
+const media = projectMedia(p.cover, p.galleryImages !== false);
+const ext = PROJECT_EXTERNAL_SITES[p.id];
+const embed = PROJECT_EMBEDS[p.id];
+
+/**
+ * Astro runs Markdown anywhere in the project through its normal pipeline, so
+ * the case studies can stay at the repo root next to the drafts they came from
+ * instead of being copied into src/. remarkStripNeedsInput has already removed
+ * the author's open questions by the time `Content` renders — see
+ * scripts/remark-strip-needs-input.mjs.
+ */
+const caseStudies = import.meta.glob<{ Content: any }>(
+    '../../../case-studies/*.md',
+    { eager: true },
+);
+
+const caseStudy = p.caseStudy
+    ? caseStudies[`../../../case-studies/${p.caseStudy}.md`]
+    : undefined;
+
+const Content = caseStudy?.Content;
+
+/**
+ * The evidence slots from the asset list at the end of the case study, in
+ * priority order. Each is emitted only if the file is actually on disk, which
+ * is what keeps an unfilled slot from becoming a broken <video> on a live
+ * page. Video first: the argument is about what happens when the visitor
+ * moves, and a still cannot carry that.
+ */
+type Slot = { src: string; poster?: string; caption: string; proves: string };
+const SLOTS: Record<string, Slot[]> = {
+    'inhabiting-memory': [
+        {
+            src: '/case-studies/inhabiting-memory/locomotion.mp4',
+            poster: '/case-studies/inhabiting-memory/locomotion.jpg',
+            caption: 'One pass through the museum: walking inside a module, then teleporting to the next.',
+            proves: 'The locomotion decision, which a screenshot cannot show at all.',
+        },
+        {
+            src: '/case-studies/inhabiting-memory/temporal-splat.mp4',
+            poster: '/case-studies/inhabiting-memory/temporal-splat.jpg',
+            caption: 'A moving reconstruction, filmed with the head moving.',
+            proves: 'That the reconstruction holds together under parallax, and the difference between a place and a moment.',
+        },
+        {
+            src: '/case-studies/inhabiting-memory/flat-vs-spatial.mp4',
+            poster: '/case-studies/inhabiting-memory/flat-vs-spatial.jpg',
+            caption: 'The same submitted photographs on a screen, then stood inside.',
+            proves: 'The study’s comparison, in the form the participants met it.',
+        },
+        {
+            src: '/case-studies/inhabiting-memory/room-scale.mp4',
+            poster: '/case-studies/inhabiting-memory/room-scale.jpg',
+            caption: 'A participant in the study room: body walking the module, hands raised to teleport.',
+            proves: 'That this is physical and embodied, and shows the real play space that constrained the design.',
+        },
+        {
+            src: '/case-studies/inhabiting-memory/hand-tracking.mp4',
+            poster: '/case-studies/inhabiting-memory/hand-tracking.jpg',
+            caption: 'Hand-tracked menu selection and teleport, close on the hands.',
+            proves: 'The interaction layer, and the decision to use no controllers.',
+        },
+        {
+            src: '/case-studies/inhabiting-memory/module-diagram.png',
+            caption: 'Real play space, virtual module, and the teleport network across the level.',
+            proves: 'The single design idea the rest of the layout is built on.',
+        },
+        {
+            src: '/case-studies/inhabiting-memory/mockups.jpg',
+            caption: 'The original iPad mockups, unretouched.',
+            proves: 'Process — the thinking before the build, rather than the artifact after it.',
+        },
+        {
+            src: '/case-studies/inhabiting-memory/rooms.jpg',
+            caption: 'One frame from each of the six rooms.',
+            proves: 'That the interpretive half came from six different people, not one aesthetic.',
+        },
+        {
+            src: '/case-studies/inhabiting-memory/failure-state.png',
+            caption: 'A reconstruction breaking down: artifacts and unstable geometry.',
+            proves: 'Command of the medium’s failure mode, which the whole design is built to manage.',
+        },
+    ],
+};
+
+const slots = (p.caseStudy ? SLOTS[p.caseStudy] ?? [] : [])
+    .filter((s) => hasAsset(s.src))
+    .map((s) => ({
+        ...s,
+        url: assetUrl(s.src),
+        posterUrl: s.poster && hasAsset(s.poster) ? assetUrl(s.poster) : undefined,
+        isVideo: s.src.endsWith('.mp4'),
+    }));
+
+// The hero is the project video where there is one. For a case study a static
+// splat still is deliberately not the fallback: it reads as a noisy photograph
+// and undersells the work to anyone who has never worn a headset, so the hero
+// falls back to type on the project's own gradient instead.
+const heroVideo = media.video;
+const heroStill = p.caseStudy ? null : media.poster;
+
+const title = `${p.name} — Tomme Denney`;
+const description = p.caption ?? `${p.desc.slice(0, 175).trimEnd()}…`;
+---
+
+<Base
+    title={title}
+    description={description}
+    path={projectHref(p.name)}
+    image={media.poster ?? p.cover}
+    ogType="article"
+    bodyClass="page-work"
+>
+    <nav class="pp-nav">
+        <a class="logo" href="/">Tomme Denney</a>
+        <a class="back-btn" href="/">
+            <svg width="16" height="12" viewBox="0 0 16 12" fill="none" aria-hidden="true"
+                ><path d="M15 6H1M1 6L6 1M1 6L6 11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg
+            >
+            All Work
+        </a>
+    </nav>
+
+    <div class="pp">
+        <header class="pv-hero pp-hero">
+            <div class="pv-hero-bg" style={`background:${p.bg}`}></div>
+            {heroVideo && (
+                <video
+                    class="pv-hero-media"
+                    data-hero-video
+                    src={heroVideo}
+                    poster={media.poster ?? undefined}
+                    autoplay
+                    muted
+                    loop
+                    playsinline
+                    preload="metadata"
+                    aria-label={`${p.name} — looping preview`}></video>
+            )}
+            {!heroVideo && heroStill && (
+                <img class="pv-hero-media" src={heroStill} alt={`${p.name} — cover image`} />
+            )}
+            <div class="pv-hero-grad"></div>
+            <div class="pv-hero-info">
+                <p class="pv-cat">{p.cat}</p>
+                <h1 class="pv-title">{p.name}</h1>
+                <div class="pv-tags">
+                    {p.tags.map((t) => <span class="pv-tag">{t}</span>)}
+                </div>
+                {p.caption && <p class="pv-caption">{p.caption}</p>}
+            </div>
+        </header>
+
+        <div class="pv-body">
+            <div class="pp-actions">
+                {ext && <a class="pv-ext-btn" href={ext.url} target="_blank" rel="noopener">{ext.label}</a>}
+                {p.dl && (
+                    <a class="pv-ext-btn" href={p.dl} target="_blank" rel="noopener">{p.dlLabel ?? 'Download'}</a>
+                )}
+            </div>
+
+            {Content ? (
+                <article class="cs">
+                    <div class="cs-prose">
+                        <Content />
+                    </div>
+                </article>
+            ) : (
+                <p class="pv-desc">{p.desc}</p>
+            )}
+
+            {slots.length > 0 && (
+                <section class="cs-evidence" aria-labelledby="evidence-h">
+                    <h2 class="cs-evidence-h" id="evidence-h">Evidence</h2>
+                    {slots.map((s) => (
+                        <figure class="cs-fig">
+                            {s.isVideo ? (
+                                <video
+                                    src={s.url}
+                                    poster={s.posterUrl}
+                                    controls
+                                    muted
+                                    loop
+                                    playsinline
+                                    preload="none"></video>
+                            ) : (
+                                <img src={s.url} alt={s.caption} loading="lazy" decoding="async" />
+                            )}
+                            <figcaption>
+                                {s.caption}
+                                <span class="cs-proves">{s.proves}</span>
+                            </figcaption>
+                        </figure>
+                    ))}
+                </section>
+            )}
+
+            {embed && (
+                <section class="pv-game-wrap" aria-label="Play in browser">
+                    <div class="pv-game-bar">
+                        <span>Play in Browser</span>
+                        <div class="pv-game-bar-btns">
+                            {embed.itchio && (
+                                <a class="pv-game-itchio" href={embed.itchio} target="_blank" rel="noopener">Itch.io ↗</a>
+                            )}
+                        </div>
+                    </div>
+                    <iframe src={embed.src} title={`${p.name} — playable build`} loading="lazy" allowfullscreen allow="autoplay; fullscreen *; gamepad"></iframe>
+                </section>
+            )}
+
+            {media.gallery.length > 0 && (
+                <section class="pv-gallery" aria-label={`${p.name} gallery`}>
+                    {media.gallery.map((src, i) => (
+                        <div class="pv-gallery-item">
+                            <img src={src} alt={`${p.name} — still ${i + 1}`} loading="lazy" decoding="async" />
+                        </div>
+                    ))}
+                </section>
+            )}
+
+            {(p.paper || p.presentation) && (
+                <section class="pp-documents" aria-labelledby="documents-h">
+                    <h2 class="cs-evidence-h" id="documents-h">Thesis Documents</h2>
+                    <div class="pp-documents-grid">
+                        {p.paper && (
+                            <article class="pv-document">
+                                <div class="pv-paper-head">
+                                    <div>
+                                        <h3 class="pv-paper-title">Research Paper</h3>
+                                        <p class="pv-paper-sub">The complete {p.name} master’s thesis.</p>
+                                    </div>
+                                    <a class="pv-paper-open" href={p.paper} target="_blank" rel="noopener">Open PDF ↗</a>
+                                </div>
+                            </article>
+                        )}
+                        {p.presentation && (
+                            <article class="pv-document">
+                                <div class="pv-paper-head">
+                                    <div>
+                                        <h3 class="pv-paper-title">Presentation</h3>
+                                        <p class="pv-paper-sub">The thesis presentation deck.</p>
+                                    </div>
+                                    <a class="pv-paper-open" href={p.presentation} target="_blank" rel="noopener">Open PDF ↗</a>
+                                </div>
+                            </article>
+                        )}
+                    </div>
+                </section>
+            )}
+        </div>
+    </div>
+
+    <script is:inline>
+        // The hero loops silently as part of the page's composition, so it is
+        // not something the visitor asked to have moving. Under a reduced-motion
+        // preference it becomes its own poster frame instead.
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            document.querySelectorAll('video[data-hero-video]').forEach(function (v) {
+                v.autoplay = false;
+                v.removeAttribute('autoplay');
+                v.pause();
+            });
+        }
+    </script>
+</Base>

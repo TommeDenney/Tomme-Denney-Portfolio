@@ -686,10 +686,27 @@ goHome = function () {
     updateHoverListeners();
 };
 
-/* Hide mode switch when in project detail */
+/**
+ * Every project has its own page at /work/<slug>, so a card click navigates
+ * there rather than opening the overlay this file used to fill in. The overlay
+ * was a dead end: it had no URL, so whatever a visitor was looking at could not
+ * be linked or shared. _origOpenProject still renders it and is deliberately
+ * left in place, but nothing calls it now.
+ *
+ * Must match projectSlug() in src/data/projects.ts.
+ */
+function projectPath(name) {
+    return '/work/' + name
+        .toLowerCase()
+        .normalize('NFKD')
+        .replace(/['\u2019]/g, '')
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+}
+
 const _origOpenProject = openProject;
 openProject = function (id) {
-    document.getElementById('mode-switch').style.opacity = '0';
-    document.getElementById('mode-switch').style.pointerEvents = 'none';
-    _origOpenProject(id);
+    const p = PMAP[id];
+    if (!p) return;
+    window.location.href = projectPath(p.name);
 };

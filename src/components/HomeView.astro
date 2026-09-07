@@ -119,6 +119,14 @@ const thesis = PMAP.genexr;
                         <img class="wcimg" src={p.cover} alt={p.name} onload="this.classList.add('ok')" onerror="imgFallback(this)" />
                         <div class="wcico">{p.ico}</div>
                         <div class="wct">{p.name}</div>
+                        {/* Covers the cover on hover: the still is what the work
+                            looks like, this is what it is. Uses the project's own
+                            gradient rather than one shared accent, so the grid
+                            stays legible when several are hovered in sequence. */}
+                        <div class="wcover" style={`background:${p.bg}`} aria-hidden="true">
+                            <span class="wcover-t">{p.name}</span>
+                            <span class="wcover-s">{p.cat}</span>
+                        </div>
                     </div>
                 </div>
             ))}

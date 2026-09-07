@@ -13,12 +13,29 @@ import '../styles/global.css';
 interface Props {
     title?: string;
     description?: string;
+    /** Site-root-absolute path of this page. Defaults to the site root. */
+    path?: string;
+    /** Site-root-absolute path or absolute URL of the share image, if any. */
+    image?: string;
+    ogType?: string;
+    /** Extra class on <body>, for per-page overrides of the global styles. */
+    bodyClass?: string;
 }
 
 const {
     title = 'Tomme Denney',
     description = 'XR developer and photographer in Boston, Massachusetts. Extended reality, Gaussian splatting, and game design.',
+    path = '/',
+    image,
+    ogType = 'website',
+    bodyClass,
 } = Astro.props;
+
+// The canonical used to be hardcoded to Astro.site, which was right while
+// index.astro was the only route and points every project page at the
+// homepage now that they exist.
+const canonical = new URL(path, Astro.site).href;
+const ogImage = image ? new URL(image, Astro.site).href : undefined;
 ---
 
 <!DOCTYPE html>
@@ -28,11 +45,18 @@ const {
         <meta name="viewport" content="width=device-width,initial-scale=1" />
         <title>{title}</title>
         <meta name="description" content={description} />
-        <link rel="canonical" href={Astro.site} />
+        <link rel="canonical" href={canonical} />
 
-        <meta property="og:type" content="website" />
+        <meta property="og:type" content={ogType} />
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
+        <meta property="og:url" content={canonical} />
+        <meta property="og:site_name" content="Tomme Denney" />
+        {ogImage && <meta property="og:image" content={ogImage} />}
+        <meta name="twitter:card" content={ogImage ? 'summary_large_image' : 'summary'} />
+        <meta name="twitter:title" content={title} />
+        <meta name="twitter:description" content={description} />
+        {ogImage && <meta name="twitter:image" content={ogImage} />}
 
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -43,7 +67,7 @@ const {
 
         <script is:inline set:html={headScript} />
     </head>
-    <body>
+    <body class={bodyClass}>
         <slot />
     </body>
 </html>
