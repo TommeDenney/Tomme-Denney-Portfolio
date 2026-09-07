@@ -10,13 +10,16 @@
 import Base from '../layouts/Base.astro';
 import SiteNav from '../components/SiteNav.astro';
 import SiteFooter from '../components/SiteFooter.astro';
-import { PROJECTS, DISCIPLINES, projectDisciplines, projectHref } from '../data/projects';
+import {
+    PROJECTS, DISCIPLINES, projectDisciplines, projectHref, projectKind, KIND_LABEL,
+} from '../data/projects';
 import { projectMedia } from '../lib/projectMedia';
 
 const rows = PROJECTS.map((p) => ({
     p,
     href: projectHref(p.name),
     disciplines: projectDisciplines(p),
+    kind: projectKind(p),
     media: projectMedia(p.cover, false),
 }));
 
@@ -54,7 +57,7 @@ const counts = Object.fromEntries(
         </div>
 
         <ol class="index" id="index">
-            {rows.map(({ p, href, disciplines, media }, i) => (
+            {rows.map(({ p, href, disciplines, kind, media }, i) => (
                 <li class="index-row" data-disciplines={disciplines.join('|')}>
                     <a class="index-link" href={href} data-peek={media.poster ?? ''}>
                         <span class="index-num">{String(i + 1).padStart(2, '0')}</span>
@@ -62,9 +65,7 @@ const counts = Object.fromEntries(
                             <span class="index-name">{p.name}</span>
                             <span class="index-meta">{p.cat}</span>
                         </span>
-                        <span class="index-kind" data-kind={p.caseStudy ? 'case' : 'project'}>
-                            {p.caseStudy ? 'Case study' : 'Project'}
-                        </span>
+                        <span class="index-kind" data-kind={kind}>{KIND_LABEL[kind]}</span>
                         {media.poster && (
                             <span class="index-thumb">
                                 <img src={media.poster} alt="" loading="lazy" decoding="async" />

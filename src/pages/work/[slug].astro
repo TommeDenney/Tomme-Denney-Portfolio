@@ -17,7 +17,8 @@ import SiteNav from '../../components/SiteNav.astro';
 import SiteFooter from '../../components/SiteFooter.astro';
 import {
     PROJECTS, PROJECT_EXTERNAL_SITES, PROJECT_EMBEDS,
-    projectSlug, projectHref, projectDisciplines, type Project,
+    projectSlug, projectHref, projectDisciplines, projectKind, KIND_LABEL,
+    type Project,
 } from '../../data/projects';
 import { projectMedia, hasAsset } from '../../lib/projectMedia';
 import { assetUrl } from '../../lib/assets';
@@ -306,6 +307,7 @@ const slots = (p.caseStudy ? SLOTS[p.caseStudy] ?? [] : [])
 const heroVideo = media.video;
 const heroStill = p.noStillHero ? null : media.poster;
 const disciplines = projectDisciplines(p);
+const kind = projectKind(p);
 const demo = p.caseStudy ? DEMOS[p.caseStudy] : undefined;
 const demoOk = demo && hasAsset(demo.src);
 const others = PROJECTS.filter((o) => o.id !== p.id).slice(0, 4);
@@ -341,7 +343,7 @@ const description = p.caption ?? `${p.desc.slice(0, 175).trimEnd()}…`;
 
         <div class="shell">
             <header class="cs-head">
-                <p class="label">{p.caseStudy ? 'Case study' : 'Project'}</p>
+                <p class="label">{KIND_LABEL[kind]}</p>
                 <h1 class="display" style="margin-top:16px">{p.name}</h1>
                 {p.caption && <p class="cs-dek">{p.caption}</p>}
                 <div class="cs-meta">
@@ -386,8 +388,18 @@ const description = p.caption ?? `${p.desc.slice(0, 175).trimEnd()}…`;
                 evidence yet. */}
             <section class={slots.length > 0 ? 'cs-body cs-split' : 'cs-body'}>
                 <div class="cs-main">
-                    <p class="label" style="margin-bottom:22px">{Content ? 'Case study' : 'Overview'}</p>
-                    {Content ? <Content /> : <div class="prose"><p>{p.desc}</p></div>}
+                    <p class="label" style="margin-bottom:22px">{Content ? KIND_LABEL[kind] : 'Overview'}</p>
+                    {Content ? (
+                        <Content />
+                    ) : (
+                        /* Blank lines in `desc` are paragraph breaks. Rendered as one
+                           <p> they collapsed into a run-on block, which mattered as
+                           soon as a project without a case study had to carry its
+                           reasoning in the description. */
+                        <div class="prose">
+                            {p.desc.split(/\n\n+/).map((para) => <p>{para}</p>)}
+                        </div>
+                    )}
 
                     {(ext || p.dl) && (
                         <p class="stack" style="margin-top:44px">
@@ -506,8 +518,8 @@ const description = p.caption ?? `${p.desc.slice(0, 175).trimEnd()}…`;
                                             <span class="index-name">{o.name}</span>
                                             <span class="index-meta">{o.cat}</span>
                                         </span>
-                                        <span class="index-kind" data-kind={o.caseStudy ? 'case' : 'project'}>
-                                            {o.caseStudy ? 'Case study' : 'Project'}
+                                        <span class="index-kind" data-kind={projectKind(o)}>
+                                            {KIND_LABEL[projectKind(o)]}
                                         </span>
                                     </a>
                                 </li>

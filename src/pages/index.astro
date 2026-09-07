@@ -11,7 +11,7 @@
 import Base from '../layouts/Base.astro';
 import SiteNav from '../components/SiteNav.astro';
 import SiteFooter from '../components/SiteFooter.astro';
-import { PROJECTS, PMAP, projectHref, projectDisciplines } from '../data/projects';
+import { PROJECTS, PMAP, projectHref, projectKind, KIND_LABEL } from '../data/projects';
 import { projectMedia } from '../lib/projectMedia';
 
 // Two leads rather than one. Both carry a full case study and they argue for
@@ -23,8 +23,14 @@ const leads = LEADS.map((id) => ({ p: PMAP[id], media: projectMedia(PMAP[id].cov
 
 // The index under the leads: the work worth a recruiter's next click, in the
 // order it should be read rather than by date.
-const SELECTED = ['recollection', 'buddyrun', 'haptidraw', 'iamyou'];
-const selected = SELECTED.map((id) => ({ p: PMAP[id], media: projectMedia(PMAP[id].cover, false) }));
+const card = (id: string) => ({ p: PMAP[id], media: projectMedia(PMAP[id].cover, false) });
+
+// The two leads, then the rest of the written-up work, then work that speaks
+// for itself. Badges carry the tier inside each row.
+const WRITTEN = ['recollection', 'buddyrun', 'haptidraw', 'iamyou'];
+const PROJECTS_ROW = ['seereality', 'bofum', 'wallace', 'unforgottenstories'];
+const written = WRITTEN.map(card);
+const projectsRow = PROJECTS_ROW.map(card);
 ---
 
 <Base
@@ -61,68 +67,93 @@ const selected = SELECTED.map((id) => ({ p: PMAP[id], media: projectMedia(PMAP[i
             </div>
         </header>
 
-        <section class="shell band" aria-labelledby="lead-h">
-            <div class="band-grid">
-                <p class="label band-label" id="lead-h">Lead case studies</p>
-                <div class="leads">
-                    {leads.map(({ p: lead, media }) => (
-                        <a class="feature" href={projectHref(lead.name)}>
-                            <div class="feature-media">
-                                {media.preview ? (
-                                    <video
-                                        src={media.preview}
-                                        poster={media.poster ?? undefined}
-                                        autoplay muted loop playsinline preload="metadata"
-                                        data-hero-video
-                                        aria-label={`${lead.name} — looping preview`}></video>
-                                ) : media.poster ? (
-                                    <img src={media.poster} alt={`${lead.name} — cover`} />
-                                ) : null}
-                            </div>
-                            <div class="feature-body">
-                                <h2 class="display" style="font-size:clamp(26px,3vw,40px)">{lead.name}</h2>
-                                <p class="label">Case study &rarr;</p>
-                            </div>
-                            <p class="lead-cap">{lead.caption}</p>
-                        </a>
-                    ))}
-                </div>
+        <section class="band strip leads-band" aria-labelledby="lead-h">
+            <p class="label" id="lead-h" style="margin-bottom:30px">Lead case studies</p>
+            <div class="leads">
+                {leads.map(({ p: lead, media }) => (
+                    <a class="feature" href={projectHref(lead.name)}>
+                        <div class="feature-media">
+                            {media.preview ? (
+                                <video
+                                    src={media.preview}
+                                    poster={media.poster ?? undefined}
+                                    autoplay muted loop playsinline preload="metadata"
+                                    data-hero-video
+                                    aria-label={`${lead.name} — looping preview`}></video>
+                            ) : media.poster ? (
+                                <img src={media.poster} alt={`${lead.name} — cover`} />
+                            ) : null}
+                            <span class="index-kind" data-kind={projectKind(lead)}>
+                                {KIND_LABEL[projectKind(lead)]}
+                            </span>
+                        </div>
+                        <div class="feature-body">
+                            <h2 class="display lead-title">{lead.name}</h2>
+                            <p class="label">Read it &rarr;</p>
+                        </div>
+                        <p class="lead-cap">{lead.caption}</p>
+                    </a>
+                ))}
             </div>
         </section>
 
-        {/* Full-bleed row: the shell's 1440px cap would leave four cards
-            narrower than the two leads above them, which reads as a
-            downgrade rather than a different section. This section sets its
-            own gutters instead. */}
-        <section class="band strip" aria-labelledby="sel-h">
-            <p class="label" id="sel-h" style="margin-bottom:28px">Selected work</p>
+        {/* Full-bleed rows: the shell's 1440px cap would leave four cards
+            narrower than the two leads above them, which reads as a downgrade
+            rather than a different section. These set their own gutters. */}
+        <section class="band strip" aria-labelledby="cs-h">
+            <p class="label" id="cs-h" style="margin-bottom:28px">Case studies</p>
             <div class="strip-grid">
-                {selected.map(({ p: item, media }) => (
+                {written.map(({ p: item, media }) => (
                     <a class="feature" href={projectHref(item.name)}>
                         <div class="feature-media">
                             {media.preview ? (
                                 <video
                                     src={media.preview}
                                     poster={media.poster ?? undefined}
-                                    autoplay muted loop playsinline
-                                    preload="metadata"
+                                    autoplay muted loop playsinline preload="metadata"
                                     data-hero-video
                                     aria-label={`${item.name} — looping preview`}></video>
                             ) : media.poster ? (
                                 <img src={media.poster} alt={`${item.name} — cover`} loading="lazy" decoding="async" />
                             ) : null}
-                            <span class="index-kind" data-kind={item.caseStudy ? 'case' : 'project'}>
-                                {item.caseStudy ? 'Case study' : 'Project'}
+                            <span class="index-kind" data-kind={projectKind(item)}>
+                                {KIND_LABEL[projectKind(item)]}
                             </span>
                         </div>
                         <div class="feature-body">
-                            <h3 class="display" style="font-size:clamp(20px,1.7vw,26px)">{item.name}</h3>
+                            <h3 class="display strip-title">{item.name}</h3>
                         </div>
                         <p class="lead-cap">{item.caption}</p>
                     </a>
                 ))}
             </div>
-            <p style="margin-top:44px">
+        </section>
+
+        <section class="band strip" aria-labelledby="pr-h">
+            <p class="label" id="pr-h" style="margin-bottom:28px">Projects</p>
+            <div class="strip-grid">
+                {projectsRow.map(({ p: item, media }) => (
+                    <a class="feature" href={projectHref(item.name)}>
+                        <div class="feature-media">
+                            {media.preview ? (
+                                <video
+                                    src={media.preview}
+                                    poster={media.poster ?? undefined}
+                                    autoplay muted loop playsinline preload="metadata"
+                                    data-hero-video
+                                    aria-label={`${item.name} — looping preview`}></video>
+                            ) : media.poster ? (
+                                <img src={media.poster} alt={`${item.name} — cover`} loading="lazy" decoding="async" />
+                            ) : null}
+                        </div>
+                        <div class="feature-body">
+                            <h3 class="display strip-title">{item.name}</h3>
+                        </div>
+                        <p class="lead-cap">{item.caption}</p>
+                    </a>
+                ))}
+            </div>
+            <p style="margin-top:52px">
                 <a class="btn" href="/work">All {PROJECTS.length} projects &rarr;</a>
             </p>
         </section>
