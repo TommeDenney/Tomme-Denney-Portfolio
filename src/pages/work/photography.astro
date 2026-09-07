@@ -1,0 +1,123 @@
+---
+/**
+ * Photography, at /work/photography so it sits with everything else.
+ *
+ * A static route beats the [slug] route for the same path, and no project
+ * slugifies to "photography", so there is no collision.
+ *
+ * v1 built this grid in the browser and let images that 404 remove their own
+ * tile. Here the folders are read at build time, so the page only ever emits
+ * tags for files that exist — no failed requests, and the grid is complete in
+ * the HTML for anything that does not run scripts.
+ */
+import Base from '../../layouts/Base.astro';
+import SiteNav from '../../components/SiteNav.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
+import { FEATURED_PHOTO_COUNT, ALL_WORKS_PHOTO_COUNT } from '../../data/photography';
+import { hasAsset } from '../../lib/projectMedia';
+
+function shots(folder: string, count: number): string[] {
+    return Array.from({ length: count }, (_, i) => `/photography/${folder}/${i}.webp`)
+        .filter(hasAsset);
+}
+
+const featured = shots('Featured', FEATURED_PHOTO_COUNT);
+const all = shots('All Works', ALL_WORKS_PHOTO_COUNT);
+---
+
+<Base
+    title="Photography — Tomme Denney"
+    description="Photography by Tomme Denney — Boston, Massachusetts."
+    path="/work/photography"
+    image={featured[0] ?? all[0]}
+>
+    <SiteNav current="photography" />
+
+    <main id="main" class="shell">
+        <header class="mast">
+            <p class="label">{featured.length + all.length} photographs</p>
+            <h1 class="display">Photography</h1>
+        </header>
+
+        {featured.length > 0 && (
+            <section class="band" aria-labelledby="feat-h">
+                <div class="band-grid">
+                    <p class="label band-label" id="feat-h">Featured</p>
+                    <div class="photos">
+                        {featured.map((src, i) => (
+                            <figure>
+                                <img src={src} alt={`Featured photograph ${i + 1}`} loading="lazy" decoding="async" />
+                            </figure>
+                        ))}
+                    </div>
+                </div>
+            </section>
+        )}
+
+        {all.length > 0 && (
+            <section class="band" aria-labelledby="all-h">
+                <div class="band-grid">
+                    <p class="label band-label" id="all-h">All works</p>
+                    <div class="photos">
+                        {all.map((src, i) => (
+                            <figure>
+                                <img src={src} alt={`Photograph ${i + 1}`} loading="lazy" decoding="async" />
+                            </figure>
+                        ))}
+                    </div>
+                </div>
+            </section>
+        )}
+    </main>
+
+    <div class="lightbox" id="lb">
+        <button class="lightbox-x" id="lb-x" type="button">Close</button>
+        <img src="" alt="" id="lb-img" />
+    </div>
+
+    <SiteFooter />
+
+    <script is:inline>
+        (function () {
+            var lb = document.getElementById('lb');
+            var img = document.getElementById('lb-img');
+            var last = null;
+
+            function open(src, alt) {
+                img.src = src;
+                img.alt = alt;
+                lb.setAttribute('open', '');
+                document.body.style.overflow = 'hidden';
+                document.getElementById('lb-x').focus();
+            }
+
+            function close() {
+                lb.removeAttribute('open');
+                img.src = '';
+                document.body.style.overflow = '';
+                if (last) last.focus();
+            }
+
+            document.querySelectorAll('.photos img').forEach(function (el) {
+                el.tabIndex = 0;
+                el.addEventListener('click', function () {
+                    last = el;
+                    open(el.src, el.alt);
+                });
+                el.addEventListener('keydown', function (e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        last = el;
+                        open(el.src, el.alt);
+                    }
+                });
+            });
+
+            document.getElementById('lb-x').addEventListener('click', close);
+            lb.addEventListener('click', function (e) { if (e.target === lb) close(); });
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape' && lb.hasAttribute('open')) close();
+            });
+        })();
+    </script>
+</Base>

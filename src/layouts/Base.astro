@@ -2,12 +2,10 @@
 /**
  * The page shell.
  *
- * head.js has to be inline and in the head: the markup calls imgFallback and
- * smoothTo from inline attributes, and every card image's onerror fires during
- * parse. A deferred module would be too late and, being module-scoped, invisible
- * to those attributes anyway.
+ * v1 inlined head.js here so the markup's onerror/imgFallback attributes could
+ * find it during parse. The new pages resolve their media at build time and
+ * emit only tags that point at files which exist, so that chain is gone.
  */
-import headScript from '../scripts/head.js?raw';
 import '../styles/global.css';
 
 interface Props {
@@ -39,7 +37,7 @@ const ogImage = image ? new URL(image, Astro.site).href : undefined;
 ---
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -60,12 +58,18 @@ const ogImage = image ? new URL(image, Astro.site).href : undefined;
 
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        {/* Fraunces is the change of character: a variable serif with the
+            optical-size axis wound up reads as a printed archive, where Barlow
+            Condensed read as industrial signage. Barlow stays for text and UI. */}
         <link
-            href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Barlow:wght@400;500;600;700&display=swap"
+            href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..700&family=Barlow:wght@400;500;600;700&display=swap"
             rel="stylesheet"
         />
 
-        <script is:inline set:html={headScript} />
+        {/* Set before first paint so a saved Ink preference does not flash wheat. */}
+        <script is:inline>
+            if (localStorage.getItem('theme') === 'ink') document.documentElement.dataset.theme = 'ink';
+        </script>
     </head>
     <body class={bodyClass}>
         <slot />

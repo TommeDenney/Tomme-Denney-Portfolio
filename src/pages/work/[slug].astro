@@ -13,9 +13,11 @@
  * exactly one home.
  */
 import Base from '../../layouts/Base.astro';
+import SiteNav from '../../components/SiteNav.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
 import {
     PROJECTS, PROJECT_EXTERNAL_SITES, PROJECT_EMBEDS,
-    projectSlug, projectHref, type Project,
+    projectSlug, projectHref, projectDisciplines, type Project,
 } from '../../data/projects';
 import { projectMedia, hasAsset } from '../../lib/projectMedia';
 import { assetUrl } from '../../lib/assets';
@@ -130,6 +132,8 @@ const slots = (p.caseStudy ? SLOTS[p.caseStudy] ?? [] : [])
 // falls back to type on the project's own gradient instead.
 const heroVideo = media.video;
 const heroStill = p.caseStudy ? null : media.poster;
+const disciplines = projectDisciplines(p);
+const others = PROJECTS.filter((o) => o.id !== p.id).slice(0, 4);
 
 const title = `${p.name} — Tomme Denney`;
 const description = p.caption ?? `${p.desc.slice(0, 175).trimEnd()}…`;
@@ -141,155 +145,159 @@ const description = p.caption ?? `${p.desc.slice(0, 175).trimEnd()}…`;
     path={projectHref(p.name)}
     image={media.poster ?? p.cover}
     ogType="article"
-    bodyClass="page-work"
 >
-    <nav class="pp-nav">
-        <a class="logo" href="/">Tomme Denney</a>
-        <a class="back-btn" href="/">
-            <svg width="16" height="12" viewBox="0 0 16 12" fill="none" aria-hidden="true"
-                ><path d="M15 6H1M1 6L6 1M1 6L6 11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg
-            >
-            All Work
-        </a>
-    </nav>
+    <SiteNav current="work" />
 
-    <div class="pp">
-        <header class="pv-hero pp-hero">
-            <div class="pv-hero-bg" style={`background:${p.bg}`}></div>
-            {heroVideo && (
-                <video
-                    class="pv-hero-media"
-                    data-hero-video
-                    src={heroVideo}
-                    poster={media.poster ?? undefined}
-                    autoplay
-                    muted
-                    loop
-                    playsinline
-                    preload="metadata"
-                    aria-label={`${p.name} — looping preview`}></video>
-            )}
-            {!heroVideo && heroStill && (
-                <img class="pv-hero-media" src={heroStill} alt={`${p.name} — cover image`} />
-            )}
-            <div class="pv-hero-grad"></div>
-            <div class="pv-hero-info">
-                <p class="pv-cat">{p.cat}</p>
-                <h1 class="pv-title">{p.name}</h1>
-                <div class="pv-tags">
-                    {p.tags.map((t) => <span class="pv-tag">{t}</span>)}
-                </div>
-                {p.caption && <p class="pv-caption">{p.caption}</p>}
-            </div>
-        </header>
-
-        <div class="pv-body">
-            <div class="pp-actions">
-                {ext && <a class="pv-ext-btn" href={ext.url} target="_blank" rel="noopener">{ext.label}</a>}
-                {p.dl && (
-                    <a class="pv-ext-btn" href={p.dl} target="_blank" rel="noopener">{p.dlLabel ?? 'Download'}</a>
+    <main id="main">
+        {(heroVideo || heroStill) && (
+            <div class="cs-hero">
+                {heroVideo ? (
+                    <video
+                        src={heroVideo}
+                        poster={media.poster ?? undefined}
+                        autoplay muted loop playsinline preload="metadata"
+                        data-hero-video
+                        aria-label={`${p.name} — looping preview`}></video>
+                ) : (
+                    <img src={heroStill!} alt={`${p.name} — cover`} />
                 )}
             </div>
+        )}
 
-            {Content ? (
-                <article class="cs">
-                    <div class="cs-prose">
-                        <Content />
+        <div class="shell">
+            <header class="cs-head">
+                <p class="label">{p.caseStudy ? 'Case study' : 'Project'}</p>
+                <h1 class="display" style="margin-top:16px">{p.name}</h1>
+                {p.caption && <p class="cs-dek">{p.caption}</p>}
+                <div class="cs-meta">
+                    <span>{p.cat}</span>
+                    {disciplines.map((d) => <span>{d}</span>)}
+                </div>
+            </header>
+
+            <section class="cs-body">
+                <div class="band-grid">
+                    <p class="label band-label">{Content ? 'Case study' : 'Overview'}</p>
+                    <div>
+                        {Content ? <Content /> : <div class="prose"><p>{p.desc}</p></div>}
+
+                        {(ext || p.dl) && (
+                            <p class="stack" style="margin-top:44px">
+                                {ext && <a class="btn" href={ext.url} target="_blank" rel="noopener">{ext.label}</a>}
+                                {p.dl && (
+                                    <a class="btn" href={p.dl} target="_blank" rel="noopener">{p.dlLabel ?? 'Download'}</a>
+                                )}
+                            </p>
+                        )}
                     </div>
-                </article>
-            ) : (
-                <p class="pv-desc">{p.desc}</p>
-            )}
+                </div>
+            </section>
 
             {slots.length > 0 && (
-                <section class="cs-evidence" aria-labelledby="evidence-h">
-                    <h2 class="cs-evidence-h" id="evidence-h">Evidence</h2>
-                    {slots.map((s) => (
-                        <figure class="cs-fig">
-                            {s.isVideo ? (
-                                <video
-                                    src={s.url}
-                                    poster={s.posterUrl}
-                                    controls
-                                    muted
-                                    loop
-                                    playsinline
-                                    preload="none"></video>
-                            ) : (
-                                <img src={s.url} alt={s.caption} loading="lazy" decoding="async" />
-                            )}
-                            <figcaption>
-                                {s.caption}
-                                <span class="cs-proves">{s.proves}</span>
-                            </figcaption>
-                        </figure>
-                    ))}
+                <section class="band" aria-labelledby="ev-h">
+                    <div class="band-grid">
+                        <p class="label band-label" id="ev-h">Evidence</p>
+                        <div>
+                            {slots.map((s) => (
+                                <figure class="fig">
+                                    {s.isVideo ? (
+                                        <video src={s.url} poster={s.posterUrl} controls muted loop playsinline preload="none"></video>
+                                    ) : (
+                                        <img src={s.url} alt={s.caption} loading="lazy" decoding="async" />
+                                    )}
+                                    <figcaption>
+                                        <span class="label">Proves</span>
+                                        <span>
+                                            {s.caption}
+                                            <span class="fig-proves" style="display:block;margin-top:4px">{s.proves}</span>
+                                        </span>
+                                    </figcaption>
+                                </figure>
+                            ))}
+                        </div>
+                    </div>
                 </section>
             )}
 
             {embed && (
-                <section class="pv-game-wrap" aria-label="Play in browser">
-                    <div class="pv-game-bar">
-                        <span>Play in Browser</span>
-                        <div class="pv-game-bar-btns">
+                <section class="band" aria-labelledby="play-h">
+                    <div class="band-grid">
+                        <p class="label band-label" id="play-h">Play in browser</p>
+                        <div>
+                            <iframe
+                                src={embed.src}
+                                title={`${p.name} — playable build`}
+                                loading="lazy"
+                                allowfullscreen
+                                allow="autoplay; fullscreen *; gamepad"
+                                style="width:100%;aspect-ratio:16/9;border:0;background:#04151f"></iframe>
                             {embed.itchio && (
-                                <a class="pv-game-itchio" href={embed.itchio} target="_blank" rel="noopener">Itch.io ↗</a>
+                                <p style="margin-top:18px">
+                                    <a class="btn" href={embed.itchio} target="_blank" rel="noopener">Itch.io ↗</a>
+                                </p>
                             )}
                         </div>
                     </div>
-                    <iframe src={embed.src} title={`${p.name} — playable build`} loading="lazy" allowfullscreen allow="autoplay; fullscreen *; gamepad"></iframe>
                 </section>
             )}
 
             {media.gallery.length > 0 && (
-                <section class="pv-gallery" aria-label={`${p.name} gallery`}>
-                    {media.gallery.map((src, i) => (
-                        <div class="pv-gallery-item">
-                            <img src={src} alt={`${p.name} — still ${i + 1}`} loading="lazy" decoding="async" />
+                <section class="band" aria-labelledby="gal-h">
+                    <div class="band-grid">
+                        <p class="label band-label" id="gal-h">Stills</p>
+                        <div class="photos">
+                            {media.gallery.map((src, i) => (
+                                <figure><img src={src} alt={`${p.name} — still ${i + 1}`} loading="lazy" decoding="async" /></figure>
+                            ))}
                         </div>
-                    ))}
-                </section>
-            )}
-
-            {(p.paper || p.presentation) && (
-                <section class="pp-documents" aria-labelledby="documents-h">
-                    <h2 class="cs-evidence-h" id="documents-h">Thesis Documents</h2>
-                    <div class="pp-documents-grid">
-                        {p.paper && (
-                            <article class="pv-document">
-                                <div class="pv-paper-head">
-                                    <div>
-                                        <h3 class="pv-paper-title">Research Paper</h3>
-                                        <p class="pv-paper-sub">The complete {p.name} master’s thesis.</p>
-                                    </div>
-                                    <a class="pv-paper-open" href={p.paper} target="_blank" rel="noopener">Open PDF ↗</a>
-                                </div>
-                            </article>
-                        )}
-                        {p.presentation && (
-                            <article class="pv-document">
-                                <div class="pv-paper-head">
-                                    <div>
-                                        <h3 class="pv-paper-title">Presentation</h3>
-                                        <p class="pv-paper-sub">The thesis presentation deck.</p>
-                                    </div>
-                                    <a class="pv-paper-open" href={p.presentation} target="_blank" rel="noopener">Open PDF ↗</a>
-                                </div>
-                            </article>
-                        )}
                     </div>
                 </section>
             )}
+
+            {p.presentation && (
+                <section class="band" aria-labelledby="doc-h">
+                    <div class="band-grid">
+                        <p class="label band-label" id="doc-h">Documents</p>
+                        <div>
+                            <h3 class="display">Thesis presentation</h3>
+                            <p class="prose muted" style="margin-top:10px">The deck as presented at the showcase.</p>
+                            <p style="margin-top:20px"><a class="btn" href={p.presentation} target="_blank" rel="noopener">Open PDF ↗</a></p>
+                        </div>
+                    </div>
+                </section>
+            )}
+
+            <section class="band">
+                <div class="band-grid">
+                    <p class="label band-label">Next</p>
+                    <div>
+                        <ol class="index">
+                            {others.map((o, i) => (
+                                <li class="index-row">
+                                    <a class="index-link" href={projectHref(o.name)}>
+                                        <span class="index-num">{String(i + 1).padStart(2, '0')}</span>
+                                        <span>
+                                            <span class="index-name">{o.name}</span>
+                                            <span class="index-meta">{o.cat}</span>
+                                        </span>
+                                        <span class="index-kind" data-kind={o.caseStudy ? 'case' : 'project'}>
+                                            {o.caseStudy ? 'Case study' : 'Project'}
+                                        </span>
+                                    </a>
+                                </li>
+                            ))}
+                        </ol>
+                    </div>
+                </div>
+            </section>
         </div>
-    </div>
+    </main>
+
+    <SiteFooter />
 
     <script is:inline>
-        // The hero loops silently as part of the page's composition, so it is
-        // not something the visitor asked to have moving. Under a reduced-motion
-        // preference it becomes its own poster frame instead.
         if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
             document.querySelectorAll('video[data-hero-video]').forEach(function (v) {
-                v.autoplay = false;
                 v.removeAttribute('autoplay');
                 v.pause();
             });

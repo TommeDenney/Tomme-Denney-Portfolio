@@ -1,0 +1,42 @@
+---
+/**
+ * The bar. Sticky, hairline-ruled, and the same on every page — v1 rewrote its
+ * own nav in JS whenever the mode changed, which meant two copies of the markup
+ * that had to agree by hand.
+ */
+interface Props { current?: 'work' | 'about' | 'photography' }
+const { current } = Astro.props;
+---
+<a class="skip" href="#main">Skip to content</a>
+<nav class="nav">
+    <a class="nav-mark" href="/">Tomme Denney</a>
+    <ul class="nav-links">
+        <li><a href="/work" aria-current={current === 'work' ? 'page' : undefined}>Work</a></li>
+        <li><a href="/work/photography" aria-current={current === 'photography' ? 'page' : undefined}>Photography</a></li>
+        <li><a href="/about" aria-current={current === 'about' ? 'page' : undefined}>About</a></li>
+        <li>
+            <button class="theme-btn" id="theme-btn" type="button" aria-live="polite">Ink</button>
+        </li>
+    </ul>
+</nav>
+<script is:inline>
+    (function () {
+        var btn = document.getElementById('theme-btn');
+        if (!btn) return;
+        // Persisted, unlike v1 — a palette that resets on every navigation is
+        // not a preference, it is a toggle that forgets.
+        var saved = localStorage.getItem('theme');
+        if (saved === 'ink') document.documentElement.dataset.theme = 'ink';
+        function sync() {
+            btn.textContent = document.documentElement.dataset.theme === 'ink' ? 'Wheat' : 'Ink';
+        }
+        sync();
+        btn.addEventListener('click', function () {
+            var next = document.documentElement.dataset.theme === 'ink' ? '' : 'ink';
+            if (next) document.documentElement.dataset.theme = next;
+            else delete document.documentElement.dataset.theme;
+            localStorage.setItem('theme', next);
+            sync();
+        });
+    })();
+</script>

@@ -9,6 +9,8 @@
  * content.
  */
 import Base from '../layouts/Base.astro';
+import SiteNav from '../components/SiteNav.astro';
+import SiteFooter from '../components/SiteFooter.astro';
 import { projectHref } from '../data/projects';
 ---
 
@@ -17,32 +19,33 @@ import { projectHref } from '../data/projects';
     description="Spatial and immersive product designer who prototypes. MS Extended Reality with a concentration in Human-Computer Interaction, BFA Game Design — Northeastern University."
     path="/about"
 >
-    <nav class="pp-nav">
-        <a class="logo" href="/">Tomme Denney</a>
-        <a class="back-btn" href="/work">All Work</a>
-    </nav>
+    <SiteNav current="about" />
 
-    <main class="ab">
-        <header class="ab-head">
+    <main id="main" class="shell">
+        <header class="mast">
             <p class="label">About</p>
-            <h1 class="ab-title">I design experiences you<br /><em>enter</em>, not ones you look at.</h1>
-            <p class="ab-lede">
+            <h1 class="display">Design, and enough building to test it.</h1>
+            <p class="lede" style="margin-top:26px">
                 Spatial and immersive product designer, and enough of a builder to
                 test my own ideas in a headset rather than argue about them in a
                 deck. MS in Extended Reality with a concentration in
                 Human-Computer Interaction, and a BFA in Game Design — both from
                 Northeastern University.
             </p>
-            <p class="ab-lede">
-                I treat comfort as an accessibility problem, not a polish pass. In
-                spatial work that means locomotion, session length, play space and
-                the person who has never worn a headset before are design
-                questions from the first sketch.
-            </p>
+            <div class="prose muted" style="margin-top:22px">
+                <p>
+                    I treat comfort as an accessibility problem, not a polish pass. In
+                    spatial work that means locomotion, session length, play space and
+                    the person who has never worn a headset before are design
+                    questions from the first sketch.
+                </p>
+            </div>
         </header>
 
-        <section class="ab-sec">
-            <h2 class="ab-h">How I actually work</h2>
+        <section class="band">
+            <div class="band-grid">
+            <p class="label band-label">How I actually work</p>
+            <div class="prose">
             <p>
                 Five phases, run end to end on two graduate projects in
                 <em>Design for Dignity</em>, with a graded deliverable at each one.
@@ -50,17 +53,20 @@ import { projectHref } from '../data/projects';
                 it — a process diagram on a project that skipped ideation is a lie
                 with a nice icon.
             </p>
-            <ol class="ab-phases">
+            <ol class="phases">
                 <li><span>Research</span></li>
                 <li><span>Definition</span></li>
                 <li><span>Ideation</span></li>
                 <li><span>Synthesis</span></li>
                 <li><span>Delivery</span></li>
             </ol>
+            </div></div>
         </section>
 
-        <section class="ab-sec">
-            <h2 class="ab-h">What I mean by dignity</h2>
+        <section class="band">
+            <div class="band-grid">
+            <p class="label band-label">What I mean by dignity</p>
+            <div class="prose">
             <p>
                 From graduate coursework in <em>Design for Dignity</em>: a design
                 either honours four things about a person or erodes them.
@@ -84,8 +90,10 @@ import { projectHref } from '../data/projects';
             </p>
         </section>
 
-        <section class="ab-sec">
-            <h2 class="ab-h">Instrumented evaluation</h2>
+        <section class="band">
+            <div class="band-grid">
+            <p class="label band-label">Instrumented evaluation</p>
+            <div class="prose">
             <p>
                 Graduate coursework in <em>Biometrics of Design</em> put me on eye
                 tracking and heart-rate instrumentation — measuring where
@@ -95,10 +103,13 @@ import { projectHref } from '../data/projects';
                 tells you what a person believes about an experience, and
                 instrumentation tells you what happened to them.
             </p>
+            </div></div>
         </section>
 
-        <section class="ab-sec">
-            <h2 class="ab-h">Where the rest of it comes from</h2>
+        <section class="band">
+            <div class="band-grid">
+            <p class="label band-label">Where the rest of it comes from</p>
+            <div class="prose">
             <p>
                 Game interface design — diegetic UI, iconography, and taking a
                 sketch through to a tested prototype. Interaction and experience
@@ -108,11 +119,11 @@ import { projectHref } from '../data/projects';
                 actually comes from. And psychology, which is what any claim about
                 attention, memory or cognitive load has to rest on.
             </p>
+            </div></div>
         </section>
 
-        <footer class="ab-foot">
-            <a class="pv-ext-btn" href="/work">See the work →</a>
-            <a class="ab-mail" href="mailto:denneytomme@gmail.com">denneytomme@gmail.com</a>
-        </footer>
+        <p class="band" style="padding-bottom:0"><a class="btn" href="/work">See the work &rarr;</a></p>
     </main>
+
+    <SiteFooter />
 </Base>

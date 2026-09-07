@@ -2,18 +2,18 @@
 /**
  * The work index.
  *
- * / is a pitch and hands off to one case study; this is the browsable wall.
- * Filtering is a class toggle on the grid rather than a re-render: 18 cards is
- * not enough work to justify shipping a framework, and the whole grid stays in
- * the HTML so it is all crawlable regardless of which filter is active.
+ * A contents page rather than a wall of tiles: numbered rows on hairline
+ * rules, with the still following the pointer. Filtering is a hidden attribute
+ * toggle, so every row stays in the HTML and is crawlable whichever filter is
+ * showing — 18 rows does not justify shipping a framework.
  */
 import Base from '../layouts/Base.astro';
-import {
-    PROJECTS, DISCIPLINES, projectDisciplines, projectHref,
-} from '../data/projects';
+import SiteNav from '../components/SiteNav.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import { PROJECTS, DISCIPLINES, projectDisciplines, projectHref } from '../data/projects';
 import { projectMedia } from '../lib/projectMedia';
 
-const cards = PROJECTS.map((p) => ({
+const rows = PROJECTS.map((p) => ({
     p,
     href: projectHref(p.name),
     disciplines: projectDisciplines(p),
@@ -21,91 +21,88 @@ const cards = PROJECTS.map((p) => ({
 }));
 
 const counts = Object.fromEntries(
-    DISCIPLINES.map((d) => [d, cards.filter((c) => c.disciplines.includes(d)).length]),
+    DISCIPLINES.map((d) => [d, rows.filter((r) => r.disciplines.includes(d)).length]),
 );
 ---
 
 <Base
     title="Work — Tomme Denney"
-    description="Spatial and immersive design, games, interface work and design research by Tomme Denney."
+    description="Spatial and immersive design, games, and design research by Tomme Denney."
     path="/work"
 >
-    <nav class="pp-nav">
-        <a class="logo" href="/">Tomme Denney</a>
-        <a class="back-btn" href="/">All Work</a>
-    </nav>
+    <SiteNav current="work" />
 
-    <main class="wx">
-        <header class="wx-head">
-            <p class="label">Selected work</p>
-            <h1 class="wx-title">Work</h1>
-            <p class="wx-sub">
-                Spatial and immersive design first, then games, interface work, and
-                the research that tested it. Case studies carry the reasoning;
-                projects carry the craft.
+    <main id="main" class="shell">
+        <header class="mast">
+            <p class="label">Index</p>
+            <h1 class="display">Work</h1>
+            <p class="lede" style="margin-top:26px">
+                Spatial work first, then games, then the research that tested it.
+                Case studies carry the reasoning; projects carry the craft.
             </p>
         </header>
 
-        <div class="wx-filters" role="group" aria-label="Filter by discipline">
-            <button class="wx-filter is-on" data-filter="all" aria-pressed="true">
-                All <span class="wx-count">{cards.length}</span>
+        <div class="filters" role="group" aria-label="Filter by discipline">
+            <button class="filter on" data-filter="all" aria-pressed="true">
+                All <span class="filter-n">{rows.length}</span>
             </button>
             {DISCIPLINES.map((d) => (
-                <button class="wx-filter" data-filter={d} aria-pressed="false">
-                    {d} <span class="wx-count">{counts[d]}</span>
+                <button class="filter" data-filter={d} aria-pressed="false">
+                    {d} <span class="filter-n">{counts[d]}</span>
                 </button>
             ))}
         </div>
 
-        <div class="wx-grid" id="wx-grid">
-            {cards.map(({ p, href, disciplines, media }) => (
-                <article class="wx-card" data-disciplines={disciplines.join('|')}>
-                    <a class="wx-link" href={href}>
-                        <div class="wx-thumb">
-                            <div class="wx-thumb-bg" style={`background:${p.bg}`}></div>
-                            {media.poster && (
-                                <img src={media.poster} alt={`${p.name} — cover`} loading="lazy" decoding="async" />
-                            )}
-                            <span class="wx-kind">{p.caseStudy ? 'Case study' : 'Project'}</span>
-                        </div>
-                        <h2 class="wx-name">{p.name}</h2>
-                        <p class="wx-cat">{p.cat}</p>
-                        {p.caption && <p class="wx-cap">{p.caption}</p>}
-                        <span class="wx-more">{p.caseStudy ? 'Read the case study' : 'View project'} →</span>
+        <ol class="index" id="index">
+            {rows.map(({ p, href, disciplines, media }, i) => (
+                <li class="index-row" data-disciplines={disciplines.join('|')}>
+                    <a class="index-link" href={href} data-peek={media.poster ?? ''}>
+                        <span class="index-num">{String(i + 1).padStart(2, '0')}</span>
+                        <span>
+                            <span class="index-name">{p.name}</span>
+                            <span class="index-meta">{p.cat}</span>
+                        </span>
+                        <span class="index-kind" data-kind={p.caseStudy ? 'case' : 'project'}>
+                            {p.caseStudy ? 'Case study' : 'Project'}
+                        </span>
+                        {media.poster && (
+                            <span class="index-thumb">
+                                <img src={media.poster} alt="" loading="lazy" decoding="async" />
+                            </span>
+                        )}
                     </a>
-                </article>
+                </li>
             ))}
-        </div>
+        </ol>
 
-        <p class="wx-empty" id="wx-empty" hidden>Nothing in that discipline yet.</p>
+        <p class="muted" id="empty" hidden style="padding:48px 0">Nothing in that discipline yet.</p>
     </main>
 
+    <div class="peek" id="peek" aria-hidden="true"><img src="" alt="" /></div>
+    <SiteFooter />
+
+    <script is:inline src="/peek.js" defer></script>
     <script is:inline>
         (function () {
-            var grid = document.getElementById('wx-grid');
-            var empty = document.getElementById('wx-empty');
-            var buttons = document.querySelectorAll('.wx-filter');
-
-            function apply(filter) {
-                var shown = 0;
-                grid.querySelectorAll('.wx-card').forEach(function (card) {
-                    var list = (card.dataset.disciplines || '').split('|');
-                    var show = filter === 'all' || list.indexOf(filter) !== -1;
-                    card.hidden = !show;
-                    if (show) shown++;
-                });
-                empty.hidden = shown > 0;
-            }
+            var buttons = document.querySelectorAll('.filter');
+            var rows = document.querySelectorAll('#index .index-row');
+            var empty = document.getElementById('empty');
 
             buttons.forEach(function (btn) {
                 btn.addEventListener('click', function () {
+                    var f = btn.dataset.filter;
                     buttons.forEach(function (b) {
-                        b.classList.remove('is-on');
-                        b.setAttribute('aria-pressed', 'false');
+                        b.classList.toggle('on', b === btn);
+                        b.setAttribute('aria-pressed', b === btn ? 'true' : 'false');
                     });
-                    btn.classList.add('is-on');
-                    btn.setAttribute('aria-pressed', 'true');
-                    apply(btn.dataset.filter);
+                    var shown = 0;
+                    rows.forEach(function (row) {
+                        var list = (row.dataset.disciplines || '').split('|');
+                        var show = f === 'all' || list.indexOf(f) !== -1;
+                        row.hidden = !show;
+                        if (show) shown++;
+                    });
+                    empty.hidden = shown > 0;
                 });
             });
         })();
