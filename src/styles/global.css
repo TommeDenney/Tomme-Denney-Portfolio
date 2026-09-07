@@ -1148,3 +1148,17 @@ h3.display {
         transition: none;
     }
 }
+
+/* Two leads side by side. They are peers, so neither gets the larger tile. */
+.leads {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: clamp(28px, 4vw, 52px);
+}
+
+.lead-cap {
+    margin-top: 14px;
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--mt);
+}

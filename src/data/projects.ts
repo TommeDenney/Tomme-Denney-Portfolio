@@ -166,6 +166,41 @@ export const PROJECTS: Project[] = [
         galleryImages: false
     },
     {
+        id: 'spark', name: 'Spark', cat: 'Service Design · Design for Dignity · ARTG5710 · 2026', cover: '/projects/spark/1.jpg',
+        bg: 'linear-gradient(145deg,#04151f,#183a37,#c44900)', ico: '✨',
+        tags: ['Service Design', 'Co-Design', 'Design for Dignity', 'Accessibility', 'Intergenerational', 'Systems Mapping', 'Personas & Journeys'],
+        caption: 'A card game an older adult designs the rules for, and their grandchild has to follow.',
+        desc: 'Older adults are usually framed as people who need to be taught technology. Spark starts from a different reading of the same problem: the exclusion is not from the device, it is from the moments happening around it — the group chat, the shared joke, the plan everyone else is already inside. So Spark is a facilitated session where an older adult and a younger relative design a card game together, and the older adult authors the rules. The younger one follows them. The facilitator hands over a card that says Elder Expert and then spends the rest of the session getting out of the way. Built with two teammates for a graduate Design for Dignity course, as a full service design: research, personas, a fifteen-stage journey, a service blueprint, and a system map.',
+        caseStudy: 'spark',
+        documents: [
+            {
+                label: 'Final presentation',
+                file: '/projects/spark/SPARK Final Presentation.pdf',
+                note: 'The service blueprint, the framework, and the prompt decks.',
+            },
+            {
+                label: 'Hero\u2019s journey map',
+                file: '/projects/spark/SPARK Heros Journey Map.pdf',
+                note: 'Fifteen stages, the ten-panel storyboard, and the three-layer system map, with the dignity pillars marked where each one activates.',
+            },
+            {
+                label: 'Intervention',
+                file: '/projects/spark/SPARK Intervention.pdf',
+                note: 'Secondary research, both personas, the design identity, and the perception-gap argument.',
+            },
+            {
+                label: 'Arrangement',
+                file: '/projects/spark/SPARK Arrangement.pdf',
+                note: 'The journey map and storyboard as presented.',
+            },
+            {
+                label: 'Research',
+                file: '/projects/spark/SPARK Research.pdf',
+                note: 'The opening brainstorm and the three directions we started from.',
+            },
+        ]
+    },
+    {
         id: 'buddyrun', name: 'Buddy Run', cat: 'Design Research · Biometrics · GSND6340 · 2025', cover: '/projects/buddyrun/1.jpg',
         bg: 'linear-gradient(145deg,#04151f,#432534,#c44900)', ico: '🏃',
         tags: ['Design Research', 'Biometrics', 'Behaviour Change', 'Haptics & Audio', 'Mobile Product', 'Whoop', 'iOS'],
@@ -192,8 +227,6 @@ export const PROJECTS: Project[] = [
                 note: 'The deck as presented, including what the study actually became.',
             },
         ],
-        dl: '/projects/buddyrun/Buddy Run App Demo.MOV',
-        dlLabel: 'Original screen recording'
     },
     {
         id: 'seereality', name: 'See Reality', cat: 'XR Studio · Client Work · 2024–Present', cover: '/projects/seereality/0.png',

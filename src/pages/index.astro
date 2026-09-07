@@ -14,10 +14,14 @@ import SiteFooter from '../components/SiteFooter.astro';
 import { PROJECTS, PMAP, projectHref, projectDisciplines } from '../data/projects';
 import { projectMedia } from '../lib/projectMedia';
 
-const lead = PMAP.genexr;
-const leadMedia = projectMedia(lead.cover, false);
+// Two leads rather than one. Both carry a full case study and they argue for
+// different things — one that spatial media can hold a memory, one that a
+// service can hand authority to the person usually being helped — so putting
+// either second would undersell it.
+const LEADS = ['genexr', 'spark'];
+const leads = LEADS.map((id) => ({ p: PMAP[id], media: projectMedia(PMAP[id].cover, false) }));
 
-// The index under the lead: the work worth a recruiter's next click, in the
+// The index under the leads: the work worth a recruiter's next click, in the
 // order it should be read rather than by date.
 const SELECTED = ['buddyrun', 'seereality', 'haptidraw', 'bofum', 'iamyou', 'unforgottenstories'];
 const selected = SELECTED.map((id) => PMAP[id]).filter(Boolean);
@@ -27,7 +31,7 @@ const selected = SELECTED.map((id) => PMAP[id]).filter(Boolean);
     title="Tomme Denney — Spatial & Immersive Product Designer"
     description="Spatial and immersive product designer who prototypes. MS Extended Reality with a concentration in Human-Computer Interaction, BFA Game Design — Northeastern University."
     path="/"
-    image={leadMedia.poster ?? lead.cover}
+    image={leads[0].media.poster ?? leads[0].p.cover}
 >
     <SiteNav />
 
@@ -59,29 +63,29 @@ const selected = SELECTED.map((id) => PMAP[id]).filter(Boolean);
 
         <section class="shell band" aria-labelledby="lead-h">
             <div class="band-grid">
-                <p class="label band-label">Lead case study</p>
-                <div>
-                    <a class="feature" href={projectHref(lead.name)}>
-                        <div class="feature-media">
-                            {leadMedia.video ? (
-                                <video
-                                    src={leadMedia.video}
-                                    poster={leadMedia.poster ?? undefined}
-                                    autoplay muted loop playsinline preload="metadata"
-                                    data-hero-video
-                                    aria-label={`${lead.name} — looping preview`}></video>
-                            ) : leadMedia.poster ? (
-                                <img src={leadMedia.poster} alt={`${lead.name} — cover`} />
-                            ) : null}
-                        </div>
-                        <div class="feature-body">
-                            <h2 class="display" id="lead-h" style="font-size:clamp(30px,4.2vw,58px)">
-                                {lead.name}
-                            </h2>
-                            <p class="label">Read the case study &rarr;</p>
-                        </div>
-                    </a>
-                    <p class="prose" style="margin-top:22px">{lead.caption}</p>
+                <p class="label band-label" id="lead-h">Lead case studies</p>
+                <div class="leads">
+                    {leads.map(({ p: lead, media }) => (
+                        <a class="feature" href={projectHref(lead.name)}>
+                            <div class="feature-media">
+                                {media.video ? (
+                                    <video
+                                        src={media.video}
+                                        poster={media.poster ?? undefined}
+                                        autoplay muted loop playsinline preload="metadata"
+                                        data-hero-video
+                                        aria-label={`${lead.name} — looping preview`}></video>
+                                ) : media.poster ? (
+                                    <img src={media.poster} alt={`${lead.name} — cover`} />
+                                ) : null}
+                            </div>
+                            <div class="feature-body">
+                                <h2 class="display" style="font-size:clamp(26px,3vw,40px)">{lead.name}</h2>
+                                <p class="label">Case study &rarr;</p>
+                            </div>
+                            <p class="lead-cap">{lead.caption}</p>
+                        </a>
+                    ))}
                 </div>
             </div>
         </section>
