@@ -21,12 +21,14 @@
  */
 
 :root {
-    --bg: #efd6ac;
-    --surface: #e7cd9d;
-    --text: #04151f;
-    --mt: #183a37;
-    --rule: rgba(4, 21, 31, .16);
-    --rule-strong: rgba(4, 21, 31, .38);
+    /* Ink is the default: the work is photography and headset capture, and
+       both sit better on it. Wheat remains a first-class choice. */
+    --bg: #04151f;
+    --surface: #183a37;
+    --text: #efd6ac;
+    --mt: rgba(239, 214, 172, .7);
+    --rule: rgba(239, 214, 172, .18);
+    --rule-strong: rgba(239, 214, 172, .42);
     --accent: #c44900;
     --deep: #432534;
     --on-deep: #efd6ac;
@@ -37,13 +39,13 @@
     --step: clamp(72px, 11vh, 148px);
 }
 
-[data-theme='ink'] {
-    --bg: #04151f;
-    --surface: #183a37;
-    --text: #efd6ac;
-    --mt: rgba(239, 214, 172, .7);
-    --rule: rgba(239, 214, 172, .18);
-    --rule-strong: rgba(239, 214, 172, .42);
+[data-theme='wheat'] {
+    --bg: #efd6ac;
+    --surface: #e7cd9d;
+    --text: #04151f;
+    --mt: #183a37;
+    --rule: rgba(4, 21, 31, .16);
+    --rule-strong: rgba(4, 21, 31, .38);
     --deep: #432534;
 }
 
@@ -676,31 +678,102 @@ h3.display {
 
 /* ── PHOTOGRAPHY ─────────────────────────────────────────────────────────── */
 
-.photos {
-    columns: 3;
-    column-gap: 14px;
+/* Featured: an auto-scrolling strip, paused on hover so a photograph can
+   actually be looked at, and stopped entirely under reduced motion. */
+.feat {
+    margin-top: var(--step);
+    overflow: hidden;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    padding: 22px 0;
 }
 
-.photos figure {
-    break-inside: avoid;
-    margin-bottom: 14px;
+.feat-inner {
+    display: flex;
+    gap: 14px;
+    width: max-content;
+    animation: feat-scroll 90s linear infinite;
 }
 
-.photos img {
-    width: 100%;
-    background: var(--surface);
-    cursor: zoom-in;
+.feat:hover .feat-inner,
+.feat:focus-within .feat-inner {
+    animation-play-state: paused;
 }
 
-@media (max-width: 900px) {
-    .photos {
-        columns: 2;
+@keyframes feat-scroll {
+    to {
+        transform: translateX(-50%);
     }
 }
 
-@media (max-width: 560px) {
-    .photos {
-        columns: 1;
+.feat-card {
+    flex: 0 0 auto;
+    height: clamp(200px, 26vh, 300px);
+    padding: 0;
+    border: 0;
+    background: var(--surface);
+    cursor: zoom-in;
+    overflow: hidden;
+}
+
+.feat-card img {
+    height: 100%;
+    width: auto;
+    object-fit: cover;
+    transition: opacity .3s;
+}
+
+.feat-card:hover img {
+    opacity: .84;
+}
+
+/* All works: a justified grid. Each tile's flex-basis and flex-grow come from
+   its real aspect ratio, so a row fills the width without cropping, and the
+   ratios are in the HTML rather than read back from decoded images. */
+.jgrid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.jitem {
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+    background: var(--surface);
+    cursor: zoom-in;
+    flex-shrink: 1;
+    will-change: transform;
+}
+
+.jitem img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.jitem.open {
+    cursor: zoom-out;
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+/* The last row would otherwise stretch its few tiles to absurd widths. */
+.jgrid::after {
+    content: '';
+    flex-grow: 999999;
+}
+
+@media (max-width: 700px) {
+    .jgrid {
+        display: grid;
+        grid-template-columns: 1fr;
+    }
+
+    .jitem {
+        height: auto !important;
+        flex-basis: auto !important;
+        aspect-ratio: 3 / 2;
     }
 }
 
@@ -711,7 +784,7 @@ h3.display {
     display: none;
     place-items: center;
     padding: 4vmin;
-    background: rgba(4, 21, 31, .94);
+    background: rgba(4, 21, 31, .95);
 }
 
 .lightbox[open] {
@@ -738,6 +811,28 @@ h3.display {
     border: 1px solid rgba(239, 214, 172, .4);
     padding: 8px 14px;
     cursor: pointer;
+}
+
+/* Stills inside a case study keep the simple column layout. */
+.photos {
+    columns: 2;
+    column-gap: 12px;
+}
+
+.photos figure {
+    break-inside: avoid;
+    margin-bottom: 12px;
+}
+
+.photos img {
+    width: 100%;
+    background: var(--surface);
+}
+
+@media (max-width: 700px) {
+    .photos {
+        columns: 1;
+    }
 }
 
 /* ── UTILITY ─────────────────────────────────────────────────────────────── */
@@ -817,4 +912,25 @@ h3.display {
     font-size: 13px;
     letter-spacing: 0;
     color: var(--accent);
+}
+
+/* The theme control: a swatch of what it switches to, not a word. */
+.theme-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px;
+    line-height: 0;
+}
+
+.theme-dot {
+    display: block;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #efd6ac;
+    border: 1px solid var(--rule-strong);
+}
+
+[data-theme='wheat'] .theme-dot {
+    background: #04151f;
 }

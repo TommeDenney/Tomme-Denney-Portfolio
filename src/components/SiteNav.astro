@@ -5,17 +5,26 @@
  * that had to agree by hand.
  */
 interface Props { current?: 'work' | 'about' | 'photography' }
+// Photography is reached from /work rather than the top bar: four peer links
+// gave it equal billing with the design work, which is the opposite of the
+// point when the whole site is a repositioning.
 const { current } = Astro.props;
 ---
 <a class="skip" href="#main">Skip to content</a>
 <nav class="nav">
     <a class="nav-mark" href="/">Tomme Denney</a>
     <ul class="nav-links">
-        <li><a href="/work" aria-current={current === 'work' ? 'page' : undefined}>Work</a></li>
-        <li><a href="/work/photography" aria-current={current === 'photography' ? 'page' : undefined}>Photography</a></li>
+        <li>
+            <a href="/work" aria-current={current === 'work' || current === 'photography' ? 'page' : undefined}>Work</a>
+        </li>
         <li><a href="/about" aria-current={current === 'about' ? 'page' : undefined}>About</a></li>
         <li>
-            <button class="theme-btn" id="theme-btn" type="button" aria-live="polite">Ink</button>
+            {/* A swatch of the theme it switches to. "Ink" as a word told a
+                visitor nothing about what the button did. */}
+            <button class="theme-btn" id="theme-btn" type="button">
+                <span class="theme-dot" aria-hidden="true"></span>
+                <span class="skip" id="theme-label">Switch theme</span>
+            </button>
         </li>
     </ul>
 </nav>
@@ -25,16 +34,16 @@ const { current } = Astro.props;
         if (!btn) return;
         // Persisted, unlike v1 — a palette that resets on every navigation is
         // not a preference, it is a toggle that forgets.
-        var saved = localStorage.getItem('theme');
-        if (saved === 'ink') document.documentElement.dataset.theme = 'ink';
+        var label = document.getElementById('theme-label');
         function sync() {
-            btn.textContent = document.documentElement.dataset.theme === 'ink' ? 'Wheat' : 'Ink';
+            var toWheat = document.documentElement.dataset.theme === 'ink';
+            btn.setAttribute('aria-label', toWheat ? 'Switch to the Wheat theme' : 'Switch to the Ink theme');
+            label.textContent = toWheat ? 'Switch to Wheat' : 'Switch to Ink';
         }
         sync();
         btn.addEventListener('click', function () {
-            var next = document.documentElement.dataset.theme === 'ink' ? '' : 'ink';
-            if (next) document.documentElement.dataset.theme = next;
-            else delete document.documentElement.dataset.theme;
+            var next = document.documentElement.dataset.theme === 'ink' ? 'wheat' : 'ink';
+            document.documentElement.dataset.theme = next;
             localStorage.setItem('theme', next);
             sync();
         });

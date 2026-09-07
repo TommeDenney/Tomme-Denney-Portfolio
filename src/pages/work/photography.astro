@@ -1,53 +1,90 @@
 ---
 /**
- * Photography, at /work/photography so it sits with everything else.
+ * Photography, at /work/photography.
  *
- * A static route beats the [slug] route for the same path, and no project
- * slugifies to "photography", so there is no collision.
+ * A static route wins over [slug] for the same path, and no project slugifies
+ * to "photography", so there is no collision.
  *
- * v1 built this grid in the browser and let images that 404 remove their own
- * tile. Here the folders are read at build time, so the page only ever emits
- * tags for files that exist — no failed requests, and the grid is complete in
- * the HTML for anything that does not run scripts.
+ * Keeps v1's two behaviours — the auto-scrolling featured strip, and the
+ * justified grid whose tiles expand in place with a FLIP animation — and fixes
+ * the two things that made them feel slow:
+ *
+ *   1. The page requested the 2400px originals, up to 5.8 MB each, to fill
+ *      rows 220px tall. It now requests the derivatives from
+ *      scripts/build-photo-derivatives.mjs: 138 MB of originals became 6 MB.
+ *   2. v1 could not lay the grid out until every image had decoded, because
+ *      it read naturalWidth in img.onload to get each aspect ratio. The ratios
+ *      come from photo-manifest.json now, so the correct layout is in the HTML
+ *      and there is no reflow once the pictures arrive.
  */
 import Base from '../../layouts/Base.astro';
 import SiteNav from '../../components/SiteNav.astro';
 import SiteFooter from '../../components/SiteFooter.astro';
-import { FEATURED_PHOTO_COUNT, ALL_WORKS_PHOTO_COUNT } from '../../data/photography';
+import { FEATURED_PHOTO_COUNT, ALL_WORKS_PHOTO_COUNT, BASE_ROW_H } from '../../data/photography';
+import manifest from '../../data/photo-manifest.json';
 import { hasAsset } from '../../lib/projectMedia';
 
-function shots(folder: string, count: number): string[] {
-    return Array.from({ length: count }, (_, i) => `/photography/${folder}/${i}.webp`)
-        .filter(hasAsset);
+type Shot = { small: string; large: string; w: number; h: number; ratio: number; alt: string };
+
+function shots(folder: string, count: number, label: string): Shot[] {
+    const out: Shot[] = [];
+    for (let i = 0; i < count; i++) {
+        const dims = (manifest as Record<string, { w: number; h: number }>)[`${folder}/${i}`];
+        const small = `/photography/_derived/${folder}/${i}-800.webp`;
+        if (!dims || !hasAsset(small)) continue;
+        out.push({
+            small: encodeURI(small),
+            large: encodeURI(`/photography/_derived/${folder}/${i}-1600.webp`),
+            w: dims.w,
+            h: dims.h,
+            ratio: dims.w / dims.h,
+            alt: `${label} ${i + 1}`,
+        });
+    }
+    return out;
 }
 
-const featured = shots('Featured', FEATURED_PHOTO_COUNT);
-const all = shots('All Works', ALL_WORKS_PHOTO_COUNT);
+const featured = shots('Featured', FEATURED_PHOTO_COUNT, 'Featured photograph');
+const all = shots('All Works', ALL_WORKS_PHOTO_COUNT, 'Photograph');
 ---
 
 <Base
     title="Photography — Tomme Denney"
     description="Photography by Tomme Denney — Boston, Massachusetts."
     path="/work/photography"
-    image={featured[0] ?? all[0]}
+    image={featured[0]?.large ?? all[0]?.large}
 >
     <SiteNav current="photography" />
 
-    <main id="main" class="shell">
-        <header class="mast">
-            <p class="label">{featured.length + all.length} photographs</p>
+    <main id="main">
+        <header class="shell mast">
+            <p class="label">{featured.length + all.length} photographs &middot; Boston</p>
             <h1 class="display">Photography</h1>
         </header>
 
         {featured.length > 0 && (
-            <section class="band" aria-labelledby="feat-h">
-                <div class="band-grid">
-                    <p class="label band-label" id="feat-h">Featured</p>
-                    <div class="photos">
-                        {featured.map((src, i) => (
-                            <figure>
-                                <img src={src} alt={`Featured photograph ${i + 1}`} loading="lazy" decoding="async" />
-                            </figure>
+            <section class="feat" aria-label="Featured photographs">
+                <div class="feat-track">
+                    {/* Duplicated so the marquee can loop without a visible seam. */}
+                    <div class="feat-inner">
+                        {[...featured, ...featured].map((s, i) => (
+                            <button
+                                class="feat-card"
+                                type="button"
+                                data-full={s.large}
+                                data-alt={s.alt}
+                                aria-hidden={i >= featured.length ? 'true' : undefined}
+                                tabindex={i >= featured.length ? -1 : 0}
+                            >
+                                <img
+                                    src={s.small}
+                                    width={s.w}
+                                    height={s.h}
+                                    alt={i >= featured.length ? '' : s.alt}
+                                    loading={i < 3 ? 'eager' : 'lazy'}
+                                    decoding="async"
+                                />
+                            </button>
                         ))}
                     </div>
                 </div>
@@ -55,14 +92,33 @@ const all = shots('All Works', ALL_WORKS_PHOTO_COUNT);
         )}
 
         {all.length > 0 && (
-            <section class="band" aria-labelledby="all-h">
+            <section class="shell band" aria-labelledby="all-h">
                 <div class="band-grid">
-                    <p class="label band-label" id="all-h">All works</p>
-                    <div class="photos">
-                        {all.map((src, i) => (
-                            <figure>
-                                <img src={src} alt={`Photograph ${i + 1}`} loading="lazy" decoding="async" />
-                            </figure>
+                    <div class="band-label">
+                        <p class="label" id="all-h">All works</p>
+                        <p class="muted" style="font-size:13px;margin-top:8px">Click any photograph to enlarge it in place.</p>
+                    </div>
+                    <div class="jgrid" id="jgrid">
+                        {all.map((s) => (
+                            <button
+                                class="jitem"
+                                type="button"
+                                data-ratio={s.ratio.toFixed(4)}
+                                data-full={s.large}
+                                data-alt={s.alt}
+                                style={`flex-basis:${(BASE_ROW_H * s.ratio).toFixed(1)}px;flex-grow:${s.ratio.toFixed(4)};height:${BASE_ROW_H}px`}
+                            >
+                                <img
+                                    src={s.small}
+                                    srcset={`${s.small} 800w, ${s.large} 1600w`}
+                                    sizes="(max-width: 900px) 92vw, 40vw"
+                                    width={s.w}
+                                    height={s.h}
+                                    alt={s.alt}
+                                    loading="lazy"
+                                    decoding="async"
+                                />
+                            </button>
                         ))}
                     </div>
                 </div>
@@ -77,39 +133,88 @@ const all = shots('All Works', ALL_WORKS_PHOTO_COUNT);
 
     <SiteFooter />
 
-    <script is:inline>
+    <script is:inline define:vars={{ BASE_ROW_H }}>
         (function () {
+            var EXPAND_H = 520;
+            var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+            /* ── Enlarge in place, with a FLIP so the neighbours slide rather
+                  than jump. Ported from v1; the ratios are now attributes, so
+                  it no longer depends on the images having decoded. ── */
+            var grid = document.getElementById('jgrid');
+
+            function size(item, h) {
+                var r = parseFloat(item.dataset.ratio) || 1;
+                item.style.height = h + 'px';
+                item.style.flexBasis = (h * r) + 'px';
+            }
+
+            if (grid) {
+                grid.addEventListener('click', function (e) {
+                    var item = e.target.closest('.jitem');
+                    if (!item) return;
+
+                    var items = Array.from(grid.querySelectorAll('.jitem'));
+                    var first = new Map();
+                    items.forEach(function (el) { first.set(el, el.getBoundingClientRect()); });
+
+                    var wasOpen = item.classList.contains('open');
+                    var prev = grid.querySelector('.jitem.open');
+                    if (prev && prev !== item) { prev.classList.remove('open'); size(prev, BASE_ROW_H); }
+                    item.classList.toggle('open', !wasOpen);
+                    size(item, wasOpen ? BASE_ROW_H : EXPAND_H);
+
+                    void grid.offsetHeight;
+                    if (reduce) return;
+
+                    items.forEach(function (el) {
+                        var f = first.get(el);
+                        if (!f) return;
+                        var l = el.getBoundingClientRect();
+                        var dx = f.left - l.left;
+                        var dy = f.top - l.top;
+                        var sx = f.width / (l.width || 1);
+                        var sy = f.height / (l.height || 1);
+                        var moved = Math.abs(dx) > 1 || Math.abs(dy) > 1;
+                        var sized = Math.abs(sx - 1) > 0.02 || Math.abs(sy - 1) > 0.02;
+                        if (!moved && !sized) return;
+
+                        el.style.transformOrigin = '0 0';
+                        var from = sized
+                            ? 'translate(' + dx + 'px,' + dy + 'px) scale(' + sx + ',' + sy + ')'
+                            : 'translate(' + dx + 'px,' + dy + 'px)';
+                        var anim = el.animate(
+                            [{ transform: from }, { transform: 'none' }],
+                            { duration: 420, easing: 'cubic-bezier(.22,.61,.36,1)' }
+                        );
+                        anim.onfinish = function () { el.style.transformOrigin = ''; };
+                    });
+                });
+            }
+
+            /* ── Featured strip opens the lightbox ── */
             var lb = document.getElementById('lb');
-            var img = document.getElementById('lb-img');
-            var last = null;
+            var lbImg = document.getElementById('lb-img');
+            var lastFocus = null;
 
             function open(src, alt) {
-                img.src = src;
-                img.alt = alt;
+                lbImg.src = src;
+                lbImg.alt = alt || '';
                 lb.setAttribute('open', '');
                 document.body.style.overflow = 'hidden';
                 document.getElementById('lb-x').focus();
             }
-
             function close() {
                 lb.removeAttribute('open');
-                img.src = '';
+                lbImg.src = '';
                 document.body.style.overflow = '';
-                if (last) last.focus();
+                if (lastFocus) lastFocus.focus();
             }
 
-            document.querySelectorAll('.photos img').forEach(function (el) {
-                el.tabIndex = 0;
-                el.addEventListener('click', function () {
-                    last = el;
-                    open(el.src, el.alt);
-                });
-                el.addEventListener('keydown', function (e) {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        last = el;
-                        open(el.src, el.alt);
-                    }
+            document.querySelectorAll('.feat-card').forEach(function (card) {
+                card.addEventListener('click', function () {
+                    lastFocus = card;
+                    open(card.dataset.full, card.dataset.alt);
                 });
             });
 
