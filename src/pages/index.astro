@@ -39,35 +39,12 @@ const projectsRow = PROJECTS_ROW.map(card);
     path="/"
     image={leads[0].media.poster ?? leads[0].p.cover}
 >
-    <SiteNav />
+    <SiteNav current="home" />
 
     <main id="main">
-        <header class="shell mast">
-            <p class="label">Tomme Denney &middot; Boston, Massachusetts</p>
-            <h1 class="display">
-                I design experiences you <span class="mast-accent">enter</span>, not ones you look at.
-            </h1>
-            <div class="mast-body">
-                <p class="lede">
-                    Spatial and immersive product designer — and enough of a builder to
-                    test an idea in a headset instead of arguing about it in a deck.
-                </p>
-                <div class="prose muted">
-                    <p>
-                        MS in Extended Reality with a concentration in Human-Computer
-                        Interaction, and a BFA in Game Design, both from Northeastern
-                        University. Several years building XR for real clients.
-                    </p>
-                    <p>
-                        I treat comfort as an accessibility problem rather than a polish
-                        pass: locomotion, session length, play space and the person who
-                        has never worn a headset are design questions from the first sketch.
-                    </p>
-                </div>
-            </div>
-        </header>
-
-        <section class="band strip leads-band" aria-labelledby="lead-h">
+        {/* No masthead: the introduction lives on /about now, and the
+            homepage opens on the work itself. */}
+        <section class="band strip leads-band leads-first" aria-labelledby="lead-h">
             <p class="label" id="lead-h" style="margin-bottom:30px">Lead case studies</p>
             <div class="leads">
                 {leads.map(({ p: lead, media }) => (

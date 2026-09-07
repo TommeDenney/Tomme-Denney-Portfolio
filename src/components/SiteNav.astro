@@ -4,7 +4,7 @@
  * own nav in JS whenever the mode changed, which meant two copies of the markup
  * that had to agree by hand.
  */
-interface Props { current?: 'work' | 'about' | 'photography' }
+interface Props { current?: 'home' | 'work' | 'about' | 'photography' }
 // Photography is reached from /work rather than the top bar: four peer links
 // gave it equal billing with the design work, which is the opposite of the
 // point when the whole site is a repositioning.
@@ -14,6 +14,9 @@ const { current } = Astro.props;
 <nav class="nav">
     <a class="nav-mark" href="/">Tomme Denney</a>
     <ul class="nav-links">
+        {/* The wordmark already goes home, but a named link is what a visitor
+            looks for, and it keeps the row readable as a set. */}
+        <li><a href="/" aria-current={current === 'home' ? 'page' : undefined}>Home</a></li>
         <li>
             <a href="/work" aria-current={current === 'work' || current === 'photography' ? 'page' : undefined}>Work</a>
         </li>

@@ -1263,3 +1263,10 @@ h3.display {
 #grid .feature[hidden] {
     display: none;
 }
+
+/* First band on the homepage: it is no longer following a masthead, so it
+   supplies its own breathing room under the nav and drops the section rule
+   that only makes sense between bands. */
+.leads-first {
+    padding-top: clamp(44px, 6vw, 92px);
+}
