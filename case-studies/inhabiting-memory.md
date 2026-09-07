@@ -46,11 +46,13 @@ Presence is a subtraction problem, and a controller is an object in your hand re
 
 ## Outcome
 
+I stripped the museum down to run the study. Participants stood in one place and viewed four reconstructions built from their own submitted photographs — no hub, no navigation, no family tree — because testing the whole museum would have produced a warm reaction I could not attribute to anything. Holding the source material constant and changing only the medium was the only way to isolate the claim.
+
 Six participants completed both conditions: their own photographs on a flat screen, then spatial reconstructions built from those same photographs. Presence and emotional-response surveys after each, plus two written questions. The full response set is intact.
 
 Some had submitted photographs of relatives who had died. They described standing next to them again — the strongest thing this project produced, and the thing I could not have designed for.
 
-Presented at the XR thesis showcase in the Northeastern news/media room, under open critique. The critique converged on two points: optimize it, and show how it continues after graduation. Both are fair.
+Presented at the XR thesis showcase in the Northeastern news/media room, under open critique. The critique converged on two points: optimize it, and show how it continues after graduation. Both have the same answer, and I know what it is — replace the flipbook with true temporal splatting, which encodes motion into each point rather than storing whole frames, and move the renderer off DirectX so it can target standalone headsets instead of a tethered PC. That is the difference between an argument and something a family could actually use.
 
 **No participant in the study ever experienced the thing I actually designed.** The study validates the foundation the museum is built on. It does not evaluate the museum.
 

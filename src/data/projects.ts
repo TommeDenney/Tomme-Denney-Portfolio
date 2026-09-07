@@ -63,7 +63,15 @@ export const PROJECTS: Project[] = [
         caption: 'A family museum you enter on foot — built from interviews, tested against flat photographs.',
         desc: 'Photographs preserve the surface of a moment and discard the thing memory actually uses to find it again: the space. Inhabiting Memory is a VR family museum you enter on foot — six rooms, one per family member, each designed from an interview with the person it belongs to, so a visitor stands inside a reconstructed room instead of looking at a picture of one. I built the locomotion around the visitor’s real play space so nobody trades comfort for presence, and I tested the premise directly: six participants viewed their own photographs on a screen, then stood inside spatial reconstructions built from those same photographs. My master’s thesis at Northeastern, presented for open critique. Built solo in Unity for Quest 3 using Gaussian splatting — a capture technique that rebuilds a real place as a cloud of points you can walk through.',
         caseStudy: 'inhabiting-memory',
-        paper: '/projects/genexr/Inhabiting Memory.pdf',
+        // The thesis PDF is withheld, not missing. Page 22 asserts that
+        // "Participants consistently report stronger spatial presence,
+        // familiarity, and a sense of return" — a finding written in a paper
+        // whose methods section is in the future tense, and one the case study
+        // deliberately declines to make because the survey data has not been
+        // analysed. Linking both invites a careful reader to find the claim the
+        // page refused to make, which reads as though the restraint were
+        // cosmetic. Restore this line once page 22 is corrected.
+        // paper: '/projects/genexr/Inhabiting Memory.pdf',
         presentation: '/projects/genexr/Inhabiting Memory Presentation.pdf',
         galleryImages: false
     },

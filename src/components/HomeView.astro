@@ -74,21 +74,25 @@ const thesis = PMAP.genexr;
         <div class="thesis-research-inner">
             <div class="thesis-research-head">
                 <h2 class="sh">Thesis Research</h2>
-                <p class="ss">Inhabiting Memory — master’s thesis and presentation</p>
+                <p class="ss">
+                    Inhabiting Memory — {thesis.paper ? 'master’s thesis and presentation' : 'thesis presentation'}
+                </p>
             </div>
             <div class="thesis-research-grid">
-                <article class="pv-document">
-                    <div class="pv-paper-head">
-                        <div>
-                            <h3 class="pv-paper-title">Research Paper</h3>
-                            <p class="pv-paper-sub">Read the complete Inhabiting Memory master’s thesis.</p>
+                {thesis.paper && (
+                    <article class="pv-document">
+                        <div class="pv-paper-head">
+                            <div>
+                                <h3 class="pv-paper-title">Research Paper</h3>
+                                <p class="pv-paper-sub">Read the complete Inhabiting Memory master’s thesis.</p>
+                            </div>
+                            <a class="pv-paper-open" href={thesis.paper} target="_blank" rel="noopener">Open PDF ↗</a>
                         </div>
-                        <a class="pv-paper-open" href={thesis.paper} target="_blank" rel="noopener">Open PDF ↗</a>
-                    </div>
-                    <div class="pv-paper-frame">
-                        <iframe src={`${thesis.paper}#view=FitH`} title="Inhabiting Memory research paper" loading="lazy"></iframe>
-                    </div>
-                </article>
+                        <div class="pv-paper-frame">
+                            <iframe src={`${thesis.paper}#view=FitH`} title="Inhabiting Memory research paper" loading="lazy"></iframe>
+                        </div>
+                    </article>
+                )}
                 <article class="pv-document">
                     <div class="pv-paper-head">
                         <div>
