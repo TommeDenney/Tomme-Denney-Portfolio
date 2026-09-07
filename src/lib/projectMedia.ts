@@ -66,6 +66,12 @@ function firstImage(dir: string, stem: string | number): string | null {
 export type ProjectMedia = {
     /** Looping hero video, already resolved through R2 where applicable. */
     video: string | null;
+    /**
+     * A short, quiet, 960px loop for cards — see
+     * scripts/build-preview-videos.mjs. The full videos run to 65 MB, and the
+     * homepage plays three at once, so a card must never load one.
+     */
+    preview: string | null;
     /** Poster for the hero video; also the still fallback when there is none. */
     poster: string | null;
     /** Gallery stills in order, 1..12, excluding the cover. */
@@ -82,6 +88,11 @@ export function projectMedia(cover: string, includeGallery = true): ProjectMedia
 
     const videoPath = `${dir}0.mp4`;
     const video = has(videoPath) ? assetUrl(videoPath) : null;
+
+    // Folder name doubles as the preview's filename.
+    const slug = dir.replace(/^\/projects\//, '').replace(/\/$/, '');
+    const previewPath = `/previews/${slug}.mp4`;
+    const preview = has(previewPath) ? assetUrl(previewPath) : null;
     const poster = firstImage(dir, 0) ?? (has(cover) ? cover : null);
 
     const gallery: string[] = [];
@@ -95,5 +106,5 @@ export function projectMedia(cover: string, includeGallery = true): ProjectMedia
         }
     }
 
-    return { video, poster, gallery };
+    return { video, preview, poster, gallery };
 }

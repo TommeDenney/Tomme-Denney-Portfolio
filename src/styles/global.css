@@ -1162,3 +1162,47 @@ h3.display {
     line-height: 1.55;
     color: var(--mt);
 }
+
+/* SELECTED WORK — a full-bleed row, so four cards do not read as a smaller
+   version of the two leads above them. */
+.strip {
+    max-width: none;
+    padding-left: var(--gutter);
+    padding-right: var(--gutter);
+}
+
+.strip-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(16px, 1.8vw, 28px);
+}
+
+.feature-media .index-kind {
+    position: absolute;
+    left: 10px;
+    bottom: 10px;
+    z-index: 2;
+}
+
+.strip .feature-body {
+    margin-top: 16px;
+    padding-bottom: 12px;
+}
+
+.strip .lead-cap {
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+@media (max-width: 1100px) {
+    .strip-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 26px 20px;
+    }
+}
+
+@media (max-width: 560px) {
+    .strip-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}

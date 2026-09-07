@@ -11,7 +11,8 @@
     "check": "astro check",
     "deploy": "astro build && wrangler pages deploy dist --project-name=tommedenney --branch=main",
     "assets:push": "node scripts/push-assets.mjs",
-    "photos": "node scripts/build-photo-derivatives.mjs"
+    "photos": "node scripts/build-photo-derivatives.mjs",
+    "previews": "node scripts/build-preview-videos.mjs"
   },
   "dependencies": {
     "astro": "^5.0.0"
