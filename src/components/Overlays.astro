@@ -21,11 +21,11 @@
 
 <div id="pal">
     <div class="swatches" id="sw">
-        <div class="sw on" onclick="setTheme('',this)"><span>Warm</span><div class="sdot" style="background:#f2ede3"></div></div>
-        <div class="sw" onclick="setTheme('white',this)"><span>White</span><div class="sdot" style="background:#f7f7f5"></div></div>
-        <div class="sw" onclick="setTheme('sage',this)"><span>Sage</span><div class="sdot" style="background:#e8ede5"></div></div>
-        <div class="sw" onclick="setTheme('dark',this)"><span>Dark</span><div class="sdot" style="background:#0e0e0e"></div></div>
-        <div class="sw" onclick="setTheme('night',this)"><span>Night</span><div class="sdot" style="background:#07070e"></div></div>
+        {/* Both themes are drawn from the Vintage Charm palette and nothing
+            else. Wheat-on-ink and ink-on-wheat are each 13.15:1, so the choice
+            is taste rather than a legibility compromise. */}
+        <div class="sw on" onclick="setTheme('',this)"><span>Wheat</span><div class="sdot" style="background:#efd6ac"></div></div>
+        <div class="sw" onclick="setTheme('ink',this)"><span>Ink</span><div class="sdot" style="background:#04151f"></div></div>
     </div>
     <button id="pbtn" onclick="togglePal()">🎨</button>
 </div>

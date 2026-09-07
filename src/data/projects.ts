@@ -31,6 +31,8 @@ export type Project = {
      * hand-written short version, not an excerpt, so the two cannot drift.
      */
     caseStudy?: string;
+    /** Overrides the keyword derivation in projectDisciplines(). */
+    disciplines?: Discipline[];
 };
 
 /**
@@ -53,6 +55,81 @@ export function projectSlug(name: string): string {
 /** `/work/<slug>` for a project, which is where its own page lives. */
 export function projectHref(name: string): string {
     return `/work/${projectSlug(name)}`;
+}
+
+/**
+ * The filters on /work.
+ *
+ * Derived from each project's own cat and tags rather than hand-listed, so a
+ * new project lands in the right bucket without a second edit. `disciplines`
+ * overrides the derivation where the keywords get it wrong.
+ *
+ * Matching is on whole tokens, not substrings, which is not fussiness: "ar"
+ * appears inside "Narrative", "game" inside "Game Design", and "study" inside
+ * "Study Abroad" — a substring pass put 17 of 18 projects in Games and read as
+ * noise rather than as a filter.
+ *
+ * There is deliberately no "Interface & UI" bucket yet. The work that would
+ * fill it — the interface-design coursework with four documented rounds of user
+ * testing — has no project entry, and a filter that returns nothing is worse
+ * than an absent one. It goes back in when that case study exists.
+ */
+export const DISCIPLINES = [
+    'XR & Spatial',
+    'Games',
+    'Research & Evaluation',
+] as const;
+
+export type Discipline = (typeof DISCIPLINES)[number];
+
+/** Single words matched against the token set. */
+const DISCIPLINE_TOKENS: Record<Discipline, string[]> = {
+    'XR & Spatial': [
+        'xr', 'vr', 'ar', 'mr', 'quest', 'spatial', 'gaussian', 'splatting',
+        'immersive', 'passthrough', 'sidequest', 'genealogy',
+    ],
+    'Games': [
+        'game', 'games', 'horror', 'platformer', 'arcade', 'racing', 'shooter',
+        'defense', 'mystery', 'narrative', 'twine', 'survival', 'jam',
+        'strategy', 'rhythm',
+    ],
+    'Research & Evaluation': [
+        'hci', 'research', 'thesis', 'biometrics', 'usability',
+    ],
+};
+
+/** Multi-word keys matched against the joined string. */
+const DISCIPLINE_PHRASES: Record<Discipline, string[]> = {
+    'XR & Spatial': [
+        'hand tracking', 'avatar embodiment', 'gaze interaction',
+        'extended reality', 'comfort & locomotion',
+    ],
+    'Games': ['point & click', 'interactive fiction'],
+    'Research & Evaluation': [
+        'design research', 'user testing', 'eye tracking', 'interview-led',
+    ],
+};
+
+/** Disciplines a project belongs to. Never empty — falls back to Games. */
+export function projectDisciplines(p: Project): Discipline[] {
+    if (p.disciplines?.length) return p.disciplines;
+
+    // Course codes are stripped first: "Narrative Game · XR 5020" is a game
+    // made in an XR course, not a spatial project, and the bare "xr" token
+    // otherwise files it under XR & Spatial on the strength of the catalogue
+    // number alone.
+    const text = [p.cat, ...p.tags]
+        .join(' ')
+        .toLowerCase()
+        .replace(/\b(xr|game|artg|artf|gsnd|exre|psyc|cs)\s*\d{3,4}\b/g, ' ');
+    const tokens = new Set(text.split(/[^a-z0-9]+/).filter(Boolean));
+
+    const found = DISCIPLINES.filter(
+        (d) =>
+            DISCIPLINE_TOKENS[d].some((t) => tokens.has(t)) ||
+            DISCIPLINE_PHRASES[d].some((phrase) => text.includes(phrase)),
+    );
+    return found.length ? found : ['Games'];
 }
 
 export const PROJECTS: Project[] = [

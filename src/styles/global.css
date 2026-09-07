@@ -1,51 +1,43 @@
+/* VINTAGE CHARM
+   Ink #04151f · Slate #183a37 · Wheat #efd6ac · Burnt Orange #c44900 · Violet #432534
+
+   Three rules the measured contrast forces, and they are not negotiable:
+
+   1. Burnt orange is never body text and never a small link. It is 3.46:1 on
+      wheat and 3.80:1 on ink — large display and UI only (24px+, or 19px bold):
+      headline words, rules, active filter state, focus rings.
+   2. Orange never sits on slate (2.53:1) or violet (2.77:1). Both fail. Orange
+      goes on wheat or on ink.
+   3. Slate and violet are surfaces on ink, never text on it — 1.50:1 and
+      1.37:1 make them near-invisible as type and excellent as quiet panels.
+
+   Ink on wheat and wheat on ink are both 13.15:1, so either direction is AAA
+   and either can be the default. Variable names are unchanged from v1 so the
+   rest of the stylesheet keeps working. */
 :root {
-    --bg: #f2ede3;
-    --text: #1a1714;
-    --gr: #b5ada3;
-    --mt: #8a7e70;
-    --cb: #e0dad0;
-    --b: rgba(26,23,20,.1);
-    --contact-bg: #161411
+    --bg: #efd6ac;
+    --surface: #e6cd9d;
+    --text: #04151f;
+    --gr: rgba(4,21,31,.28);
+    --mt: #183a37;
+    --cb: #e6cd9d;
+    --b: rgba(4,21,31,.14);
+    --accent: #c44900;
+    --deep: #432534;
+    --contact-bg: #04151f
 }
 
-[data-theme=white] {
-    --bg: #f7f7f5;
-    --text: #111;
-    --gr: #bbb;
-    --mt: #999;
-    --cb: #eaeae8;
-    --b: rgba(0,0,0,.08);
-    --contact-bg: #1a1a1a
-}
-
-[data-theme=dark] {
-    --bg: #0e0e0e;
-    --text: #e8e4dc;
-    --gr: #3a3a3a;
-    --mt: #555;
-    --cb: #1a1a1a;
-    --b: rgba(255,255,255,.08);
-    --contact-bg: #050505
-}
-
-[data-theme=sage] {
-    --bg: #e8ede5;
-    --text: #1a2a1a;
-    --gr: #9ab29a;
-    --mt: #6a836a;
-    --cb: #dde6da;
-    --b: rgba(26,40,26,.1);
-    --contact-bg: #0d1a0d
-}
-
-[data-theme=night] {
-    --bg: #07070e;
-    --text: #c0bde0;
-    --gr: #22223c;
-    --mt: #44427a;
-    --cb: #10101c;
-    --b: rgba(130,125,220,.1);
-    --contact-bg: #030308
+[data-theme=ink] {
+    --bg: #04151f;
+    --surface: #183a37;
+    --text: #efd6ac;
+    --gr: rgba(239,214,172,.3);
+    --mt: rgba(239,214,172,.68);
+    --cb: #183a37;
+    --b: rgba(239,214,172,.16);
+    --accent: #c44900;
+    --deep: #432534;
+    --contact-bg: #432534
 }
 
 * {
@@ -2095,5 +2087,330 @@ nav {
 @media(hover:none) {
     .wcover {
         display: none
+    }
+}
+/* ── VINTAGE CHARM additions ─────────────────────────────────────────────── */
+
+/* The small tracked label that carries most of the palette's period character.
+   It lives in the labels, not in a novelty typeface. */
+.label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--mt);
+    margin-bottom: 14px
+}
+
+/* Orange is legal here: this is a 3px rule, not type. */
+.label::after {
+    content: '';
+    display: block;
+    width: 28px;
+    height: 3px;
+    background: var(--accent);
+    margin-top: 10px
+}
+
+/* Focus states the old stylesheet never had. Orange at 3px is a UI element,
+   which is the one job the measured contrast allows it. */
+a:focus-visible,
+button:focus-visible,
+[tabindex]:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 3px
+}
+
+.wcover {
+    background: var(--deep)
+}
+
+/* WORK INDEX */
+.wx {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 132px 52px 120px
+}
+
+.wx-head {
+    max-width: 660px;
+    margin-bottom: 56px
+}
+
+.wx-title {
+    font-family: 'Barlow Condensed',Impact,'Arial Narrow',sans-serif;
+    font-weight: 900;
+    font-size: clamp(52px,9vw,116px);
+    line-height: .86;
+    letter-spacing: -.03em;
+    text-transform: uppercase;
+    margin-bottom: 20px
+}
+
+.wx-sub {
+    font-size: 17px;
+    line-height: 1.75;
+    color: var(--mt)
+}
+
+.wx-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding-bottom: 28px;
+    margin-bottom: 44px;
+    border-bottom: 1px solid var(--b)
+}
+
+.wx-filter {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 7px;
+    padding: 9px 17px;
+    border: 1px solid var(--b);
+    border-radius: 100px;
+    background: transparent;
+    color: var(--mt);
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: color .2s,border-color .2s,background .2s
+}
+
+    .wx-filter:hover {
+        color: var(--text);
+        border-color: var(--gr)
+    }
+
+    .wx-filter.is-on {
+        color: var(--text);
+        border-color: var(--accent);
+        /* 3px inset rule, not text: keeps orange inside its measured limits. */
+        box-shadow: inset 0 -3px 0 var(--accent)
+    }
+
+.wx-count {
+    font-size: 10px;
+    opacity: .6
+}
+
+.wx-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(300px,1fr));
+    gap: 52px 32px
+}
+
+.wx-card[hidden] {
+    display: none
+}
+
+.wx-link {
+    display: block;
+    color: var(--text);
+    text-decoration: none
+}
+
+.wx-thumb {
+    position: relative;
+    aspect-ratio: 4/3;
+    border-radius: 14px;
+    overflow: hidden;
+    margin-bottom: 18px;
+    background: var(--cb);
+    transition: transform .4s cubic-bezier(.25,.46,.45,.94)
+}
+
+.wx-thumb-bg {
+    position: absolute;
+    inset: 0
+}
+
+    .wx-thumb img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover
+    }
+
+.wx-link:hover .wx-thumb {
+    transform: translateY(-6px)
+}
+
+.wx-kind {
+    position: absolute;
+    left: 12px;
+    bottom: 12px;
+    z-index: 2;
+    padding: 5px 11px;
+    border-radius: 100px;
+    background: var(--deep);
+    color: #efd6ac;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase
+}
+
+.wx-name {
+    font-family: 'Barlow Condensed',Impact,'Arial Narrow',sans-serif;
+    font-weight: 900;
+    font-size: 27px;
+    line-height: 1;
+    letter-spacing: -.01em;
+    text-transform: uppercase;
+    margin-bottom: 7px
+}
+
+.wx-cat {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--mt);
+    margin-bottom: 10px
+}
+
+.wx-cap {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--mt);
+    margin-bottom: 12px
+}
+
+.wx-more {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    /* Underline rather than orange type: orange is 3.46:1 on wheat. */
+    border-bottom: 2px solid var(--accent);
+    padding-bottom: 2px
+}
+
+.wx-empty {
+    padding: 48px 0;
+    color: var(--mt)
+}
+
+/* ABOUT */
+.ab {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 132px 52px 120px
+}
+
+.ab-title {
+    font-family: 'Barlow Condensed',Impact,'Arial Narrow',sans-serif;
+    font-weight: 900;
+    font-size: clamp(40px,6.5vw,74px);
+    line-height: .94;
+    letter-spacing: -.025em;
+    text-transform: uppercase;
+    margin-bottom: 28px
+}
+
+    .ab-title em {
+        font-style: normal;
+        color: var(--accent)
+    }
+
+.ab-lede {
+    font-size: 19px;
+    line-height: 1.68;
+    margin-bottom: 18px
+}
+
+.ab-sec {
+    margin-top: 72px
+}
+
+.ab-h {
+    font-family: 'Barlow Condensed',Impact,'Arial Narrow',sans-serif;
+    font-weight: 900;
+    font-size: clamp(26px,3.4vw,38px);
+    line-height: 1;
+    letter-spacing: -.015em;
+    text-transform: uppercase;
+    margin-bottom: 18px
+}
+
+.ab-sec p {
+    font-size: 17px;
+    line-height: 1.8;
+    margin-bottom: 18px
+}
+
+.ab-sec a {
+    color: var(--text);
+    text-decoration-color: var(--accent);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 3px
+}
+
+.ab-phases {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    counter-reset: ph;
+    margin-top: 26px
+}
+
+    .ab-phases li {
+        counter-increment: ph;
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        padding: 11px 18px;
+        border-radius: 100px;
+        background: var(--cb);
+        border: 1px solid var(--b);
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: .1em;
+        text-transform: uppercase
+    }
+
+        .ab-phases li::before {
+            content: counter(ph);
+            display: grid;
+            place-items: center;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--accent);
+            color: #efd6ac;
+            font-size: 10px
+        }
+
+.ab-foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 22px;
+    margin-top: 88px;
+    padding-top: 40px;
+    border-top: 1px solid var(--b)
+}
+
+.ab-mail {
+    font-size: 14px;
+    color: var(--mt);
+    text-decoration-color: var(--gr)
+}
+
+@media(max-width:700px) {
+    .wx, .ab {
+        padding: 104px 20px 80px
+    }
+
+    .wx-grid {
+        grid-template-columns: 1fr;
+        gap: 40px
     }
 }

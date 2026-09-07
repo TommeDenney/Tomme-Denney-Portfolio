@@ -348,7 +348,8 @@ function closeLightbox() { document.getElementById('lightbox').classList.remove(
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
 
 /* Per-mode palette tracking */
-const modeThemes = { dev: '', photo: 'sage' }; // defaults: Warm for dev, Sage for photo
+// Wheat for the work, Ink for photography — the images carry better on it.
+const modeThemes = { dev: '', photo: 'ink' };
 let userPickedTheme = { dev: false, photo: false };
 
 function setTheme(t, el) {
@@ -366,8 +367,8 @@ function applyThemeForMode(mode) {
     // Update swatch highlight
     const swatches = document.querySelectorAll('.sw');
     swatches.forEach(s => s.classList.remove('on'));
-    const themeNames = { '': 'Warm', 'white': 'White', 'sage': 'Sage', 'dark': 'Dark', 'night': 'Night' };
-    const targetName = themeNames[t] || 'Warm';
+    const themeNames = { '': 'Wheat', 'ink': 'Ink' };
+    const targetName = themeNames[t] || 'Wheat';
     swatches.forEach(s => { if (s.querySelector('span').textContent === targetName) s.classList.add('on'); });
 }
 function togglePal() { document.getElementById('sw').classList.toggle('open'); }
@@ -639,7 +640,8 @@ function updateDevNav() {
 <li><a href="#hero" class="on" onclick="smoothTo('hero')">Info</a></li>
 <li><a href="#sect-featured" onclick="smoothTo('sect-featured')">Featured</a></li>
 <li><a href="#sect-play" onclick="smoothTo('sect-play')">Play</a></li>
-<li><a href="#sect-projects" onclick="smoothTo('sect-projects')">Projects</a></li>
+<li><a href="/work">Work</a></li>
+<li><a href="/about">About</a></li>
 <li><a href="#" onclick="switchMode('photo');return false;">Photography</a></li>
 <li><a href="#sect-contact" onclick="smoothTo('sect-contact')">Contact</a></li>
       `;

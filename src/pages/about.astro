@@ -1,0 +1,118 @@
+---
+/**
+ * About.
+ *
+ * The one page where the frameworks may be named directly. Everywhere else
+ * they have to show up as consequences inside a decision — a framework named
+ * without a consequence reads as coursework, which is the opposite of the
+ * point. No grades anywhere: they inform which projects lead, they are not
+ * content.
+ */
+import Base from '../layouts/Base.astro';
+import { projectHref } from '../data/projects';
+---
+
+<Base
+    title="About — Tomme Denney"
+    description="Spatial and immersive product designer who prototypes. MS Extended Reality with a concentration in Human-Computer Interaction, BFA Game Design — Northeastern University."
+    path="/about"
+>
+    <nav class="pp-nav">
+        <a class="logo" href="/">Tomme Denney</a>
+        <a class="back-btn" href="/work">All Work</a>
+    </nav>
+
+    <main class="ab">
+        <header class="ab-head">
+            <p class="label">About</p>
+            <h1 class="ab-title">I design experiences you<br /><em>enter</em>, not ones you look at.</h1>
+            <p class="ab-lede">
+                Spatial and immersive product designer, and enough of a builder to
+                test my own ideas in a headset rather than argue about them in a
+                deck. MS in Extended Reality with a concentration in
+                Human-Computer Interaction, and a BFA in Game Design — both from
+                Northeastern University.
+            </p>
+            <p class="ab-lede">
+                I treat comfort as an accessibility problem, not a polish pass. In
+                spatial work that means locomotion, session length, play space and
+                the person who has never worn a headset before are design
+                questions from the first sketch.
+            </p>
+        </header>
+
+        <section class="ab-sec">
+            <h2 class="ab-h">How I actually work</h2>
+            <p>
+                Five phases, run end to end on two graduate projects in
+                <em>Design for Dignity</em>, with a graded deliverable at each one.
+                I show this sequence only on projects that genuinely went through
+                it — a process diagram on a project that skipped ideation is a lie
+                with a nice icon.
+            </p>
+            <ol class="ab-phases">
+                <li><span>Research</span></li>
+                <li><span>Definition</span></li>
+                <li><span>Ideation</span></li>
+                <li><span>Synthesis</span></li>
+                <li><span>Delivery</span></li>
+            </ol>
+        </section>
+
+        <section class="ab-sec">
+            <h2 class="ab-h">What I mean by dignity</h2>
+            <p>
+                From graduate coursework in <em>Design for Dignity</em>: a design
+                either honours four things about a person or erodes them.
+                <strong>Merit</strong> — is this someone of inherent worth, or a
+                funnel stage? <strong>Autonomy</strong> — can they choose, refuse,
+                exit, and control how they are represented?
+                <strong>Human rights</strong> — what are they entitled to
+                regardless of whether they are a valuable user?
+                <strong>Interpersonal connection</strong> — does this strengthen a
+                relationship between people, or stand in for one?
+            </p>
+            <p>
+                I would rather show it than claim it. In
+                <a href={projectHref('Inhabiting Memory')}>Inhabiting Memory</a>,
+                every interpretive room came from that person's own interview
+                rather than my reading of them, and I ruled out the most obvious
+                mechanic available — letting a visitor handle a deceased relative
+                as an object — because it treats a person as a prop. Those are the
+                pillars working as build constraints, which is the only form in
+                which they mean anything.
+            </p>
+        </section>
+
+        <section class="ab-sec">
+            <h2 class="ab-h">Instrumented evaluation</h2>
+            <p>
+                Graduate coursework in <em>Biometrics of Design</em> put me on eye
+                tracking and heart-rate instrumentation — measuring where
+                attention actually went and what the body did, rather than asking
+                someone to recall it afterwards. It is the least common thing on
+                this site and the one I would most like to use again: self-report
+                tells you what a person believes about an experience, and
+                instrumentation tells you what happened to them.
+            </p>
+        </section>
+
+        <section class="ab-sec">
+            <h2 class="ab-h">Where the rest of it comes from</h2>
+            <p>
+                Game interface design — diegetic UI, iconography, and taking a
+                sketch through to a tested prototype. Interaction and experience
+                foundations — object surveys, heuristic critique, and low-fidelity
+                to high-fidelity wireframes. XR history and theory, which is where
+                the argument that spatial media behaves differently from a screen
+                actually comes from. And psychology, which is what any claim about
+                attention, memory or cognitive load has to rest on.
+            </p>
+        </section>
+
+        <footer class="ab-foot">
+            <a class="pv-ext-btn" href="/work">See the work →</a>
+            <a class="ab-mail" href="mailto:denneytomme@gmail.com">denneytomme@gmail.com</a>
+        </footer>
+    </main>
+</Base>

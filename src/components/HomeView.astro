@@ -124,10 +124,11 @@ const thesis = PMAP.genexr;
                         <div class="wcico">{p.ico}</div>
                         <div class="wct">{p.name}</div>
                         {/* Covers the cover on hover: the still is what the work
-                            looks like, this is what it is. Uses the project's own
-                            gradient rather than one shared accent, so the grid
-                            stays legible when several are hovered in sequence. */}
-                        <div class="wcover" style={`background:${p.bg}`} aria-hidden="true">
+                            looks like, this is what it is. Violet is the palette's
+                            one "candlelight" surface and wheat on it is 9.59:1, so
+                            the panel is legible on every card without needing each
+                            project's own gradient behind it. */}
+                        <div class="wcover" aria-hidden="true">
                             <span class="wcover-t">{p.name}</span>
                             <span class="wcover-s">{p.cat}</span>
                         </div>
