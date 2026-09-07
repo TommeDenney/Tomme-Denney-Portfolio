@@ -80,11 +80,23 @@ const DEMOS: Record<string, Demo> = {
     },
 };
 
-type Slot = { src: string; poster?: string; caption: string; proves: string };
+type Slot = {
+    src: string;
+    /**
+     * A higher-resolution copy for the hover enlargement. `src` is sized for
+     * the 400px rail; loading a 3040px file to fill that slot would be a
+     * third of a megabyte spent on a thumbnail.
+     */
+    large?: string;
+    poster?: string;
+    caption: string;
+    proves: string;
+};
 const SLOTS: Record<string, Slot[]> = {
     'buddy-run': [
         {
             src: '/case-studies/buddy-run/design-screens.jpg',
+            large: '/case-studies/buddy-run/design-screens-large.jpg',
             caption:
                 'The final interface design by Yunbing Han: baseline explainer, weekly plan, and run history.',
             proves:
@@ -92,6 +104,7 @@ const SLOTS: Record<string, Slot[]> = {
         },
         {
             src: '/case-studies/buddy-run/built-screens.jpg',
+            large: '/case-studies/buddy-run/built-screens-large.jpg',
             caption:
                 'The same app as implemented, reading live from the Whoop strap at 79 bpm.',
             proves:
@@ -157,6 +170,7 @@ const slots = (p.caseStudy ? SLOTS[p.caseStudy] ?? [] : [])
     .map((s) => ({
         ...s,
         url: assetUrl(s.src),
+        largeUrl: s.large && hasAsset(s.large) ? assetUrl(s.large) : assetUrl(s.src),
         posterUrl: s.poster && hasAsset(s.poster) ? assetUrl(s.poster) : undefined,
         isVideo: s.src.endsWith('.mp4'),
     }));
@@ -269,7 +283,22 @@ const description = p.caption ?? `${p.desc.slice(0, 175).trimEnd()}…`;
                                 {s.isVideo ? (
                                     <video src={s.url} poster={s.posterUrl} controls muted loop playsinline preload="none"></video>
                                 ) : (
-                                    <img src={s.url} alt={s.caption} loading="lazy" decoding="async" />
+                                    /* An anchor, not a div with a handler: hovering shows the
+                                       enlargement, and tapping or pressing Enter opens the
+                                       full-resolution file. A rail figure is 400px wide and
+                                       these are dense interface screenshots — at that size
+                                       each phone is about 130px across and unreadable. */
+                                    <a
+                                        class="fig-zoom"
+                                        href={s.largeUrl}
+                                        target="_blank"
+                                        rel="noopener"
+                                        style={`--zoom:url("${s.largeUrl}")`}
+                                        aria-label={`${s.caption} — open full size`}
+                                    >
+                                        <img src={s.url} alt={s.caption} loading="lazy" decoding="async" />
+                                        <span class="fig-hint">Hover to enlarge &middot; click for full size</span>
+                                    </a>
                                 )}
                                 <figcaption>
                                     {s.caption}

@@ -1060,3 +1060,91 @@ h3.display {
     color: var(--mt);
     max-width: 56ch;
 }
+
+/* ── HOVER ENLARGEMENT FOR RAIL FIGURES ──────────────────────────────────── */
+
+/* These are interface screenshots three phones wide. In a 400px rail each
+   phone is about 130px across, which is enough to see the layout and not
+   nearly enough to read it. Hovering paints the full image over the page from
+   a pseudo-element, so the figure itself never leaves the flow — swapping the
+   real image to position:fixed would collapse its own hover target and flicker
+   between states forever. */
+.fig-zoom {
+    display: block;
+    position: relative;
+    cursor: zoom-in;
+}
+
+.fig-zoom img {
+    width: 100%;
+    transition: opacity .2s;
+}
+
+.fig-hint {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 7px 9px;
+    background: rgba(4, 21, 31, .82);
+    color: #efd6ac;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    text-align: center;
+    opacity: 0;
+    transition: opacity .2s;
+}
+
+.fig-zoom:hover .fig-hint,
+.fig-zoom:focus-visible .fig-hint {
+    opacity: 1;
+}
+
+@media (hover: hover) and (min-width: 1000px) {
+    .fig-zoom::before,
+    .fig-zoom::after {
+        content: '';
+        position: fixed;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity .22s ease;
+    }
+
+    /* Backdrop, so the enlargement is not competing with the prose behind it. */
+    .fig-zoom::before {
+        inset: 0;
+        z-index: 190;
+        background: rgba(4, 21, 31, .88);
+    }
+
+    .fig-zoom::after {
+        inset: 3vh 3vw;
+        z-index: 191;
+        background-image: var(--zoom);
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: contain;
+    }
+
+    .fig-zoom:hover::before,
+    .fig-zoom:hover::after,
+    .fig-zoom:focus-visible::before,
+    .fig-zoom:focus-visible::after {
+        opacity: 1;
+    }
+
+    /* Dim the thumbnail so it is obvious which figure is enlarged. */
+    .fig-zoom:hover img {
+        opacity: .25;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .fig-zoom::before,
+    .fig-zoom::after,
+    .fig-hint {
+        transition: none;
+    }
+}
