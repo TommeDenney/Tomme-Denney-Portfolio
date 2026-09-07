@@ -146,6 +146,35 @@ export function projectDisciplines(p: Project): Discipline[] {
 
 export const PROJECTS: Project[] = [
     {
+        id: 'recollection', name: 'Recollection', cat: 'Product · Usurper Interactive · Live · 2026', cover: '/projects/recollection/1.png',
+        bg: 'linear-gradient(145deg,#04151f,#432534,#183a37)', ico: '💍',
+        tags: ['Product Design', 'Service Design', 'Privacy by Design', 'Onboarding', '360° Video', 'WebXR', 'Unity C#', 'Cloudflare'],
+        caption: 'Every camera on every moment of a wedding, opened from a link with no account and no app.',
+        desc: 'A wedding video is one person\u2019s edit of your day \u2014 someone chose the angle, and every time you go back you get their choice again. Recollection captures the day in every direction at once, cuts it into named moments, and lets you switch camera mid-moment without losing your place. The design problem was not fidelity; it was removing the editor from between a person and their own memory, for an audience of a hundred wedding guests who will not install anything or make an account. So a guest redeems a code and gets a token scoped to one event: no login, no app, and no master key \u2014 the all-access path was removed rather than disabled. The commercial end of the same line of work as my thesis, and the only part of it with a price.',
+        caseStudy: 'recollection',
+        documents: [
+            {
+                label: 'Usurper Interactive business plan',
+                file: '/projects/recollection/Usurper Interactive Business Plan.pdf',
+                note: 'The studio pitch this product came out of: segmentation, differentiation position, five-year headcount and the pricing ladder. A three-person course project.',
+            },
+            {
+                label: 'Income statement',
+                file: '/projects/recollection/Usurper Interactive Income Statement.pdf',
+                note: 'Five-year projection behind the pricing.',
+            },
+            {
+                label: 'Balance sheet',
+                file: '/projects/recollection/Usurper Interactive Balance Sheet.pdf',
+            },
+            {
+                label: 'Headcount growth plan',
+                file: '/projects/recollection/Usurper Interactive Headcount Plan.pdf',
+                note: 'Bootstrap and part-time for two years, then four people to twelve.',
+            },
+        ]
+    },
+    {
         id: 'genexr', name: 'Inhabiting Memory', cat: 'Master’s Thesis · Spatial Design · Design Research · 2026', cover: '/projects/genexr/1.png',
         bg: 'linear-gradient(145deg,#0e0418,#2a0e48,#4a1888)', ico: '🧬',
         tags: ['Spatial Design', 'Design Research', 'Immersive Genealogy', 'Comfort & Locomotion', 'Interview-Led Design', 'Master’s Thesis', 'Meta Quest 3', 'Unity C#', 'Gaussian Splatting'],
@@ -356,6 +385,7 @@ export const PMAP: Record<string, Project> = Object.fromEntries(
 export type ExternalSite = { url: string; label: string };
 
 export const PROJECT_EXTERNAL_SITES: Record<string, ExternalSite> = {
+    recollection: { url: 'https://recollection.usurperinteractive.com', label: 'Visit Recollection ↗' },
     arworkofart: { url: 'https://tommedenney.itch.io/ar-work-of-art', label: 'View on Itch.io ↗' },
     curse: { url: 'https://tommedenney.itch.io/curse-of-the-mind-demo', label: 'Download on Itch.io ↗' },
     flora: { url: 'https://tommedenney.itch.io/flora-park-mystery', label: 'Download on Itch.io ↗' },
