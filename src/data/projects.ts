@@ -258,6 +258,47 @@ export const PROJECTS: Project[] = [
         ],
     },
     {
+        /*
+         * This record used to hold two projects at once: Interview With
+         * Eternity's name, category and description against HaptiDraw's cover
+         * art, video and Devpost link — so /work/interview-with-eternity sent
+         * a reader to a different project entirely. The assets and the link
+         * are HaptiDraw's, so this entry keeps them and the text is corrected;
+         * Interview With Eternity is its own entry below.
+         */
+        id: 'haptidraw', name: 'HaptiDraw', cat: 'Accessibility · MIT Reality Hack 2025', cover: '/projects/haptidraw/1.jpg',
+        bg: 'linear-gradient(145deg,#04151f,#183a37,#c44900)', ico: '✋',
+        tags: ['Accessibility', 'Haptics', 'Inclusive Design', 'Hackathon', 'Multisensory', 'Unity C#', 'Python'],
+        caption: 'Drawing you can feel — a stylus and a haptic exoskeleton for blind users.',
+        desc: 'Digital drawing tools assume you can see what you are making. HaptiDraw lets a blind user draw and read a drawing by touch instead: a silhouette is traced into vector anchor points, a haptic exoskeleton drives feedback per finger, and the stylus buzzes when your hand leaves the line you are following. Built by four people in the length of MIT Reality Hack 2025. The clearest thing that came out of it is that touch does not just replace sight here — it builds a mental map of the drawing that a sighted user gets for free from a glance.',
+        caseStudy: 'haptidraw'
+    },
+    {
+        id: 'truthancientforest', name: 'Truth of the Ancient Forest', cat: 'Board Game · Rapid Idea Prototyping · 2021', cover: '/projects/truthancientforest/1.jpg',
+        bg: 'linear-gradient(145deg,#04151f,#183a37,#432534)', ico: '🌲',
+        tags: ['Rapid Prototyping', 'Game Design', 'Systems Design', 'Physical Prototyping', 'Laser Cutting', 'Board Game', 'Iteration'],
+        caption: 'A wooden survival board game whose map does not exist until you walk into it.',
+        desc: 'Four village leaders ration food and shelter while racing to open an ancient temple, across a forest that is not printed on a board \u2014 the map is a pile of numbered tiles laid down as players move into it, so the space everyone is competing over gets built during play. Made in four versions for an undergraduate rapid-prototyping course, from paper to laser-cut wood. The design document is an explicit list of what I added and what I removed each version, and the removals are the real work: a fully specified weather system cut for stopping the table, direct player attacks cut for making comebacks impossible, and real religious iconography cut because borrowing two living faiths as set dressing for a temple you loot was not mine to do.',
+        caseStudy: 'truth-of-the-ancient-forest',
+        documents: [
+            {
+                label: 'Design document',
+                file: '/projects/truthancientforest/Truth of the Ancient Forest Design Document.pdf',
+                note: 'Every addition and subtraction across four versions. The subtractions are the argument.',
+            },
+            {
+                label: 'Rules, version 4',
+                file: '/projects/truthancientforest/Truth of the Ancient Forest Rules v4.pdf',
+                note: 'The game as finished: durability, the tile system, blind trading, and the seven spells.',
+            },
+            {
+                label: 'Pitch',
+                file: '/projects/truthancientforest/Truth of the Ancient Forest Pitch.pdf',
+                note: 'Written for a publisher, and already proposing a VR version in 2021.',
+            },
+        ]
+    },
+    {
         id: 'seereality', name: 'See Reality', cat: 'XR Studio · Client Work · 2024–Present', cover: '/projects/seereality/0.png',
         bg: 'linear-gradient(145deg,#050e1a,#0e2860,#1a449a)', ico: '🌐',
         tags: ['Unity C#', 'Meta Quest', 'URP', 'XR Experience', 'Client Work'],
@@ -272,7 +313,7 @@ export const PROJECTS: Project[] = [
         desc: 'BOFUM is a spatial XR game built in 72 hours at MIT Reality Hack 2026. Designed for mixed reality with physical space as the playing field — fast, chaotic, and built to surprise. Check it out on Devpost.'
     },
     {
-        id: 'haptidraw', name: 'Interview With Eternity', cat: 'VR Experience · XR 5010 · 2026', cover: '/projects/haptidraw/1.jpg',
+        id: 'interviewwitheternity', name: 'Interview With Eternity', cat: 'VR Experience · XR 5010 · 2026', cover: '/projects/interviewwitheternity/1.jpg',
         bg: 'linear-gradient(145deg,#08080e,#14122a,#1e1848)', ico: '✨',
         tags: ['VR', 'Avatar Embodiment', 'Existential', 'HCI', 'XR 5010', 'Gaze Interaction'],
         caption: 'Before you are born — choose mortality, or choose forever.',
