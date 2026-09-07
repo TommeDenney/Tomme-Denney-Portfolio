@@ -32,10 +32,6 @@ Both put the runner in the position of interpreting data about their own body fr
 
 **Voice coaching.** "Speed up" and "slow down" were in the first concept and came out. A voice makes the app an authority you obey; a tempo is something you fall into step with. The replacement is haptic vibration and an audio metronome at the target cadence.
 
-**The AI buddy.** The earliest document in this project is a heart-rate integration proposal built around a customisable companion: a buddy that mirrored your effort, visibly tiring as your heart rate climbed, saying *let's catch our breath together* when you overexerted, evolving as your HRV improved across months, with cosmetics earned through consistency rather than performance. Almost none of it was built.
-
-Under one term, with sensor problems still unsolved, a character that emotionally mirrors a runner was the part most likely to be charming in a demo and useless on a run. It also had a subtler problem: a companion that reacts to your body is a second thing to attend to while running, and the whole point was to stop asking the runner to interpret anything. What survived the cut was the idea underneath it — that guidance should feel like company rather than instruction. The tempo does that with no character at all, and the proposal is linked below so the distance between the two is visible rather than tidied away.
-
 **A universal cadence target.** The received wisdom is 170–180 steps per minute for everyone. We tested zone by zone instead, because the right cadence at an easy pace is not the right cadence at threshold.
 
 **Generic max-heart-rate formulas.** There are several in circulation — 220 minus age, 208 minus 0.7×age, 207 minus 0.7×age — and they disagree with each other and with people. One team member's measured maximum was 175 against a formula estimate near 190. A 15 bpm error is the difference between a hard effort and an unsustainable one, so max heart rate is measured with a sprint rather than assumed.
@@ -49,6 +45,16 @@ Under one term, with sensor problems still unsolved, a character that emotionall
 **The algorithm proposes, the runner decides.** Target cadence has plus and minus controls, and the tempo guide has an off switch. This is Consolvo's "controllable" strategy taken literally: a coaching system that cannot be overruled is one people stop trusting the first time it is wrong about them.
 
 **Data consent as a product decision, not a policy page.** The proposal set out three ways to use the app: pay and your data stays private; share anonymised data and use it free; or accept ads and your data still stays private. Privacy is not the reward for paying — it is available on every tier, and the choice is changeable at any time. Health data is the most intimate thing a fitness app holds, and making its handling a thing the user picks rather than a thing they accept is the whole difference.
+
+## Designed, then narrowed
+
+Two artifacts came out of this project and they do not match, which is the most useful thing about them.
+
+The **final interface design**, by Yunbing Han, is the whole product: a baseline-run explainer that promises to find "the cadence that feels like yours", a weekly plan whose focus notes read *enjoy the "could keep going" feeling* and *don't speed up or go farther just because you feel good*, a run calendar, and the buddy — a character on the primary button, a Buddy tab, friends, and locked achievements. The behaviour-change reading is visible in the copy: it rewards restraint rather than effort, which is the opposite of what most running apps do.
+
+The **build** is narrower and darker. It reads live from the Whoop strap, gates personalised runs behind "Complete Baseline First", tracks a weekly streak, and runs the live coaching screen. The buddy is not in it. Neither are friends, achievements, or the planner.
+
+That gap is not a failure of the design; it is what one term buys. But it does mean the honest claim is narrow: what was validated on a device is the biometric loop and the live coaching, and what remains a design is the companion and the social layer around it.
 
 ## Outcome
 

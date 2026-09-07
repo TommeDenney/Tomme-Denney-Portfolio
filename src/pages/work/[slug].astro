@@ -82,6 +82,22 @@ const DEMOS: Record<string, Demo> = {
 
 type Slot = { src: string; poster?: string; caption: string; proves: string };
 const SLOTS: Record<string, Slot[]> = {
+    'buddy-run': [
+        {
+            src: '/case-studies/buddy-run/design-screens.jpg',
+            caption:
+                'The final interface design by Yunbing Han: baseline explainer, weekly plan, and run history.',
+            proves:
+                'The product as designed — the buddy, the planner and the restraint-first copy that the build never reached.',
+        },
+        {
+            src: '/case-studies/buddy-run/built-screens.jpg',
+            caption:
+                'The same app as implemented, reading live from the Whoop strap at 79 bpm.',
+            proves:
+                'That the biometric loop actually ran on a device, and exactly how much narrower the build is than the design.',
+        },
+    ],
     'inhabiting-memory': [
         {
             src: '/case-studies/inhabiting-memory/locomotion.mp4',
