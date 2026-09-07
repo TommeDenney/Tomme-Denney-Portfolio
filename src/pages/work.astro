@@ -2,30 +2,44 @@
 /**
  * The work index.
  *
- * A contents page rather than a wall of tiles: numbered rows on hairline
- * rules, with the still following the pointer. Filtering is a hidden attribute
- * toggle, so every row stays in the HTML and is crawlable whichever filter is
- * showing — 18 rows does not justify shipping a framework.
+ * Cards in the same shape as the homepage rather than a numbered list: the
+ * list read as a table of contents, and this work is visual enough that a
+ * reader should be able to see it without clicking first.
+ *
+ * Filtering is a hidden attribute toggle rather than a re-render. Twenty-three
+ * cards does not justify shipping a framework, and every card stays in the
+ * HTML so all of it is crawlable whichever filter is showing.
  */
 import Base from '../layouts/Base.astro';
 import SiteNav from '../components/SiteNav.astro';
 import SiteFooter from '../components/SiteFooter.astro';
-import {
-    PROJECTS, DISCIPLINES, projectDisciplines, projectHref, projectKind, KIND_LABEL,
-} from '../data/projects';
+import { PROJECTS, projectHref, projectKind, KIND_LABEL } from '../data/projects';
 import { projectMedia } from '../lib/projectMedia';
 
-const rows = PROJECTS.map((p) => ({
-    p,
-    href: projectHref(p.name),
-    disciplines: projectDisciplines(p),
-    kind: projectKind(p),
-    media: projectMedia(p.cover, false),
-}));
+const cards = PROJECTS.map((p) => {
+    const kind = projectKind(p);
+    return {
+        p,
+        kind,
+        // Case studies and notes are both written up, so they answer the same
+        // question a reader is asking with that filter.
+        group: kind === 'project' ? 'project' : 'written',
+        href: projectHref(p.name),
+        media: projectMedia(p.cover, false),
+    };
+});
 
-const counts = Object.fromEntries(
-    DISCIPLINES.map((d) => [d, rows.filter((r) => r.disciplines.includes(d)).length]),
-);
+const counts = {
+    all: cards.length,
+    written: cards.filter((c) => c.group === 'written').length,
+    project: cards.filter((c) => c.group === 'project').length,
+};
+
+const FILTERS = [
+    { id: 'all', label: 'All', n: counts.all },
+    { id: 'written', label: 'Case studies', n: counts.written },
+    { id: 'project', label: 'Projects', n: counts.project },
+];
 ---
 
 <Base
@@ -35,72 +49,69 @@ const counts = Object.fromEntries(
 >
     <SiteNav current="work" />
 
-    <main id="main" class="shell">
-        <header class="mast">
+    <main id="main">
+        <header class="shell mast">
             <p class="label">Index</p>
             <h1 class="display">Work</h1>
             <p class="lede" style="margin-top:26px">
-                Spatial work first, then games, then the research that tested it.
-                Case studies carry the reasoning; projects carry the craft.
+                Written up first, then the work that speaks for itself. Case studies
+                carry the reasoning; notes make one argument; projects are the craft.
             </p>
         </header>
 
-        <div class="filters" role="group" aria-label="Filter by discipline">
-            <button class="filter on" data-filter="all" aria-pressed="true">
-                All <span class="filter-n">{rows.length}</span>
-            </button>
-            {DISCIPLINES.map((d) => (
-                <button class="filter" data-filter={d} aria-pressed="false">
-                    {d} <span class="filter-n">{counts[d]}</span>
-                </button>
-            ))}
-        </div>
-
-        <ol class="index" id="index">
-            {rows.map(({ p, href, disciplines, kind, media }, i) => (
-                <li class="index-row" data-disciplines={disciplines.join('|')}>
-                    <a class="index-link" href={href} data-peek={media.poster ?? ''}>
-                        <span class="index-num">{String(i + 1).padStart(2, '0')}</span>
-                        <span>
-                            <span class="index-name">{p.name}</span>
-                            <span class="index-meta">{p.cat}</span>
-                        </span>
-                        <span class="index-kind" data-kind={kind}>{KIND_LABEL[kind]}</span>
-                        {media.poster && (
-                            <span class="index-thumb">
-                                <img src={media.poster} alt="" loading="lazy" decoding="async" />
-                            </span>
-                        )}
-                    </a>
-                </li>
-            ))}
-        </ol>
-
-        <p class="muted" id="empty" hidden style="padding:48px 0">Nothing in that discipline yet.</p>
-
-        <section class="band">
-            <div class="band-grid">
-                <p class="label band-label">Also</p>
-                <div>
-                    <h2 class="display" style="font-size:clamp(26px,3.2vw,40px)">Photography</h2>
-                    <p class="prose muted" style="margin-top:12px">
-                        Real-estate and spatial capture — stills, and the scanning work
-                        the XR projects are built on.
-                    </p>
-                    <p style="margin-top:22px"><a class="btn" href="/work/photography">View photographs &rarr;</a></p>
-                </div>
+        <section class="band strip">
+            <div class="filters" role="group" aria-label="Filter by depth">
+                {FILTERS.map((f, i) => (
+                    <button
+                        class={i === 0 ? 'filter on' : 'filter'}
+                        data-filter={f.id}
+                        aria-pressed={i === 0 ? 'true' : 'false'}
+                    >
+                        {f.label} <span class="filter-n">{f.n}</span>
+                    </button>
+                ))}
             </div>
+
+            <div class="strip-grid" id="grid">
+                {cards.map(({ p, kind, group, href, media }) => (
+                    <a class="feature" href={href} data-group={group}>
+                        <div class="feature-media">
+                            {media.preview ? (
+                                <video
+                                    src={media.preview}
+                                    poster={media.poster ?? undefined}
+                                    autoplay muted loop playsinline preload="metadata"
+                                    data-hero-video
+                                    aria-label={`${p.name} — looping preview`}></video>
+                            ) : media.poster ? (
+                                <img src={media.poster} alt={`${p.name} — cover`} loading="lazy" decoding="async" />
+                            ) : (
+                                <div class="feature-fallback" style={`background:${p.bg}`} aria-hidden="true">
+                                    <span>{p.ico}</span>
+                                </div>
+                            )}
+                            {kind !== 'project' && (
+                                <span class="index-kind" data-kind={kind}>{KIND_LABEL[kind]}</span>
+                            )}
+                        </div>
+                        <div class="feature-body">
+                            <h2 class="display strip-title">{p.name}</h2>
+                        </div>
+                        <p class="lead-cap">{p.caption ?? p.cat}</p>
+                    </a>
+                ))}
+            </div>
+
+            <p class="muted" id="empty" hidden style="padding:48px 0">Nothing in that group yet.</p>
         </section>
     </main>
 
-    <div class="peek" id="peek" aria-hidden="true"><img src="" alt="" /></div>
     <SiteFooter />
 
-    <script is:inline src="/peek.js" defer></script>
     <script is:inline>
         (function () {
             var buttons = document.querySelectorAll('.filter');
-            var rows = document.querySelectorAll('#index .index-row');
+            var cards = document.querySelectorAll('#grid .feature');
             var empty = document.getElementById('empty');
 
             buttons.forEach(function (btn) {
@@ -111,15 +122,34 @@ const counts = Object.fromEntries(
                         b.setAttribute('aria-pressed', b === btn ? 'true' : 'false');
                     });
                     var shown = 0;
-                    rows.forEach(function (row) {
-                        var list = (row.dataset.disciplines || '').split('|');
-                        var show = f === 'all' || list.indexOf(f) !== -1;
-                        row.hidden = !show;
+                    cards.forEach(function (card) {
+                        var show = f === 'all' || card.dataset.group === f;
+                        card.hidden = !show;
                         if (show) shown++;
                     });
                     empty.hidden = shown > 0;
                 });
             });
+
+            /* Same rule as the homepage: whatever is on screen plays, the rest
+               waits. Twenty-three cards would otherwise start every clip at once. */
+            var vids = document.querySelectorAll('video[data-hero-video]');
+            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                vids.forEach(function (v) { v.removeAttribute('autoplay'); v.pause(); });
+                return;
+            }
+            if (!('IntersectionObserver' in window)) return;
+            var io = new IntersectionObserver(function (entries) {
+                entries.forEach(function (e) {
+                    if (e.isIntersecting) {
+                        var play = e.target.play();
+                        if (play && play.catch) play.catch(function () {});
+                    } else {
+                        e.target.pause();
+                    }
+                });
+            }, { rootMargin: '200px' });
+            vids.forEach(function (v) { io.observe(v); });
         })();
     </script>
 </Base>

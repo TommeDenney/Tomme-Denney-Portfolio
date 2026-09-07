@@ -1249,3 +1249,17 @@ h3.display {
         grid-template-columns: minmax(0, 1fr);
     }
 }
+
+/* A card for a project with no cover file on disk yet. */
+.feature-fallback {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    font-size: 40px;
+}
+
+/* /work runs the same grid as the homepage rows. */
+#grid .feature[hidden] {
+    display: none;
+}
