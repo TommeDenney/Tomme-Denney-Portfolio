@@ -172,21 +172,24 @@ export const PROJECTS: Project[] = [
         caption: 'A running coach that guides by rhythm instead of telling you to speed up.',
         desc: 'Most running apps hand you a number and leave you to interpret it mid-stride. Buddy Run is an iPhone coach that reads live heart rate from a Whoop strap and answers with rhythm instead: a haptic and audio tempo you match your steps to, so the guidance arrives through the same channel as the running itself. I worked on it in a three-person team for a graduate Biometrics of Design course. The design turns on one decision — cadence is the lever, not heart rate, because cadence is the one thing a runner can change on command and optical heart-rate sensors lag five to fifteen seconds behind a change in effort. Grounded in running biomechanics and behaviour-change research, and honest about what the sensor could not do.',
         caseStudy: 'buddy-run',
+        // In the order they were written, so the narrowing from proposal to
+        // prototype is legible: the buddy is in the first document and not in
+        // the last.
         documents: [
-            {
-                label: 'Final presentation',
-                file: '/projects/buddyrun/Buddy Run Final Slides.pdf',
-                note: 'The deck as presented, including what the study actually became.',
-            },
             {
                 label: 'Heart-rate integration proposal',
                 file: '/projects/buddyrun/Buddy Run Heart Rate Proposal.pdf',
-                note: 'My individual proposal: the AI buddy, HRV trends, and the three data-consent models.',
+                note: 'The earliest document, written by me: the AI buddy, HRV trends, and the three data-consent models.',
             },
             {
                 label: 'Method plan',
                 file: '/projects/buddyrun/Buddy Run Project Prep.pdf',
                 note: 'The protocol we designed, against which the autoethnographic fallback should be read.',
+            },
+            {
+                label: 'Final presentation',
+                file: '/projects/buddyrun/Buddy Run Final Slides.pdf',
+                note: 'The deck as presented, including what the study actually became.',
             },
         ],
         dl: '/projects/buddyrun/Buddy Run App Demo.MOV',
