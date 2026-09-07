@@ -274,6 +274,26 @@ export const PROJECTS: Project[] = [
         caseStudy: 'haptidraw'
     },
     {
+        id: 'iamyou', name: 'I Am You', cat: 'VR Horror · XR 5010 · 2024', cover: '/projects/iamyou/1.png',
+        bg: 'linear-gradient(145deg,#04151f,#183a37,#432534)', ico: '📸',
+        tags: ['VR', 'Embodiment', 'Comfort & Locomotion', 'Horror', 'Narrative', 'Unity C#', 'XR 5010'],
+        caption: 'You are not the hiker. You are the trail camera watching him, steering his body.',
+        desc: 'Almost every design decision in VR aims at convincing you the body is yours. I Am You asks the opposite question: can a player care about a character they do not inhabit? Your viewpoint sits at the trail cameras in a dark forest and never travels \u2014 you keep your head and hands, while the locomotion drives the hiker\u2019s body instead. You are puppeting yourself. He is looking for photographs the wind took from him, and something is following him. A two-person prototype for a course on XR history and theory, built in three weeks.',
+        caseStudy: 'i-am-you',
+        documents: [
+            {
+                label: 'Project plan, second version',
+                file: '/projects/iamyou/I Am You Project Plan v2.pdf',
+                note: 'The plan as revised: the Proteus Effect reasoning, the work split, and the schedule.',
+            },
+            {
+                label: 'Project plan, first version',
+                file: '/projects/iamyou/I Am You Project Plan v1.pdf',
+                note: 'The earlier draft, which still carries the compass mechanic that came out.',
+            },
+        ]
+    },
+    {
         id: 'truthancientforest', name: 'Truth of the Ancient Forest', cat: 'Board Game · Rapid Idea Prototyping · 2021', cover: '/projects/truthancientforest/1.jpg',
         bg: 'linear-gradient(145deg,#04151f,#183a37,#432534)', ico: '🌲',
         tags: ['Rapid Prototyping', 'Game Design', 'Systems Design', 'Physical Prototyping', 'Laser Cutting', 'Board Game', 'Iteration'],
@@ -325,13 +345,6 @@ export const PROJECTS: Project[] = [
         tags: ['Horror', 'Unity', 'Survival', 'Atmosphere', 'First Person', 'Halloween', 'WebGL'],
         caption: 'Give out candy. Do your tasks. Do not let Wallace out.',
         desc: 'You\'re watching your neighbor\'s house for the night. Give out candy to trick-or-treaters — or don\'t, but leave the lights off. Take care of their very special dog, Wallace. Keep the front and back doors open for visitors. Do your tasks or die. Wallace is a real dog, by the way. WASD to move, Left Click to interact. Volume up.'
-    },
-    {
-        id: 'iamyou', name: 'I Am You', cat: 'VR Horror · Dissociation · 2024', cover: '/projects/iamyou/1.png',
-        bg: 'linear-gradient(145deg,#0a1a1a,#1a4a4a,#2a7a7a)', ico: '👤',
-        tags: ['VR', 'Horror', 'Dissociation', 'Narrative', 'Trail Camera', 'Psychological'],
-        caption: 'Control your body from the outside. Find the photos. Outrun the fear.',
-        desc: 'A VR horror adventure where you play as an amateur photographer whose cherished photos are scattered by a sudden wind — and the Ice Cream Man, a haunting manifestation of regret, begins to pursue you. Using trail cameras to direct your own body, you retrieve lost memories from the perspective of an external observer.'
     },
     {
         id: 'internshipintheafterlife', name: 'Internship in the Afterlife', cat: 'Narrative Game · XR 5020 · 2024', cover: '/projects/internshipintheafterlife/1.png',
