@@ -763,97 +763,52 @@ h3.display {
 /* ── ARROWS ────────────────────────────────────────────── */
 
 /* Drawn rather than typed, so they have something to do when a pointer
-   arrives: a glyph inside a text node cannot be animated on its own. */
+   arrives: a glyph inside a text node cannot be animated on its own.
+ *
+ * They all move the same short distance. The boxed buttons briefly had one
+ * that left its slot and flew the perimeter along the border box — it worked,
+ * and it was a second arrow doing a worse version of what the first one
+ * already did well. The nudge is the effect.
+ */
 .btn::after,
 .lead-cta::after,
 .rcard-links a::after {
     content: '\2192';
     display: inline-block;
     margin-left: .5em;
-    transition: transform .4s cubic-bezier(.22, .61, .36, 1), opacity .3s;
+    transition: transform .4s cubic-bezier(.22, .61, .36, 1), color .2s;
 }
 
+/* Out of the page rather than along it, for a link that leaves the site. */
 .btn-ext::after,
 .rcard-links a.ext::after {
     content: '\2197';
 }
 
+.btn:hover::after,
+.btn:focus-visible::after,
 .rcard-links a:hover::after,
+.rcard-links a:focus-visible::after,
 .feature:hover .lead-cta::after {
     transform: translateX(6px);
 }
 
-/* Never inherit. A pseudo-element inside an element whose colour has gone
-   transparent for the foil is an invisible arrow, which is exactly what
-   happened. */
+.btn-ext:hover::after,
+.btn-ext:focus-visible::after,
+.rcard-links a.ext:hover::after,
+.rcard-links a.ext:focus-visible::after {
+    transform: translate(5px, -5px);
+}
+
+/* Never inherit the colour. A pseudo-element inside an element whose colour
+   has just gone transparent for the foil is an invisible arrow, which is
+   exactly what happened to "See the project" and "Read it". */
 .btn:hover::after,
 .btn:focus-visible::after,
 .rcard-links a:hover::after,
 .rcard-links a:focus-visible::after,
 .feature:hover .lead-cta::after {
     color: var(--accent);
-}
-
-.rcard-links a.ext:hover::after {
-    transform: translate(5px, -5px);
-}
-
-/* On a button the arrow leaves its slot and flies the perimeter once.
- *
- * `offset-path: border-box` traces the button's own edge, so this works at any
- * width without a single hard-coded coordinate, and `offset-rotate: auto`
- * turns the arrowhead into the direction of travel — along the bottom it
- * points back the way it came, which is the whole reason it reads as one
- * object going round rather than a glyph flickering at four corners. The
- * inline arrow dims out of the way while it is gone and comes back as it
- * lands.
- *
- * Behind @supports because the fallback would be an arrow parked in the top
- * left corner blinking, which is worse than no flourish at all.
- */
-@supports (offset-path: border-box) {
-    .btn::before {
-        content: '\2192';
-        position: absolute;
-        top: 0;
-        left: 0;
-        font-size: .95em;
-        line-height: 1;
-        color: var(--accent);
-        offset-path: border-box;
-        offset-distance: 46%;
-        offset-rotate: auto;
-        opacity: 0;
-        pointer-events: none;
-    }
-
-    .btn-ext::before {
-        content: '\2197';
-    }
-
-    .btn:hover::before,
-    .btn:focus-visible::before {
-        animation: arrow-orbit .95s cubic-bezier(.42, .04, .3, 1) both;
-    }
-
-    /* The inline arrow steps aside so the orbiting one is not a second arrow
-       on the same button. */
-    .btn:hover::after,
-    .btn:focus-visible::after {
-        opacity: 0;
-    }
-
-    /* Starting at 0% put the arrow in the top left corner, so it appeared to
-       jump the width of the button before setting off. 46% is the middle of
-       the right edge — where the inline arrow already sits — and border-box
-       is a closed path, so offset-distance wraps past 100% and one full
-       clockwise loop is 46% to 146%. */
-    @keyframes arrow-orbit {
-        0% { offset-distance: 46%; opacity: 0; }
-        6% { opacity: 1; }
-        94% { opacity: 1; }
-        100% { offset-distance: 146%; opacity: 0; }
-    }
 }
 
 /* ── THE BUMP ──────────────────────────────────────────── */
@@ -872,6 +827,10 @@ h3.display {
 
 .index-kind {
     transform-origin: left bottom;
+    /* The badge takes the scale; the foil is on the label inside it. Without
+       its own transition here the size change snapped, because the rule that
+       used to carry one moved in with the span. */
+    transition: transform .35s cubic-bezier(.22, .61, .36, 1);
 }
 
 .btn:hover,
@@ -919,9 +878,8 @@ h3.display {
     .nav-links a:hover,
     .rcard-links a:hover,
     .feature:hover .lead-cta,
-    .feature:hover .index-kind,
-    .nav-mark:hover .nav-logo,
-    .btn:hover::before {
+    .feature:hover .index-kind > span,
+    .nav-mark:hover .nav-logo {
         animation: none;
         color: inherit;
     }
@@ -1229,16 +1187,6 @@ h3.display {
     border-top: 1px solid var(--rule);
     font-size: 14px;
     line-height: 1.55;
-}
-
-.fig-proves {
-    display: block;
-    margin-top: 5px;
-    color: var(--mt);
-}
-
-.fig-proves {
-    color: var(--mt);
 }
 
 /* ── PROSE + EVIDENCE RAIL ───────────────────────────────────────────────── */

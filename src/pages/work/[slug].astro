@@ -63,11 +63,15 @@ const caseStudy = p.caseStudy
 const Content = caseStudy?.Content;
 
 /**
- * The evidence slots from the asset list at the end of the case study, in
- * priority order. Each is emitted only if the file is actually on disk, which
- * is what keeps an unfilled slot from becoming a broken <video> on a live
- * page. Video first: the argument is about what happens when the visitor
- * moves, and a still cannot carry that.
+ * The evidence for a case study, in the order it should be read. Each slot is
+ * emitted only if the file is really on disk, which is what keeps an unfilled
+ * one from becoming a broken <video> on a live page.
+ *
+ * Every figure used to carry a second line arguing for its own significance —
+ * "that it is a real commercial thing with an identity, not a prototype" and
+ * twenty-nine more like it. A caption that has to explain why a picture counts
+ * is a caption that does not trust the picture, and read end to end they were
+ * the most obviously written thing on the site. One line each now: what it is.
  */
 /**
  * A portrait screen recording, shown alongside its notes rather than as a
@@ -98,7 +102,6 @@ type Slot = {
     large?: string;
     poster?: string;
     caption: string;
-    proves: string;
 };
 const SLOTS: Record<string, Slot[]> = {
     'ar-work-of-art': [
@@ -106,19 +109,16 @@ const SLOTS: Record<string, Slot[]> = {
             src: '/case-studies/ar-work-of-art/particles-star.jpg',
             large: '/case-studies/ar-work-of-art/particles-star-large.jpg',
             caption: 'A block resolving into a particle burst, mid-run.',
-            proves: 'That hitting a block writes into the space rather than incrementing a counter.',
         },
         {
             src: '/case-studies/ar-work-of-art/particles-dense.jpg',
             large: '/case-studies/ar-work-of-art/particles-dense-large.jpg',
             caption: 'The room later in a sustained run, thick with accumulated effects.',
-            proves: 'The artwork as a readout of performance — this is what playing well looks like.',
         },
         {
             src: '/case-studies/ar-work-of-art/particles-early.jpg',
             large: '/case-studies/ar-work-of-art/particles-early-large.jpg',
             caption: 'The same environment sparser, before the effects build up.',
-            proves: 'The contrast the design depends on: missing does not deduct points, it takes the art away.',
         },
     ],
     'i-am-you': [
@@ -126,45 +126,38 @@ const SLOTS: Record<string, Slot[]> = {
             src: '/case-studies/i-am-you/trail-camera.jpg',
             large: '/case-studies/i-am-you/trail-camera-large.jpg',
             caption: 'The trail-camera view: greyscale, vignetted, grainy — the hiker seen from the position the player occupies.',
-            proves: 'That the conceit is legible without interface furniture. You know you are looking through a camera because the world stops being in colour.',
         },
         {
             src: '/case-studies/i-am-you/colour-world.jpg',
             large: '/case-studies/i-am-you/colour-world-large.jpg',
             caption: 'The same forest in colour, outside the camera feed.',
-            proves: 'The contrast the desaturation is doing — colour is reserved for when you are not watching through a lens.',
         },
         {
             src: '/case-studies/i-am-you/ice-cream-man.jpg',
             large: '/case-studies/i-am-you/ice-cream-man-large.jpg',
             caption: 'The Ice Cream Man — grief as a soft-serve silhouette.',
-            proves: 'The tonal bet the project makes: heavy subject, deliberately ridiculous monster.',
         },
         {
             src: '/case-studies/i-am-you/polaroid.jpg',
             large: '/case-studies/i-am-you/polaroid-large.jpg',
             caption: 'A Polaroid on the forest floor, found by flashlight.',
-            proves: 'The whole activity: searching a dark forest for a photograph, from a body you are steering rather than occupying.',
         },
     ],
     'truth-of-the-ancient-forest': [
         {
             src: '/case-studies/truth-of-the-ancient-forest/sprite-sheet.jpg',
             large: '/case-studies/truth-of-the-ancient-forest/sprite-sheet-large.jpg',
-            caption: 'The production sheet: four sets of role tokens, durability meters, and the spell deck. Abstract card art by Divine Siam.',
-            proves: 'That the visual language came from the laser cutter — line work on solid black, no gradients, legible at token size.',
+            caption: 'The production sheet: four sets of role tokens, durability meters, and the spell deck. Line work on solid black, because that is what the laser cutter could cut. Abstract card art by Divine Siam.',
         },
         {
             src: '/case-studies/truth-of-the-ancient-forest/temple-tiles.jpg',
             large: '/case-studies/truth-of-the-ancient-forest/temple-tiles-large.jpg',
             caption: 'The ancient temple tiles, in the abstract style that replaced the religious imagery of versions 1 and 2.',
-            proves: 'The cut that mattered most, in the form it took afterwards.',
         },
         {
             src: '/case-studies/truth-of-the-ancient-forest/board-tiles.jpg',
             large: '/case-studies/truth-of-the-ancient-forest/board-tiles-large.jpg',
             caption: 'Numbered floor tiles and dark wall tiles — the pieces the map is built from during play.',
-            proves: 'That there is no printed board; the space is assembled by the players as they move into it.',
         },
     ],
     recollection: [
@@ -172,7 +165,6 @@ const SLOTS: Record<string, Slot[]> = {
             src: '/case-studies/recollection/share-card.jpg',
             large: '/case-studies/recollection/share-card-large.jpg',
             caption: 'The product\u2019s own share card, in Playfair Display and Pinyon Script.',
-            proves: 'That it is a real commercial thing with an identity, not a prototype \u2014 and that the copy carries the argument the thesis made.',
         },
     ],
     spark: [
@@ -180,49 +172,41 @@ const SLOTS: Record<string, Slot[]> = {
             src: '/case-studies/spark/system-map.jpg',
             large: '/case-studies/spark/system-map-large.jpg',
             caption: 'The system map: outreach, inputs, session, outcomes.',
-            proves: 'That the three rules are the whole mechanism — elder defines the goal, cards guide the session, facilitator steps back.',
         },
         {
             src: '/case-studies/spark/heros-journey.jpg',
             large: '/case-studies/spark/heros-journey-large.jpg',
             caption: 'Fifteen stages from exclusion to community spread, with each dignity pillar marked where it activates.',
-            proves: 'The framework applied as structure rather than quoted as a value — autonomy at the handover, merit when her knowledge becomes the game.',
         },
         {
             src: '/case-studies/spark/perception-gap.jpg',
             large: '/case-studies/spark/perception-gap-large.jpg',
             caption: 'The perception gap, and the answer to it: change who holds the pen.',
-            proves: 'The reframe the whole project rests on — that these are not knowledge gaps.',
         },
         {
             src: '/case-studies/spark/personas.jpg',
             large: '/case-studies/spark/personas-large.jpg',
             caption: 'Margaret and Emma. Constructed from published survey data, not interviewed.',
-            proves: 'That the same failure was designed for from both ends, rather than treating the older adult as the problem.',
         },
         {
             src: '/case-studies/spark/service-blueprint.jpg',
             large: '/case-studies/spark/service-blueprint-large.jpg',
             caption: 'Six phases across physical evidence, both participants, onstage and backstage facilitation.',
-            proves: 'That the design covers what happens before arrival and after everyone goes home.',
         },
         {
             src: '/case-studies/spark/storyboard.jpg',
             large: '/case-studies/spark/storyboard-large.jpg',
             caption: 'The session as ten panels — the facilitator is gone by the eighth.',
-            proves: 'The disappearing facilitator, which is easier to see than to describe.',
         },
         {
             src: '/case-studies/spark/research-board.jpg',
             large: '/case-studies/spark/research-board-large.jpg',
             caption: 'The research board, unretouched: the direction that became Spark, with the affordance argument on the green note.',
-            proves: 'That the card game was reasoned to rather than assumed — "simple rules, but real engagement", against feeling like a kindergarten activity.',
         },
         {
             src: '/case-studies/spark/palette.jpg',
             large: '/case-studies/spark/palette-large.jpg',
             caption: 'Palette and type, checked for WCAG AA with high-contrast pairings for low-vision users.',
-            proves: 'Legibility treated as a build constraint for an audience in their seventies and eighties.',
         },
     ],
     'buddy-run': [
@@ -231,16 +215,12 @@ const SLOTS: Record<string, Slot[]> = {
             large: '/case-studies/buddy-run/design-screens-large.jpg',
             caption:
                 'The final interface design by Yunbing Han: baseline explainer, weekly plan, and run history.',
-            proves:
-                'The product as designed — the buddy, the planner and the restraint-first copy that the build never reached.',
         },
         {
             src: '/case-studies/buddy-run/built-screens.jpg',
             large: '/case-studies/buddy-run/built-screens-large.jpg',
             caption:
                 'The same app as implemented, reading live from the Whoop strap at 79 bpm.',
-            proves:
-                'That the biometric loop actually ran on a device, and exactly how much narrower the build is than the design.',
         },
     ],
     'inhabiting-memory': [
@@ -248,51 +228,42 @@ const SLOTS: Record<string, Slot[]> = {
             src: '/case-studies/inhabiting-memory/locomotion.mp4',
             poster: '/case-studies/inhabiting-memory/locomotion.jpg',
             caption: 'One pass through the museum: walking inside a module, then teleporting to the next.',
-            proves: 'The locomotion decision, which a screenshot cannot show at all.',
         },
         {
             src: '/case-studies/inhabiting-memory/temporal-splat.mp4',
             poster: '/case-studies/inhabiting-memory/temporal-splat.jpg',
             caption: 'A moving reconstruction, filmed with the head moving.',
-            proves: 'That the reconstruction holds together under parallax, and the difference between a place and a moment.',
         },
         {
             src: '/case-studies/inhabiting-memory/flat-vs-spatial.mp4',
             poster: '/case-studies/inhabiting-memory/flat-vs-spatial.jpg',
             caption: 'The same submitted photographs on a screen, then stood inside.',
-            proves: 'The study’s comparison, in the form the participants met it.',
         },
         {
             src: '/case-studies/inhabiting-memory/room-scale.mp4',
             poster: '/case-studies/inhabiting-memory/room-scale.jpg',
             caption: 'A participant in the study room: body walking the module, hands raised to teleport.',
-            proves: 'That this is physical and embodied, and shows the real play space that constrained the design.',
         },
         {
             src: '/case-studies/inhabiting-memory/hand-tracking.mp4',
             poster: '/case-studies/inhabiting-memory/hand-tracking.jpg',
             caption: 'Hand-tracked menu selection and teleport, close on the hands.',
-            proves: 'The interaction layer, and the decision to use no controllers.',
         },
         {
             src: '/case-studies/inhabiting-memory/module-diagram.png',
             caption: 'Real play space, virtual module, and the teleport network across the level.',
-            proves: 'The single design idea the rest of the layout is built on.',
         },
         {
             src: '/case-studies/inhabiting-memory/mockups.jpg',
             caption: 'The original iPad mockups, unretouched.',
-            proves: 'Process — the thinking before the build, rather than the artifact after it.',
         },
         {
             src: '/case-studies/inhabiting-memory/rooms.jpg',
             caption: 'One frame from each of the six rooms.',
-            proves: 'That the interpretive half came from six different people, not one aesthetic.',
         },
         {
             src: '/case-studies/inhabiting-memory/failure-state.png',
             caption: 'A reconstruction breaking down: artifacts and unstable geometry.',
-            proves: 'Command of the medium’s failure mode, which the whole design is built to manage.',
         },
     ],
 };
@@ -513,10 +484,7 @@ const description = p.caption ?? `${p.desc.slice(0, 175).trimEnd()}…`;
                                         <span class="fig-hint">Hover to enlarge &middot; click for full size</span>
                                     </a>
                                 )}
-                                <figcaption>
-                                    {s.caption}
-                                    <span class="fig-proves">{s.proves}</span>
-                                </figcaption>
+                                <figcaption>{s.caption}</figcaption>
                             </figure>
                         ))}
                     </aside>

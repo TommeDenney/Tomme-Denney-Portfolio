@@ -178,7 +178,7 @@ export const PROJECTS: Project[] = [
         id: 'recollection', name: 'Recollection', cat: 'Product · Usurper Interactive · Live · 2026', cover: '/projects/recollection/1.png',
         bg: 'linear-gradient(145deg,#04151f,#432534,#183a37)', ico: '💍',
         tags: ['Product Design', 'Service Design', 'Privacy by Design', 'Onboarding', '360° Video', 'WebXR', 'Unity C#', 'Cloudflare'],
-        caption: 'Every camera on every moment of a wedding, opened from a link with no account and no app.',
+        caption: 'A wedding recorded from every direction, so nobody is stuck with one person’s edit of it.',
         desc: 'A wedding video is one person\u2019s edit of your day \u2014 someone chose the angle, and every time you go back you get their choice again. Recollection captures the day in every direction at once, cuts it into named moments, and lets you switch camera mid-moment without losing your place. The design problem was not fidelity; it was removing the editor from between a person and their own memory, for an audience of a hundred wedding guests who will not install anything or make an account. So a guest redeems a code and gets a token scoped to one event: no login, no app, and no master key \u2014 the all-access path was removed rather than disabled. The commercial end of the same line of work as my thesis, and the only part of it with a price.',
         caseStudy: 'recollection',
         documents: [
@@ -351,7 +351,7 @@ export const PROJECTS: Project[] = [
         id: 'arworkofart', name: 'AR Work of Art', cat: 'MR Art · Rhythm · XR 5010 · 2024', cover: '/projects/arworkofart/1.png',
         bg: 'linear-gradient(145deg,#04151f,#432534,#c44900)', ico: '🎵',
         tags: ['Interactive Art', 'Mixed Reality', 'Rhythm', 'Co-Creation', 'Meta Quest 3', 'Unity C#', 'XR 5010'],
-        caption: 'The artwork is not what you look at \u2014 it is what your playing builds.',
+        caption: 'Hit the blocks and the room fills with particles. Miss them and it empties again.',
         desc: 'Most virtual art asks you to look at it. This asks whether the audience can hold the pen: a 360\u00b0 mixed-reality rhythm game where hitting blocks fires particle effects into the room and missing them lets those effects fade, with three audio tracks layering in as you sustain it.\n\nThe one decision worth keeping is that failure subtracts instead of punishing. Missing a block does not deduct points or end a run \u2014 it dims the particles and lowers the music. There is no scoreboard, because the state of the artwork is the readout: if it is dark and quiet, that describes your performance rather than judging it. A score would have made the art a container for a game; making the art the readout means a player cannot help authoring it.\n\nIt came out of a podcast interview with Nancy Baker Cahill about siting AR work in contested places in New Orleans, which is where I am from \u2014 the same Cahill who turns up two years later as one of four precedents in my thesis. My verdict at the time was that it did not fully meet my expectations, and I still think the particle system carries more of it than the interaction does.',
         documents: [
             {

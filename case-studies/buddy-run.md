@@ -1,6 +1,6 @@
 # Buddy Run
 
-**A running coach that guides by rhythm instead of telling you to speed up — an iPhone app that reads live heart rate from a Whoop strap and answers with a tempo you can match your steps to.**
+**An iPhone running coach that reads your heart rate off a Whoop strap and answers with a tempo to run to, rather than a number to work out mid-stride.**
 
 *Three-person team · Biometrics of Design (GSND6340), Northeastern · Fall 2025, presented 8 December 2025 · iPhone, Whoop*
 

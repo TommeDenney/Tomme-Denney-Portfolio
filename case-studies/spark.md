@@ -50,7 +50,7 @@ Read that way, this stops being a usability problem. Every tutorial ever written
 
 **The facilitator is designed to disappear.** David hands over a card reading *Elder Expert* and steps back. He holds the framework silently, redirects Emma if she takes over, and intervenes only if someone is uncomfortable. Across the ten-panel storyboard he is present at the door, visible in the background with folded arms while they build, out of frame while they play, and gone by the time the cheat sheet goes on the fridge. A facilitator whose success is measured by how little he is needed at the end is the argument in miniature.
 
-**The take-home is in her handwriting.** The session ends with a cheat sheet she wrote, a deck of cards, and blank sheets. The reason it is handwritten rather than printed is the whole point: a printed summary is something she was given, and a handwritten one is something she made.
+**The take-home is in her handwriting.** The session ends with a cheat sheet she wrote, a deck of cards, and blank sheets. It is handwritten for a reason. A printed summary is something she was handed; the one in her own writing is something she made.
 
 **Accessibility as a build constraint.** The palette was checked for WCAG AA contrast with high-contrast pairings specified for low-vision users, the flyer is one page in large print, and the facilitator guide carries a dignity-first language guide alongside large-print and voice options. For an intervention aimed at people in their seventies and eighties, legibility is not a finishing pass.
 

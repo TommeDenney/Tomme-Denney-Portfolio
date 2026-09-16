@@ -1,6 +1,6 @@
 # Recollection
 
-**A 360° capture and playback service for weddings: every camera on every moment, playing in step, opened from a link with no account and no app.**
+**A wedding recorded from every direction at once, so nobody ends up stuck with one person’s edit of their own day.**
 
 [NEEDS INPUT: what is my role against my co-founders' on Recollection specifically? The business plan is a three-person course project with Jennifer Ann Lawrence and Sebastian Salas; the four product repositories are under my account. Those are different splits and the metadata line should say which is which.]
 
