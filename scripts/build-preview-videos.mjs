@@ -44,6 +44,29 @@ const EXTRA = {
         // worth showing, and past the notification that lands around 0:95.
         start: 55,
     },
+    /*
+     * Three of the See Reality deployment reels are press or promo cuts that
+     * open on a studio anchor desk or a piece to camera. A card is fifteen
+     * silent seconds and has to show the work, so each one seeks to where the
+     * experience is on screen instead.
+     */
+    lexington: {
+        // 0:10 to 0:25 is the news desk. 0:26 is the reconstruction standing
+        // on the real Lexington Green.
+        src: 'public/projects/lexington/0.mp4',
+        start: 26,
+    },
+    nashvilleadventures: {
+        // The first ninety seconds are an interview on the boardwalk. This is
+        // the in-headset view of the river and the early settlement.
+        src: 'public/projects/nashvilleadventures/0.mp4',
+        start: 104,
+    },
+    showmeitaly: {
+        // Straight to the gladiators on the arena floor.
+        src: 'public/projects/showmeitaly/0.mp4',
+        start: 25,
+    },
 };
 
 const force = process.argv.includes('--force');

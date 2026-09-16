@@ -54,6 +54,14 @@ export type Project = {
      * deck that `paper` and `presentation` cover. Rendered in order.
      */
     documents?: { label: string; file: string; note?: string }[];
+    /**
+     * The id of a project whose case study covers this one. Set on the six See
+     * Reality deployments, which are individual cards over a single body of
+     * work: the card carries the client and the footage, and this sends a
+     * reader to the page that carries the reasoning, so the reasoning is never
+     * written twice.
+     */
+    partOf?: string;
 };
 
 /**
@@ -374,11 +382,76 @@ export const PROJECTS: Project[] = [
         ]
     },
     {
-        id: 'seereality', name: 'See Reality', cat: 'XR Studio · Client Work · 2024–Present', cover: '/projects/seereality/0.png',
+        id: 'seereality', name: 'See Reality', cat: 'Professional XR · See Reality · Deployed internationally · 2024–Present',
+        cover: '/projects/seereality/0.png',
         bg: 'linear-gradient(145deg,#050e1a,#0e2860,#1a449a)', ico: '🌐',
-        tags: ['Unity C#', 'Meta Quest', 'URP', 'XR Experience', 'Client Work'],
-        caption: 'Real-world client XR — from colonial installations to stadium fan experiences.',
-        desc: 'Immersive XR experiences built for world-class clients spanning heritage, sports, and entertainment — from Fort Nashborough colonial installations to Liverpool FC fan experiences. Built with Unity C#, Meta Quest hardware, and custom URP shader pipelines optimized for standalone passthrough.\n\nClients & Collaborators: See Reality · Nashville Adventures · Town of Lexington, MA · Liverpool FC · Venice City Tours · Faneuil Hall'
+        tags: ['Unity C#', 'Meta Quest', 'Mixed Reality', 'Mobile AR', 'AR Glasses', '360° Video', 'XR Interaction Design', 'Location-Based XR', 'Multiplayer XR', 'Normcore', 'URP', 'Localisation', 'Client Work'],
+        caption: 'Years of AR, MR and VR built into live guided tours — Boston, Lexington, Nashville, Atlantic Canada, Rome, Pompeii, Venice.',
+        desc: 'Immersive experiences for tour operators, municipalities and guides, built to run inside tours that were already selling tickets — not standalone demos. Deployed for Relive 1776 on Boston’s Freedom Trail, the Town of Lexington, Nashville Adventures at Fort Nashborough, ShowMeItaly in Rome and Pompeii, Ride Solar in Atlantic Canada and Venice City Tours, with fan-experience work for Liverpool FC.\n\nUnity C# on Meta Quest with URP pipelines tuned for standalone passthrough, mobile AR triggered from city signage, cinematic 360° on lightweight AR glasses, hand-tracked physical interaction, and — currently — networked multiplayer in Normcore. The audience is families, children, older adults and people who have never worn a headset, handled by guides rather than developers.',
+        caseStudy: 'see-reality'
+    },
+    /*
+     * The six deployments below are the same body of work as the See Reality
+     * case study, one card each, and they exist for a reason the case study
+     * cannot cover on its own: every one of them has footage of the thing
+     * actually running in the place it was built for, and a client name a
+     * reader recognises. Buried as headings inside one page, that evidence is
+     * three scrolls down and unlinkable. `partOf` points each one back at the
+     * case study so the argument still lives in exactly one file.
+     */
+    {
+        id: 'relive1776', name: 'Relive 1776', cat: 'Mixed Reality · See Reality · Freedom Trail, Boston · Live',
+        cover: '/projects/relive1776/0.jpg',
+        bg: 'linear-gradient(145deg,#04151f,#432534,#c44900)', ico: '💥',
+        tags: ['Mixed Reality', 'Meta Quest', 'Passthrough', 'Procedural Interaction', 'Hand Tracking', 'Unity C#', 'Heritage', 'Live Deployment'],
+        caption: 'Revolutionary Boston in mixed reality, on the bricks where it happened — five experiences inside a two-hour guided tour.',
+        desc: 'The tour operation my earliest See Reality work fed into: five mixed-reality experiences along the Freedom Trail — Sons of Liberty, Five Shots at Midnight, a 17th-century Faneuil Hall market, Paul Revere’s Ride, and the Bunker Hill cannon, which teaches a visitor to load and fire a field gun by hand, in order. It sells as a two-hour guided tour rated 4.9 out of 5 across 83 TripAdvisor reviews.\n\nEverything is registered to the real place: the market lines up with a colonnade that is still standing, the cannon sits on the plaza’s actual bricks, and tourists who paid for nothing walk through the frame while a guest works the gun.',
+        partOf: 'seereality'
+    },
+    {
+        id: 'lexington', name: 'Town of Lexington', cat: 'Mixed Reality · See Reality · Lexington, Massachusetts · Live',
+        cover: '/projects/lexington/0.jpg',
+        bg: 'linear-gradient(145deg,#04151f,#183a37,#432534)', ico: '🏛️',
+        tags: ['Mixed Reality', 'Mobile AR', 'Meta Quest', 'Tablet AR', 'Public Sector', 'Historical Reconstruction', 'Unity C#', 'Live Deployment'],
+        caption: 'Three XR experiences twenty-five town guides can drop into tours they already give — plus mobile AR off the street signage.',
+        desc: 'A municipal client rather than a private operator, which changes the brief: Lexington runs a walking-tour programme with more than twenty-five guides, so the target was not one flagship but three experiences any guide could add to their own tour on tablets and headsets, without rehearsal. Visitors stand where buildings no longer exist and see them rebuilt — the Meeting House and the Belfry — meet figures including Anna Harrington, and are put inside moments from the Battle of Lexington in April 1775.\n\nThe half I find most interesting has no guide at all: free mobile AR triggered by QR codes on city signage, for someone who walks up with a phone and no ticket. The deployment was covered by Boston’s 7NEWS in a segment titled High-Tech History.',
+        partOf: 'seereality'
+    },
+    {
+        id: 'nashvilleadventures', name: 'Nashville Adventures', cat: 'XR Walking Tour · See Reality · Nashville, Tennessee · Live',
+        cover: '/projects/nashvilleadventures/0.jpg',
+        bg: 'linear-gradient(145deg,#0e0418,#2a0e48,#c44900)', ico: '🎸',
+        tags: ['XR Experience', 'Meta Quest', 'Guided Tour Integration', 'Historical Reconstruction', 'Unity C#', 'Live Deployment'],
+        caption: 'Four XR scenes threaded through one guided walk — the original settlers, the architecture, early Music City, rock and roll.',
+        desc: 'Four experiences our team designed and built into a single guided walking tour through Nashville: the city’s first settlers at Fort Nashborough, its historical architecture, early Music City, and the rock-and-roll era of the clubs and streets the group is walking down. The scenes layer onto the physical city while participants keep listening to a live guide, so the cut points are set by the guide’s storytelling rather than by the software.\n\nThe deployment was covered in a Talk of the Town segment with the operator’s founder on the Cumberland riverfront.',
+        partOf: 'seereality'
+    },
+    {
+        id: 'showmeitaly', name: 'ShowMeItaly', cat: 'VR & MR · See Reality · Rome & Pompeii · Live',
+        cover: '/projects/showmeitaly/0.jpg',
+        bg: 'linear-gradient(145deg,#1a0a05,#4a2010,#c44900)', ico: '🏟️',
+        tags: ['VR', 'Mixed Reality', 'Meta Quest', 'Historical Reconstruction', 'Paid Add-On', 'Throughput', 'Unity C#', 'Live Deployment'],
+        caption: 'Seven experiences sold as a paid add-on in Rome and Pompeii — gladiators from the arena floor, Vesuvius before and after.',
+        desc: 'Seven experiences built for one of the larger operators working Rome and Pompeii, sold into their tours as a paid immersive add-on: meeting Julius Caesar, fighting gladiators from the floor of the real Colosseum arena, four temples of the Roman Forum, an ancient Pompeii market, and Pompeii before and after Vesuvius.\n\nWhat matters here is commercial rather than technical. This is XR running inside an operation working at Roman volumes, where the failure modes that count are throughput, device turnaround between groups, and how fast a guide can recover a guest who is stuck.',
+        partOf: 'seereality'
+    },
+    {
+        id: 'ridesolar', name: 'Ride Solar', cat: 'XR Tour Integration · See Reality · Prince Edward Island & Nova Scotia · Live',
+        cover: '/projects/ridesolar/0.jpg',
+        bg: 'linear-gradient(145deg,#04151f,#183a37,#c44900)', ico: '🦞',
+        tags: ['XR Experience', 'Guided Tour Integration', 'Meta Quest', 'Pacing & Handback', 'Unity C#', 'Live Deployment'],
+        caption: 'Around six XR moments dropped into a historic walking tour and a food-and-drink tour in Atlantic Canada.',
+        desc: 'See Reality partnered with Ride Solar to put XR inside two live tours: a historic walking tour and a food-and-drink tour where the immersive content is tied to what is being eaten and where it came from. The operator advertises four time moments on the walk and three on the tasting.\n\nGuests step onto a 19th-century lobster boat and deal with the crew, meet the figures behind Canadian Confederation, walk a market of the Anne of Green Gables era, and run into dinosaurs — all without the tour stopping. The design question was pacing rather than fidelity: each segment has to end cleanly enough that a guide can pick the group back up and walk them to the next stop.',
+        partOf: 'seereality'
+    },
+    {
+        id: 'venicecitytours', name: 'Venice City Tours', cat: '360° & XR · See Reality · Venice, Italy · Live, plus work in progress',
+        cover: '/projects/venicecitytours/0.jpg',
+        bg: 'linear-gradient(145deg,#050e1a,#0e2860,#183a37)', ico: '🚣',
+        tags: ['360° Video', 'AR Glasses', 'Localisation', 'Multiplayer XR', 'Normcore', 'Unity C#', 'Live Deployment'],
+        caption: 'A cinematic 360° piece in five languages on AR glasses, a gondola you paddle yourself — and multiplayer racing in progress.',
+        desc: 'Two things worth separating. A cinematic 360° experience delivered on lightweight AR glasses, localised into five languages so an international group can each take it in their own — which is not a translation pass when the content is timed to a guide’s narration, because it changes pacing and how long the segment takes. And an XR gondola simulator where a participant paddles through a stylised medieval Venice while the guide carries on managing the group in the real world.\n\nI am currently building a multiplayer gondola racing experience off the back of it, networked with Normcore: several participants in one shared scene, racing rather than taking turns. It is in development and nothing about it is deployed.',
+        partOf: 'seereality'
     },
     {
         id: 'bofum', name: 'BOFUM', cat: 'Asymmetric Co-op · MIT Reality Hack 2026', cover: '/projects/bofum/1.png',
@@ -496,7 +569,17 @@ export const PROJECT_EXTERNAL_SITES: Record<string, ExternalSite> = {
     unforgottenstories: { url: 'https://tommedenney.itch.io/unforgotten-stories-the-partition', label: 'Play on Itch.io ↗' },
     walk: { url: 'https://tommedenney.itch.io/walkamongus', label: 'Download on Itch.io ↗' },
     wallace: { url: 'https://tommedenney.itch.io/wallace', label: 'Download on Itch.io ↗' },
-    bofum: { url: 'https://devpost.com/software/bofum', label: 'View on Devpost ↗' }
+    bofum: { url: 'https://devpost.com/software/bofum', label: 'View on Devpost ↗' },
+    seereality: { url: 'https://www.seereality.world/', label: 'See Reality ↗' },
+    relive1776: {
+        url: 'https://www.tripadvisor.com/AttractionProductReview-g60745-d28008309-Relive_1776_See_Boston_s_History_in_Augmented_Reality_AR-Boston_Massachusetts.html',
+        label: 'Relive 1776 on TripAdvisor ↗',
+    },
+    lexington: { url: 'https://www.tourlexington.us/', label: 'Tour Lexington ↗' },
+    nashvilleadventures: { url: 'https://www.nashvilleadventures.com/', label: 'Nashville Adventures ↗' },
+    showmeitaly: { url: 'https://showmeitaly.com/', label: 'ShowMeItaly ↗' },
+    ridesolar: { url: 'https://ridesolar.com/', label: 'Ride Solar ↗' },
+    venicecitytours: { url: 'https://www.venicecitytours.it/', label: 'Venice City Tours ↗' }
 };
 
 export type Embed = { src: string; itchio: string | null };

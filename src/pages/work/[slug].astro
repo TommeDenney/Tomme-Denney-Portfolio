@@ -36,6 +36,10 @@ const { project: p } = Astro.props;
 const media = projectMedia(p.cover, p.galleryImages !== false);
 const ext = PROJECT_EXTERNAL_SITES[p.id];
 const embed = PROJECT_EMBEDS[p.id];
+// The case study that covers this project, where it is one deployment out of
+// several. Without it a reader who lands on a client page from search has no
+// route to the reasoning, and the reasoning is the part worth reading.
+const parent = p.partOf ? PROJECTS.find((o) => o.id === p.partOf) : undefined;
 
 /**
  * Astro runs Markdown anywhere in the project through its normal pipeline, so
@@ -236,6 +240,89 @@ const SLOTS: Record<string, Slot[]> = {
                 'That the biometric loop actually ran on a device, and exactly how much narrower the build is than the design.',
         },
     ],
+    /*
+     * See Reality's rail is doing a different job from the others. The case
+     * study's claim is breadth across many deployments, so the figures are
+     * spread across five of them rather than dug into one build, and most are
+     * clips instead of stills: every argument on that page is about what a
+     * stranger does with their hands and where the content sits in a real
+     * street, and a still cannot carry either. They are cut from the studio's
+     * own capture reels and the operators' own coverage.
+     */
+    'see-reality': [
+        {
+            src: '/case-studies/see-reality/cannon.mp4',
+            poster: '/case-studies/see-reality/cannon.jpg',
+            caption: 'The Bunker Hill cannon on the Faneuil Hall plaza: aim, ram, fire — with real pedestrians walking past the muzzle.',
+            proves: 'Procedural interaction, which is the transferable half of this work. A real sequence, in order, completed by hand by someone who has never done it.',
+        },
+        {
+            src: '/case-studies/see-reality/italy-gladiator.mp4',
+            poster: '/case-studies/see-reality/italy-gladiator.jpg',
+            caption: 'Gladiators on the Colosseum arena floor, with the operator’s group standing in the same frame.',
+            proves: 'That this is sold inside a working Rome operation — the visitors around the fight are the tour, not a test audience.',
+        },
+        {
+            src: '/case-studies/see-reality/lexington-meetinghouse.mp4',
+            poster: '/case-studies/see-reality/lexington-meetinghouse.jpg',
+            caption: 'Inside the reconstructed Meeting House in Lexington, from the ground where it stood.',
+            proves: 'The point of location-based reconstruction: standing inside a building that is no longer there, on the spot it occupied.',
+        },
+        {
+            src: '/case-studies/see-reality/nashville-glasses.mp4',
+            poster: '/case-studies/see-reality/nashville-glasses.jpg',
+            caption: 'On the Cumberland riverfront: the headset held up to the eyes like binoculars, guide and guest still facing each other.',
+            proves: 'The hardware decision that encodes the whole argument — a visitor never loses the guide, the group, or the street.',
+        },
+        {
+            src: '/case-studies/see-reality/market-street.jpg',
+            large: '/case-studies/see-reality/market-street-large.jpg',
+            caption: 'The 17th-century market laid down the length of the real Quincy Market colonnade.',
+            proves: 'Registration and scale doing the work. The reconstruction has to line up with a building that is still standing, or it stops being the place.',
+        },
+        {
+            src: '/case-studies/see-reality/first-headset.mp4',
+            poster: '/case-studies/see-reality/first-headset.jpg',
+            caption: 'A guide fitting a headset onto a child on the bricks outside Faneuil Hall, then letting go.',
+            proves: 'Who this is actually for. The fitting is the first ten seconds of the experience, performed in public by staff, on a user with no patience for onboarding.',
+        },
+        {
+            src: '/case-studies/see-reality/redcoats.mp4',
+            poster: '/case-studies/see-reality/redcoats.jpg',
+            caption: 'Regulars formed up in the plaza, with the visitor’s own tracked hand reaching into the frame.',
+            proves: 'Hand tracking as an operational choice rather than an elegant one: no controller to explain, hand over, drop, or lose between groups.',
+        },
+        {
+            src: '/case-studies/see-reality/pompeii.mp4',
+            poster: '/case-studies/see-reality/pompeii.jpg',
+            caption: 'The Pompeii market, and Vesuvius going up behind the temple.',
+            proves: 'Before and after in one shot — the thing a guide can describe and only this medium can show.',
+        },
+        {
+            src: '/case-studies/see-reality/lexington-green.mp4',
+            poster: '/case-studies/see-reality/lexington-green.jpg',
+            caption: 'A colonial building rebuilt on the Lexington Green, with a child walking around the barrels.',
+            proves: 'That the content is placed for a public site in daylight, and that the audience includes people who are five.',
+        },
+        {
+            src: '/case-studies/see-reality/dragon.mp4',
+            poster: '/case-studies/see-reality/dragon.jpg',
+            caption: 'The kids’ dragon, passing through the real trees above the square and breathing fire.',
+            proves: 'The children’s work, and what scale does when the ceiling is the actual sky.',
+        },
+        {
+            src: '/case-studies/see-reality/market.mp4',
+            poster: '/case-studies/see-reality/market.jpg',
+            caption: 'Inside the market stall: hanging goods, a trader, and a tracked hand reaching for them.',
+            proves: 'One gesture, obvious on sight — the whole interaction vocabulary a first-time user gets.',
+        },
+        {
+            src: '/case-studies/see-reality/stonehenge.jpg',
+            large: '/case-studies/see-reality/stonehenge-large.jpg',
+            caption: 'The stones at full height in the middle of the Faneuil Hall plaza, against a building that is still there.',
+            proves: 'Scale as the argument for doing this in the street instead of in a museum room.',
+        },
+    ],
     'inhabiting-memory': [
         {
             src: '/case-studies/inhabiting-memory/locomotion.mp4',
@@ -401,8 +488,13 @@ const description = p.caption ?? `${p.desc.slice(0, 175).trimEnd()}…`;
                         </div>
                     )}
 
-                    {(ext || p.dl) && (
+                    {(ext || p.dl || parent) && (
                         <p class="stack" style="margin-top:44px">
+                            {parent && (
+                                <a class="btn" href={projectHref(parent.name)}>
+                                    Read the {parent.name} case study &rarr;
+                                </a>
+                            )}
                             {ext && <a class="btn" href={ext.url} target="_blank" rel="noopener">{ext.label}</a>}
                             {p.dl && (
                                 <a class="btn" href={assetUrl(p.dl)} target="_blank" rel="noopener">{p.dlLabel ?? 'Download'}</a>

@@ -25,11 +25,27 @@ const leads = LEADS.map((id) => ({ p: PMAP[id], media: projectMedia(PMAP[id].cov
 // order it should be read rather than by date.
 const card = (id: string) => ({ p: PMAP[id], media: projectMedia(PMAP[id].cover, false) });
 
-// The two leads, then the rest of the written-up work, then work that speaks
-// for itself. Badges carry the tier inside each row.
-const WRITTEN = ['recollection', 'buddyrun', 'haptidraw', 'iamyou'];
-const PROJECTS_ROW = ['seereality', 'bofum', 'wallace', 'unforgottenstories'];
+// The two leads, then the rest of the written-up work, then the client
+// deployments, then work that speaks for itself. Badges carry the tier inside
+// each row.
+//
+// See Reality leads the case-study row rather than sitting in Projects, where
+// it was: it is the only professional, deployed, multi-year body of work on
+// the site, and a row that opens with it answers the first question a hiring
+// reader has. I Am You moves down to make room — a three-week course
+// prototype is the weakest of the four written pieces, and it is still one
+// click away on /work.
+const WRITTEN = ['seereality', 'recollection', 'buddyrun', 'haptidraw'];
+
+// The deployments get their own row because the argument is plural. One card
+// says "client work"; four client names with footage of the thing running in
+// four different cities says the rest of it. These are the four with capture
+// reels — Ride Solar and Venice City Tours are on /work and in the case study.
+const DEPLOYMENTS = ['relive1776', 'showmeitaly', 'lexington', 'nashvilleadventures'];
+
+const PROJECTS_ROW = ['iamyou', 'bofum', 'wallace', 'unforgottenstories'];
 const written = WRITTEN.map(card);
+const deployments = DEPLOYMENTS.map(card);
 const projectsRow = PROJECTS_ROW.map(card);
 ---
 
@@ -96,6 +112,32 @@ const projectsRow = PROJECTS_ROW.map(card);
                             <span class="index-kind" data-kind={projectKind(item)}>
                                 {KIND_LABEL[projectKind(item)]}
                             </span>
+                        </div>
+                        <div class="feature-body">
+                            <h3 class="display strip-title">{item.name}</h3>
+                        </div>
+                        <p class="lead-cap">{item.caption}</p>
+                    </a>
+                ))}
+            </div>
+        </section>
+
+        <section class="band strip" aria-labelledby="dep-h">
+            <p class="label" id="dep-h" style="margin-bottom:28px">See Reality deployments</p>
+            <div class="strip-grid">
+                {deployments.map(({ p: item, media }) => (
+                    <a class="feature" href={projectHref(item.name)}>
+                        <div class="feature-media">
+                            {media.preview ? (
+                                <video
+                                    src={media.preview}
+                                    poster={media.poster ?? undefined}
+                                    autoplay muted loop playsinline preload="metadata"
+                                    data-hero-video
+                                    aria-label={`${item.name} — looping preview`}></video>
+                            ) : media.poster ? (
+                                <img src={media.poster} alt={`${item.name} — cover`} loading="lazy" decoding="async" />
+                            ) : null}
                         </div>
                         <div class="feature-body">
                             <h3 class="display strip-title">{item.name}</h3>
