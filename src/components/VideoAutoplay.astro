@@ -98,9 +98,12 @@
             function release() {
                 window.__vidArmed = false;
                 (window.__vidPending || []).splice(0).forEach(function (video) {
-                    // Not one the viewer has since muted or paused themselves,
-                    // and not one belonging to a page they have already left.
-                    if (!video.dataset.held && document.contains(video) && !video.paused) {
+                    /* Not one the viewer has taken over, and not one left
+                       behind on a page they have already navigated away from.
+                       Whether it happens to be playing at this instant is
+                       beside the point: if it is off screen, the observer
+                       starts it on the way back. */
+                    if (!video.dataset.held && document.contains(video)) {
                         video.muted = false;
                     }
                 });
@@ -112,16 +115,36 @@
         }
 
         function withSound(v) {
+            v.volume = 0.7;
             v.muted = false;
+
             var playing = v.play();
-            if (playing && playing.catch) {
-                playing.catch(function () {
-                    v.muted = true;
-                    var quiet = v.play();
-                    if (quiet && quiet.catch) quiet.catch(function () {});
+            if (!playing || !playing.catch) return;
+
+            playing.catch(function (err) {
+                /* Muted is the one state every browser will allow, so the
+                   fallback is the same either way. The reason decides how the
+                   sound gets turned back on. */
+                v.muted = true;
+                var quiet = v.play();
+                if (quiet && quiet.catch) quiet.catch(function () {});
+
+                if (err && err.name === 'NotAllowedError') {
+                    // Policy: this visitor has not interacted with the site
+                    // yet, so wait for the first thing they do.
                     armSound(v);
+                    return;
+                }
+
+                /* Not a policy refusal, so the element simply had no resource
+                   to play — which is exactly what a video looks like for a
+                   moment after a client-side navigation adopts it. Ask again
+                   as soon as it can actually play. */
+                v.addEventListener('canplay', function again() {
+                    v.removeEventListener('canplay', again);
+                    if (!v.dataset.held) withSound(v);
                 });
-            }
+            });
         }
 
         function init() {
@@ -147,7 +170,7 @@
                     });
                 }
 
-                if (v.dataset.audio) withSound(v);
+                if (v.hasAttribute('data-audio')) withSound(v);
 
                 if (io) io.observe(v);
             });
