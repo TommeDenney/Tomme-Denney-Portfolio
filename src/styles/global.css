@@ -506,6 +506,10 @@ h3.display {
 }
 
 .nav-links a {
+    /* Inline-block, not inline: transform has no effect on a non-replaced
+       inline box, which is why these three sat still while everything else
+       grew. */
+    display: inline-block;
     font-size: 12px;
     font-weight: 600;
     letter-spacing: .14em;
@@ -526,25 +530,6 @@ h3.display {
 .nav-links a[aria-current='page'] {
     color: var(--text);
     border-color: var(--accent);
-}
-
-.theme-btn {
-    font-family: inherit;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: .14em;
-    text-transform: uppercase;
-    color: var(--mt);
-    background: none;
-    border: 1px solid var(--rule);
-    padding: 6px 12px;
-    cursor: pointer;
-    transition: color .2s, border-color .2s;
-}
-
-.theme-btn:hover {
-    color: var(--text);
-    border-color: var(--rule-strong);
 }
 
 .foot {
@@ -718,11 +703,10 @@ h3.display {
    passing over the button, not as the letters themselves catching light. */
 .btn,
 .filter,
-.theme-btn,
 .nav-mark,
 .nav-links a,
 .lead-cta,
-.index-kind,
+.index-kind > span,
 .rcard-links a {
     background-image: var(--foil);
     background-size: 320% 100%;
@@ -737,8 +721,6 @@ h3.display {
 .btn:focus-visible,
 .filter:hover,
 .filter:focus-visible,
-.theme-btn:hover,
-.theme-btn:focus-visible,
 .nav-mark:hover,
 .nav-mark:focus-visible,
 .nav-links a:hover,
@@ -746,7 +728,7 @@ h3.display {
 .rcard-links a:hover,
 .rcard-links a:focus-visible,
 .feature:hover .lead-cta,
-.feature:hover .index-kind {
+.feature:hover .index-kind > span {
     color: transparent;
     animation: foil-run .9s cubic-bezier(.36, .07, .3, 1) both;
 }
@@ -759,27 +741,6 @@ h3.display {
 /* The badge's own pill has to move out of the way: background-clip clips every
    background layer, colour included, so a badge that kept its fill in
    `background` would lose it the moment the type took the gradient. */
-.index-kind {
-    /* Positioned so the pill below has something to fill. The badge is
-       absolutely positioned inside a card, which already gave it one, but not
-       every future home for it will. */
-    position: relative;
-    background-color: transparent;
-    isolation: isolate;
-}
-
-.index-kind::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    background: var(--deep);
-}
-
-.index-kind[data-kind='project']::before {
-    background: none;
-}
-
 /* The wordmark's monogram is a mask painted in currentColor, and currentColor
    goes transparent with the rest of the type. It takes the gradient directly
    instead — through the mask, so the foil runs inside the letters of the mark
@@ -822,6 +783,17 @@ h3.display {
     transform: translateX(6px);
 }
 
+/* Never inherit. A pseudo-element inside an element whose colour has gone
+   transparent for the foil is an invisible arrow, which is exactly what
+   happened. */
+.btn:hover::after,
+.btn:focus-visible::after,
+.rcard-links a:hover::after,
+.rcard-links a:focus-visible::after,
+.feature:hover .lead-cta::after {
+    color: var(--accent);
+}
+
 .rcard-links a.ext:hover::after {
     transform: translate(5px, -5px);
 }
@@ -849,7 +821,7 @@ h3.display {
         line-height: 1;
         color: var(--accent);
         offset-path: border-box;
-        offset-distance: 0%;
+        offset-distance: 46%;
         offset-rotate: auto;
         opacity: 0;
         pointer-events: none;
@@ -864,17 +836,23 @@ h3.display {
         animation: arrow-orbit .95s cubic-bezier(.42, .04, .3, 1) both;
     }
 
+    /* The inline arrow steps aside so the orbiting one is not a second arrow
+       on the same button. */
     .btn:hover::after,
     .btn:focus-visible::after {
-        opacity: .2;
-        transform: translateX(3px);
+        opacity: 0;
     }
 
+    /* Starting at 0% put the arrow in the top left corner, so it appeared to
+       jump the width of the button before setting off. 46% is the middle of
+       the right edge — where the inline arrow already sits — and border-box
+       is a closed path, so offset-distance wraps past 100% and one full
+       clockwise loop is 46% to 146%. */
     @keyframes arrow-orbit {
-        0% { offset-distance: 0%; opacity: 0; }
-        10% { opacity: 1; }
-        82% { opacity: 1; }
-        100% { offset-distance: 100%; opacity: 0; }
+        0% { offset-distance: 46%; opacity: 0; }
+        6% { opacity: 1; }
+        94% { opacity: 1; }
+        100% { offset-distance: 146%; opacity: 0; }
     }
 }
 
@@ -900,8 +878,6 @@ h3.display {
 .btn:focus-visible,
 .filter:hover,
 .filter:focus-visible,
-.theme-btn:hover,
-.theme-btn:focus-visible,
 .nav-links a:hover,
 .nav-links a:focus-visible,
 .nav-mark:hover,
@@ -917,7 +893,6 @@ h3.display {
 @media (prefers-reduced-motion: reduce) {
     .btn,
     .filter,
-    .theme-btn,
     .index-kind,
     .nav-mark,
     .nav-links a,
@@ -930,7 +905,6 @@ h3.display {
     .btn:hover,
     .btn:focus-visible,
     .filter:hover,
-    .theme-btn:hover,
     .nav-links a:hover,
     .nav-mark:hover,
     .feature:hover .index-kind,
@@ -941,7 +915,6 @@ h3.display {
 
     .btn:hover,
     .filter:hover,
-    .theme-btn:hover,
     .nav-mark:hover,
     .nav-links a:hover,
     .rcard-links a:hover,
@@ -1293,6 +1266,17 @@ h3.display {
     padding-left: clamp(20px, 2.4vw, 34px);
 }
 
+/* The outbound links, at the head of the rail. They are the first thing in
+   the column, so the label under them carries the top margin instead. */
+.cs-actions {
+    margin-bottom: 34px;
+}
+
+.cs-actions + .label {
+    padding-top: 30px;
+    border-top: 1px solid var(--rule);
+}
+
 .fig-rail {
     margin: 0 0 30px;
 }
@@ -1554,27 +1538,6 @@ h3.display {
 }
 
 /* The theme control: a swatch of what it switches to, not a word. */
-.theme-btn {
-    display: inline-flex;
-    align-items: center;
-    padding: 5px;
-    line-height: 0;
-}
-
-.theme-dot {
-    display: block;
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    /* The swatch shows the mode it switches to, so it is the other base. */
-    background: var(--paper);
-    border: 1px solid var(--rule-strong);
-}
-
-[data-theme='wheat'] .theme-dot {
-    background: var(--ink);
-}
-
 /* ── PORTRAIT DEMO ───────────────────────────────────────────────────────── */
 
 /* A phone screen recording is 588x1280. Across the top it would be four

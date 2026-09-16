@@ -4,6 +4,13 @@
  * own nav in JS whenever the mode changed, which meant two copies of the markup
  * that had to agree by hand.
  */
+/*
+ * The light/dark toggle used to live at the end of this row. It is gone: the
+ * palette picker in the bottom right is the only appearance control now, and
+ * two of them in opposite corners asked a visitor to hold both in their head.
+ * The wheat values are still in src/data/palettes.ts, so this is one <li> and
+ * a script away from coming back.
+ */
 interface Props { current?: 'home' | 'work' | 'about' | 'photography' }
 // Photography is reached from /work rather than the top bar: four peer links
 // gave it equal billing with the design work, which is the opposite of the
@@ -27,52 +34,5 @@ const { current } = Astro.props;
             <a href="/work" aria-current={current === 'work' || current === 'photography' ? 'page' : undefined}>Work</a>
         </li>
         <li><a href="/about" aria-current={current === 'about' ? 'page' : undefined}>About</a></li>
-        <li>
-            {/* A swatch of the theme it switches to. "Ink" as a word told a
-                visitor nothing about what the button did. */}
-            <button class="theme-btn" id="theme-btn" type="button">
-                <span class="theme-dot" aria-hidden="true"></span>
-                <span class="skip" id="theme-label">Switch theme</span>
-            </button>
-        </li>
     </ul>
 </nav>
-<script is:inline>
-    /*
-     * Wired on astro:page-load rather than on parse, because client-side
-     * navigation hands this component a brand new button element: a listener
-     * bound once to the node that existed at first paint would stop working
-     * the moment somebody visited a second page. page-load fires on the first
-     * load and after every swap, and the per-element flag makes a second call
-     * on the same button a no-op.
-     */
-    (function () {
-        function init() {
-            var btn = document.getElementById('theme-btn');
-            if (!btn || btn.dataset.wired) return;
-            btn.dataset.wired = '1';
-
-            // Persisted, unlike v1 — a palette that resets on every navigation
-            // is not a preference, it is a toggle that forgets.
-            var label = document.getElementById('theme-label');
-            function sync() {
-                var toWheat = document.documentElement.dataset.theme === 'ink';
-                btn.setAttribute('aria-label', toWheat ? 'Switch to the Wheat theme' : 'Switch to the Ink theme');
-                label.textContent = toWheat ? 'Switch to Wheat' : 'Switch to Ink';
-            }
-            sync();
-            btn.addEventListener('click', function () {
-                var next = document.documentElement.dataset.theme === 'ink' ? 'wheat' : 'ink';
-                document.documentElement.dataset.theme = next;
-                localStorage.setItem('theme', next);
-                sync();
-            });
-        }
-
-        init();
-        if (!window.__navWired) {
-            window.__navWired = true;
-            document.addEventListener('astro:page-load', init);
-        }
-    })();
-</script>

@@ -56,23 +56,6 @@ export type Palette = {
 
 export const PALETTES: Palette[] = [
     {
-        id: 'charm',
-        name: 'Vintage Charm',
-        note: 'The archive. Ink, wheat and burnt orange.',
-        dark: {
-            ink: '#04151f', paper: '#efd6ac',
-            bg: '#04151f', surface: '#183a37', text: '#efd6ac',
-            accent: '#c44900', deep: '#432534', onDeep: '#efd6ac', onAccent: '#efd6ac',
-            amb: ['#0e2b4a', '#12395c', '#163a4f', '#0a2138'], ambAlpha: '.55',
-        },
-        light: {
-            ink: '#04151f', paper: '#efd6ac',
-            bg: '#efd6ac', surface: '#e7cd9d', text: '#04151f',
-            accent: '#a83d00', deep: '#432534', onDeep: '#efd6ac', onAccent: '#efd6ac',
-            amb: ['#e3c895', '#dcbf88', '#e9d3a6', '#d8b97f'], ambAlpha: '.72',
-        },
-    },
-    {
         id: 'nocturne',
         name: 'Nocturne',
         note: 'Near-black violet with a cold cyan. The most XR of the five.',
@@ -104,6 +87,23 @@ export const PALETTES: Palette[] = [
             bg: '#faeee6', surface: '#f1ded1', text: '#120c10',
             accent: '#bf3a15', deep: '#3a1c22', onDeep: '#f7e9dc', onAccent: '#faeee6',
             amb: ['#f2ddd0', '#eed4c4', '#f5e4d9', '#e8cbb8'], ambAlpha: '.7',
+        },
+    },
+    {
+        id: 'charm',
+        name: 'Vintage Charm',
+        note: 'The archive. Ink, wheat and burnt orange.',
+        dark: {
+            ink: '#04151f', paper: '#efd6ac',
+            bg: '#04151f', surface: '#183a37', text: '#efd6ac',
+            accent: '#c44900', deep: '#432534', onDeep: '#efd6ac', onAccent: '#efd6ac',
+            amb: ['#0e2b4a', '#12395c', '#163a4f', '#0a2138'], ambAlpha: '.55',
+        },
+        light: {
+            ink: '#04151f', paper: '#efd6ac',
+            bg: '#efd6ac', surface: '#e7cd9d', text: '#04151f',
+            accent: '#a83d00', deep: '#432534', onDeep: '#efd6ac', onAccent: '#efd6ac',
+            amb: ['#e3c895', '#dcbf88', '#e9d3a6', '#d8b97f'], ambAlpha: '.72',
         },
     },
     {
@@ -142,6 +142,8 @@ export const PALETTES: Palette[] = [
     },
 ];
 
+/* Nocturne leads, and leading the array is what makes it the default: the
+   picker, the <html> attribute and the emitted CSS all read this. */
 export const DEFAULT_PALETTE = PALETTES[0].id;
 
 /** The custom properties for one mode, as CSS declarations. */

@@ -76,7 +76,7 @@ const socialImage = PMAP.genexr.cover;
                                 <img src={media.poster} alt={`${lead.name} — cover`} />
                             ) : null}
                             <span class="index-kind" data-kind={projectKind(lead)}>
-                                {KIND_LABEL[projectKind(lead)]}
+                                <span>{KIND_LABEL[projectKind(lead)]}</span>
                             </span>
                         </div>
                         <div class="feature-body">
@@ -138,7 +138,7 @@ const socialImage = PMAP.genexr.cover;
                                 <img src={media.poster} alt={`${item.name} — cover`} loading="lazy" decoding="async" />
                             ) : null}
                             <span class="index-kind" data-kind={projectKind(item)}>
-                                {KIND_LABEL[projectKind(item)]}
+                                <span>{KIND_LABEL[projectKind(item)]}</span>
                             </span>
                         </div>
                         <div class="feature-body">

@@ -144,15 +144,14 @@ const transitionCss = `
             rel="stylesheet"
         />
 
-        {/* Ink is the default and is already on <html>, so there is nothing to
-            do unless the visitor chose wheat. Set before first paint either
-            way, so the page never flashes the theme it is about to leave. */}
+        {/* The chosen palette, set before first paint so the page never flashes
+            the one it is about to leave. `data-theme` stays on <html> as a
+            constant: the palette selectors are written against it, and the
+            light half of every palette is still defined for whenever a toggle
+            comes back. */}
         <script is:inline>
             (function () {
                 function apply() {
-                    if (localStorage.getItem('theme') === 'wheat') {
-                        document.documentElement.dataset.theme = 'wheat';
-                    }
                     var palette = localStorage.getItem('palette');
                     if (palette) document.documentElement.dataset.palette = palette;
                 }

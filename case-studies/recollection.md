@@ -2,8 +2,6 @@
 
 **A 360° capture and playback service for weddings: every camera on every moment, playing in step, opened from a link with no account and no app.**
 
-*Usurper Interactive · Live at recollection.usurperinteractive.com · Unity 6, Astro, Cloudflare Workers + D1 + R2*
-
 [NEEDS INPUT: what is my role against my co-founders' on Recollection specifically? The business plan is a three-person course project with Jennifer Ann Lawrence and Sebastian Salas; the four product repositories are under my account. Those are different splits and the metadata line should say which is which.]
 
 ## Where this came from

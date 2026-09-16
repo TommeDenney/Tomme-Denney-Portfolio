@@ -350,6 +350,15 @@ const docs = [
     ...(p.documents ?? []),
 ].map((d) => ({ ...d, preview: docPreview(d.file) }));
 
+/*
+ * The right-hand rail exists for either of two reasons now: there is evidence
+ * to show, or there is somewhere to send a reader. Before this, a project with
+ * a live site and no figures put its only outbound link at the bottom of the
+ * prose, which on a full case study is several screens down.
+ */
+const actions = Boolean(ext || p.dl || parent);
+const railed = actions || slots.length > 0;
+
 const others = PROJECTS.filter((o) => o.id !== p.id)
     .slice(0, 4)
     .map((o) => ({ p: o, media: projectMedia(o.cover, false), kind: projectKind(o) }));
@@ -448,7 +457,7 @@ const description = p.caption ?? `${p.desc.slice(0, 175).trimEnd()}…`;
                 collapses under the prose on narrow screens, and the whole
                 thing falls back to one column when a case study has no
                 evidence yet. */}
-            <section class={slots.length > 0 ? 'cs-body cs-split' : 'cs-body'}>
+            <section class={railed ? 'cs-body cs-split' : 'cs-body'}>
                 <div class="cs-main">
                     <p class="label" style="margin-bottom:22px">{Content ? KIND_LABEL[kind] : 'Overview'}</p>
                     {Content ? (
@@ -462,25 +471,26 @@ const description = p.caption ?? `${p.desc.slice(0, 175).trimEnd()}…`;
                             {p.desc.split(/\n\n+/).map((para) => <p>{para}</p>)}
                         </div>
                     )}
-
-                    {(ext || p.dl || parent) && (
-                        <p class="stack" style="margin-top:44px">
-                            {parent && (
-                                <a class="btn" href={projectHref(parent.name)}>
-                                    All the {parent.name} work
-                                </a>
-                            )}
-                            {ext && <a class="btn btn-ext" href={ext.url} target="_blank" rel="noopener">{ext.label}</a>}
-                            {p.dl && (
-                                <a class="btn btn-ext" href={assetUrl(p.dl)} target="_blank" rel="noopener">{p.dlLabel ?? 'Download'}</a>
-                            )}
-                        </p>
-                    )}
                 </div>
 
-                {slots.length > 0 && (
-                    <aside class="cs-side" aria-labelledby="ev-h">
-                        <p class="label" id="ev-h" style="margin-bottom:22px">Evidence</p>
+                {railed && (
+                    <aside class="cs-side" aria-labelledby={slots.length > 0 ? 'ev-h' : undefined}>
+                        {actions && (
+                            <p class="stack cs-actions">
+                                {ext && <a class="btn btn-ext" href={ext.url} target="_blank" rel="noopener">{ext.label}</a>}
+                                {p.dl && (
+                                    <a class="btn btn-ext" href={assetUrl(p.dl)} target="_blank" rel="noopener">{p.dlLabel ?? 'Download'}</a>
+                                )}
+                                {parent && (
+                                    <a class="btn" href={projectHref(parent.name)}>
+                                        All the {parent.name} work
+                                    </a>
+                                )}
+                            </p>
+                        )}
+                        {slots.length > 0 && (
+                            <p class="label" id="ev-h" style="margin-bottom:22px">Evidence</p>
+                        )}
                         {slots.map((s) => (
                             <figure class="fig fig-rail">
                                 {s.isVideo ? (
@@ -570,7 +580,7 @@ const description = p.caption ?? `${p.desc.slice(0, 175).trimEnd()}…`;
                                                 decoding="async"
                                             />
                                         ) : null}
-                                        <span class="index-kind doc-kind">PDF</span>
+                                        <span class="index-kind doc-kind"><span>PDF</span></span>
                                     </div>
                                     <h3 class="doc-name">{d.label}</h3>
                                     {d.note && <p class="doc-note">{d.note}</p>}
@@ -604,7 +614,7 @@ const description = p.caption ?? `${p.desc.slice(0, 175).trimEnd()}…`;
                                 </div>
                             )}
                             {k !== 'project' && (
-                                <span class="index-kind" data-kind={k}>{KIND_LABEL[k]}</span>
+                                <span class="index-kind" data-kind={k}><span>{KIND_LABEL[k]}</span></span>
                             )}
                         </div>
                         <div class="feature-body">
