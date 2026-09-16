@@ -6,7 +6,16 @@ const year = new Date().getFullYear();
     <div class="foot-in">
         <div>
             <p class="label" style="color:rgba(239,214,172,.62)">Get in touch</p>
+            {/* Cloudflare's email obfuscation replaces a mailto with a
+                placeholder and a script that decodes it on load. That script
+                does not re-run after a client-side navigation, so the address
+                stayed as "[email protected]" for the rest of the visit. These
+                comments are Cloudflare's documented way to leave an address
+                alone; the alternative is a dashboard setting this repo cannot
+                see. */}
+            <!--email_off-->
             <a class="foot-mail" href="mailto:denneytomme@gmail.com">denneytomme@gmail.com</a>
+            <!--/email_off-->
         </div>
         <p class="foot-meta">
             Boston, Massachusetts<br />

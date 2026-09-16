@@ -27,7 +27,16 @@
  *   3. A video with controls belongs to the viewer. Once they touch it the
  *      observer never starts it again — but it is still paused on the way out
  *      of view, so sound does not follow a reader down the page.
- *   4. Sound is on, at 70%, for the one video a page is actually about: the
+ *   4. After a client-side navigation, every video has to be told to load.
+ *      Astro parses the incoming page in an inert document, where media
+ *      elements never begin resource selection, and adopting them into the
+ *      live page does not begin it either: they arrive with networkState
+ *      NETWORK_NO_SOURCE, which is a state play() is specified not to
+ *      recover from. Symptom is brutal and was live for an hour — the hero on
+ *      a project page never starts, and coming back to the homepage leaves
+ *      every card frozen on its poster until a reload. One load() per video
+ *      restores exactly what a full page load does.
+ *   5. Sound is on, at 70%, for the one video a page is actually about: the
  *      hero. Every browser refuses to autoplay audio before a visitor has
  *      interacted with the site, so the markup still ships `muted` — without
  *      it the play() call is rejected and the page opens on a frozen poster —
@@ -144,9 +153,25 @@
             });
         }
 
+        /*
+         * Every video, not only the ones the observer handles: the Buddy Run
+         * demo is a plain player with no autoplay, and after a swap it would
+         * sit there refusing to start when somebody pressed play.
+         */
+        function reload() {
+            document.querySelectorAll('video').forEach(function (v) {
+                // NETWORK_NO_SOURCE (3) is what an adopted element reports;
+                // NETWORK_EMPTY (0) covers the same failure earlier on.
+                if (v.networkState === 3 || v.networkState === 0) v.load();
+            });
+        }
+
         init();
         if (!window.__vidWired) {
             window.__vidWired = true;
+            // Before page-load, so the elements are already fetching by the
+            // time init() observes them and asks the visible ones to play.
+            document.addEventListener('astro:after-swap', reload);
             document.addEventListener('astro:page-load', init);
         }
     })();

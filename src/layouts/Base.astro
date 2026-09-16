@@ -102,6 +102,12 @@ const transitionCss = `
         <meta name="description" content={description} />
         <link rel="canonical" href={canonical} />
 
+        {/* The monogram, in the site's own pairing rather than currentColor:
+            a tab strip is not ours to theme. Also stops the /favicon.ico
+            request that 404'd on every page load. */}
+        <link rel="icon" href="/favicon.png" type="image/png" sizes="64x64" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
         {/* Client-side routing, so a navigation is a transition rather than a
             reload: the nav bar and footer never blink, and a project's title
             and cover travel from the card that was clicked to the page they
