@@ -1054,31 +1054,89 @@ h3.display {
 
 /* ── DOCUMENT LIST ───────────────────────────────────────────────────────── */
 
-.docs {
-    list-style: none;
-    border-top: 1px solid var(--rule-strong);
+/* A row of document cards, three across, sharing the roster's proportions so
+   the two grids on a project page do not disagree about what a card is. */
+.docs-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(24px, 2.4vw, 38px) clamp(18px, 1.8vw, 30px);
 }
 
-.docs li {
-    padding: 18px 0;
-    border-bottom: 1px solid var(--rule);
-}
-
-.docs a {
-    font-family: Fraunces, serif;
-    font-variation-settings: 'WONK' 1, 'opsz' 60;
-    font-size: clamp(19px, 2.1vw, 25px);
+.doc {
+    display: block;
     color: inherit;
     text-decoration: none;
-    border-bottom: 2px solid var(--accent);
 }
 
-.docs span {
+.doc-media {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+}
+
+/* Contained, not cropped. These are pages: a 16:9 deck cover cropped to a 4:3
+   card lost a quarter of its width and cut the first letter off its own title,
+   and a letter-size page cropped to fill would lose the bottom half of a
+   diagram. Letterboxing against the surface colour costs a little air and
+   shows every document whole. */
+.doc-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: transform .5s cubic-bezier(.22, .61, .36, 1);
+}
+
+.doc:hover .doc-media img {
+    transform: scale(1.03);
+}
+
+/* The badge is hidden on touch for the project cards, where the page's own
+   filters already say what tier a card is. Here it is the only thing telling a
+   reader that tapping opens a PDF, so it stays. */
+.doc-kind {
     display: block;
-    margin-top: 7px;
+    position: absolute;
+    left: 10px;
+    bottom: 10px;
+    z-index: 2;
+}
+
+.doc-name {
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid var(--rule-strong);
+    font-family: Fraunces, 'Times New Roman', serif;
+    font-variation-settings: 'SOFT' 0, 'WONK' 1, 'opsz' 60;
+    font-weight: 600;
+    font-size: clamp(17px, 1.3vw, 21px);
+    line-height: 1.08;
+    letter-spacing: -.015em;
+    transition: border-color .2s;
+}
+
+.doc:hover .doc-name {
+    border-color: var(--accent);
+}
+
+.doc-note {
+    margin-top: 9px;
     font-size: 14px;
+    line-height: 1.5;
     color: var(--mt);
-    max-width: 56ch;
+}
+
+@media (max-width: 1100px) {
+    .docs-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 640px) {
+    .docs-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
 }
 
 /* ── HOVER ENLARGEMENT FOR RAIL FIGURES ──────────────────────────────────── */

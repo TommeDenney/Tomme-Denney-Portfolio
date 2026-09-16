@@ -13,7 +13,8 @@
     "assets:push": "node scripts/push-assets.mjs",
     "photos": "node scripts/build-photo-derivatives.mjs",
     "previews": "node scripts/build-preview-videos.mjs",
-    "captions": "node scripts/build-captions.mjs"
+    "captions": "node scripts/build-captions.mjs",
+    "docs": "node scripts/build-doc-previews.mjs"
   },
   "dependencies": {
     "astro": "^5.0.0"

@@ -80,6 +80,22 @@ export function captionTrack(videoPath: string): string | null {
     return hasAsset(vtt) ? vtt : null;
 }
 
+/**
+ * The rendered first page of a PDF, if one has been built.
+ *
+ * Lives in a `docs/` folder beside the document — see
+ * scripts/build-doc-previews.mjs — where it cannot be confused with a
+ * project's numbered gallery stills. Null means the card falls back to its
+ * badge, which is a legible state rather than a broken image.
+ */
+export function docPreview(file: string): string | null {
+    const cut = file.lastIndexOf('/');
+    const dir = file.slice(0, cut + 1);
+    const stem = file.slice(cut + 1).replace(/\.pdf$/i, '');
+    const jpg = `${dir}docs/${stem}.jpg`;
+    return hasAsset(jpg) ? jpg : null;
+}
+
 export type ProjectMedia = {
     /** Looping hero video, already resolved through R2 where applicable. */
     video: string | null;

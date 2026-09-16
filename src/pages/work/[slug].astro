@@ -22,7 +22,7 @@ import {
     projectSlug, projectHref, projectDisciplines, projectKind, KIND_LABEL,
     type Project,
 } from '../../data/projects';
-import { projectMedia, hasAsset, captionTrack } from '../../lib/projectMedia';
+import { projectMedia, hasAsset, captionTrack, docPreview } from '../../lib/projectMedia';
 import { assetUrl } from '../../lib/assets';
 import { PROJECT_ROSTERS } from '../../data/seereality';
 
@@ -332,6 +332,24 @@ const demoOk = demo && hasAsset(demo.src);
 // argument. See src/data/seereality.ts.
 const roster = PROJECT_ROSTERS[p.id] ?? [];
 
+/*
+ * The documents, with the first page of each one rendered.
+ *
+ * `presentation` predates the `documents` array and is the same kind of thing,
+ * so it is folded in here rather than rendered as a special case ahead of the
+ * list — a reader has no interest in which field a PDF arrived from.
+ */
+const docs = [
+    ...(p.presentation
+        ? [{
+            label: 'Thesis presentation',
+            file: p.presentation,
+            note: 'The deck as presented at the showcase.',
+        }]
+        : []),
+    ...(p.documents ?? []),
+].map((d) => ({ ...d, preview: docPreview(d.file) }));
+
 const others = PROJECTS.filter((o) => o.id !== p.id)
     .slice(0, 4)
     .map((o) => ({ p: o, media: projectMedia(o.cover, false), kind: projectKind(o) }));
@@ -532,25 +550,32 @@ const description = p.caption ?? `${p.desc.slice(0, 175).trimEnd()}…`;
                 </section>
             )}
 
-            {(p.presentation || p.documents?.length) && (
+            {docs.length > 0 && (
                 <section class="band" aria-labelledby="doc-h">
                     <div class="band-grid">
                         <p class="label band-label" id="doc-h">Documents</p>
-                        <div>
-                            <ul class="docs">
-                                {p.presentation && (
-                                    <li>
-                                        <a href={p.presentation} target="_blank" rel="noopener">Thesis presentation</a>
-                                        <span>The deck as presented at the showcase.</span>
-                                    </li>
-                                )}
-                                {p.documents?.map((d) => (
-                                    <li>
-                                        <a href={d.file} target="_blank" rel="noopener">{d.label}</a>
-                                        {d.note && <span>{d.note}</span>}
-                                    </li>
-                                ))}
-                            </ul>
+                        {/* Cards rather than a list of links. A list left a
+                            reader guessing whether "Hero's journey map" was a
+                            diagram or four pages of prose; the first page
+                            answers that before anyone clicks. */}
+                        <div class="docs-grid">
+                            {docs.map((d) => (
+                                <a class="doc" href={d.file} target="_blank" rel="noopener">
+                                    <div class="doc-media">
+                                        {d.preview ? (
+                                            <img
+                                                src={d.preview}
+                                                alt={`${d.label} — first page`}
+                                                loading="lazy"
+                                                decoding="async"
+                                            />
+                                        ) : null}
+                                        <span class="index-kind doc-kind">PDF</span>
+                                    </div>
+                                    <h3 class="doc-name">{d.label}</h3>
+                                    {d.note && <p class="doc-note">{d.note}</p>}
+                                </a>
+                            ))}
                         </div>
                     </div>
                 </section>
