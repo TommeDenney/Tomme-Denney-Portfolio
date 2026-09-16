@@ -13,7 +13,8 @@
 import Base from '../layouts/Base.astro';
 import SiteNav from '../components/SiteNav.astro';
 import SiteFooter from '../components/SiteFooter.astro';
-import { PROJECTS, projectHref, projectKind, KIND_LABEL } from '../data/projects';
+import VideoAutoplay from '../components/VideoAutoplay.astro';
+import { PROJECTS, projectHref, projectSlug, projectKind, KIND_LABEL } from '../data/projects';
 import { projectMedia } from '../lib/projectMedia';
 
 const cards = PROJECTS.map((p) => {
@@ -52,7 +53,7 @@ const FILTERS = [
     <main id="main">
         <header class="shell mast">
             <p class="label">Index</p>
-            <h1 class="display">Work</h1>
+            <h1 class="display" transition:name="page-heading">Work</h1>
             <p class="lede" style="margin-top:26px">
                 Written up first, then the work that speaks for itself. Case studies
                 carry the reasoning; notes make one argument; projects are the craft.
@@ -75,7 +76,7 @@ const FILTERS = [
             <div class="strip-grid" id="grid">
                 {cards.map(({ p, kind, group, href, media }) => (
                     <a class="feature" href={href} data-group={group}>
-                        <div class="feature-media">
+                        <div class="feature-media" transition:name={`m-${projectSlug(p.name)}`}>
                             {media.preview ? (
                                 <video
                                     src={media.preview}
@@ -95,7 +96,7 @@ const FILTERS = [
                             )}
                         </div>
                         <div class="feature-body">
-                            <h2 class="display strip-title">{p.name}</h2>
+                            <h2 class="display strip-title" transition:name={`t-${projectSlug(p.name)}`}>{p.name}</h2>
                         </div>
                         <p class="lead-cap">{p.caption ?? p.cat}</p>
                     </a>
@@ -108,48 +109,49 @@ const FILTERS = [
 
     <SiteFooter />
 
+    <VideoAutoplay />
+
     <script is:inline>
+        /*
+         * The depth filter. Bound on astro:page-load rather than at parse
+         * time: client-side navigation replaces these buttons with new
+         * elements, so a listener attached to the ones that existed at first
+         * paint would leave the filter dead on the second visit. The flag on
+         * the button makes a repeat call a no-op.
+         */
         (function () {
-            var buttons = document.querySelectorAll('.filter');
-            var cards = document.querySelectorAll('#grid .feature');
-            var empty = document.getElementById('empty');
+            function init() {
+                var buttons = document.querySelectorAll('.filter');
+                var cards = document.querySelectorAll('#grid .feature');
+                var empty = document.getElementById('empty');
+                if (!buttons.length || !empty) return;
 
-            buttons.forEach(function (btn) {
-                btn.addEventListener('click', function () {
-                    var f = btn.dataset.filter;
-                    buttons.forEach(function (b) {
-                        b.classList.toggle('on', b === btn);
-                        b.setAttribute('aria-pressed', b === btn ? 'true' : 'false');
+                buttons.forEach(function (btn) {
+                    if (btn.dataset.wired) return;
+                    btn.dataset.wired = '1';
+
+                    btn.addEventListener('click', function () {
+                        var f = btn.dataset.filter;
+                        buttons.forEach(function (b) {
+                            b.classList.toggle('on', b === btn);
+                            b.setAttribute('aria-pressed', b === btn ? 'true' : 'false');
+                        });
+                        var shown = 0;
+                        cards.forEach(function (card) {
+                            var show = f === 'all' || card.dataset.group === f;
+                            card.hidden = !show;
+                            if (show) shown++;
+                        });
+                        empty.hidden = shown > 0;
                     });
-                    var shown = 0;
-                    cards.forEach(function (card) {
-                        var show = f === 'all' || card.dataset.group === f;
-                        card.hidden = !show;
-                        if (show) shown++;
-                    });
-                    empty.hidden = shown > 0;
                 });
-            });
-
-            /* Same rule as the homepage: whatever is on screen plays, the rest
-               waits. Twenty-three cards would otherwise start every clip at once. */
-            var vids = document.querySelectorAll('video[data-hero-video]');
-            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-                vids.forEach(function (v) { v.removeAttribute('autoplay'); v.pause(); });
-                return;
             }
-            if (!('IntersectionObserver' in window)) return;
-            var io = new IntersectionObserver(function (entries) {
-                entries.forEach(function (e) {
-                    if (e.isIntersecting) {
-                        var play = e.target.play();
-                        if (play && play.catch) play.catch(function () {});
-                    } else {
-                        e.target.pause();
-                    }
-                });
-            }, { rootMargin: '200px' });
-            vids.forEach(function (v) { io.observe(v); });
+
+            init();
+            if (!window.__filterWired) {
+                window.__filterWired = true;
+                document.addEventListener('astro:page-load', init);
+            }
         })();
     </script>
 </Base>

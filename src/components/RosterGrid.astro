@@ -16,7 +16,7 @@
  * disk first, so an item whose clip has not been cut yet renders as text
  * rather than as a broken <video>.
  */
-import { PMAP, projectHref, type Project } from '../data/projects';
+import { PMAP, projectHref, projectSlug, type Project } from '../data/projects';
 import { projectMedia, hasAsset, captionTrack } from '../lib/projectMedia';
 import type { RosterSection, RosterItem } from '../data/seereality';
 
@@ -83,7 +83,7 @@ const items = section.items.map(resolve);
                 {items.map(({ item, href, video, poster, captions, playable }) => (
                     <article class="rcard">
                         {(video || poster) && (
-                            <div class="rcard-media">
+                            <div class="rcard-media" transition:name={href ? `m-${projectSlug(item.name)}` : undefined}>
                                 {video ? (
                                     <video
                                         src={video}
@@ -107,7 +107,7 @@ const items = section.items.map(resolve);
                             </div>
                         )}
                         <h3 class="rcard-name">
-                            {href ? <a href={href}>{item.name}</a> : item.name}
+                            {href ? <a href={href} transition:name={`t-${projectSlug(item.name)}`}>{item.name}</a> : item.name}
                         </h3>
                         {item.meta && <p class="rcard-meta">{item.meta}</p>}
                         <p class="rcard-body">{item.body}</p>

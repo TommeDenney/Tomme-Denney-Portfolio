@@ -6,6 +6,8 @@
  * find it during parse. The new pages resolve their media at build time and
  * emit only tags that point at files which exist, so that chain is gone.
  */
+import { ClientRouter } from 'astro:transitions';
+import { PROJECTS, projectSlug } from '../data/projects';
 import '../styles/global.css';
 
 interface Props {
@@ -34,6 +36,61 @@ const {
 // homepage now that they exist.
 const canonical = new URL(path, Astro.site).href;
 const ogImage = image ? new URL(image, Astro.site).href : undefined;
+
+/**
+ * Timing for the cross-page transitions, generated rather than hand-written.
+ *
+ * A shared element only morphs if the same `transition:name` exists on both
+ * pages, so the names are derived from the same PROJECTS array the cards and
+ * the project pages read — `t-<slug>` for a title, `m-<slug>` for its media.
+ * That means a new project gets its transition for free and cannot be given
+ * one that does not match on the other side.
+ *
+ * The durations have to be listed per name because `::view-transition-group(*)`
+ * is not old enough to rely on, and the browser default of 250ms is too quick
+ * for a title crossing the page. Sixty-four selectors of generated CSS is a
+ * couple of kilobytes before compression, which is cheaper than the alternative
+ * of hand-maintaining them.
+ */
+const vtNames = [
+    ...PROJECTS.flatMap((p) => {
+        const slug = projectSlug(p.name);
+        return [`t-${slug}`, `m-${slug}`];
+    }),
+    // The big heading on /work and /about. Both carry the same name, so one
+    // page's title travels into the other's.
+    'page-heading',
+];
+
+const groups = vtNames.map((n) => `::view-transition-group(${n})`).join(',');
+const pairs = vtNames.map((n) => `::view-transition-image-pair(${n})`).join(',');
+
+const transitionCss = `
+@media (prefers-reduced-motion: no-preference) {
+  /* The travelling elements: card title to page heading, card media to hero. */
+  ${groups} {
+    animation-duration: .72s;
+    animation-timing-function: cubic-bezier(.22, .61, .36, 1);
+  }
+  ${pairs} {
+    animation-duration: .72s;
+  }
+  /* Everything else. Out fast, in late — which leaves the middle of the
+     transition as bare background with only the title and its image moving
+     across it. That gap is the whole effect; without it the two pages just
+     dissolve into each other and nothing appears to travel. */
+  ::view-transition-old(root) {
+    animation: vt-out .22s cubic-bezier(.4, 0, 1, 1) both;
+  }
+  ::view-transition-new(root) {
+    animation: vt-in .36s .32s cubic-bezier(0, 0, .2, 1) both;
+  }
+}
+/* The nine tenths of a percent of scale is doing more than it looks: it turns
+   an opacity crossfade into the page settling into place behind the title. */
+@keyframes vt-out { to { opacity: 0; transform: scale(.991) } }
+@keyframes vt-in { from { opacity: 0; transform: scale(.991) } }
+`;
 ---
 
 <!DOCTYPE html>
@@ -44,6 +101,14 @@ const ogImage = image ? new URL(image, Astro.site).href : undefined;
         <title>{title}</title>
         <meta name="description" content={description} />
         <link rel="canonical" href={canonical} />
+
+        {/* Client-side routing, so a navigation is a transition rather than a
+            reload: the nav bar and footer never blink, and a project's title
+            and cover travel from the card that was clicked to the page they
+            land on. Falls back to ordinary navigation where the browser has no
+            View Transitions API. */}
+        <ClientRouter />
+        <style is:inline set:html={transitionCss}></style>
 
         <meta property="og:type" content={ogType} />
         <meta property="og:title" content={title} />
@@ -70,7 +135,21 @@ const ogImage = image ? new URL(image, Astro.site).href : undefined;
             do unless the visitor chose wheat. Set before first paint either
             way, so the page never flashes the theme it is about to leave. */}
         <script is:inline>
-            if (localStorage.getItem('theme') === 'wheat') document.documentElement.dataset.theme = 'wheat';
+            (function () {
+                function apply() {
+                    if (localStorage.getItem('theme') === 'wheat') {
+                        document.documentElement.dataset.theme = 'wheat';
+                    }
+                }
+                apply();
+                /* Every page renders data-theme="ink", and a client-side
+                   navigation copies the incoming document's root attributes
+                   over the live ones — so without this, walking from one page
+                   to the next would throw a visitor's chosen palette away.
+                   Re-applied before the swap is painted rather than after, so
+                   there is no flash of the theme they did not pick. */
+                document.addEventListener('astro:after-swap', apply);
+            })();
         </script>
     </head>
     <body class={bodyClass}>

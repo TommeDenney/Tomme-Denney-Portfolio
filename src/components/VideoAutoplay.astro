@@ -1,0 +1,153 @@
+---
+/**
+ * The autoplay rules for every looping video on a page, in one place.
+ *
+ * This was the same twenty lines pasted into three pages, and client-side
+ * routing made that untenable: a listener bound while the document was parsed
+ * only ever knows the elements that existed at first paint, so after one
+ * in-page navigation every video on the site was left running or left dead.
+ * It now runs on astro:page-load — which fires on the first load and after
+ * every swap — and each element carries a flag, so calling it twice over the
+ * same video does nothing.
+ *
+ * Three rules:
+ *
+ *   1. Reduced motion wins outright. Autoplay is removed rather than paused,
+ *      so nothing restarts it.
+ *   2. A video plays once it is fully on screen and pauses once it is fully
+ *      off it, and nothing happens in between. The asymmetry is the point:
+ *      scrolling down past a playing video lets it run until the last pixel
+ *      leaves, and scrolling back up does not restart it until it is whole
+ *      again — so a video half in view at rest is never flickering between
+ *      states, and coming back to one resumes where it left off.
+ *
+ *      This is also what keeps the page cheap. The homepage ships ten looping
+ *      cards and /work twenty-nine; starting them together would pull tens of
+ *      megabytes before a visitor scrolled anywhere.
+ *   3. A video with controls belongs to the viewer. Once they touch it the
+ *      observer never starts it again — but it is still paused on the way out
+ *      of view, so sound does not follow a reader down the page.
+ *   4. Sound is on, at 70%, for the one video a page is actually about: the
+ *      hero. Every browser refuses to autoplay audio before a visitor has
+ *      interacted with the site, so the markup still ships `muted` — without
+ *      it the play() call is rejected and the page opens on a frozen poster —
+ *      and the sound is switched on either immediately, where the browser
+ *      allows it, or on the visitor's first click or keypress.
+ *
+ *      Only the hero. The See Reality page carries nine more clips with their
+ *      own audio, and nine tracks playing at once is not sound design. They
+ *      hold 70% volume ready for the moment somebody unmutes one from its own
+ *      control bar.
+ */
+---
+<script is:inline>
+    (function () {
+        var REDUCE = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+        /* One observer for the life of the tab. Nodes from a page that has
+           been swapped away stop intersecting, get paused once, and are then
+           garbage — which is cheaper than building a new observer per page. */
+        function observer() {
+            if (!('IntersectionObserver' in window)) return null;
+            if (!window.__vidIo) {
+                window.__vidIo = new IntersectionObserver(function (entries) {
+                    entries.forEach(function (e) {
+                        if (!e.isIntersecting) {
+                            e.target.pause();
+                            return;
+                        }
+
+                        /* "Fully visible" has to bend for anything taller than
+                           the window, which can never reach a ratio of 1 and
+                           would otherwise never be allowed to play. */
+                        var tall = e.boundingClientRect.height > window.innerHeight;
+                        var whole = tall ? e.intersectionRatio > 0.85 : e.intersectionRatio >= 0.99;
+                        if (!whole || e.target.dataset.held) return;
+
+                        var playing = e.target.play();
+                        if (playing && playing.catch) playing.catch(function () {});
+                    });
+                    /* No rootMargin: the ratios have to be measured against the
+                       real viewport, or a card sitting just below the fold
+                       reads as fully visible and starts playing off screen. */
+                }, { threshold: [0, 0.85, 0.99] });
+            }
+            return window.__vidIo;
+        }
+
+        /*
+         * Videos waiting for a gesture before they are allowed to make noise.
+         * Kept on window because a client-side navigation re-runs this script
+         * with a fresh closure, and the queue has to outlive that.
+         */
+        function armSound(v) {
+            var pending = window.__vidPending = window.__vidPending || [];
+            pending.push(v);
+            if (window.__vidArmed) return;
+            window.__vidArmed = true;
+
+            function release() {
+                window.__vidArmed = false;
+                (window.__vidPending || []).splice(0).forEach(function (video) {
+                    // Not one the viewer has since muted or paused themselves,
+                    // and not one belonging to a page they have already left.
+                    if (!video.dataset.held && document.contains(video) && !video.paused) {
+                        video.muted = false;
+                    }
+                });
+            }
+
+            ['pointerdown', 'keydown', 'touchstart'].forEach(function (evt) {
+                document.addEventListener(evt, release, { once: true, capture: true });
+            });
+        }
+
+        function withSound(v) {
+            v.muted = false;
+            var playing = v.play();
+            if (playing && playing.catch) {
+                playing.catch(function () {
+                    v.muted = true;
+                    var quiet = v.play();
+                    if (quiet && quiet.catch) quiet.catch(function () {});
+                    armSound(v);
+                });
+            }
+        }
+
+        function init() {
+            var io = REDUCE.matches ? null : observer();
+
+            document.querySelectorAll('video[data-hero-video]').forEach(function (v) {
+                if (v.dataset.wired) return;
+                v.dataset.wired = '1';
+
+                if (REDUCE.matches) {
+                    v.removeAttribute('autoplay');
+                    v.pause();
+                    return;
+                }
+
+                // Set on every player, not just the audible one: this is the
+                // level a viewer gets when they unmute a clip themselves, and
+                // full volume out of a control bar is a jump scare.
+                if (v.hasAttribute('controls')) {
+                    v.volume = 0.7;
+                    ['pointerdown', 'keydown'].forEach(function (evt) {
+                        v.addEventListener(evt, function () { v.dataset.held = '1'; });
+                    });
+                }
+
+                if (v.dataset.audio) withSound(v);
+
+                if (io) io.observe(v);
+            });
+        }
+
+        init();
+        if (!window.__vidWired) {
+            window.__vidWired = true;
+            document.addEventListener('astro:page-load', init);
+        }
+    })();
+</script>

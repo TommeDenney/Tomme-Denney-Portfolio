@@ -16,6 +16,7 @@ import Base from '../../layouts/Base.astro';
 import SiteNav from '../../components/SiteNav.astro';
 import SiteFooter from '../../components/SiteFooter.astro';
 import RosterGrid from '../../components/RosterGrid.astro';
+import VideoAutoplay from '../../components/VideoAutoplay.astro';
 import {
     PROJECTS, PROJECT_EXTERNAL_SITES, PROJECT_EMBEDS,
     projectSlug, projectHref, projectDisciplines, projectKind, KIND_LABEL,
@@ -350,13 +351,14 @@ const description = p.caption ?? `${p.desc.slice(0, 175).trimEnd()}…`;
 
     <main id="main">
         {(heroVideo || heroStill) && (
-            <div class="cs-hero">
+            <div class="cs-hero" transition:name={`m-${projectSlug(p.name)}`}>
                 {heroVideo ? (
                     <video
                         src={heroVideo}
                         poster={media.poster ?? undefined}
                         autoplay muted loop playsinline controls preload="metadata"
                         data-hero-video
+                        data-audio
                         aria-label={`${p.name} — project video`}>
                         {media.captions && (
                             <track
@@ -377,7 +379,7 @@ const description = p.caption ?? `${p.desc.slice(0, 175).trimEnd()}…`;
         <div class="shell">
             <header class="cs-head">
                 <p class="label">{KIND_LABEL[kind]}</p>
-                <h1 class="display" style="margin-top:16px">{p.name}</h1>
+                <h1 class="display" style="margin-top:16px" transition:name={`t-${projectSlug(p.name)}`}>{p.name}</h1>
                 {p.caption && <p class="cs-dek">{p.caption}</p>}
                 <div class="cs-meta">
                     <span>{p.cat}</span>
@@ -561,7 +563,7 @@ const description = p.caption ?? `${p.desc.slice(0, 175).trimEnd()}…`;
             <div class="strip-grid">
                 {others.map(({ p: o, media: m, kind: k }) => (
                     <a class="feature" href={projectHref(o.name)}>
-                        <div class="feature-media">
+                        <div class="feature-media" transition:name={`m-${projectSlug(o.name)}`}>
                             {m.preview ? (
                                 <video
                                     src={m.preview}
@@ -581,7 +583,7 @@ const description = p.caption ?? `${p.desc.slice(0, 175).trimEnd()}…`;
                             )}
                         </div>
                         <div class="feature-body">
-                            <h2 class="display strip-title">{o.name}</h2>
+                            <h2 class="display strip-title" transition:name={`t-${projectSlug(o.name)}`}>{o.name}</h2>
                         </div>
                         <p class="lead-cap">{o.caption ?? o.cat}</p>
                     </a>
@@ -592,38 +594,5 @@ const description = p.caption ?? `${p.desc.slice(0, 175).trimEnd()}…`;
 
     <SiteFooter />
 
-    <script is:inline>
-        (function () {
-            var vids = document.querySelectorAll('video[data-hero-video]');
-
-            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-                vids.forEach(function (v) { v.removeAttribute('autoplay'); v.pause(); });
-                return;
-            }
-
-            /* Any real input on a player hands it over for good: after that
-               the observer will still pause it on the way off screen, so no
-               audio follows the reader, but it never starts it again. */
-            vids.forEach(function (v) {
-                ['pointerdown', 'keydown', 'click'].forEach(function (evt) {
-                    v.addEventListener(evt, function () { v.dataset.held = '1'; });
-                });
-            });
-
-            /* Same rule as / and /work: whatever is on screen plays, the rest
-               waits until someone scrolls to it. */
-            if (!('IntersectionObserver' in window)) return;
-            var io = new IntersectionObserver(function (entries) {
-                entries.forEach(function (e) {
-                    if (!e.isIntersecting) {
-                        e.target.pause();
-                    } else if (!e.target.dataset.held) {
-                        var play = e.target.play();
-                        if (play && play.catch) play.catch(function () {});
-                    }
-                });
-            }, { rootMargin: '200px' });
-            vids.forEach(function (v) { io.observe(v); });
-        })();
-    </script>
+    <VideoAutoplay />
 </Base>

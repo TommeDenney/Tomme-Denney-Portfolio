@@ -11,7 +11,8 @@
 import Base from '../layouts/Base.astro';
 import SiteNav from '../components/SiteNav.astro';
 import SiteFooter from '../components/SiteFooter.astro';
-import { PROJECTS, PMAP, projectHref, projectKind, KIND_LABEL } from '../data/projects';
+import VideoAutoplay from '../components/VideoAutoplay.astro';
+import { PROJECTS, PMAP, projectHref, projectSlug, projectKind, KIND_LABEL } from '../data/projects';
 import { projectMedia } from '../lib/projectMedia';
 
 // Three featured projects, in this order on purpose. See Reality first: it is
@@ -63,7 +64,7 @@ const socialImage = PMAP.genexr.cover;
             <div class="leads">
                 {leads.map(({ p: lead, media }) => (
                     <a class="feature" href={projectHref(lead.name)}>
-                        <div class="feature-media">
+                        <div class="feature-media" transition:name={`m-${projectSlug(lead.name)}`}>
                             {media.preview ? (
                                 <video
                                     src={media.preview}
@@ -79,7 +80,7 @@ const socialImage = PMAP.genexr.cover;
                             </span>
                         </div>
                         <div class="feature-body">
-                            <h2 class="display lead-title">{lead.name}</h2>
+                            <h2 class="display lead-title" transition:name={`t-${projectSlug(lead.name)}`}>{lead.name}</h2>
                             <p class="label">{projectKind(lead) === 'project' ? 'See the work' : 'Read it'} &rarr;</p>
                         </div>
                         <p class="lead-cap">{lead.caption}</p>
@@ -96,7 +97,7 @@ const socialImage = PMAP.genexr.cover;
             <div class="strip-grid">
                 {deployments.map(({ p: item, media }) => (
                     <a class="feature" href={projectHref(item.name)}>
-                        <div class="feature-media">
+                        <div class="feature-media" transition:name={`m-${projectSlug(item.name)}`}>
                             {media.preview ? (
                                 <video
                                     src={media.preview}
@@ -109,7 +110,7 @@ const socialImage = PMAP.genexr.cover;
                             ) : null}
                         </div>
                         <div class="feature-body">
-                            <h3 class="display strip-title">{item.name}</h3>
+                            <h3 class="display strip-title" transition:name={`t-${projectSlug(item.name)}`}>{item.name}</h3>
                         </div>
                         <p class="lead-cap">{item.caption}</p>
                     </a>
@@ -125,7 +126,7 @@ const socialImage = PMAP.genexr.cover;
             <div class="strip-grid">
                 {written.map(({ p: item, media }) => (
                     <a class="feature" href={projectHref(item.name)}>
-                        <div class="feature-media">
+                        <div class="feature-media" transition:name={`m-${projectSlug(item.name)}`}>
                             {media.preview ? (
                                 <video
                                     src={media.preview}
@@ -141,7 +142,7 @@ const socialImage = PMAP.genexr.cover;
                             </span>
                         </div>
                         <div class="feature-body">
-                            <h3 class="display strip-title">{item.name}</h3>
+                            <h3 class="display strip-title" transition:name={`t-${projectSlug(item.name)}`}>{item.name}</h3>
                         </div>
                         <p class="lead-cap">{item.caption}</p>
                     </a>
@@ -154,7 +155,7 @@ const socialImage = PMAP.genexr.cover;
             <div class="strip-grid">
                 {projectsRow.map(({ p: item, media }) => (
                     <a class="feature" href={projectHref(item.name)}>
-                        <div class="feature-media">
+                        <div class="feature-media" transition:name={`m-${projectSlug(item.name)}`}>
                             {media.preview ? (
                                 <video
                                     src={media.preview}
@@ -167,7 +168,7 @@ const socialImage = PMAP.genexr.cover;
                             ) : null}
                         </div>
                         <div class="feature-body">
-                            <h3 class="display strip-title">{item.name}</h3>
+                            <h3 class="display strip-title" transition:name={`t-${projectSlug(item.name)}`}>{item.name}</h3>
                         </div>
                         <p class="lead-cap">{item.caption}</p>
                     </a>
@@ -181,31 +182,5 @@ const socialImage = PMAP.genexr.cover;
 
     <SiteFooter />
 
-    <script is:inline>
-        (function () {
-            var vids = document.querySelectorAll('video[data-hero-video]');
-
-            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-                vids.forEach(function (v) { v.removeAttribute('autoplay'); v.pause(); });
-                return;
-            }
-
-            /* Six autoplaying clips would pull tens of megabytes before anyone
-               scrolled. They keep the autoplay attribute so whatever is on
-               screen at load starts immediately; anything off screen is paused
-               until it arrives. */
-            if (!('IntersectionObserver' in window)) return;
-            var io = new IntersectionObserver(function (entries) {
-                entries.forEach(function (e) {
-                    if (e.isIntersecting) {
-                        var play = e.target.play();
-                        if (play && play.catch) play.catch(function () {});
-                    } else {
-                        e.target.pause();
-                    }
-                });
-            }, { rootMargin: '200px' });
-            vids.forEach(function (v) { io.observe(v); });
-        })();
-    </script>
+    <VideoAutoplay />
 </Base>

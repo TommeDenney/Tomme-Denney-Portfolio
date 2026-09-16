@@ -11,7 +11,7 @@ interface Props { current?: 'home' | 'work' | 'about' | 'photography' }
 const { current } = Astro.props;
 ---
 <a class="skip" href="#main">Skip to content</a>
-<nav class="nav">
+<nav class="nav" transition:name="site-nav" transition:animate="none">
     <a class="nav-mark" href="/">Tomme Denney</a>
     <ul class="nav-links">
         {/* The wordmark already goes home, but a named link is what a visitor
@@ -32,23 +32,41 @@ const { current } = Astro.props;
     </ul>
 </nav>
 <script is:inline>
+    /*
+     * Wired on astro:page-load rather than on parse, because client-side
+     * navigation hands this component a brand new button element: a listener
+     * bound once to the node that existed at first paint would stop working
+     * the moment somebody visited a second page. page-load fires on the first
+     * load and after every swap, and the per-element flag makes a second call
+     * on the same button a no-op.
+     */
     (function () {
-        var btn = document.getElementById('theme-btn');
-        if (!btn) return;
-        // Persisted, unlike v1 — a palette that resets on every navigation is
-        // not a preference, it is a toggle that forgets.
-        var label = document.getElementById('theme-label');
-        function sync() {
-            var toWheat = document.documentElement.dataset.theme === 'ink';
-            btn.setAttribute('aria-label', toWheat ? 'Switch to the Wheat theme' : 'Switch to the Ink theme');
-            label.textContent = toWheat ? 'Switch to Wheat' : 'Switch to Ink';
-        }
-        sync();
-        btn.addEventListener('click', function () {
-            var next = document.documentElement.dataset.theme === 'ink' ? 'wheat' : 'ink';
-            document.documentElement.dataset.theme = next;
-            localStorage.setItem('theme', next);
+        function init() {
+            var btn = document.getElementById('theme-btn');
+            if (!btn || btn.dataset.wired) return;
+            btn.dataset.wired = '1';
+
+            // Persisted, unlike v1 — a palette that resets on every navigation
+            // is not a preference, it is a toggle that forgets.
+            var label = document.getElementById('theme-label');
+            function sync() {
+                var toWheat = document.documentElement.dataset.theme === 'ink';
+                btn.setAttribute('aria-label', toWheat ? 'Switch to the Wheat theme' : 'Switch to the Ink theme');
+                label.textContent = toWheat ? 'Switch to Wheat' : 'Switch to Ink';
+            }
             sync();
-        });
+            btn.addEventListener('click', function () {
+                var next = document.documentElement.dataset.theme === 'ink' ? 'wheat' : 'ink';
+                document.documentElement.dataset.theme = next;
+                localStorage.setItem('theme', next);
+                sync();
+            });
+        }
+
+        init();
+        if (!window.__navWired) {
+            window.__navWired = true;
+            document.addEventListener('astro:page-load', init);
+        }
     })();
 </script>
