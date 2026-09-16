@@ -1,0 +1,119 @@
+---
+/**
+ * The palette picker, bottom right.
+ *
+ * A scaffold for choosing, not a feature: five palettes are live so they can
+ * be compared on real pages with real photographs in them, and once one is
+ * picked this component, its block in global.css and the four losing objects
+ * in src/data/palettes.ts all go. Deleting it is deleting the import in
+ * Base.astro and this file.
+ *
+ * Each option previews itself rather than the palette currently applied — the
+ * three dots are that palette's own page, accent and text colours, taken from
+ * the data. The choice persists in localStorage and is applied in the head
+ * before first paint, same as the light/dark toggle, so nothing flashes.
+ */
+import { PALETTES, DEFAULT_PALETTE } from '../data/palettes';
+---
+<div class="picker" transition:persist="picker">
+    <button class="picker-btn" id="picker-btn" type="button" aria-expanded="false" aria-controls="picker-list">
+        <span class="picker-dots" aria-hidden="true">
+            <i id="picker-dot-bg"></i><i id="picker-dot-accent"></i><i id="picker-dot-text"></i>
+        </span>
+        <span class="picker-now" id="picker-now">Palette</span>
+    </button>
+
+    <div class="picker-list" id="picker-list" hidden>
+        <p class="label picker-head">Palette</p>
+        {PALETTES.map((p) => (
+            <button
+                class="picker-opt"
+                type="button"
+                data-palette={p.id}
+                data-name={p.name}
+                data-bg={p.dark.bg}
+                data-accent={p.dark.accent}
+                data-text={p.dark.text}
+                aria-pressed={p.id === DEFAULT_PALETTE ? 'true' : 'false'}
+            >
+                <span class="picker-dots" aria-hidden="true">
+                    <i style={`background:${p.dark.bg}`}></i>
+                    <i style={`background:${p.dark.accent}`}></i>
+                    <i style={`background:${p.dark.text}`}></i>
+                </span>
+                <span class="picker-opt-text">
+                    <span class="picker-opt-name">{p.name}</span>
+                    <span class="picker-opt-note">{p.note}</span>
+                </span>
+            </button>
+        ))}
+    </div>
+</div>
+
+<script is:inline define:vars={{ fallback: DEFAULT_PALETTE }}>
+    (function () {
+        if (window.__picker) return;
+        window.__picker = true;
+
+        /* Looked up through functions rather than captured: this element is
+           persisted across navigations, and a stale reference would write to a
+           detached node in silence. */
+        function q(id) {
+            return document.getElementById(id);
+        }
+
+        function current() {
+            return document.documentElement.dataset.palette || fallback;
+        }
+
+        function paint() {
+            var id = current();
+            var chosen = null;
+            document.querySelectorAll('.picker-opt').forEach(function (opt) {
+                var on = opt.dataset.palette === id;
+                opt.setAttribute('aria-pressed', on ? 'true' : 'false');
+                if (on) chosen = opt;
+            });
+            if (!chosen) return;
+            var now = q('picker-now');
+            if (now) now.textContent = chosen.dataset.name;
+            [['picker-dot-bg', 'bg'], ['picker-dot-accent', 'accent'], ['picker-dot-text', 'text']]
+                .forEach(function (pair) {
+                    var dot = q(pair[0]);
+                    if (dot) dot.style.background = chosen.dataset[pair[1]];
+                });
+        }
+
+        function open(state) {
+            var btn = q('picker-btn');
+            var list = q('picker-list');
+            if (!btn || !list) return;
+            list.hidden = !state;
+            btn.setAttribute('aria-expanded', state ? 'true' : 'false');
+        }
+
+        document.addEventListener('click', function (e) {
+            var opt = e.target.closest ? e.target.closest('.picker-opt') : null;
+            if (opt) {
+                document.documentElement.dataset.palette = opt.dataset.palette;
+                localStorage.setItem('palette', opt.dataset.palette);
+                paint();
+                open(false);
+                return;
+            }
+            if (e.target.closest && e.target.closest('#picker-btn')) {
+                open(q('picker-btn').getAttribute('aria-expanded') !== 'true');
+                return;
+            }
+            // Anywhere else closes it.
+            if (!e.target.closest || !e.target.closest('.picker')) open(false);
+        });
+
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') open(false);
+        });
+
+        paint();
+        document.addEventListener('astro:page-load', paint);
+    })();
+</script>

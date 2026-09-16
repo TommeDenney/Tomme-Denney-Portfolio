@@ -8,6 +8,8 @@
  */
 import { ClientRouter } from 'astro:transitions';
 import Ambient from '../components/Ambient.astro';
+import PalettePicker from '../components/PalettePicker.astro';
+import { paletteCss, DEFAULT_PALETTE } from '../data/palettes';
 import { PROJECTS, projectSlug } from '../data/projects';
 import '../styles/global.css';
 
@@ -95,7 +97,7 @@ const transitionCss = `
 ---
 
 <!DOCTYPE html>
-<html lang="en" data-theme="ink">
+<html lang="en" data-theme="ink" data-palette={DEFAULT_PALETTE}>
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -116,6 +118,10 @@ const transitionCss = `
             View Transitions API. */}
         <ClientRouter />
         <style is:inline set:html={transitionCss}></style>
+        {/* The colour tokens for every palette, emitted from
+            src/data/palettes.ts so the picker and the CSS cannot disagree
+            about what a palette is. */}
+        <style is:inline set:html={paletteCss()}></style>
 
         <meta property="og:type" content={ogType} />
         <meta property="og:title" content={title} />
@@ -147,6 +153,8 @@ const transitionCss = `
                     if (localStorage.getItem('theme') === 'wheat') {
                         document.documentElement.dataset.theme = 'wheat';
                     }
+                    var palette = localStorage.getItem('palette');
+                    if (palette) document.documentElement.dataset.palette = palette;
                 }
                 apply();
                 /* Every page renders data-theme="ink", and a client-side
@@ -162,5 +170,6 @@ const transitionCss = `
     <body class={bodyClass}>
         <Ambient />
         <slot />
+        <PalettePicker />
     </body>
 </html>

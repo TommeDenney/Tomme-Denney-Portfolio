@@ -8,30 +8,44 @@
  * poster scale, hairline rules, numbered index rows, square corners, and an
  * asymmetric grid with the labels in the left margin.
  *
- * VINTAGE CHARM, and the three rules the measured contrast forces:
+ * The colours are not in this file. Five palettes live in
+ * src/data/palettes.ts and arrive as html[data-palette][data-theme] blocks
+ * from Base.astro; what is here is everything derived from them — muted text,
+ * hairlines, scrims and the hover sweep are all mixed from the eight colours a
+ * palette names, so adding or removing one touches no CSS.
  *
- *   1. Burnt orange is never body text and never a small link. It is 3.46:1 on
- *      wheat and 3.80:1 on ink. It appears only as rules, numerals at display
- *      size, underlines, and focus rings.
- *   2. Orange never sits on slate (2.53:1) or violet (2.77:1). Both fail.
- *   3. Slate and violet are surfaces on ink, never type on it — 1.50:1 and
- *      1.37:1. As quiet panels they are the best thing in the palette.
+ * The three rules every palette is measured against, which come from the
+ * original Vintage Charm pairing and hold for the rest:
  *
- * Ink on wheat and wheat on ink are both 13.15:1.
+ *   1. Body text sits at 13:1 or better on the page colour. There is room to
+ *      lose some of that to the background field, which is why it exists at
+ *      all.
+ *   2. The accent is never body text and never a small link. In the warm
+ *      palettes it is a mid-tone — burnt orange is 3.80:1 on ink — so it
+ *      appears only as rules, underlines, display-size numerals, focus rings
+ *      and the sweep. The cold palettes could carry it as text and still
+ *      do not, so the palettes stay swappable.
+ *   3. `surface` and `deep` are panels, never type on the page. Text on them
+ *      is `on-deep`, which every palette states outright.
  */
 
 :root {
-    /* Ink is the default: the work is photography and headset capture, and
-       both sit better on it. Wheat remains a first-class choice. */
-    --bg: #04151f;
-    --surface: #183a37;
-    --text: #efd6ac;
-    --mt: rgba(239, 214, 172, .7);
-    --rule: rgba(239, 214, 172, .18);
-    --rule-strong: rgba(239, 214, 172, .42);
-    --accent: #c44900;
-    --deep: #432534;
-    --on-deep: #efd6ac;
+    /* The colours live in src/data/palettes.ts and arrive as
+       html[data-palette][data-theme] blocks from Base.astro. What is left here
+       is everything derived from them, so a palette only ever has to name
+       eight colours and cannot half-apply. */
+
+    /* Muted text and the hairlines, mixed from whatever the text colour is.
+       These were three hand-written rgba()s of wheat, which is why every
+       palette before this one would have needed its own copy of them. */
+    --mt: color-mix(in srgb, var(--text) 70%, transparent);
+    --rule: color-mix(in srgb, var(--text) 18%, transparent);
+    --rule-strong: color-mix(in srgb, var(--text) 42%, transparent);
+
+    /* Scrims for the lightbox and the hover hint. Built on --ink rather than
+       on --bg: a photograph wants a dark surround even on a light page. */
+    --scrim: color-mix(in srgb, var(--ink) 95%, transparent);
+    --scrim-soft: color-mix(in srgb, var(--ink) 82%, transparent);
 
     /* How much a card grows under the pointer. 1.25 was the ask and it does
        not survive a four-column grid: at that size a card overlaps its
@@ -46,29 +60,30 @@
        a card: none of these sit in a grid with a neighbour 16px away. */
     --tap-hover: 1.25;
 
-    /* Two passes of the same angled sweep, crossing. One gradient looks like a
-       gloss; two at opposing angles read as the colour flash a stream cuts to
-       between scenes. Kept dark where it sits behind type — a bright stop
-       under wheat text would take the contrast from 13:1 to nothing — and
-       bright where it is only a 2px bar under a link. */
-    --sweep-fill:
-        linear-gradient(100deg, transparent 0 14%, rgba(196, 73, 0, .55) 30%,
-            rgba(67, 37, 52, .92) 46%, rgba(24, 58, 55, .92) 60%,
-            rgba(196, 73, 0, .5) 74%, transparent 90%),
-        linear-gradient(-42deg, transparent 0 20%, rgba(24, 58, 55, .8) 42%,
-            rgba(196, 73, 0, .42) 58%, transparent 80%);
-    --sweep-bar:
-        linear-gradient(100deg, transparent 0 10%, var(--accent) 26%,
-            var(--text) 44%, var(--accent) 62%, var(--surface) 78%, transparent 92%);
-
-    /* The background field. Navies a step or two off the page colour — the
-       brightest is #12395c at 55%, which is about nine percent lighter than
-       the ink it sits on. */
-    --amb-1: #0e2b4a;
-    --amb-2: #12395c;
-    --amb-3: #163a4f;
-    --amb-4: #0a2138;
-    --amb-alpha: .55;
+    /* The foil.
+     *
+     * Lifted from the treatment on the Recollection site, which fills its type
+     * with a gold gradient and slides it: the glyphs are the reflective thing,
+     * not a panel behind them. Same idea in this palette — body colour at both
+     * ends, the accent either side of a sheen, and a single band travelling
+     * across the letters once per hover.
+     *
+     * The ends are both `--text` on purpose. The gradient tiles, so a hovered
+     * element is covered at every position in the animation; without matching
+     * ends the seam would show, and without tiling the uncovered part of a
+     * glyph would drop out to nothing mid-sweep.
+     *
+     * Contrast survives because no stop is darker than the accent and most of
+     * the run is body colour. The sheen is the opposite base — near-white on a
+     * dark page, and a deepened accent on a light one, where a bright band
+     * would have been a hole in the word.
+     */
+    --foil-sheen: color-mix(in srgb, var(--paper) 72%, white);
+    --foil:
+        linear-gradient(100deg,
+            var(--text) 0%, var(--text) 32%,
+            var(--accent) 43%, var(--foil-sheen) 50%, var(--accent) 57%,
+            var(--text) 68%, var(--text) 100%);
 
     --measure: 62ch;
     --page: 1440px;
@@ -76,22 +91,9 @@
     --step: clamp(72px, 11vh, 148px);
 }
 
-[data-theme='wheat'] {
-    /* Tints of the paper rather than the navy: on a light page the same blobs
-       read as four holes punched in it. */
-    --amb-1: #e3c895;
-    --amb-2: #dcbf88;
-    --amb-3: #e9d3a6;
-    --amb-4: #d8b97f;
-    --amb-alpha: .72;
-
-    --bg: #efd6ac;
-    --surface: #e7cd9d;
-    --text: #04151f;
-    --mt: #183a37;
-    --rule: rgba(4, 21, 31, .16);
-    --rule-strong: rgba(4, 21, 31, .38);
-    --deep: #432534;
+/* On a light page the shine has to go darker, not brighter. */
+html[data-theme='wheat'] {
+    --foil-sheen: color-mix(in srgb, var(--ink) 74%, var(--accent));
 }
 
 *,
@@ -125,7 +127,7 @@ video {
 
 ::selection {
     background: var(--accent);
-    color: #efd6ac;
+    color: var(--on-accent);
 }
 
 /* Orange at 3px is a UI element, which is the one job its contrast allows. */
@@ -134,6 +136,123 @@ button:focus-visible,
 [tabindex]:focus-visible {
     outline: 3px solid var(--accent);
     outline-offset: 4px;
+}
+
+/* ── PALETTE PICKER ───────────────────────────────────────── */
+
+/* Temporary — see src/components/PalettePicker.astro. Opaque rather than
+   translucent: it sits over the drifting background field and a see-through
+   panel would make its own labels move. */
+.picker {
+    position: fixed;
+    right: clamp(14px, 2vw, 26px);
+    bottom: clamp(14px, 2vw, 26px);
+    z-index: 60;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+}
+
+.picker-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--text);
+    background: var(--bg);
+    border: 1px solid var(--rule-strong);
+    padding: 9px 13px;
+    cursor: pointer;
+    transition: border-color .2s, transform .35s cubic-bezier(.22, .61, .36, 1);
+}
+
+.picker-btn:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+}
+
+.picker-dots {
+    display: flex;
+    gap: 3px;
+}
+
+.picker-dots i {
+    display: block;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    border: 1px solid var(--rule);
+}
+
+.picker-list {
+    order: -1;
+    width: min(19rem, calc(100vw - 32px));
+    padding: 16px;
+    background: var(--bg);
+    border: 1px solid var(--rule-strong);
+    box-shadow: 0 18px 44px color-mix(in srgb, var(--ink) 45%, transparent);
+}
+
+.picker-head {
+    margin-bottom: 12px;
+}
+
+.picker-opt {
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+    width: 100%;
+    font-family: inherit;
+    text-align: left;
+    color: var(--text);
+    background: none;
+    border: 0;
+    border-top: 1px solid var(--rule);
+    padding: 11px 0 12px;
+    cursor: pointer;
+}
+
+.picker-opt:hover .picker-opt-name,
+.picker-opt[aria-pressed='true'] .picker-opt-name {
+    border-bottom-color: var(--accent);
+}
+
+.picker-opt .picker-dots {
+    padding-top: 3px;
+}
+
+.picker-opt-text {
+    display: block;
+}
+
+.picker-opt-name {
+    display: inline-block;
+    font-family: Fraunces, 'Times New Roman', serif;
+    font-variation-settings: 'SOFT' 0, 'WONK' 1, 'opsz' 40;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 1.1;
+    border-bottom: 2px solid transparent;
+    transition: border-color .2s;
+}
+
+.picker-opt-note {
+    display: block;
+    margin-top: 4px;
+    font-size: 12px;
+    line-height: 1.45;
+    color: var(--mt);
+}
+
+@media (max-width: 560px) {
+    .picker-now {
+        display: none;
+    }
 }
 
 /* ── BACKGROUND FIELD ──────────────────────────────────────── */
@@ -589,138 +708,183 @@ h3.display {
     opacity: .55;
 }
 
-/* ── ARROWS AND THE HOVER SWEEP ───────────────────────────────── */
+/* ── THE FOIL, AND THE ORBITING ARROW ──────────────────────────── */
 
-/* Every arrow on the site is drawn by CSS rather than typed into the label, so
-   it has something to do when a pointer arrives. A glyph inside a text node
-   cannot be transformed on its own; a pseudo-element can. */
+/* Everything clickable and typographic carries the foil: the gradient is
+   clipped to the glyphs at all times and simply hidden behind an opaque text
+   colour, so hovering is a matter of dropping the colour and running the
+   gradient once. Nothing is layered behind the type, which is what the earlier
+   version got wrong — a panel sliding under the letters read as a highlight
+   passing over the button, not as the letters themselves catching light. */
+.btn,
+.filter,
+.theme-btn,
+.nav-mark,
+.nav-links a,
+.lead-cta,
+.index-kind,
+.rcard-links a {
+    background-image: var(--foil);
+    background-size: 320% 100%;
+    background-position: 130% 0;
+    -webkit-background-clip: text;
+    background-clip: text;
+    transition: transform .35s cubic-bezier(.22, .61, .36, 1),
+        color .18s, border-color .22s;
+}
+
+.btn:hover,
+.btn:focus-visible,
+.filter:hover,
+.filter:focus-visible,
+.theme-btn:hover,
+.theme-btn:focus-visible,
+.nav-mark:hover,
+.nav-mark:focus-visible,
+.nav-links a:hover,
+.nav-links a:focus-visible,
+.rcard-links a:hover,
+.rcard-links a:focus-visible,
+.feature:hover .lead-cta,
+.feature:hover .index-kind {
+    color: transparent;
+    animation: foil-run .9s cubic-bezier(.36, .07, .3, 1) both;
+}
+
+@keyframes foil-run {
+    from { background-position: 130% 0; }
+    to { background-position: -30% 0; }
+}
+
+/* The badge's own pill has to move out of the way: background-clip clips every
+   background layer, colour included, so a badge that kept its fill in
+   `background` would lose it the moment the type took the gradient. */
+.index-kind {
+    /* Positioned so the pill below has something to fill. The badge is
+       absolutely positioned inside a card, which already gave it one, but not
+       every future home for it will. */
+    position: relative;
+    background-color: transparent;
+    isolation: isolate;
+}
+
+.index-kind::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--deep);
+}
+
+.index-kind[data-kind='project']::before {
+    background: none;
+}
+
+/* The wordmark's monogram is a mask painted in currentColor, and currentColor
+   goes transparent with the rest of the type. It takes the gradient directly
+   instead — through the mask, so the foil runs inside the letters of the mark
+   itself. */
+.nav-mark:hover .nav-logo,
+.nav-mark:focus-visible .nav-logo {
+    background-color: var(--text);
+    background-image: var(--foil);
+    background-size: 320% 100%;
+    animation: foil-run .9s cubic-bezier(.36, .07, .3, 1) both;
+}
+
+/* A button no longer fills on hover. The foil is the event; a solid panel
+   behind it flattened the one thing that was supposed to catch the light. */
+.btn:hover,
+.btn:focus-visible {
+    border-color: var(--accent);
+}
+
+/* ── ARROWS ────────────────────────────────────────────── */
+
+/* Drawn rather than typed, so they have something to do when a pointer
+   arrives: a glyph inside a text node cannot be animated on its own. */
 .btn::after,
 .lead-cta::after,
 .rcard-links a::after {
     content: '\2192';
     display: inline-block;
     margin-left: .5em;
-    transition: transform .4s cubic-bezier(.22, .61, .36, 1);
+    transition: transform .4s cubic-bezier(.22, .61, .36, 1), opacity .3s;
 }
 
-/* Off-site links point out of the page instead of along it. */
 .btn-ext::after,
 .rcard-links a.ext::after {
     content: '\2197';
 }
 
-.btn:hover::after,
-.btn:focus-visible::after,
 .rcard-links a:hover::after,
 .feature:hover .lead-cta::after {
     transform: translateX(6px);
 }
 
-.btn-ext:hover::after,
-.btn-ext:focus-visible::after,
 .rcard-links a.ext:hover::after {
     transform: translate(5px, -5px);
 }
 
-/* The sweep. It is a layer behind the element's own content, so the text
-   colour never changes and nothing depends on the gradient for legibility —
-   the flash is decoration over an already-readable pairing. */
-.btn,
-.filter,
-.theme-btn,
-.index-kind,
-.nav-mark,
-.nav-links a {
+/* On a button the arrow leaves its slot and flies the perimeter once.
+ *
+ * `offset-path: border-box` traces the button's own edge, so this works at any
+ * width without a single hard-coded coordinate, and `offset-rotate: auto`
+ * turns the arrowhead into the direction of travel — along the bottom it
+ * points back the way it came, which is the whole reason it reads as one
+ * object going round rather than a glyph flickering at four corners. The
+ * inline arrow dims out of the way while it is gone and comes back as it
+ * lands.
+ *
+ * Behind @supports because the fallback would be an arrow parked in the top
+ * left corner blinking, which is worse than no flourish at all.
+ */
+@supports (offset-path: border-box) {
+    .btn::before {
+        content: '\2192';
+        position: absolute;
+        top: 0;
+        left: 0;
+        font-size: .95em;
+        line-height: 1;
+        color: var(--accent);
+        offset-path: border-box;
+        offset-distance: 0%;
+        offset-rotate: auto;
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .btn-ext::before {
+        content: '\2197';
+    }
+
+    .btn:hover::before,
+    .btn:focus-visible::before {
+        animation: arrow-orbit .95s cubic-bezier(.42, .04, .3, 1) both;
+    }
+
+    .btn:hover::after,
+    .btn:focus-visible::after {
+        opacity: .2;
+        transform: translateX(3px);
+    }
+
+    @keyframes arrow-orbit {
+        0% { offset-distance: 0%; opacity: 0; }
+        10% { opacity: 1; }
+        82% { opacity: 1; }
+        100% { offset-distance: 100%; opacity: 0; }
+    }
+}
+
+/* ── THE BUMP ──────────────────────────────────────────── */
+
+/* Transform only, so nothing reflows and no neighbour moves. */
+.btn {
     position: relative;
-    isolation: isolate;
-    transition: transform .35s cubic-bezier(.22, .61, .36, 1),
-        background .22s, color .22s, border-color .22s;
 }
 
-.btn::before,
-.filter::before,
-.theme-btn::before,
-.index-kind::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    background-image: var(--sweep-fill);
-    background-repeat: no-repeat;
-    background-size: 220% 100%, 220% 100%;
-    background-position: 210% 0, -130% 0;
-    opacity: 0;
-    transition: opacity .2s;
-}
-
-.btn:hover::before,
-.btn:focus-visible::before,
-.filter:hover::before,
-.filter:focus-visible::before,
-.theme-btn:hover::before,
-.theme-btn:focus-visible::before,
-.feature:hover .index-kind::before {
-    opacity: 1;
-}
-
-/* The two layers cross: one runs left, the other right, over the same 0.8s. */
-@keyframes sweep-cross {
-    from { background-position: 210% 0, -130% 0; }
-    to { background-position: -130% 0, 210% 0; }
-}
-
-.btn:hover::before,
-.btn:focus-visible::before,
-.filter:hover::before,
-.filter:focus-visible::before,
-.theme-btn:hover::before,
-.theme-btn:focus-visible::before,
-.feature:hover .index-kind::before {
-    animation: sweep-cross .8s cubic-bezier(.32, 0, .3, 1) both;
-}
-
-/* The badge answers its card rather than the pointer: it is a 10px label in
-   the corner of a picture, and asking someone to hit it is asking them to
-   find it first. */
-.index-kind::before {
-    transition: opacity .25s;
-}
-
-/* Text that has no box gets the sweep as the 2px rule under it, which is the
-   one place the palette allows the accent to be bright. */
-.nav-mark,
-.nav-links a {
-    background-image: var(--sweep-bar);
-    background-repeat: no-repeat;
-    background-size: 220% 2px;
-    background-position: 210% 100%;
-}
-
-.nav-links a:hover,
-.nav-links a:focus-visible,
-.nav-mark:hover,
-.nav-mark:focus-visible {
-    animation: sweep-bar .85s cubic-bezier(.32, 0, .3, 1) both;
-}
-
-@keyframes sweep-bar {
-    from { background-position: 210% 100%; }
-    to { background-position: -130% 100%; }
-}
-
-/* The bump. Transform only, so nothing reflows and no neighbour moves. */
-.btn:hover,
-.btn:focus-visible,
-.filter:hover,
-.filter:focus-visible,
-.theme-btn:hover,
-.theme-btn:focus-visible {
-    transform: scale(var(--tap-hover));
-    z-index: 4;
-}
-
-/* Left-anchored, all of them: these sit at the left edge of a shell or a
-   nav, and growing from the centre pushes them into the gutter. */
 .btn,
 .filter,
 .nav-mark,
@@ -728,6 +892,16 @@ h3.display {
     transform-origin: left center;
 }
 
+.index-kind {
+    transform-origin: left bottom;
+}
+
+.btn:hover,
+.btn:focus-visible,
+.filter:hover,
+.filter:focus-visible,
+.theme-btn:hover,
+.theme-btn:focus-visible,
 .nav-links a:hover,
 .nav-links a:focus-visible,
 .nav-mark:hover,
@@ -736,25 +910,20 @@ h3.display {
     z-index: 4;
 }
 
-/* The badge grows out of the corner it is pinned to. */
-.index-kind {
-    transform-origin: left bottom;
-}
-
 .feature:hover .index-kind {
     transform: scale(var(--tap-hover));
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .btn::after,
-    .lead-cta::after,
-    .rcard-links a::after,
     .btn,
     .filter,
     .theme-btn,
     .index-kind,
     .nav-mark,
-    .nav-links a {
+    .nav-links a,
+    .btn::after,
+    .lead-cta::after,
+    .rcard-links a::after {
         transition: none;
     }
 
@@ -764,17 +933,24 @@ h3.display {
     .theme-btn:hover,
     .nav-links a:hover,
     .nav-mark:hover,
-    .feature:hover .index-kind {
+    .feature:hover .index-kind,
+    .rcard-links a:hover::after,
+    .feature:hover .lead-cta::after {
         transform: none;
     }
 
-    .btn:hover::before,
-    .filter:hover::before,
-    .theme-btn:hover::before,
-    .feature:hover .index-kind::before,
+    .btn:hover,
+    .filter:hover,
+    .theme-btn:hover,
+    .nav-mark:hover,
     .nav-links a:hover,
-    .nav-mark:hover {
+    .rcard-links a:hover,
+    .feature:hover .lead-cta,
+    .feature:hover .index-kind,
+    .nav-mark:hover .nav-logo,
+    .btn:hover::before {
         animation: none;
+        color: inherit;
     }
 }
 
@@ -1250,7 +1426,7 @@ h3.display {
     display: none;
     place-items: center;
     padding: 4vmin;
-    background: rgba(4, 21, 31, .95);
+    background: var(--scrim);
 }
 
 .lightbox[open] {
@@ -1272,9 +1448,9 @@ h3.display {
     font-weight: 600;
     letter-spacing: .14em;
     text-transform: uppercase;
-    color: #efd6ac;
+    color: var(--paper);
     background: none;
-    border: 1px solid rgba(239, 214, 172, .4);
+    border: 1px solid color-mix(in srgb, var(--paper) 40%, transparent);
     padding: 8px 14px;
     cursor: pointer;
 }
@@ -1313,14 +1489,11 @@ h3.display {
     text-decoration: none;
     padding: 14px 26px;
     border: 1px solid var(--rule-strong);
-    transition: background .22s, color .22s, border-color .22s;
 }
 
-.btn:hover {
-    background: var(--deep);
-    border-color: var(--deep);
-    color: var(--on-deep);
-}
+/* No hover fill — see the foil block above, which this rule used to undo:
+   `background` is a shorthand and reset the gradient and its clip, and
+   `color` painted the type back over what was left. */
 
 .stack > * + * {
     margin-top: 18px;
@@ -1393,12 +1566,13 @@ h3.display {
     width: 14px;
     height: 14px;
     border-radius: 50%;
-    background: #efd6ac;
+    /* The swatch shows the mode it switches to, so it is the other base. */
+    background: var(--paper);
     border: 1px solid var(--rule-strong);
 }
 
 [data-theme='wheat'] .theme-dot {
-    background: #04151f;
+    background: var(--ink);
 }
 
 /* ── PORTRAIT DEMO ───────────────────────────────────────────────────────── */
@@ -1559,8 +1733,8 @@ h3.display {
     right: 0;
     bottom: 0;
     padding: 7px 9px;
-    background: rgba(4, 21, 31, .82);
-    color: #efd6ac;
+    background: var(--scrim-soft);
+    color: var(--paper);
     font-size: 10px;
     font-weight: 600;
     letter-spacing: .1em;
@@ -1589,7 +1763,7 @@ h3.display {
     .fig-zoom::before {
         inset: 0;
         z-index: 190;
-        background: rgba(4, 21, 31, .88);
+        background: color-mix(in srgb, var(--ink) 88%, transparent);
     }
 
     .fig-zoom::after {
