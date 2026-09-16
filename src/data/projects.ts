@@ -55,11 +55,10 @@ export type Project = {
      */
     documents?: { label: string; file: string; note?: string }[];
     /**
-     * The id of a project whose case study covers this one. Set on the six See
-     * Reality deployments, which are individual cards over a single body of
-     * work: the card carries the client and the footage, and this sends a
-     * reader to the page that carries the reasoning, so the reasoning is never
-     * written twice.
+     * The id of a project this one is part of. Set on the six See Reality
+     * deployments: the card carries the client and the footage, and this sends
+     * a reader to the page that lists the whole body of work, so the overview
+     * is never written twice.
      */
     partOf?: string;
 };
@@ -387,17 +386,15 @@ export const PROJECTS: Project[] = [
         bg: 'linear-gradient(145deg,#050e1a,#0e2860,#1a449a)', ico: '🌐',
         tags: ['Unity C#', 'Meta Quest', 'Mixed Reality', 'Mobile AR', 'AR Glasses', '360° Video', 'XR Interaction Design', 'Location-Based XR', 'Multiplayer XR', 'Normcore', 'URP', 'Localisation', 'Client Work'],
         caption: 'Years of AR, MR and VR built into live guided tours — Boston, Lexington, Nashville, Atlantic Canada, Rome, Pompeii, Venice.',
-        desc: 'Immersive experiences for tour operators, municipalities and guides, built to run inside tours that were already selling tickets — not standalone demos. Deployed for Relive 1776 on Boston’s Freedom Trail, the Town of Lexington, Nashville Adventures at Fort Nashborough, ShowMeItaly in Rome and Pompeii, Ride Solar in Atlantic Canada and Venice City Tours, with fan-experience work for Liverpool FC.\n\nUnity C# on Meta Quest with URP pipelines tuned for standalone passthrough, mobile AR triggered from city signage, cinematic 360° on lightweight AR glasses, hand-tracked physical interaction, and — currently — networked multiplayer in Normcore. The audience is families, children, older adults and people who have never worn a headset, handled by guides rather than developers.',
-        caseStudy: 'see-reality'
+        desc: 'See Reality builds immersive experiences for tour operators, municipalities and historical attractions, and integrates them into tours those clients are already selling. I am one of the developers on them: across the work below I contributed to interaction design, Unity implementation, iteration against what guides reported back from the street, and the unglamorous part of getting a build to survive a tour day. Where this page says our team, that is what it means — the Venice multiplayer racing work is the one piece that is mine, and it is in progress.\n\nNone of it is a demo. These run on a schedule, in public, at a ticket price, operated by staff who did not build them, for families, children, older adults and people who have never worn a headset — often twenty at a time, outdoors, with pedestrians walking through the scene. The guide is not being replaced: the XR is one chapter of somebody else’s two-hour experience and has to hand the group back on time.\n\nAcross several years that has covered room-scale mixed reality on Quest, mobile AR triggered from street signage, tablet content a guide holds up, cinematic 360° on lightweight AR glasses, hand-tracked physical interaction, historical reconstruction registered to real streets, five-language localisation, and — currently — networked multiplayer in Normcore.\n\nEverything I have worked on or contributed to is below, grouped and named, including the experiences whose final client I cannot confirm.'
     },
     /*
      * The six deployments below are the same body of work as the See Reality
-     * case study, one card each, and they exist for a reason the case study
-     * cannot cover on its own: every one of them has footage of the thing
-     * actually running in the place it was built for, and a client name a
-     * reader recognises. Buried as headings inside one page, that evidence is
-     * three scrolls down and unlinkable. `partOf` points each one back at the
-     * case study so the argument still lives in exactly one file.
+     * entry above, one card each. They exist because every one of them has
+     * footage of the thing running in the place it was built for and a client
+     * name a reader recognises, and because a deployment is what an employer
+     * is actually asking about. `partOf` points each one back at the roster
+     * page, which is where the work is listed in full.
      */
     {
         id: 'relive1776', name: 'Relive 1776', cat: 'Mixed Reality · See Reality · Freedom Trail, Boston · Live',

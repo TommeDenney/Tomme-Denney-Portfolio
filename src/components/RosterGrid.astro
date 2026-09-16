@@ -1,0 +1,97 @@
+---
+/**
+ * One section of a project's roster: a label, an optional note, and a grid of
+ * ruled cells.
+ *
+ * This exists because See Reality is not one project and is not a case study
+ * either — it is two dozen deployed experiences, and the readable form for that
+ * is a grid where each cell says what one of them is. The cell is deliberately
+ * not the site's `.feature` card: a feature card is a link with a caption, and
+ * these need a paragraph, a metadata line, and sometimes two links and
+ * sometimes none. So the whole cell is not an anchor; the name is, where there
+ * is somewhere to go, which also keeps an operator's link out of a nested
+ * anchor.
+ *
+ * Media resolves in priority order and every branch is checked against the
+ * disk first, so an item whose clip has not been cut yet renders as text
+ * rather than as a broken <video>.
+ */
+import { PMAP, projectHref, type Project } from '../data/projects';
+import { projectMedia, hasAsset } from '../lib/projectMedia';
+import type { RosterSection, RosterItem } from '../data/seereality';
+
+interface Props { section: RosterSection }
+const { section } = Astro.props;
+
+type Resolved = {
+    item: RosterItem;
+    href: string | null;
+    video: string | null;
+    poster: string | null;
+};
+
+function resolve(item: RosterItem): Resolved {
+    const target: Project | undefined = item.project ? PMAP[item.project] : undefined;
+    const href = target ? projectHref(target.name) : null;
+
+    // An explicit clip wins over the project's own card preview: where an item
+    // sets both, the clip is a moment chosen for this grid and the preview is
+    // the generic one from the card.
+    if (item.clip && hasAsset(item.clip)) {
+        const poster = item.clip.replace(/\.mp4$/, '.jpg');
+        return { item, href, video: item.clip, poster: hasAsset(poster) ? poster : null };
+    }
+    if (item.still && hasAsset(item.still)) {
+        return { item, href, video: null, poster: item.still };
+    }
+    if (target) {
+        const media = projectMedia(target.cover, false);
+        return { item, href, video: media.preview, poster: media.poster };
+    }
+    return { item, href, video: null, poster: null };
+}
+
+const items = section.items.map(resolve);
+---
+
+<section class="band" aria-labelledby={`r-${section.id}`}>
+    <div class="band-grid">
+        <p class="label band-label" id={`r-${section.id}`}>{section.label}</p>
+        <div>
+            {section.note && <p class="roster-note">{section.note}</p>}
+            <div class="roster">
+                {items.map(({ item, href, video, poster }) => (
+                    <article class="rcard">
+                        {(video || poster) && (
+                            <div class="rcard-media">
+                                {video ? (
+                                    <video
+                                        src={video}
+                                        poster={poster ?? undefined}
+                                        autoplay muted loop playsinline preload="metadata"
+                                        data-hero-video
+                                        aria-label={`${item.name} — looping preview`}></video>
+                                ) : (
+                                    <img src={poster!} alt={`${item.name} — still`} loading="lazy" decoding="async" />
+                                )}
+                            </div>
+                        )}
+                        <h3 class="rcard-name">
+                            {href ? <a href={href}>{item.name}</a> : item.name}
+                        </h3>
+                        {item.meta && <p class="rcard-meta">{item.meta}</p>}
+                        <p class="rcard-body">{item.body}</p>
+                        {(href || item.link) && (
+                            <p class="rcard-links">
+                                {href && <a href={href}>See the project &rarr;</a>}
+                                {item.link && (
+                                    <a href={item.link.url} target="_blank" rel="noopener">{item.link.label} &#8599;</a>
+                                )}
+                            </p>
+                        )}
+                    </article>
+                ))}
+            </div>
+        </div>
+    </div>
+</section>

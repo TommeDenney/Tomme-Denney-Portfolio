@@ -541,6 +541,109 @@ h3.display {
     text-decoration: none;
 }
 
+/* ── ROSTER ──────────────────────────────────────────────────────────────── */
+
+/* A body of work listed in full: one ruled cell per experience, three across.
+   Three rather than four because every cell carries a paragraph, and a
+   paragraph in a quarter-column is eight words a line. */
+.roster {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(26px, 2.6vw, 42px) clamp(18px, 1.8vw, 30px);
+}
+
+.roster-note {
+    max-width: var(--measure);
+    margin-bottom: clamp(30px, 3vw, 48px);
+    color: var(--mt);
+    font-size: 16px;
+}
+
+.rcard {
+    border-top: 1px solid var(--rule-strong);
+    padding-top: 18px;
+}
+
+.rcard-media {
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--surface);
+    margin-bottom: 16px;
+}
+
+.rcard-media img,
+.rcard-media video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.rcard-name {
+    font-family: Fraunces, 'Times New Roman', serif;
+    font-variation-settings: 'SOFT' 0, 'WONK' 1, 'opsz' 60;
+    font-weight: 600;
+    font-size: clamp(19px, 1.5vw, 24px);
+    line-height: 1.06;
+    letter-spacing: -.02em;
+    text-wrap: balance;
+}
+
+.rcard-name a {
+    color: inherit;
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+    transition: border-color .2s;
+}
+
+.rcard-name a:hover {
+    border-color: var(--accent);
+}
+
+.rcard-meta {
+    margin-top: 9px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--mt);
+}
+
+.rcard-body {
+    margin-top: 13px;
+    font-size: 15px;
+    line-height: 1.58;
+}
+
+.rcard-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 20px;
+    margin-top: 15px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+}
+
+.rcard-links a {
+    color: var(--text);
+    text-decoration: none;
+    border-bottom: 2px solid var(--accent);
+    padding-bottom: 2px;
+}
+
+@media (max-width: 1100px) {
+    .roster {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 640px) {
+    .roster {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
 /* ── FIGURES ─────────────────────────────────────────────────────────────── */
 
 .fig {
@@ -1062,6 +1165,14 @@ h3.display {
     color: var(--mt);
 }
 
+/* The full-bleed rows carry their own separation: a --step of air and a
+   tracked label each. The .band + .band hairline drawn between two of them
+   read as a hard edge across the whole page, so rows opt out of it. Sections
+   inside a shell keep it — there the rule is doing real work. */
+.strip + .strip {
+    border-top: 0;
+}
+
 /* NEXT — the row at the foot of a project page. It is a sibling of the
    shell rather than a child, so it cannot inherit the .band + .band rule. */
 .cs-next {
@@ -1114,16 +1225,25 @@ h3.display {
 
 /* LEADS — label above rather than in the margin, and wider than the rows
    beneath so the hierarchy is size rather than position. */
+/* FEATURED — three across. At two the titles could run to 68px; at three the
+   column is a third of the page, so the display size comes down to match or
+   "Inhabiting Memory" wraps to three lines and stops reading as a title. */
 .leads-band .leads {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: clamp(28px, 3.2vw, 60px);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(24px, 2.4vw, 44px);
     max-width: 1680px;
     margin: 0 auto;
 }
 
 .lead-title {
-    font-size: clamp(34px, 4.6vw, 68px);
-    line-height: .96;
+    font-size: clamp(30px, 3.1vw, 46px);
+    line-height: .98;
+}
+
+@media (max-width: 1100px) {
+    .leads-band .leads {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
 }
 
 .leads-band .feature-body {

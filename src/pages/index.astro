@@ -14,46 +14,44 @@ import SiteFooter from '../components/SiteFooter.astro';
 import { PROJECTS, PMAP, projectHref, projectKind, KIND_LABEL } from '../data/projects';
 import { projectMedia } from '../lib/projectMedia';
 
-// Two leads rather than one. Both carry a full case study and they argue for
-// different things — one that spatial media can hold a memory, one that a
-// service can hand authority to the person usually being helped — so putting
-// either second would undersell it.
-const LEADS = ['genexr', 'spark'];
+// Three featured projects, in this order on purpose. See Reality first: it is
+// the only professional, deployed, multi-year body of work here, and it is the
+// answer to the first question a hiring reader has. Then the two pieces that
+// argue for something — that spatial media can hold a memory, and that a
+// service can hand authority to the person usually being helped.
+const LEADS = ['seereality', 'genexr', 'spark'];
 const leads = LEADS.map((id) => ({ p: PMAP[id], media: projectMedia(PMAP[id].cover, false) }));
 
 // The index under the leads: the work worth a recruiter's next click, in the
 // order it should be read rather than by date.
 const card = (id: string) => ({ p: PMAP[id], media: projectMedia(PMAP[id].cover, false) });
 
-// The two leads, then the rest of the written-up work, then the client
-// deployments, then work that speaks for itself. Badges carry the tier inside
-// each row.
-//
-// See Reality leads the case-study row rather than sitting in Projects, where
-// it was: it is the only professional, deployed, multi-year body of work on
-// the site, and a row that opens with it answers the first question a hiring
-// reader has. I Am You moves down to make room — a three-week course
-// prototype is the weakest of the four written pieces, and it is still one
-// click away on /work.
-const WRITTEN = ['seereality', 'recollection', 'buddyrun', 'haptidraw'];
-
-// The deployments get their own row because the argument is plural. One card
-// says "client work"; four client names with footage of the thing running in
-// four different cities says the rest of it. These are the four with capture
-// reels — Ride Solar and Venice City Tours are on /work and in the case study.
+// The deployments come directly under the featured three, because the argument
+// See Reality makes is plural. One card says "client work"; four client names
+// with footage of the thing running in four different cities says the rest of
+// it. These are the four with capture reels — Ride Solar and Venice City Tours
+// are on the See Reality page and on /work.
 const DEPLOYMENTS = ['relive1776', 'showmeitaly', 'lexington', 'nashvilleadventures'];
 
-const PROJECTS_ROW = ['iamyou', 'bofum', 'wallace', 'unforgottenstories'];
+// Then the written-up work, then work that speaks for itself. Badges carry the
+// tier inside each row.
+const WRITTEN = ['recollection', 'buddyrun', 'haptidraw', 'iamyou'];
+const PROJECTS_ROW = ['bofum', 'wallace', 'unforgottenstories', 'greatvendingmachine'];
 const written = WRITTEN.map(card);
 const deployments = DEPLOYMENTS.map(card);
 const projectsRow = PROJECTS_ROW.map(card);
+
+// The social card, pinned rather than taken from the first lead: See Reality's
+// poster is a logo badge, and a logo unfurls in Slack as a sticker rather than
+// as work. Inhabiting Memory's is a photograph of the thing running.
+const socialImage = PMAP.genexr.cover;
 ---
 
 <Base
     title="Tomme Denney — Spatial & Immersive Product Designer"
     description="Spatial and immersive product designer who prototypes. MS Extended Reality with a concentration in Human-Computer Interaction, BFA Game Design — Northeastern University."
     path="/"
-    image={leads[0].media.poster ?? leads[0].p.cover}
+    image={socialImage}
 >
     <SiteNav current="home" />
 
@@ -61,7 +59,7 @@ const projectsRow = PROJECTS_ROW.map(card);
         {/* No masthead: the introduction lives on /about now, and the
             homepage opens on the work itself. */}
         <section class="band strip leads-band leads-first" aria-labelledby="lead-h">
-            <p class="label" id="lead-h" style="margin-bottom:30px">Lead case studies</p>
+            <p class="label" id="lead-h" style="margin-bottom:30px">Featured projects</p>
             <div class="leads">
                 {leads.map(({ p: lead, media }) => (
                     <a class="feature" href={projectHref(lead.name)}>
@@ -82,7 +80,7 @@ const projectsRow = PROJECTS_ROW.map(card);
                         </div>
                         <div class="feature-body">
                             <h2 class="display lead-title">{lead.name}</h2>
-                            <p class="label">Read it &rarr;</p>
+                            <p class="label">{projectKind(lead) === 'project' ? 'See the work' : 'Read it'} &rarr;</p>
                         </div>
                         <p class="lead-cap">{lead.caption}</p>
                     </a>
@@ -93,6 +91,35 @@ const projectsRow = PROJECTS_ROW.map(card);
         {/* Full-bleed rows: the shell's 1440px cap would leave four cards
             narrower than the two leads above them, which reads as a downgrade
             rather than a different section. These set their own gutters. */}
+        <section class="band strip" aria-labelledby="dep-h">
+            <p class="label" id="dep-h" style="margin-bottom:28px">See Reality deployments</p>
+            <div class="strip-grid">
+                {deployments.map(({ p: item, media }) => (
+                    <a class="feature" href={projectHref(item.name)}>
+                        <div class="feature-media">
+                            {media.preview ? (
+                                <video
+                                    src={media.preview}
+                                    poster={media.poster ?? undefined}
+                                    autoplay muted loop playsinline preload="metadata"
+                                    data-hero-video
+                                    aria-label={`${item.name} — looping preview`}></video>
+                            ) : media.poster ? (
+                                <img src={media.poster} alt={`${item.name} — cover`} loading="lazy" decoding="async" />
+                            ) : null}
+                        </div>
+                        <div class="feature-body">
+                            <h3 class="display strip-title">{item.name}</h3>
+                        </div>
+                        <p class="lead-cap">{item.caption}</p>
+                    </a>
+                ))}
+            </div>
+            <p style="margin-top:44px">
+                <a class="btn" href={projectHref(PMAP.seereality.name)}>All the See Reality work &rarr;</a>
+            </p>
+        </section>
+
         <section class="band strip" aria-labelledby="cs-h">
             <p class="label" id="cs-h" style="margin-bottom:28px">Case studies</p>
             <div class="strip-grid">
@@ -112,32 +139,6 @@ const projectsRow = PROJECTS_ROW.map(card);
                             <span class="index-kind" data-kind={projectKind(item)}>
                                 {KIND_LABEL[projectKind(item)]}
                             </span>
-                        </div>
-                        <div class="feature-body">
-                            <h3 class="display strip-title">{item.name}</h3>
-                        </div>
-                        <p class="lead-cap">{item.caption}</p>
-                    </a>
-                ))}
-            </div>
-        </section>
-
-        <section class="band strip" aria-labelledby="dep-h">
-            <p class="label" id="dep-h" style="margin-bottom:28px">See Reality deployments</p>
-            <div class="strip-grid">
-                {deployments.map(({ p: item, media }) => (
-                    <a class="feature" href={projectHref(item.name)}>
-                        <div class="feature-media">
-                            {media.preview ? (
-                                <video
-                                    src={media.preview}
-                                    poster={media.poster ?? undefined}
-                                    autoplay muted loop playsinline preload="metadata"
-                                    data-hero-video
-                                    aria-label={`${item.name} — looping preview`}></video>
-                            ) : media.poster ? (
-                                <img src={media.poster} alt={`${item.name} — cover`} loading="lazy" decoding="async" />
-                            ) : null}
                         </div>
                         <div class="feature-body">
                             <h3 class="display strip-title">{item.name}</h3>
