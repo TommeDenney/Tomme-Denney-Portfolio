@@ -7,6 +7,7 @@
  * emit only tags that point at files which exist, so that chain is gone.
  */
 import { ClientRouter } from 'astro:transitions';
+import Ambient from '../components/Ambient.astro';
 import { PROJECTS, projectSlug } from '../data/projects';
 import '../styles/global.css';
 
@@ -159,6 +160,7 @@ const transitionCss = `
         </script>
     </head>
     <body class={bodyClass}>
+        <Ambient />
         <slot />
     </body>
 </html>

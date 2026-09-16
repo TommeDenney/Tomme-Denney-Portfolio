@@ -41,6 +41,35 @@
        ever loosened. */
     --card-hover: 1.06;
 
+    /* The pointer bump for the small interactive things — buttons, nav links,
+       the wordmark, the tier badge. 1.25 works here where it does not work on
+       a card: none of these sit in a grid with a neighbour 16px away. */
+    --tap-hover: 1.25;
+
+    /* Two passes of the same angled sweep, crossing. One gradient looks like a
+       gloss; two at opposing angles read as the colour flash a stream cuts to
+       between scenes. Kept dark where it sits behind type — a bright stop
+       under wheat text would take the contrast from 13:1 to nothing — and
+       bright where it is only a 2px bar under a link. */
+    --sweep-fill:
+        linear-gradient(100deg, transparent 0 14%, rgba(196, 73, 0, .55) 30%,
+            rgba(67, 37, 52, .92) 46%, rgba(24, 58, 55, .92) 60%,
+            rgba(196, 73, 0, .5) 74%, transparent 90%),
+        linear-gradient(-42deg, transparent 0 20%, rgba(24, 58, 55, .8) 42%,
+            rgba(196, 73, 0, .42) 58%, transparent 80%);
+    --sweep-bar:
+        linear-gradient(100deg, transparent 0 10%, var(--accent) 26%,
+            var(--text) 44%, var(--accent) 62%, var(--surface) 78%, transparent 92%);
+
+    /* The background field. Navies a step or two off the page colour — the
+       brightest is #12395c at 55%, which is about nine percent lighter than
+       the ink it sits on. */
+    --amb-1: #0e2b4a;
+    --amb-2: #12395c;
+    --amb-3: #163a4f;
+    --amb-4: #0a2138;
+    --amb-alpha: .55;
+
     --measure: 62ch;
     --page: 1440px;
     --gutter: clamp(20px, 5vw, 88px);
@@ -48,6 +77,14 @@
 }
 
 [data-theme='wheat'] {
+    /* Tints of the paper rather than the navy: on a light page the same blobs
+       read as four holes punched in it. */
+    --amb-1: #e3c895;
+    --amb-2: #dcbf88;
+    --amb-3: #e9d3a6;
+    --amb-4: #d8b97f;
+    --amb-alpha: .72;
+
     --bg: #efd6ac;
     --surface: #e7cd9d;
     --text: #04151f;
@@ -97,6 +134,133 @@ button:focus-visible,
 [tabindex]:focus-visible {
     outline: 3px solid var(--accent);
     outline-offset: 4px;
+}
+
+/* ── BACKGROUND FIELD ──────────────────────────────────────── */
+
+/* See src/components/Ambient.astro. Negative z-index rather than a z-index on
+   everything else: a fixed child at -1 paints above the body's background and
+   below every element in flow, which is exactly the slot this needs and costs
+   no changes anywhere else. */
+.ambient {
+    position: fixed;
+    inset: -20vmax;
+    z-index: -1;
+    pointer-events: none;
+    overflow: hidden;
+    transition: transform 1.1s cubic-bezier(.22, .61, .36, 1), opacity .9s;
+}
+
+/* A click swells the field for the length of the press-and-release. */
+.ambient.jolt {
+    transform: scale(1.045);
+}
+
+/* Two nested elements per blob on purpose: the outer one carries the
+   pointer-and-page offset, which is a transition, and the inner one carries
+   the endless drift, which is an animation. One element cannot hold both on
+   the same property. */
+.amb {
+    position: absolute;
+    width: 62vmax;
+    height: 54vmax;
+    transform: translate(
+        calc((var(--px, 0) + var(--ox, 0)) * var(--kx) * 1px),
+        calc((var(--py, 0) + var(--oy, 0)) * var(--ky) * 1px)
+    );
+    transition: transform 1.6s cubic-bezier(.22, .61, .36, 1);
+    will-change: transform;
+}
+
+.amb > div {
+    width: 100%;
+    height: 100%;
+    opacity: var(--amb-alpha);
+    transition: opacity .9s;
+    will-change: transform;
+}
+
+.ambient.jolt .amb > div {
+    opacity: calc(var(--amb-alpha) * 1.35);
+}
+
+.amb-1 {
+    top: -8vmax;
+    left: -6vmax;
+    --kx: 70;
+    --ky: 48;
+}
+
+.amb-1 > div {
+    background: radial-gradient(closest-side, var(--amb-1), transparent 74%);
+    animation: drift-1 96s ease-in-out infinite alternate;
+}
+
+.amb-2 {
+    top: 18vmax;
+    right: -10vmax;
+    --kx: -96;
+    --ky: 62;
+}
+
+.amb-2 > div {
+    background: radial-gradient(closest-side, var(--amb-2), transparent 72%);
+    animation: drift-2 124s ease-in-out infinite alternate;
+}
+
+.amb-3 {
+    bottom: -12vmax;
+    left: 12vmax;
+    --kx: 52;
+    --ky: -74;
+}
+
+.amb-3 > div {
+    background: radial-gradient(closest-side, var(--amb-3), transparent 76%);
+    animation: drift-3 152s ease-in-out infinite alternate;
+}
+
+.amb-4 {
+    top: 42vmax;
+    left: 34vmax;
+    --kx: -64;
+    --ky: -40;
+}
+
+.amb-4 > div {
+    background: radial-gradient(closest-side, var(--amb-4), transparent 70%);
+    animation: drift-4 108s ease-in-out infinite alternate;
+}
+
+/* Minutes per pass, and no two the same length, so the field never repeats a
+   composition while anyone is looking at it. */
+@keyframes drift-1 {
+    from { transform: translate(0, 0) scale(1); }
+    to { transform: translate(18vmax, 12vmax) scale(1.18); }
+}
+
+@keyframes drift-2 {
+    from { transform: translate(0, 0) scale(1.1); }
+    to { transform: translate(-14vmax, 20vmax) scale(.92); }
+}
+
+@keyframes drift-3 {
+    from { transform: translate(0, 0) scale(.95); }
+    to { transform: translate(22vmax, -16vmax) scale(1.22); }
+}
+
+@keyframes drift-4 {
+    from { transform: translate(0, 0) scale(1.05); }
+    to { transform: translate(-20vmax, -14vmax) scale(.9); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ambient,
+    .amb,
+    .amb > div {
+        transition: none;
+        animation: none;
+    }
 }
 
 /* ── TYPE ────────────────────────────────────────────────────────────────── */
@@ -234,7 +398,12 @@ h3.display {
     transition: color .2s, border-color .2s;
 }
 
-.nav-links a:hover,
+.nav-links a:hover {
+    color: var(--text);
+}
+
+/* The page you are on keeps a solid rule. Hover gets the sweep instead, so
+   the two states cannot be confused for each other. */
 .nav-links a[aria-current='page'] {
     color: var(--text);
     border-color: var(--accent);
@@ -376,14 +545,6 @@ h3.display {
     border: 1px solid var(--rule);
 }
 
-/* A note is shorter than a case study and longer than a description, so the
-   badge sits between the two: outlined like a project, in the accent. */
-.index-kind[data-kind='note'] {
-    background: none;
-    color: var(--text);
-    border: 1px solid var(--accent);
-}
-
 @media (max-width: 900px), (hover: none) {
     .index-kind {
         display: none;
@@ -426,6 +587,195 @@ h3.display {
 .filter-n {
     font-size: 10px;
     opacity: .55;
+}
+
+/* ── ARROWS AND THE HOVER SWEEP ───────────────────────────────── */
+
+/* Every arrow on the site is drawn by CSS rather than typed into the label, so
+   it has something to do when a pointer arrives. A glyph inside a text node
+   cannot be transformed on its own; a pseudo-element can. */
+.btn::after,
+.lead-cta::after,
+.rcard-links a::after {
+    content: '\2192';
+    display: inline-block;
+    margin-left: .5em;
+    transition: transform .4s cubic-bezier(.22, .61, .36, 1);
+}
+
+/* Off-site links point out of the page instead of along it. */
+.btn-ext::after,
+.rcard-links a.ext::after {
+    content: '\2197';
+}
+
+.btn:hover::after,
+.btn:focus-visible::after,
+.rcard-links a:hover::after,
+.feature:hover .lead-cta::after {
+    transform: translateX(6px);
+}
+
+.btn-ext:hover::after,
+.btn-ext:focus-visible::after,
+.rcard-links a.ext:hover::after {
+    transform: translate(5px, -5px);
+}
+
+/* The sweep. It is a layer behind the element's own content, so the text
+   colour never changes and nothing depends on the gradient for legibility —
+   the flash is decoration over an already-readable pairing. */
+.btn,
+.filter,
+.theme-btn,
+.index-kind,
+.nav-mark,
+.nav-links a {
+    position: relative;
+    isolation: isolate;
+    transition: transform .35s cubic-bezier(.22, .61, .36, 1),
+        background .22s, color .22s, border-color .22s;
+}
+
+.btn::before,
+.filter::before,
+.theme-btn::before,
+.index-kind::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image: var(--sweep-fill);
+    background-repeat: no-repeat;
+    background-size: 220% 100%, 220% 100%;
+    background-position: 210% 0, -130% 0;
+    opacity: 0;
+    transition: opacity .2s;
+}
+
+.btn:hover::before,
+.btn:focus-visible::before,
+.filter:hover::before,
+.filter:focus-visible::before,
+.theme-btn:hover::before,
+.theme-btn:focus-visible::before,
+.feature:hover .index-kind::before {
+    opacity: 1;
+}
+
+/* The two layers cross: one runs left, the other right, over the same 0.8s. */
+@keyframes sweep-cross {
+    from { background-position: 210% 0, -130% 0; }
+    to { background-position: -130% 0, 210% 0; }
+}
+
+.btn:hover::before,
+.btn:focus-visible::before,
+.filter:hover::before,
+.filter:focus-visible::before,
+.theme-btn:hover::before,
+.theme-btn:focus-visible::before,
+.feature:hover .index-kind::before {
+    animation: sweep-cross .8s cubic-bezier(.32, 0, .3, 1) both;
+}
+
+/* The badge answers its card rather than the pointer: it is a 10px label in
+   the corner of a picture, and asking someone to hit it is asking them to
+   find it first. */
+.index-kind::before {
+    transition: opacity .25s;
+}
+
+/* Text that has no box gets the sweep as the 2px rule under it, which is the
+   one place the palette allows the accent to be bright. */
+.nav-mark,
+.nav-links a {
+    background-image: var(--sweep-bar);
+    background-repeat: no-repeat;
+    background-size: 220% 2px;
+    background-position: 210% 100%;
+}
+
+.nav-links a:hover,
+.nav-links a:focus-visible,
+.nav-mark:hover,
+.nav-mark:focus-visible {
+    animation: sweep-bar .85s cubic-bezier(.32, 0, .3, 1) both;
+}
+
+@keyframes sweep-bar {
+    from { background-position: 210% 100%; }
+    to { background-position: -130% 100%; }
+}
+
+/* The bump. Transform only, so nothing reflows and no neighbour moves. */
+.btn:hover,
+.btn:focus-visible,
+.filter:hover,
+.filter:focus-visible,
+.theme-btn:hover,
+.theme-btn:focus-visible {
+    transform: scale(var(--tap-hover));
+    z-index: 4;
+}
+
+/* Left-anchored, all of them: these sit at the left edge of a shell or a
+   nav, and growing from the centre pushes them into the gutter. */
+.btn,
+.filter,
+.nav-mark,
+.nav-links a {
+    transform-origin: left center;
+}
+
+.nav-links a:hover,
+.nav-links a:focus-visible,
+.nav-mark:hover,
+.nav-mark:focus-visible {
+    transform: scale(var(--tap-hover));
+    z-index: 4;
+}
+
+/* The badge grows out of the corner it is pinned to. */
+.index-kind {
+    transform-origin: left bottom;
+}
+
+.feature:hover .index-kind {
+    transform: scale(var(--tap-hover));
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .btn::after,
+    .lead-cta::after,
+    .rcard-links a::after,
+    .btn,
+    .filter,
+    .theme-btn,
+    .index-kind,
+    .nav-mark,
+    .nav-links a {
+        transition: none;
+    }
+
+    .btn:hover,
+    .btn:focus-visible,
+    .filter:hover,
+    .theme-btn:hover,
+    .nav-links a:hover,
+    .nav-mark:hover,
+    .feature:hover .index-kind {
+        transform: none;
+    }
+
+    .btn:hover::before,
+    .filter:hover::before,
+    .theme-btn:hover::before,
+    .feature:hover .index-kind::before,
+    .nav-links a:hover,
+    .nav-mark:hover {
+        animation: none;
+    }
 }
 
 /* ── CARD HOVER ─────────────────────────────────────────── */

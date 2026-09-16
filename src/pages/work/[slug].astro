@@ -467,12 +467,12 @@ const description = p.caption ?? `${p.desc.slice(0, 175).trimEnd()}…`;
                         <p class="stack" style="margin-top:44px">
                             {parent && (
                                 <a class="btn" href={projectHref(parent.name)}>
-                                    All the {parent.name} work &rarr;
+                                    All the {parent.name} work
                                 </a>
                             )}
-                            {ext && <a class="btn" href={ext.url} target="_blank" rel="noopener">{ext.label}</a>}
+                            {ext && <a class="btn btn-ext" href={ext.url} target="_blank" rel="noopener">{ext.label}</a>}
                             {p.dl && (
-                                <a class="btn" href={assetUrl(p.dl)} target="_blank" rel="noopener">{p.dlLabel ?? 'Download'}</a>
+                                <a class="btn btn-ext" href={assetUrl(p.dl)} target="_blank" rel="noopener">{p.dlLabel ?? 'Download'}</a>
                             )}
                         </p>
                     )}
@@ -529,7 +529,7 @@ const description = p.caption ?? `${p.desc.slice(0, 175).trimEnd()}…`;
                                 style="width:100%;aspect-ratio:16/9;border:0;background:#04151f"></iframe>
                             {embed.itchio && (
                                 <p style="margin-top:18px">
-                                    <a class="btn" href={embed.itchio} target="_blank" rel="noopener">Itch.io ↗</a>
+                                    <a class="btn btn-ext" href={embed.itchio} target="_blank" rel="noopener">Itch.io</a>
                                 </p>
                             )}
                         </div>

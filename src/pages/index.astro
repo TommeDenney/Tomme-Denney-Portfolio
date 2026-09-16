@@ -81,7 +81,7 @@ const socialImage = PMAP.genexr.cover;
                         </div>
                         <div class="feature-body">
                             <h2 class="display lead-title" transition:name={`t-${projectSlug(lead.name)}`}>{lead.name}</h2>
-                            <p class="label">{projectKind(lead) === 'project' ? 'See the work' : 'Read it'} &rarr;</p>
+                            <p class="label lead-cta">{projectKind(lead) === 'project' ? 'See the work' : 'Read it'}</p>
                         </div>
                         <p class="lead-cap">{lead.caption}</p>
                     </a>
@@ -117,7 +117,7 @@ const socialImage = PMAP.genexr.cover;
                 ))}
             </div>
             <p style="margin-top:44px">
-                <a class="btn" href={projectHref(PMAP.seereality.name)}>All the See Reality work &rarr;</a>
+                <a class="btn" href={projectHref(PMAP.seereality.name)}>All the See Reality work</a>
             </p>
         </section>
 
@@ -175,7 +175,7 @@ const socialImage = PMAP.genexr.cover;
                 ))}
             </div>
             <p style="margin-top:52px">
-                <a class="btn" href="/work">All {PROJECTS.length} projects &rarr;</a>
+                <a class="btn" href="/work">All {PROJECTS.length} projects</a>
             </p>
         </section>
     </main>

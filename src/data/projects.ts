@@ -31,15 +31,6 @@ export type Project = {
      * hand-written short version, not an excerpt, so the two cannot drift.
      */
     caseStudy?: string;
-    /**
-     * Depth tier, which is what the card badge reports. A case study carries
-     * problem framing, constraints, rejected directions and a defensible
-     * outcome; a note is shorter and makes one argument. Nine things all
-     * badged "Case study" gave a reader no hierarchy and left the strongest
-     * work looking like the rest of it. Defaults to 'case' where `caseStudy`
-     * is set, and 'project' where it is not.
-     */
-    kind?: 'case' | 'note';
     /** Overrides the keyword derivation in projectDisciplines(). */
     disciplines?: Discipline[];
     /**
@@ -80,18 +71,25 @@ export function projectSlug(name: string): string {
         .replace(/^-+|-+$/g, '');
 }
 
-export type ProjectKind = 'case' | 'note' | 'project';
+export type ProjectKind = 'case' | 'project';
 
-/** Which tier a project sits in. */
+/**
+ * Which tier a project sits in: written up, or not.
+ *
+ * There used to be a third, 'note', for the shorter pieces that make one
+ * argument rather than carrying a full problem-to-outcome case. It is gone.
+ * Three badges asked a reader to learn a taxonomy before they could read
+ * anything, and the distinction it drew was between two things the reader
+ * wants for the same reason — the writing is either there or it is not. The
+ * length of the page says the rest.
+ */
 export function projectKind(p: Project): ProjectKind {
-    if (!p.caseStudy) return 'project';
-    return p.kind ?? 'case';
+    return p.caseStudy ? 'case' : 'project';
 }
 
 /** The badge text for that tier. */
 export const KIND_LABEL: Record<ProjectKind, string> = {
     case: 'Case study',
-    note: 'Note',
     project: 'Project',
 };
 
@@ -302,8 +300,7 @@ export const PROJECTS: Project[] = [
         tags: ['Accessibility', 'Haptics', 'Inclusive Design', 'Hackathon', 'Multisensory', 'Unity C#', 'Python'],
         caption: 'Drawing you can feel — a stylus and a haptic exoskeleton for blind users.',
         desc: 'Digital drawing tools assume you can see what you are making. HaptiDraw lets a blind user draw and read a drawing by touch instead: a silhouette is traced into vector anchor points, a haptic exoskeleton drives feedback per finger, and the stylus buzzes when your hand leaves the line you are following. Built by four people in the length of MIT Reality Hack 2025. The clearest thing that came out of it is that touch does not just replace sight here — it builds a mental map of the drawing that a sighted user gets for free from a glance.',
-        caseStudy: 'haptidraw',
-        kind: 'note'
+        caseStudy: 'haptidraw'
     },
     {
         id: 'iamyou', name: 'I Am You', cat: 'VR Horror · XR 5010 · 2024', cover: '/projects/iamyou/1.png',
@@ -312,7 +309,6 @@ export const PROJECTS: Project[] = [
         caption: 'You are not the hiker. You are the trail camera watching him, steering his body.',
         desc: 'Almost every design decision in VR aims at convincing you the body is yours. I Am You asks the opposite question: can a player care about a character they do not inhabit? Your viewpoint sits at the trail cameras in a dark forest and never travels \u2014 you keep your head and hands, while the locomotion drives the hiker\u2019s body instead. You are puppeting yourself. He is looking for photographs the wind took from him, and something is following him. A two-person prototype for a course on XR history and theory, built in three weeks.',
         caseStudy: 'i-am-you',
-        kind: 'note',
         documents: [
             {
                 label: 'Project plan, second version',
@@ -333,7 +329,6 @@ export const PROJECTS: Project[] = [
         caption: 'A wooden survival board game whose map does not exist until you walk into it.',
         desc: 'Four village leaders ration food and shelter while racing to open an ancient temple, across a forest that is not printed on a board \u2014 the map is a pile of numbered tiles laid down as players move into it, so the space everyone is competing over gets built during play. Made in four versions for an undergraduate rapid-prototyping course, from paper to laser-cut wood. The design document is an explicit list of what I added and what I removed each version, and the removals are the real work: a fully specified weather system cut for stopping the table, direct player attacks cut for making comebacks impossible, and real religious iconography cut because borrowing two living faiths as set dressing for a temple you loot was not mine to do.',
         caseStudy: 'truth-of-the-ancient-forest',
-        kind: 'note',
         documents: [
             {
                 label: 'Design document',
@@ -550,33 +545,33 @@ export const PMAP: Record<string, Project> = Object.fromEntries(
 export type ExternalSite = { url: string; label: string };
 
 export const PROJECT_EXTERNAL_SITES: Record<string, ExternalSite> = {
-    recollection: { url: 'https://recollection.usurperinteractive.com', label: 'Visit Recollection ↗' },
-    arworkofart: { url: 'https://tommedenney.itch.io/ar-work-of-art', label: 'View on Itch.io ↗' },
-    curse: { url: 'https://tommedenney.itch.io/curse-of-the-mind-demo', label: 'Download on Itch.io ↗' },
-    flora: { url: 'https://tommedenney.itch.io/flora-park-mystery', label: 'Download on Itch.io ↗' },
-    godsdrunkestdriver: { url: 'https://tommedenney.itch.io/gods-drunkest-driver', label: 'Download on Itch.io ↗' },
-    greatvendingmachine: { url: 'https://tommedenney.itch.io/great-vending-machine', label: 'View on Itch.io ↗' },
-    iamyou: { url: 'https://tommedenney.itch.io/i-am-you', label: 'Download on Itch.io ↗' },
-    internshipintheafterlife: { url: 'https://tommedenney.itch.io/internship-in-the-afterlife', label: 'Download on Itch.io ↗' },
-    haptidraw: { url: 'https://devpost.com/software/haptidraw', label: 'View on Devpost ↗' },
-    returnofthechickens: { url: 'https://tommedenney.itch.io/return-of-the-chickens-demo', label: 'Download on Itch.io ↗' },
-    soulsolace: { url: 'https://tommedenney.itch.io/soul-solace', label: 'Download on Itch.io ↗' },
-    otherrealm: { url: 'https://tommedenney.itch.io/the-other-realm', label: 'Play on Itch.io ↗' },
-    toweroffrankenfrog: { url: 'https://tommedenney.itch.io/tower-of-franken-frog', label: 'Download on Itch.io ↗' },
-    unforgottenstories: { url: 'https://tommedenney.itch.io/unforgotten-stories-the-partition', label: 'Play on Itch.io ↗' },
-    walk: { url: 'https://tommedenney.itch.io/walkamongus', label: 'Download on Itch.io ↗' },
-    wallace: { url: 'https://tommedenney.itch.io/wallace', label: 'Download on Itch.io ↗' },
-    bofum: { url: 'https://devpost.com/software/bofum', label: 'View on Devpost ↗' },
-    seereality: { url: 'https://www.seereality.world/', label: 'See Reality ↗' },
+    recollection: { url: 'https://recollection.usurperinteractive.com', label: 'Visit Recollection' },
+    arworkofart: { url: 'https://tommedenney.itch.io/ar-work-of-art', label: 'View on Itch.io' },
+    curse: { url: 'https://tommedenney.itch.io/curse-of-the-mind-demo', label: 'Download on Itch.io' },
+    flora: { url: 'https://tommedenney.itch.io/flora-park-mystery', label: 'Download on Itch.io' },
+    godsdrunkestdriver: { url: 'https://tommedenney.itch.io/gods-drunkest-driver', label: 'Download on Itch.io' },
+    greatvendingmachine: { url: 'https://tommedenney.itch.io/great-vending-machine', label: 'View on Itch.io' },
+    iamyou: { url: 'https://tommedenney.itch.io/i-am-you', label: 'Download on Itch.io' },
+    internshipintheafterlife: { url: 'https://tommedenney.itch.io/internship-in-the-afterlife', label: 'Download on Itch.io' },
+    haptidraw: { url: 'https://devpost.com/software/haptidraw', label: 'View on Devpost' },
+    returnofthechickens: { url: 'https://tommedenney.itch.io/return-of-the-chickens-demo', label: 'Download on Itch.io' },
+    soulsolace: { url: 'https://tommedenney.itch.io/soul-solace', label: 'Download on Itch.io' },
+    otherrealm: { url: 'https://tommedenney.itch.io/the-other-realm', label: 'Play on Itch.io' },
+    toweroffrankenfrog: { url: 'https://tommedenney.itch.io/tower-of-franken-frog', label: 'Download on Itch.io' },
+    unforgottenstories: { url: 'https://tommedenney.itch.io/unforgotten-stories-the-partition', label: 'Play on Itch.io' },
+    walk: { url: 'https://tommedenney.itch.io/walkamongus', label: 'Download on Itch.io' },
+    wallace: { url: 'https://tommedenney.itch.io/wallace', label: 'Download on Itch.io' },
+    bofum: { url: 'https://devpost.com/software/bofum', label: 'View on Devpost' },
+    seereality: { url: 'https://www.seereality.world/', label: 'See Reality' },
     relive1776: {
         url: 'https://www.tripadvisor.com/AttractionProductReview-g60745-d28008309-Relive_1776_See_Boston_s_History_in_Augmented_Reality_AR-Boston_Massachusetts.html',
-        label: 'Relive 1776 on TripAdvisor ↗',
+        label: 'Relive 1776 on TripAdvisor',
     },
-    lexington: { url: 'https://www.tourlexington.us/', label: 'Tour Lexington ↗' },
-    nashvilleadventures: { url: 'https://www.nashvilleadventures.com/', label: 'Nashville Adventures ↗' },
-    showmeitaly: { url: 'https://showmeitaly.com/', label: 'ShowMeItaly ↗' },
-    ridesolar: { url: 'https://ridesolar.com/', label: 'Ride Solar ↗' },
-    venicecitytours: { url: 'https://www.venicecitytours.it/', label: 'Venice City Tours ↗' }
+    lexington: { url: 'https://www.tourlexington.us/', label: 'Tour Lexington' },
+    nashvilleadventures: { url: 'https://www.nashvilleadventures.com/', label: 'Nashville Adventures' },
+    showmeitaly: { url: 'https://showmeitaly.com/', label: 'ShowMeItaly' },
+    ridesolar: { url: 'https://ridesolar.com/', label: 'Ride Solar' },
+    venicecitytours: { url: 'https://www.venicecitytours.it/', label: 'Venice City Tours' }
 };
 
 export type Embed = { src: string; itchio: string | null };

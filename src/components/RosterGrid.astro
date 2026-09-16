@@ -113,9 +113,9 @@ const items = section.items.map(resolve);
                         <p class="rcard-body">{item.body}</p>
                         {(href || item.link) && (
                             <p class="rcard-links">
-                                {href && <a href={href}>See the project &rarr;</a>}
+                                {href && <a href={href}>See the project</a>}
                                 {item.link && (
-                                    <a href={item.link.url} target="_blank" rel="noopener">{item.link.label} &#8599;</a>
+                                    <a class="ext" href={item.link.url} target="_blank" rel="noopener">{item.link.label}</a>
                                 )}
                             </p>
                         )}
