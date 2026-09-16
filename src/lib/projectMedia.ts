@@ -63,9 +63,28 @@ function firstImage(dir: string, stem: string | number): string | null {
     return null;
 }
 
+/**
+ * The WebVTT track that belongs to a video, if one has been written.
+ *
+ * Captions are a sibling of the video with the same stem — 0.mp4 and
+ * 0.en.vtt — and they are always in public/ even when the video itself is
+ * served from R2, because a few kilobytes of text does not belong in a bucket
+ * and a same-origin track avoids the CORS rules that apply to <track>.
+ *
+ * Returning null for a video nobody has transcribed yet is the point: an empty
+ * caption track is worse than no CC button, because it advertises captions and
+ * then shows nothing. See scripts/build-captions.mjs.
+ */
+export function captionTrack(videoPath: string): string | null {
+    const vtt = videoPath.replace(/\.mp4$/, '.en.vtt');
+    return hasAsset(vtt) ? vtt : null;
+}
+
 export type ProjectMedia = {
     /** Looping hero video, already resolved through R2 where applicable. */
     video: string | null;
+    /** Caption track for that hero, or null if it has not been transcribed. */
+    captions: string | null;
     /**
      * A short, quiet, 960px loop for cards — see
      * scripts/build-preview-videos.mjs. The full videos run to 65 MB, and the
@@ -88,6 +107,7 @@ export function projectMedia(cover: string, includeGallery = true): ProjectMedia
 
     const videoPath = `${dir}0.mp4`;
     const video = has(videoPath) ? assetUrl(videoPath) : null;
+    const captions = video ? captionTrack(videoPath) : null;
 
     // Folder name doubles as the preview's filename.
     const slug = dir.replace(/^\/projects\//, '').replace(/\/$/, '');
@@ -106,5 +126,5 @@ export function projectMedia(cover: string, includeGallery = true): ProjectMedia
         }
     }
 
-    return { video, preview, poster, gallery };
+    return { video, captions, preview, poster, gallery };
 }

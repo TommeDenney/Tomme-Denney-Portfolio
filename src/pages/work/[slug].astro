@@ -21,7 +21,7 @@ import {
     projectSlug, projectHref, projectDisciplines, projectKind, KIND_LABEL,
     type Project,
 } from '../../data/projects';
-import { projectMedia, hasAsset } from '../../lib/projectMedia';
+import { projectMedia, hasAsset, captionTrack } from '../../lib/projectMedia';
 import { assetUrl } from '../../lib/assets';
 import { PROJECT_ROSTERS } from '../../data/seereality';
 
@@ -355,9 +355,19 @@ const description = p.caption ?? `${p.desc.slice(0, 175).trimEnd()}…`;
                     <video
                         src={heroVideo}
                         poster={media.poster ?? undefined}
-                        autoplay muted loop playsinline preload="metadata"
+                        autoplay muted loop playsinline controls preload="metadata"
                         data-hero-video
-                        aria-label={`${p.name} — looping preview`}></video>
+                        aria-label={`${p.name} — project video`}>
+                        {media.captions && (
+                            <track
+                                kind="captions"
+                                src={media.captions}
+                                srclang="en"
+                                label="English (auto)"
+                                default
+                            />
+                        )}
+                    </video>
                 ) : (
                     <img src={heroStill!} alt={`${p.name} — cover`} />
                 )}
@@ -389,7 +399,16 @@ const description = p.caption ?? `${p.desc.slice(0, 175).trimEnd()}…`;
                                     loop
                                     playsinline
                                     preload="metadata"
-                                    aria-label={demo.caption}></video>
+                                    aria-label={demo.caption}>
+                                    {captionTrack(demo.src) && (
+                                        <track
+                                            kind="captions"
+                                            src={captionTrack(demo.src)!}
+                                            srclang="en"
+                                            label="English (auto)"
+                                        />
+                                    )}
+                                </video>
                             </div>
                             <div class="demo-notes">
                                 <p class="muted" style="font-size:14px">{demo.caption}</p>
@@ -582,17 +601,25 @@ const description = p.caption ?? `${p.desc.slice(0, 175).trimEnd()}…`;
                 return;
             }
 
-            /* Same rule as / and /work: the hero is on screen at load and
-               plays, the four cards at the bottom of the page wait until
-               someone scrolls to them. */
+            /* Any real input on a player hands it over for good: after that
+               the observer will still pause it on the way off screen, so no
+               audio follows the reader, but it never starts it again. */
+            vids.forEach(function (v) {
+                ['pointerdown', 'keydown', 'click'].forEach(function (evt) {
+                    v.addEventListener(evt, function () { v.dataset.held = '1'; });
+                });
+            });
+
+            /* Same rule as / and /work: whatever is on screen plays, the rest
+               waits until someone scrolls to it. */
             if (!('IntersectionObserver' in window)) return;
             var io = new IntersectionObserver(function (entries) {
                 entries.forEach(function (e) {
-                    if (e.isIntersecting) {
+                    if (!e.isIntersecting) {
+                        e.target.pause();
+                    } else if (!e.target.dataset.held) {
                         var play = e.target.play();
                         if (play && play.catch) play.catch(function () {});
-                    } else {
-                        e.target.pause();
                     }
                 });
             }, { rootMargin: '200px' });

@@ -17,7 +17,7 @@
  * rather than as a broken <video>.
  */
 import { PMAP, projectHref, type Project } from '../data/projects';
-import { projectMedia, hasAsset } from '../lib/projectMedia';
+import { projectMedia, hasAsset, captionTrack } from '../lib/projectMedia';
 import type { RosterSection, RosterItem } from '../data/seereality';
 
 interface Props { section: RosterSection }
@@ -28,6 +28,18 @@ type Resolved = {
     href: string | null;
     video: string | null;
     poster: string | null;
+    captions: string | null;
+    /**
+     * Whether this cell's video is footage or decoration.
+     *
+     * A clip is a piece of the real capture with its own audio, so it gets a
+     * player: play, pause, volume, fullscreen. A project's card preview is a
+     * silent fifteen-second loop that exists to make the card move, and the
+     * cell already links to the page where that project's full video plays
+     * with sound — a volume slider on a track that has no audio is a control
+     * that does nothing.
+     */
+    playable: boolean;
 };
 
 function resolve(item: RosterItem): Resolved {
@@ -39,16 +51,24 @@ function resolve(item: RosterItem): Resolved {
     // the generic one from the card.
     if (item.clip && hasAsset(item.clip)) {
         const poster = item.clip.replace(/\.mp4$/, '.jpg');
-        return { item, href, video: item.clip, poster: hasAsset(poster) ? poster : null };
+        return {
+            item, href, video: item.clip,
+            poster: hasAsset(poster) ? poster : null,
+            captions: captionTrack(item.clip),
+            playable: true,
+        };
     }
     if (item.still && hasAsset(item.still)) {
-        return { item, href, video: null, poster: item.still };
+        return { item, href, video: null, poster: item.still, captions: null, playable: false };
     }
     if (target) {
         const media = projectMedia(target.cover, false);
-        return { item, href, video: media.preview, poster: media.poster };
+        return {
+            item, href, video: media.preview, poster: media.poster,
+            captions: null, playable: false,
+        };
     }
-    return { item, href, video: null, poster: null };
+    return { item, href, video: null, poster: null, captions: null, playable: false };
 }
 
 const items = section.items.map(resolve);
@@ -60,7 +80,7 @@ const items = section.items.map(resolve);
         <div>
             {section.note && <p class="roster-note">{section.note}</p>}
             <div class="roster">
-                {items.map(({ item, href, video, poster }) => (
+                {items.map(({ item, href, video, poster, captions, playable }) => (
                     <article class="rcard">
                         {(video || poster) && (
                             <div class="rcard-media">
@@ -69,8 +89,18 @@ const items = section.items.map(resolve);
                                         src={video}
                                         poster={poster ?? undefined}
                                         autoplay muted loop playsinline preload="metadata"
+                                        controls={playable}
                                         data-hero-video
-                                        aria-label={`${item.name} — looping preview`}></video>
+                                        aria-label={playable ? `${item.name} — clip` : `${item.name} — looping preview`}>
+                                        {captions && (
+                                            <track
+                                                kind="captions"
+                                                src={captions}
+                                                srclang="en"
+                                                label="English (auto)"
+                                            />
+                                        )}
+                                    </video>
                                 ) : (
                                     <img src={poster!} alt={`${item.name} — still`} loading="lazy" decoding="async" />
                                 )}
