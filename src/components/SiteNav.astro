@@ -12,7 +12,13 @@ const { current } = Astro.props;
 ---
 <a class="skip" href="#main">Skip to content</a>
 <nav class="nav" transition:name="site-nav" transition:animate="none">
-    <a class="nav-mark" href="/">Tomme Denney</a>
+    <a class="nav-mark" href="/">
+        {/* The monogram is a mask rather than an image, so it is drawn in the
+            theme's own text colour and flips with it — the source art is black
+            on paper, which would have needed a second file and a swap. */}
+        <span class="nav-logo" aria-hidden="true"></span>
+        Tomme Denney
+    </a>
     <ul class="nav-links">
         {/* The wordmark already goes home, but a named link is what a visitor
             looks for, and it keeps the row readable as a set. */}

@@ -170,7 +170,10 @@ h3.display {
     top: 0;
     z-index: 50;
     display: flex;
-    align-items: baseline;
+    /* Centred rather than baseline-aligned since the monogram arrived: a
+       28px mark and an 12px link have no shared baseline worth aligning to,
+       and the lockup reads as one object this way. */
+    align-items: center;
     justify-content: space-between;
     gap: 24px;
     padding: 22px var(--gutter);
@@ -180,6 +183,10 @@ h3.display {
 }
 
 .nav-mark {
+    display: flex;
+    align-items: center;
+    gap: .46em;
+    line-height: 1;
     font-family: Fraunces, serif;
     font-variation-settings: 'WONK' 1, 'opsz' 20;
     font-weight: 600;
@@ -187,6 +194,17 @@ h3.display {
     letter-spacing: -.01em;
     color: var(--text);
     text-decoration: none;
+}
+
+/* The TD monogram, painted in currentColor through its own alpha. One asset
+   serves both themes, and it follows the mark's colour for free. */
+.nav-logo {
+    flex: none;
+    height: 1.5em;
+    aspect-ratio: 268 / 256;
+    background: currentColor;
+    -webkit-mask: url('/logo-td.png') center / contain no-repeat;
+    mask: url('/logo-td.png') center / contain no-repeat;
 }
 
 .nav-links {
