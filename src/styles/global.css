@@ -328,60 +328,11 @@ h3.display {
     max-width: 980px;
 }
 
-/* ── NUMBERED INDEX ──────────────────────────────────────────────────────── */
+/* ── TIER BADGE ──────────────────────────────────────────────────────────── */
 
-/* v1 listed work as square tiles. An index of numbered rules reads as a
-   contents page, which suits an archive and looks nothing like a dashboard. */
-.index {
-    list-style: none;
-    border-top: 1px solid var(--rule-strong);
-}
-
-.index-row {
-    border-bottom: 1px solid var(--rule);
-}
-
-.index-link {
-    display: grid;
-    grid-template-columns: 64px minmax(0, 1fr) auto;
-    gap: 24px;
-    align-items: center;
-    padding: clamp(18px, 2.4vw, 30px) 0;
-    color: inherit;
-    text-decoration: none;
-    transition: padding-left .3s cubic-bezier(.22, .61, .36, 1);
-}
-
-.index-link:hover {
-    padding-left: 14px;
-}
-
-.index-num {
-    font-family: Fraunces, serif;
-    font-variation-settings: 'opsz' 20;
-    font-size: 15px;
-    color: var(--accent);
-}
-
-.index-name {
-    font-family: Fraunces, serif;
-    font-variation-settings: 'SOFT' 0, 'WONK' 1, 'opsz' 100;
-    font-weight: 600;
-    font-size: clamp(26px, 3.6vw, 46px);
-    line-height: 1.02;
-    letter-spacing: -.02em;
-}
-
-.index-meta {
-    display: block;
-    margin-top: 7px;
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: .12em;
-    text-transform: uppercase;
-    color: var(--mt);
-}
-
+/* Sat on the numbered index rows this site used to list work with. The index
+   is gone — every list of work is a row of cards now — and the badge moved
+   onto the card's media, bottom left. */
 .index-kind {
     font-size: 10px;
     font-weight: 700;
@@ -407,67 +358,7 @@ h3.display {
     border: 1px solid var(--accent);
 }
 
-/* Hover preview: a still that follows the pointer. Desktop only — it is
-   decoration, and on touch the thumbnail in the row does the same job. */
-.peek {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 340px;
-    aspect-ratio: 4 / 3;
-    pointer-events: none;
-    opacity: 0;
-    z-index: 40;
-    transform: translate(-50%, -50%) scale(.96);
-    transition: opacity .22s, transform .22s;
-    background: var(--surface);
-    box-shadow: 0 24px 60px rgba(4, 21, 31, .28);
-}
-
-.peek.on {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
-}
-
-.peek img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.index-thumb {
-    display: none;
-}
-
 @media (max-width: 900px), (hover: none) {
-    .peek {
-        display: none;
-    }
-
-    .index-link {
-        grid-template-columns: 44px minmax(0, 1fr);
-        grid-template-areas: 'num name' 'thumb thumb';
-    }
-
-    .index-num {
-        grid-area: num;
-        align-self: start;
-    }
-
-    .index-thumb {
-        display: block;
-        grid-area: thumb;
-        margin-top: 16px;
-        aspect-ratio: 16 / 9;
-        background: var(--surface);
-    }
-
-    .index-thumb img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
     .index-kind {
         display: none;
     }
@@ -1169,6 +1060,12 @@ h3.display {
     font-size: 15px;
     line-height: 1.55;
     color: var(--mt);
+}
+
+/* NEXT — the row at the foot of a project page. It is a sibling of the
+   shell rather than a child, so it cannot inherit the .band + .band rule. */
+.cs-next {
+    border-top: 1px solid var(--rule);
 }
 
 /* SELECTED WORK — a full-bleed row, so four cards do not read as a smaller

@@ -397,7 +397,20 @@ const disciplines = projectDisciplines(p);
 const kind = projectKind(p);
 const demo = p.caseStudy ? DEMOS[p.caseStudy] : undefined;
 const demoOk = demo && hasAsset(demo.src);
-const others = PROJECTS.filter((o) => o.id !== p.id).slice(0, 4);
+/*
+ * What to read next, as four cards rather than four numbered rules.
+ *
+ * The numbered index was the last survivor of the version of this site that
+ * listed work as a contents page, and on a project page it read as a footnote:
+ * four lines of type at the bottom of pages whose whole argument is visual. A
+ * reader who has just watched a passthrough capture will not click a word. So
+ * it is the same card the homepage and /work use — preview, title, caption —
+ * in one full-bleed row of four, and the previews are the small looping ones so
+ * the row costs a megabyte rather than a hundred.
+ */
+const others = PROJECTS.filter((o) => o.id !== p.id)
+    .slice(0, 4)
+    .map((o) => ({ p: o, media: projectMedia(o.cover, false), kind: projectKind(o) }));
 
 const title = `${p.name} — Tomme Denney`;
 const description = p.caption ?? `${p.desc.slice(0, 175).trimEnd()}…`;
@@ -597,40 +610,68 @@ const description = p.caption ?? `${p.desc.slice(0, 175).trimEnd()}…`;
                 </section>
             )}
 
-            <section class="band">
-                <div class="band-grid">
-                    <p class="label band-label">Next</p>
-                    <div>
-                        <ol class="index">
-                            {others.map((o, i) => (
-                                <li class="index-row">
-                                    <a class="index-link" href={projectHref(o.name)}>
-                                        <span class="index-num">{String(i + 1).padStart(2, '0')}</span>
-                                        <span>
-                                            <span class="index-name">{o.name}</span>
-                                            <span class="index-meta">{o.cat}</span>
-                                        </span>
-                                        <span class="index-kind" data-kind={projectKind(o)}>
-                                            {KIND_LABEL[projectKind(o)]}
-                                        </span>
-                                    </a>
-                                </li>
-                            ))}
-                        </ol>
-                    </div>
-                </div>
-            </section>
         </div>
+
+        <section class="band strip cs-next" aria-labelledby="next-h">
+            <p class="label" id="next-h" style="margin-bottom:28px">Next</p>
+            <div class="strip-grid">
+                {others.map(({ p: o, media: m, kind: k }) => (
+                    <a class="feature" href={projectHref(o.name)}>
+                        <div class="feature-media">
+                            {m.preview ? (
+                                <video
+                                    src={m.preview}
+                                    poster={m.poster ?? undefined}
+                                    autoplay muted loop playsinline preload="metadata"
+                                    data-hero-video
+                                    aria-label={`${o.name} — looping preview`}></video>
+                            ) : m.poster ? (
+                                <img src={m.poster} alt={`${o.name} — cover`} loading="lazy" decoding="async" />
+                            ) : (
+                                <div class="feature-fallback" style={`background:${o.bg}`} aria-hidden="true">
+                                    <span>{o.ico}</span>
+                                </div>
+                            )}
+                            {k !== 'project' && (
+                                <span class="index-kind" data-kind={k}>{KIND_LABEL[k]}</span>
+                            )}
+                        </div>
+                        <div class="feature-body">
+                            <h2 class="display strip-title">{o.name}</h2>
+                        </div>
+                        <p class="lead-cap">{o.caption ?? o.cat}</p>
+                    </a>
+                ))}
+            </div>
+        </section>
     </main>
 
     <SiteFooter />
 
     <script is:inline>
-        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-            document.querySelectorAll('video[data-hero-video]').forEach(function (v) {
-                v.removeAttribute('autoplay');
-                v.pause();
-            });
-        }
+        (function () {
+            var vids = document.querySelectorAll('video[data-hero-video]');
+
+            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                vids.forEach(function (v) { v.removeAttribute('autoplay'); v.pause(); });
+                return;
+            }
+
+            /* Same rule as / and /work: the hero is on screen at load and
+               plays, the four cards at the bottom of the page wait until
+               someone scrolls to them. */
+            if (!('IntersectionObserver' in window)) return;
+            var io = new IntersectionObserver(function (entries) {
+                entries.forEach(function (e) {
+                    if (e.isIntersecting) {
+                        var play = e.target.play();
+                        if (play && play.catch) play.catch(function () {});
+                    } else {
+                        e.target.pause();
+                    }
+                });
+            }, { rootMargin: '200px' });
+            vids.forEach(function (v) { io.observe(v); });
+        })();
     </script>
 </Base>
