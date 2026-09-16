@@ -33,6 +33,14 @@
     --deep: #432534;
     --on-deep: #efd6ac;
 
+    /* How much a card grows under the pointer. 1.25 was the ask and it does
+       not survive a four-column grid: at that size a card overlaps its
+       neighbours by about forty pixels a side and an edge card pushes past
+       the gutter. This is the largest value that still reads as one card
+       lifting rather than the row breaking — raise it here if the grid is
+       ever loosened. */
+    --card-hover: 1.06;
+
     --measure: 62ch;
     --page: 1440px;
     --gutter: clamp(20px, 5vw, 88px);
@@ -418,6 +426,48 @@ h3.display {
 .filter-n {
     font-size: 10px;
     opacity: .55;
+}
+
+/* ── CARD HOVER ─────────────────────────────────────────── */
+
+/* Every clickable card grows a little under the pointer — the project cards on
+   the home page and /work, the roster cells that lead somewhere, and the
+   document cards. Position is set in the base rule rather than on :hover so
+   the browser has a containing block to stack from before the transform
+   starts; z-index on hover puts the growing card over its neighbours instead
+   of under the next one in source order. */
+.feature,
+.rcard-link,
+.doc {
+    position: relative;
+    transition: transform .45s cubic-bezier(.22, .61, .36, 1);
+}
+
+.feature:hover,
+.feature:focus-visible,
+.rcard-link:hover,
+.rcard-link:focus-within,
+.doc:hover,
+.doc:focus-visible {
+    transform: scale(var(--card-hover));
+    z-index: 3;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .feature,
+    .rcard-link,
+    .doc {
+        transition: none;
+    }
+
+    .feature:hover,
+    .feature:focus-visible,
+    .rcard-link:hover,
+    .rcard-link:focus-within,
+    .doc:hover,
+    .doc:focus-visible {
+        transform: none;
+    }
 }
 
 /* ── FEATURE BLOCK ───────────────────────────────────────────────────────── */
@@ -1085,11 +1135,6 @@ h3.display {
     width: 100%;
     height: 100%;
     object-fit: contain;
-    transition: transform .5s cubic-bezier(.22, .61, .36, 1);
-}
-
-.doc:hover .doc-media img {
-    transform: scale(1.03);
 }
 
 /* The badge is hidden on touch for the project cards, where the page's own

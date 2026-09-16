@@ -81,7 +81,7 @@ const items = section.items.map(resolve);
             {section.note && <p class="roster-note">{section.note}</p>}
             <div class="roster">
                 {items.map(({ item, href, video, poster, captions, playable }) => (
-                    <article class="rcard">
+                    <article class={href ? 'rcard rcard-link' : 'rcard'}>
                         {(video || poster) && (
                             <div class="rcard-media" transition:name={href ? `m-${projectSlug(item.name)}` : undefined}>
                                 {video ? (
