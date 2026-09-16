@@ -770,13 +770,28 @@ h3.display {
  * and it was a second arrow doing a worse version of what the first one
  * already did well. The nudge is the effect.
  */
+/*
+ * `display: inline`, and moved with `left`/`top` rather than a transform.
+ *
+ * These pseudo-elements live inside elements whose background is clipped to
+ * their text for the foil, and Chrome paints an inline-block descendant into
+ * that clip a second time, at the top left of the background box, in the base
+ * text colour. The result was a ghost arrow parked in the corner of every
+ * button — the "double arrow". An inline box does not get painted twice, and
+ * since transform does not apply to one, relative offsets do the sliding
+ * instead. They transition just as well and they cost no layout.
+ */
 .btn::after,
 .lead-cta::after,
 .rcard-links a::after {
     content: '\2192';
-    display: inline-block;
+    display: inline;
+    position: relative;
+    left: 0;
+    top: 0;
     margin-left: .5em;
-    transition: transform .4s cubic-bezier(.22, .61, .36, 1), color .2s;
+    transition: left .4s cubic-bezier(.22, .61, .36, 1),
+        top .4s cubic-bezier(.22, .61, .36, 1), color .2s;
 }
 
 /* Out of the page rather than along it, for a link that leaves the site. */
@@ -790,14 +805,15 @@ h3.display {
 .rcard-links a:hover::after,
 .rcard-links a:focus-visible::after,
 .feature:hover .lead-cta::after {
-    transform: translateX(6px);
+    left: 6px;
 }
 
 .btn-ext:hover::after,
 .btn-ext:focus-visible::after,
 .rcard-links a.ext:hover::after,
 .rcard-links a.ext:focus-visible::after {
-    transform: translate(5px, -5px);
+    left: 5px;
+    top: -5px;
 }
 
 /* Never inherit the colour. A pseudo-element inside an element whose colour
@@ -866,10 +882,15 @@ h3.display {
     .filter:hover,
     .nav-links a:hover,
     .nav-mark:hover,
-    .feature:hover .index-kind,
+    .feature:hover .index-kind {
+        transform: none;
+    }
+
+    .btn:hover::after,
     .rcard-links a:hover::after,
     .feature:hover .lead-cta::after {
-        transform: none;
+        left: 0;
+        top: 0;
     }
 
     .btn:hover,
