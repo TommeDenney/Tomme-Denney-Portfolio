@@ -1018,6 +1018,22 @@ h3.display {
     color: var(--mt);
 }
 
+/* The at-a-glance rows under the meta line: role, platform, interaction,
+   status. Label over value, in as many columns as fit. */
+.cs-facts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 20px 36px;
+    margin-top: 26px;
+    max-width: 1180px;
+}
+
+.cs-facts dd {
+    margin: 7px 0 0;
+    font-size: 15px;
+    line-height: 1.45;
+}
+
 .cs-dek {
     font-family: Fraunces, serif;
     font-variation-settings: 'WONK' 1, 'opsz' 60;
@@ -1475,6 +1491,19 @@ h3.display {
     }
 }
 
+/* The skills list on /about: ruled rows like the phases under it, so the two
+   lists read as the same kind of thing. */
+.bring {
+    list-style: none;
+    margin: 26px 0;
+    border-top: 1px solid var(--rule);
+}
+
+.bring li {
+    padding: 14px 0;
+    border-bottom: 1px solid var(--rule);
+}
+
 /* Process phases — shown on /about, and on a case study only where the project
    genuinely ran them. */
 .phases {
@@ -1858,9 +1887,31 @@ h3.display {
     display: none;
 }
 
-/* First band on the homepage: it is no longer following a masthead, so it
-   supplies its own breathing room under the nav and drops the section rule
-   that only makes sense between bands. */
-.leads-first {
-    padding-top: clamp(44px, 6vw, 92px);
+/* The homepage's three lines. Smaller than a page heading and tighter than
+   .mast, because the featured work under it has to start on the first screen
+   at laptop height — the intro says what the work is, the work proves it. */
+.home-intro {
+    padding-top: clamp(40px, 6vw, 88px);
+}
+
+.home-intro h1.display {
+    font-size: clamp(40px, 6.2vw, 96px);
+    margin-top: 18px;
+    max-width: 16ch;
+}
+
+.home-intro .lede {
+    margin-top: 28px;
+    max-width: 40ch;
+}
+
+.home-where {
+    margin-top: 18px;
+    max-width: 62ch;
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+.home-intro + .leads-band {
+    padding-top: clamp(48px, 7vh, 88px);
 }

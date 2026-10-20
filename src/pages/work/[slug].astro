@@ -383,6 +383,13 @@ const description = p.caption ?? `${p.desc.slice(0, 175).trimEnd()}…`;
                     <span>{p.cat}</span>
                     {disciplines.map((d) => <span>{d}</span>)}
                 </div>
+                {p.glance && (
+                    <dl class="cs-facts">
+                        {p.glance.map(([k, v]) => (
+                            <div><dt class="label">{k}</dt><dd>{v}</dd></div>
+                        ))}
+                    </dl>
+                )}
             </header>
 
             {demoOk && demo && (

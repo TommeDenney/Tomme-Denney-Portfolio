@@ -23,16 +23,40 @@ interface Props {
     ogType?: string;
     /** Extra class on <body>, for per-page overrides of the global styles. */
     bodyClass?: string;
+    /** Emit the Person structured data. Set on the homepage only. */
+    person?: boolean;
 }
 
 const {
     title = 'Tomme Denney',
-    description = 'XR developer and photographer in Boston, Massachusetts. Extended reality, Gaussian splatting, and game design.',
+    description = 'XR interaction designer and prototyper in Boston, Massachusetts: spatial interaction, gameplay prototyping and Unity XR for Meta Quest and games.',
     path = '/',
     image,
     ogType = 'website',
     bodyClass,
+    person = false,
 } = Astro.props;
+
+// Describes the person, not a job: `jobTitle` is left out on purpose, because
+// search engines read it as an employment title and the portfolio headline is
+// not one.
+const personLd = person
+    ? JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'Person',
+        name: 'Tomme Denney',
+        url: new URL('/', Astro.site).href,
+        description: 'XR interaction designer and prototyper: spatial interaction, gameplay mechanics and Unity XR prototypes for Meta Quest, mixed reality and games.',
+        address: { '@type': 'PostalAddress', addressLocality: 'Boston', addressRegion: 'MA', addressCountry: 'US' },
+        alumniOf: { '@type': 'CollegeOrUniversity', name: 'Northeastern University' },
+        knowsAbout: [
+            'XR interaction design', 'Spatial interaction', 'Gameplay prototyping',
+            'Game design', 'Unity', 'Meta Quest', 'Mixed reality', 'Hand tracking',
+            'VR locomotion', 'Human-computer interaction',
+        ],
+        sameAs: ['https://tommedenney.itch.io'],
+    })
+    : undefined;
 
 // The canonical used to be hardcoded to Astro.site, which was right while
 // index.astro was the only route and points every project page at the
@@ -133,6 +157,7 @@ const transitionCss = `
         <meta name="twitter:title" content={title} />
         <meta name="twitter:description" content={description} />
         {ogImage && <meta name="twitter:image" content={ogImage} />}
+        {personLd && <script type="application/ld+json" is:inline set:html={personLd}></script>}
 
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

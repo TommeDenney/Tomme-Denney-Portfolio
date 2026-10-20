@@ -4,9 +4,9 @@
  *
  * v1's homepage was a spring-loaded hero card stack, a ticker, an
  * auto-advancing carousel and four in-page sections, all driven by a 700-line
- * script — and none of it said what Tomme does. This states the positioning,
- * hands off to one case study, and lists the rest as an index. No carousel, no
- * ticker, no overlay: every destination is a real URL.
+ * script — and none of it said what Tomme does. This states the positioning in
+ * three lines, hands off to the featured work, and lists the rest as an index.
+ * No carousel, no ticker, no overlay: every destination is a real URL.
  */
 import Base from '../layouts/Base.astro';
 import SiteNav from '../components/SiteNav.astro';
@@ -17,10 +17,11 @@ import { projectMedia } from '../lib/projectMedia';
 
 // Three featured projects, in this order on purpose. See Reality first: it is
 // the only professional, deployed, multi-year body of work here, and it is the
-// answer to the first question a hiring reader has. Then the two pieces that
-// argue for something — that spatial media can hold a memory, and that a
-// service can hand authority to the person usually being helped.
-const LEADS = ['seereality', 'genexr', 'spark'];
+// answer to the first question a hiring reader has. Then the thesis, which is
+// locomotion and hand input designed and tested end to end, and I Am You,
+// whose control scheme is the clearest piece of interaction design on the site
+// with an individually credited author.
+const LEADS = ['seereality', 'genexr', 'iamyou'];
 const leads = LEADS.map((id) => ({ p: PMAP[id], media: projectMedia(PMAP[id].cover, false) }));
 
 // The index under the leads: the work worth a recruiter's next click, in the
@@ -35,9 +36,10 @@ const card = (id: string) => ({ p: PMAP[id], media: projectMedia(PMAP[id].cover,
 const DEPLOYMENTS = ['relive1776', 'showmeitaly', 'lexington', 'nashvilleadventures'];
 
 // Then the written-up work, then work that speaks for itself. Badges carry the
-// tier inside each row.
-const WRITTEN = ['recollection', 'buddyrun', 'haptidraw', 'iamyou'];
-const PROJECTS_ROW = ['bofum', 'wallace', 'unforgottenstories', 'greatvendingmachine'];
+// tier inside each row. Both rows favour input, feedback and mechanics over
+// the service-design work, which is still on /work.
+const WRITTEN = ['recollection', 'haptidraw', 'buddyrun', 'truthancientforest'];
+const PROJECTS_ROW = ['bofum', 'wallace', 'returnofthechickens', 'greatvendingmachine'];
 const written = WRITTEN.map(card);
 const deployments = DEPLOYMENTS.map(card);
 const projectsRow = PROJECTS_ROW.map(card);
@@ -49,17 +51,35 @@ const socialImage = PMAP.genexr.cover;
 ---
 
 <Base
-    title="Tomme Denney — Spatial & Immersive Product Designer"
-    description="Spatial and immersive product designer who prototypes. MS Extended Reality with a concentration in Human-Computer Interaction, BFA Game Design — Northeastern University."
+    title="Tomme Denney — XR Interaction Designer & Prototyper"
+    description="XR interaction designer and prototyper in Boston: spatial input, gameplay mechanics and interfaces for Meta Quest, mixed reality and games, built as working Unity prototypes."
     path="/"
     image={socialImage}
+    person
 >
     <SiteNav current="home" />
 
     <main id="main">
-        {/* No masthead: the introduction lives on /about now, and the
-            homepage opens on the work itself. */}
-        <section class="band strip leads-band leads-first" aria-labelledby="lead-h">
+        {/* Three lines, not a masthead: what the work is, how it gets made,
+            and where it applies — then straight into the work. The longer
+            introduction stays on /about. */}
+        <header class="shell home-intro">
+            <p class="label">Tomme Denney &middot; Boston, Massachusetts</p>
+            <h1 class="display">XR interaction designer &amp; <span class="mast-accent">prototyper</span></h1>
+            <p class="lede">
+                I design how people move, reach, look and get feedback inside
+                virtual worlds — then build it in Unity, so it can be tried in a
+                headset instead of argued about in a deck.
+            </p>
+            <p class="home-where muted">
+                Game-design craft, human-centred interaction design and real-time
+                Unity prototyping — for games, spatial computing, simulation and
+                emerging interactive products. My XR work runs inside live guided
+                tours in the US, Canada and Italy.
+            </p>
+        </header>
+
+        <section class="band strip leads-band" aria-labelledby="lead-h">
             <p class="label" id="lead-h" style="margin-bottom:30px">Featured projects</p>
             <div class="leads">
                 {leads.map(({ p: lead, media }) => (

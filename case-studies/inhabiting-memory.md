@@ -6,7 +6,7 @@
 
 ## The problem
 
-Photographs preserve the surface of a moment and discard the thing memory actually uses to find it again: the space. Recollection rebuilds the room first — layout, light, where your body was — and the story second. Flat media fixes one perspective and asks you to accept it.
+Photographs preserve the surface of a moment and discard the thing memory actually uses to find it again: the space. Remembering rebuilds the room first — layout, light, where your body was — and the story second. Flat media fixes one perspective and asks you to accept it.
 
 So the design question was not how to reconstruct a room accurately. It was **what has to be true about a spatial medium before someone stops evaluating it and starts remembering inside it.**
 

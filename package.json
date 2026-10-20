@@ -3,7 +3,7 @@
   "type": "module",
   "version": "0.1.0",
   "private": true,
-  "description": "Portfolio site for Tomme Denney \u2014 XR development and photography.",
+  "description": "Portfolio site for Tomme Denney \u2014 XR interaction design, prototyping and photography.",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",

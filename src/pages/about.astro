@@ -15,8 +15,8 @@ import { projectHref } from '../data/projects';
 ---
 
 <Base
-    title="About — Tomme Denney"
-    description="Spatial and immersive product designer who prototypes. MS Extended Reality with a concentration in Human-Computer Interaction, BFA Game Design — Northeastern University."
+    title="About — Tomme Denney, XR Interaction Designer"
+    description="XR interaction designer and prototyper. MS Extended Reality with a concentration in Human-Computer Interaction, BFA Game Design — Northeastern University."
     path="/about"
 >
     <SiteNav current="about" />
@@ -31,14 +31,16 @@ import { projectHref } from '../data/projects';
             </h1>
             <div class="mast-body">
                 <p class="lede">
-                    Spatial and immersive product designer — and enough of a builder to
+                    XR interaction designer and prototyper — and enough of a builder to
                     test an idea in a headset instead of arguing about it in a deck.
                 </p>
                 <div class="prose muted">
                     <p>
                         MS in Extended Reality with a concentration in Human-Computer
                         Interaction, and a BFA in Game Design, both from Northeastern
-                        University. Several years building XR for real clients.
+                        University. Since 2024, one of the developers at
+                        <a href={projectHref('See Reality')}>See Reality</a>, building
+                        XR that runs inside live guided tours.
                     </p>
                     <p>
                         I treat comfort as an accessibility problem rather than a polish
@@ -48,6 +50,59 @@ import { projectHref } from '../data/projects';
                 </div>
             </div>
         </header>
+
+        <section class="band">
+            <div class="band-grid">
+            <p class="label band-label">What I bring to a team</p>
+            <div class="prose">
+            <p>
+                The human-facing half of an interactive system: what a person
+                needs to understand, what they can do with their hands, head and
+                body, what the system tells them back, and how a first-time user
+                gets from putting the headset on to doing the thing. I design that,
+                then build it far enough in Unity that a team can try it rather
+                than imagine it — and work with engineers, artists and domain
+                experts to get it the rest of the way.
+            </p>
+            <ul class="bring">
+                <li>
+                    <strong>Interaction design for XR.</strong> Hand tracking,
+                    controllers and gaze as input; interaction states and feedback;
+                    onboarding for people who have never worn a headset; locomotion
+                    and comfort in room-scale VR and passthrough mixed reality.
+                </li>
+                <li>
+                    <strong>Game design.</strong> Mechanics and player decisions,
+                    control schemes, challenge and level flow, blockouts, design
+                    documentation, and iterating against playtests.
+                </li>
+                <li>
+                    <strong>Prototyping.</strong> Unity and C# on Meta Quest and
+                    OpenXR — passthrough, hand tracking, room-scale VR, and networked
+                    multiplayer in Normcore, in progress. I build to answer design
+                    questions and to show expected behaviour, not as a production
+                    engineer.
+                </li>
+                <li>
+                    <strong>HCI research.</strong> Interview-led design, presence and
+                    emotional-response surveys, and, from coursework, eye-tracking and
+                    heart-rate instrumentation.
+                </li>
+                <li>
+                    <strong>Learning now.</strong> Figma, for interaction wireframes
+                    and flows ahead of a build.
+                </li>
+            </ul>
+            <p>
+                Most of the work here is games and tourism XR. The same method —
+                break a real procedure into steps a novice can perform physically,
+                and give them feedback while they do it — is what I would bring to
+                simulation, training, and interfaces for systems that act in the
+                physical world, robots included. Those are directions I am
+                interested in, not ones I have shipped.
+            </p>
+            </div></div>
+        </section>
 
         <section class="band">
             <div class="band-grid">
@@ -95,6 +150,7 @@ import { projectHref } from '../data/projects';
                 pillars working as build constraints, which is the only form in
                 which they mean anything.
             </p>
+            </div></div>
         </section>
 
         <section class="band">
