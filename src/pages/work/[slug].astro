@@ -223,6 +223,92 @@ const SLOTS: Record<string, Slot[]> = {
                 'The same app as implemented, reading live from the Whoop strap at 79 bpm.',
         },
     ],
+    // The first figure of each of these is the page's hero image, so it is not
+    // repeated here.
+    'virtual-forest': [
+        {
+            src: '/case-studies/virtual-forest/ambient-zones.jpg',
+            large: '/case-studies/virtual-forest/ambient-zones-large.jpg',
+            caption: 'Ambient Sound Manager audio areas laid over the terrain, each zone carrying its own ambience.',
+        },
+        {
+            src: '/case-studies/virtual-forest/weather-code.jpg',
+            large: '/case-studies/virtual-forest/weather-code-large.jpg',
+            caption: 'C# naming the simulation’s weather and time-of-day states — the systems the soundscape was tied to.',
+        },
+        {
+            src: '/case-studies/virtual-forest/vr-project.jpg',
+            large: '/case-studies/virtual-forest/vr-project-large.jpg',
+            caption: 'The VR edition: a separate Android project for the Quest, in Unity 2021.3.',
+        },
+        {
+            src: '/case-studies/virtual-forest/quest-settings.jpg',
+            large: '/case-studies/virtual-forest/quest-settings-large.jpg',
+            caption: 'Player and rendering settings for the standalone Quest build.',
+        },
+        {
+            src: '/case-studies/virtual-forest/trello-board.jpg',
+            large: '/case-studies/virtual-forest/trello-board-large.jpg',
+            caption: 'The team board: MoSCoW priority and UI/UX labels, from discussion through Ready for Merge and Testing to Done.',
+        },
+        {
+            src: '/case-studies/virtual-forest/bug-card.jpg',
+            large: '/case-studies/virtual-forest/bug-card-large.jpg',
+            caption: 'A game-mode bug written up with steps to reproduce against Cloud Build 51, expected and actual results.',
+        },
+        {
+            src: '/case-studies/virtual-forest/branch-explorer.jpg',
+            large: '/case-studies/virtual-forest/branch-explorer-large.jpg',
+            caption: 'Plastic SCM’s Branch Explorer, open on a test repository.',
+        },
+    ],
+    'keys-to-the-universe': [
+        {
+            src: '/case-studies/keys-to-the-universe/onboarding.jpg',
+            large: '/case-studies/keys-to-the-universe/onboarding-large.jpg',
+            caption: 'First launch asks one question: how will you play?',
+        },
+        {
+            src: '/case-studies/keys-to-the-universe/learn-card.jpg',
+            large: '/case-studies/keys-to-the-universe/learn-card-large.jpg',
+            caption: 'A learn step: the idea on an illustrated keyboard before any playing.',
+        },
+        {
+            src: '/case-studies/keys-to-the-universe/player.jpg',
+            large: '/case-studies/keys-to-the-universe/player-large.jpg',
+            caption: 'The player at its own pace: scrolling staff with finger numbers, and the next key lit with its finger.',
+        },
+        {
+            src: '/case-studies/keys-to-the-universe/results.jpg',
+            large: '/case-studies/keys-to-the-universe/results-large.jpg',
+            caption: 'Results out of five stars, with the next step offered: try it with the beat.',
+        },
+        {
+            src: '/case-studies/keys-to-the-universe/chords.jpg',
+            large: '/case-studies/keys-to-the-universe/chords-large.jpg',
+            caption: 'The chord explorer: root, type and inversion, with fingering on the keys.',
+        },
+        {
+            src: '/case-studies/keys-to-the-universe/arcade.jpg',
+            large: '/case-studies/keys-to-the-universe/arcade-large.jpg',
+            caption: 'The Arcade: Endless, Boss Rush, Battle and four mini-games.',
+        },
+        {
+            src: '/case-studies/keys-to-the-universe/songs.jpg',
+            large: '/case-studies/keys-to-the-universe/songs-large.jpg',
+            caption: 'Songs, with sheet-music import and difficulty filters.',
+        },
+        {
+            src: '/case-studies/keys-to-the-universe/ipad.jpg',
+            large: '/case-studies/keys-to-the-universe/ipad-large.jpg',
+            caption: 'iPad landscape, the device it was tuned on, with the add-to-home-screen prompt.',
+        },
+        {
+            src: '/case-studies/keys-to-the-universe/phone-lesson.jpg',
+            large: '/case-studies/keys-to-the-universe/phone-lesson-large.jpg',
+            caption: 'A learn step on a phone-width screen.',
+        },
+    ],
     'inhabiting-memory': [
         {
             src: '/case-studies/inhabiting-memory/locomotion.mp4',
@@ -321,6 +407,10 @@ const docs = [
     ...(p.documents ?? []),
 ].map((d) => ({ ...d, preview: docPreview(d.file) }));
 
+const retrospective = (p.retrospective ?? [])
+    .filter((r) => hasAsset(r.src))
+    .map((r) => ({ ...r, url: assetUrl(r.src) }));
+
 /*
  * The right-hand rail exists for either of two reasons now: there is evidence
  * to show, or there is somewhere to send a reader. Before this, a project with
@@ -330,7 +420,10 @@ const docs = [
 const actions = Boolean(ext || p.dl || parent);
 const railed = actions || slots.length > 0;
 
-const others = PROJECTS.filter((o) => o.id !== p.id)
+const relatedFirst = (p.related ?? [])
+    .map((id) => PROJECTS.find((o) => o.id === id))
+    .filter((o): o is Project => Boolean(o));
+const others = [...relatedFirst, ...PROJECTS.filter((o) => o.id !== p.id && !relatedFirst.includes(o))]
     .slice(0, 4)
     .map((o) => ({ p: o, media: projectMedia(o.cover, false), kind: projectKind(o) }));
 
@@ -528,7 +621,26 @@ const description = p.caption ?? `${p.desc.slice(0, 175).trimEnd()}…`;
                         <p class="label band-label" id="gal-h">Stills</p>
                         <div class="photos">
                             {media.gallery.map((src, i) => (
-                                <figure><img src={src} alt={`${p.name} — still ${i + 1}`} loading="lazy" decoding="async" /></figure>
+                                <figure><img src={src} alt={p.stillAlts?.[i] ?? `${p.name} — still ${i + 1}`} loading="lazy" decoding="async" /></figure>
+                            ))}
+                        </div>
+                    </div>
+                </section>
+            )}
+
+            {retrospective.length > 0 && (
+                <section class="band" aria-labelledby="retro-h">
+                    <div class="band-grid">
+                        <p class="label band-label" id="retro-h">Retrospective Interaction Analysis</p>
+                        <div>
+                            <p class="muted" style="font-size:14px;margin-bottom:22px">
+                                Made after the project as an analysis of its interaction design, not a document from the original production.
+                            </p>
+                            {retrospective.map((r) => (
+                                <figure class="fig">
+                                    <img src={r.url} alt={r.caption} loading="lazy" decoding="async" />
+                                    <figcaption>{r.caption} &middot; {r.made}</figcaption>
+                                </figure>
                             ))}
                         </div>
                     </div>

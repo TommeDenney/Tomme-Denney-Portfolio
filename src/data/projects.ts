@@ -60,6 +60,25 @@ export type Project = {
      * established the row says "Team", not "Role".
      */
     glance?: [string, string][];
+    /**
+     * Alt text for the gallery stills, in gallery order (still 1 is the first
+     * image after the cover). Without it each still is announced as
+     * "<name> — still N", which says nothing about what is in the frame.
+     */
+    stillAlts?: string[];
+    /**
+     * Ids to lead the "Next" row with, ahead of the default order — for a
+     * project with an obvious neighbour, such as a jam game and the later
+     * game on the same premise.
+     */
+    related?: string[];
+    /**
+     * Diagrams, flows and wireframes made after the fact to analyse the
+     * interaction design of an older project. Rendered under their own
+     * heading with `made` beside each, so a reader never mistakes one for a
+     * production document from the time. Empty for every project today.
+     */
+    retrospective?: { src: string; caption: string; made: string }[];
 };
 
 /**
@@ -287,6 +306,24 @@ export const PROJECTS: Project[] = [
         ]
     },
     {
+        id: 'keystotheuniverse', name: 'Keys to the Universe', cat: 'Interactive Learning · Game UX · AI-Assisted Development · 2026',
+        cover: '/projects/keystotheuniverse/1.jpg',
+        bg: 'linear-gradient(145deg,#0e0418,#2a0e48,#4a1888)', ico: '🎹',
+        tags: ['Learning Design', 'Game UX', 'Gamification', 'Web MIDI', 'Web Audio', 'Installable Web App', 'AI-Assisted Development', 'JavaScript'],
+        caption: 'A piano course laid out as a galaxy map, with a player that waits for you — played on a screen, a computer keyboard, a MIDI piano, or a real piano heard through the microphone.',
+        glance: [
+            ['Role', 'Product concept and direction, course structure, and testing as its first learner · implemented with an AI coding agent (Claude)'],
+            ['Platform', 'Browser, installable as a web app · tuned for iPad and desktop'],
+            ['Interaction', 'Own-pace and with-the-beat practice, timing judged Perfect / Good / Early / Late, and menu navigation from the piano keys themselves'],
+            ['Status', 'Live and open source (MIT) · 70 commits over two days, October 2026'],
+            ['Built with', 'JavaScript modules, Web Audio, Web MIDI, a canvas notation renderer, GitHub Pages'],
+        ],
+        desc: 'Learning piano from an app usually means keeping up with something that scrolls past you. Keys to the Universe is a free piano course structured like a game instead: lessons are worlds on a galaxy map, songs are broken into a practice plan that goes hand by hand before hands together and slow before full tempo, and the player waits for the right note instead of scrolling past it. It listens four ways — on-screen keys, a computer keyboard, a MIDI piano, or an acoustic piano through the microphone — so the same lesson works whatever is in the room. I set the product direction and the order of the course, and tested it on my own iPad and piano; the code was written by an AI coding agent working to that direction, and every commit says so.',
+        caseStudy: 'keys-to-the-universe',
+        disciplines: ['Games'],
+        related: ['buddyrun', 'recollection'],
+    },
+    {
         /*
          * This record used to hold two projects at once: Interview With
          * Eternity's name, category and description against HaptiDraw's cover
@@ -342,6 +379,25 @@ export const PROJECTS: Project[] = [
                 note: 'The deck as presented, including what the study actually became.',
             },
         ],
+    },
+    {
+        id: 'virtualforest', name: 'Virtual Forest', cat: 'Professional · Unity College XR Innovation Lab · PC & Quest 2 · 2022',
+        cover: '/projects/virtualforest/1.jpg',
+        bg: 'linear-gradient(145deg,#04151f,#183a37,#2a5a1a)', ico: '🌲',
+        tags: ['Simulation', 'Unity C#', 'Meta Quest 2', 'VR', 'Spatial Audio', 'Game UI', 'QA & Build Management', 'Plastic SCM', 'Environmental Education'],
+        caption: 'A forest for practising fieldwork before the field — on student laptops, and on a standalone Quest 2.',
+        glance: [
+            ['Role', 'Extended Reality Developer (co-op) · gameplay and menu work, spatial audio, Quest 2 performance, QA and builds'],
+            ['Employer', 'Unity College XR Innovation Lab — now Unity Environmental University'],
+            ['Platform', 'Windows and Mac (PC edition) · standalone Meta Quest 2 (VR edition)'],
+            ['Interaction', 'Mission-based field surveys, menu and options navigation, and a soundscape that follows player position, weather and time of day'],
+            ['Status', 'January–May 2022 · PC edition used in the college’s coursework'],
+            ['Built with', 'Unity 2020.3 and 2021.3, C#, Ambient Sound Manager, Plastic SCM, Unity Cloud Build'],
+        ],
+        desc: 'Field scientists collect data they cannot easily check against anyone else’s. Virtual Forest gives students a forest to practise in first: missions that ask them to observe and survey animals and insects in a simulated environment, so the habits are learned before the data counts. I worked on it for five months as an Extended Reality Developer co-op at Unity College’s XR Innovation Lab, my first job in games and XR, across two editions — a PC version for Windows and Mac that went into the college’s coursework, and a standalone Quest 2 version. My work ran from gameplay and menus to a 3D soundscape that follows the player, weather and time of day, to getting the VR build to hold frame rate without a cable, and the testing and build management that kept both editions shippable.',
+        caseStudy: 'virtual-forest',
+        disciplines: ['XR & Spatial', 'Games'],
+        related: ['seereality'],
     },
     {
         id: 'truthancientforest', name: 'Truth of the Ancient Forest', cat: 'Board Game · Rapid Idea Prototyping · 2021', cover: '/projects/truthancientforest/1.jpg',
@@ -411,7 +467,25 @@ export const PROJECTS: Project[] = [
             ['Status', 'Demo on SideQuest · Boston FIG 2024 Online Expo · Northeastern Senior Games Showcase 2024'],
             ['Built with', 'Unity'],
         ],
-        desc: 'A VR shooter where you play as a farmer facing a full chicken invasion. Fight back with Foul Play Firearms like the Cluckshot Cannon. Northeastern Senior Games Showcase 2024 and Boston Festival of Indie Games 2024 Online Expo. Available on SideQuest.'
+        desc: 'A VR shooter where you play as a farmer facing a full chicken invasion. Fight back with Foul Play Firearms like the Cluckshot Cannon. Northeastern Senior Games Showcase 2024 and Boston Festival of Indie Games 2024 Online Expo. Available on SideQuest.',
+        related: ['attackofthechickens'],
+    },
+    {
+        id: 'attackofthechickens', name: 'Attack of the Chickens VR', cat: 'VR Game Jam · Global Game Jam 2024',
+        cover: '/projects/attackofthechickens/0.jpg',
+        bg: 'linear-gradient(145deg,#1a1505,#4a3a10,#7a6020)', ico: '🥚',
+        tags: ['VR', 'Hand Interaction', 'Game Jam', 'Global Game Jam 2024', 'Comedy'],
+        caption: 'You stole their eggs. Now the chickens want them back — and the eggs are all you have to fight with.',
+        glance: [
+            ['Event', 'Global Game Jam 2024 at Northeastern University, hosted by the NU Game Dev Club · theme “Make Me Laugh”'],
+            ['Credit', 'Listed on the jam certificate as “by Tomme Denney”'],
+            ['Platform', 'VR'],
+            ['Interaction', 'Your own hands and the stolen eggs, against a flock charging across the farmyard'],
+            ['Status', 'Jam build, January 2024 · headset capture at the top of this page'],
+        ],
+        desc: 'The theme was Make Me Laugh, so the premise is a farmer who stole the eggs and has to answer for it: the chickens leave the coop and come for you, and the only weapons in reach are your own hands and the eggs themselves.\n\nThe capture is first-person from the headset — two virtual hands at the bottom of the frame, a low-poly farmyard with a windmill and a barn, eggs and feathers in the air, and chickens running at the player from every side. It is a jam game, made at Northeastern’s site for Global Game Jam 2024 (22–28 January), and the whole design is one repeated physical action: turn your hands and the eggs on whatever is coming next.\n\nReturn of the Chickens, the VR shooter on this site, is a later game on the same premise.',
+        stillAlts: ['Global Game Jam 2024 certificate of participation for Attack of the Chickens, by Tomme Denney.'],
+        related: ['returnofthechickens'],
     },
     {
         id: 'arworkofart', name: 'AR Work of Art', cat: 'MR Art · Rhythm · XR 5010 · 2024', cover: '/projects/arworkofart/1.png',
@@ -612,11 +686,75 @@ export const PROJECTS: Project[] = [
         desc: 'Walk Among Us is a tribute to the history of Black characters in the world of video games. Created as the culmination of studies in African American and Africana Studies under Prof. Dr. Layla Brown at Northeastern University. WASD to move, Left Click to interact.'
     },
     {
+        id: 'whatremainsofme', name: 'What Remains of Me', cat: 'Puzzle Platformer · Games@Northeastern Studio · 2022',
+        cover: '/projects/whatremainsofme/0.jpg',
+        bg: 'linear-gradient(145deg,#04151f,#183a37,#432534)', ico: '🤖',
+        tags: ['Platformer', 'Puzzle', 'Game Systems Design', 'Studio Production', 'Unity', 'Student Studio'],
+        caption: 'A robot reawakened in a drowned AI laboratory — made by a student studio organised like a real one.',
+        glance: [
+            ['Team', 'Games@Northeastern Studio · I was assigned to Logistics & Studio Management and to the Game Systems Design discipline group'],
+            ['Platform', 'Windows, macOS, Linux, and in the browser on itch.io'],
+            ['Mechanics', 'Side-scrolling platforming against an energy meter; drained energy can be transferred to terminals to power moving platforms'],
+            ['Status', 'Alpha prototype on itch.io · version 0.1.5 was the studio’s GDC build'],
+            ['Built with', 'Unity'],
+        ],
+        desc: 'You play as Atlas, a robot reactivated in an abandoned, high-tech AI laboratory at the bottom of the ocean. It is a puzzle platformer: you upgrade Atlas’s abilities to get through the facility, deal with the feral AI in your way, and piece together what happened to the world and why you were switched back on. In the build shown here, Atlas runs on an energy meter, and energy Atlas has drained can be transferred into terminals to power the platforms you need to cross.\n\nThe game was made by Games@Northeastern: Studio, and the class that built it was organised to simulate a game studio. The class was split into departments — Art, Assets & Sound; Audience, covering quality assurance, community management and user research; Design; Logistics & Studio Management; Narrative & Story Development; and Programming & Implementation — and then into discipline groups: six content-design teams, Community Management, Game Systems Design, NPC Systems Design, Project Management, Quality Assurance and User Research.\n\nI was assigned to Logistics & Studio Management as my department and to Game Systems Design as my discipline group. The mechanics described above belong to the team; this page records where I sat in the production rather than claiming individual features. What the project gave me was the experience of design and production working as separate groups with handoffs between them, inside a structure that ran its own playtesting — the studio’s itch.io page still carries its user-research survey.',
+        stillAlts: ['The What Remains of Me title logo, lettered in rusted pipes.'],
+        related: ['greatvendingmachine'],
+    },
+    {
         id: 'otherrealm', name: 'Other Realm', cat: 'Narrative Game · Twine · 2021', cover: '/projects/otherrealm/1.png',
         bg: 'linear-gradient(145deg,#0a1a0a,#1a4a1a,#2a7a2a)', ico: '🌿',
         tags: ['Narrative Design', 'Twine', 'Horror', 'Story', 'Playable', 'Web'],
         caption: 'Two teenagers. One demon. A bond that refuses to break.',
         desc: 'A narrative-driven script built in Twine 2.3, created as a final project for Narrative for Games under Prof. Brandon Sichling. Two teenagers with a unique bond are separated by a demon looking to feast on their souls.'
+    },
+    {
+        id: 'forbidden', name: 'Forbidden', cat: 'Horror Game · Unreal Engine · Personal · 2021',
+        cover: '/projects/forbidden/1.jpg',
+        bg: 'linear-gradient(145deg,#080608,#1e1208,#3a2410)', ico: '🐝',
+        tags: ['Horror', 'Unreal Engine', 'Level Design', 'Environment Design', 'Environmental Storytelling', 'Enemy Design', 'Blender', 'AI Programming'],
+        caption: 'An inherited house, parents who are not there, and a spirit that lives only in the dark.',
+        glance: [
+            ['Role', 'Game design, level and environment design, character and enemy design, sound effects and music, and AI programming'],
+            ['Collaborator', 'Christian Rice, my cousin — story concept and development'],
+            ['Story', 'Investigating a family home through letters and notes found in it'],
+            ['Status', 'Personal project, 2021'],
+            ['Built with', 'Unreal Engine, Blender'],
+        ],
+        desc: 'You play a college student who comes home at her parents’ request and learns she has inherited her grandmother’s house and land. When she arrives, her parents are nowhere to be found. A letter in the house describes the killings of an old woman, a middle-aged woman and a middle-aged man by someone unidentified, and she has to wonder whether that was her family. Searching further turns up a note about a local legend: a ghost that only exists in shadow, with a hook for a hand and bees pouring out of his chest. The goal is to find out what happened to the family and stop the Forbidden spirit from hurting anyone else.\n\nI made it in Unreal Engine, doing the game design, level and environment design, character and enemy design (modelled in Blender), sound effects and music, and the enemy’s AI programming. The story concept and its development are my cousin Christian Rice’s.\n\nThe story is told through the house itself — the player learns what happened by reading what was left in it — so most of the work shown here is environment. The stills are the grounds at night and the interior rooms the investigation moves through, lit by warm practical lights against the dark.',
+        stillAlts: [
+            'A bonfire burning in a field of tall grass in front of the house at night, behind a lit wooden fence.',
+            'The game room: a pool table and seating under recessed ceiling lights.',
+            'A living room with a pool table, a low glass table on a rug, and a doorway into a lit hall.',
+            'The kitchen: dark cabinets, a coffee maker on the counter, and an open doorway at the far end.',
+            'A bedroom with a patterned bedspread, a dresser with an old television, and a bathroom off to the left.',
+            'A bedroom strung with fairy lights along striped walls, a bed in the corner.',
+            'A small bathroom: pedestal sink, mirror, pink towel and an arched shower curtain.',
+        ],
+        related: ['wallace', 'handsup'],
+    },
+    {
+        id: 'handsup', name: 'Hands Up', cat: 'Interactive Drama · Research Assistant · Unreal Engine · 2021',
+        cover: '/projects/handsup/1.jpg',
+        bg: 'linear-gradient(145deg,#050810,#101828,#1e2a40)', ico: '🏙️',
+        tags: ['Interactive Drama', 'Research Project', 'Unreal Engine', 'Level Design', 'Environment Design', 'Character Design', 'Serious Games'],
+        caption: 'A single-player interactive drama about racial injustice and police violence, from a research project led by Dr. Derek Curry.',
+        glance: [
+            ['Role', 'Research assistant · game, level and environment, and character design in Unreal Engine'],
+            ['Research lead', 'Dr. Derek Curry, Associate Professor of Art + Design, Northeastern University'],
+            ['Experience', 'Single-player and 3D: the player acts as a police officer through stories of wrongful judgment, and remedies the injustices in them'],
+            ['Status', 'Research project, 2021'],
+            ['Built with', 'Unreal Engine'],
+        ],
+        desc: 'Hands Up is a single-player, 3D interactive drama that uses the form of a video game to explore racial injustice and police violence. The player acts as a police officer and goes through stories of wrongful judgment, with the chance to remedy the injustices in them.\n\nThe project is Dr. Derek Curry’s. I worked on it as a research assistant, using Unreal Engine as a game designer, level and environment designer, and character designer, on the visuals the player sees while playing. The research, its framing and its narrative are not mine to claim, and this page does not describe findings.\n\nThe stills are environment work from the project: city streets at night, built to be the setting for these encounters.',
+        stillAlts: [
+            'A street corner at night under a traffic signal, with a crosswalk in the foreground.',
+            'A dark street at night with a lamp post, a trash can on the sidewalk and a lit shopfront to the left.',
+            'A night skyline: dark towers with scattered lit windows, viewed from above.',
+        ],
+        disciplines: ['Games'],
+        related: ['walk', 'forbidden'],
     },
     {
         id: 'curse', name: 'Curse of the Mind', cat: 'Platformer · Jam-O-Lantern 2021', cover: '/projects/curse/1.png',
@@ -652,6 +790,8 @@ export const PROJECT_EXTERNAL_SITES: Record<string, ExternalSite> = {
     wallace: { url: 'https://tommedenney.itch.io/wallace', label: 'Download on Itch.io' },
     bofum: { url: 'https://devpost.com/software/bofum', label: 'View on Devpost' },
     seereality: { url: 'https://www.seereality.world/', label: 'See Reality' },
+    keystotheuniverse: { url: 'https://tommedenney.github.io/keys-to-the-universe/#/learn', label: 'Open the live app' },
+    whatremainsofme: { url: 'https://whatremainsofme.itch.io/what-remains-of-me', label: 'Play on Itch.io' },
     relive1776: {
         url: 'https://www.tripadvisor.com/AttractionProductReview-g60745-d28008309-Relive_1776_See_Boston_s_History_in_Augmented_Reality_AR-Boston_Massachusetts.html',
         label: 'Relive 1776 on TripAdvisor',
