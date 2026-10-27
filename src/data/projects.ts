@@ -281,10 +281,10 @@ export const PROJECTS: Project[] = [
         ]
     },
     {
-        id: 'recollection', name: 'Recollection', cat: 'Product · Usurper Interactive · Live · 2026', cover: '/projects/recollection/1.png',
+        id: 'recollection', name: 'Recollection', cat: 'Product · Usurper Interactive · Live · 2026', cover: '/projects/recollection/1.jpg',
         bg: 'linear-gradient(145deg,#04151f,#432534,#183a37)', ico: '💍',
         tags: ['Product Design', 'Service Design', 'Privacy by Design', 'Onboarding', '360° Video', 'WebXR', 'Unity C#', 'Cloudflare'],
-        caption: 'A wedding recorded from every direction, so nobody is stuck with one person’s edit of it.',
+        caption: 'A wedding or any milestone, recorded from every direction, so nobody is stuck with one person’s edit of it.',
         glance: [
             ['Platform', 'Phone and desktop browser, Quest browser, XREAL glasses, iOS app'],
             ['Interaction', 'Named moments instead of a timeline, switching camera without losing your place, and headset sign-in without typing in the headset'],

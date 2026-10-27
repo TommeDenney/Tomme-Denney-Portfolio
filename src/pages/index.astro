@@ -35,13 +35,17 @@ const card = (id: string) => ({ p: PMAP[id], media: projectMedia(PMAP[id].cover,
 // are on the See Reality page and on /work.
 const DEPLOYMENTS = ['relive1776', 'showmeitaly', 'lexington', 'nashvilleadventures'];
 
+// Second tier, straight under the featured four: the two live products, and
+// the two team projects where the interaction work is mine. No card here
+// repeats in the rows below.
+const MORE = ['keystotheuniverse', 'recollection', 'bofum', 'internshipintheafterlife'];
+const more = MORE.map(card);
+
 // Then the written-up work, then work that speaks for itself. Badges carry the
 // tier inside each row. Both rows favour input, feedback and mechanics over
-// the service-design work, which is still on /work. Keys to the Universe is the
-// newest written-up work, and it takes the 2021 board game's slot here; Truth of
-// the Ancient Forest is still on /work.
-const WRITTEN = ['recollection', 'keystotheuniverse', 'haptidraw', 'buddyrun'];
-const PROJECTS_ROW = ['bofum', 'wallace', 'returnofthechickens', 'greatvendingmachine'];
+// the service-design work, which is still on /work.
+const WRITTEN = ['haptidraw', 'buddyrun', 'virtualforest', 'truthancientforest'];
+const PROJECTS_ROW = ['wallace', 'returnofthechickens', 'greatvendingmachine', 'whatremainsofme'];
 const written = WRITTEN.map(card);
 const deployments = DEPLOYMENTS.map(card);
 const projectsRow = PROJECTS_ROW.map(card);
@@ -100,6 +104,37 @@ const socialImage = PMAP.genexr.cover;
         {/* Full-bleed rows: the shell's 1440px cap would leave four cards
             narrower than the two leads above them, which reads as a downgrade
             rather than a different section. These set their own gutters. */}
+        <section class="band strip" aria-labelledby="more-h">
+            <p class="label" id="more-h" style="margin-bottom:28px">More selected work</p>
+            <div class="strip-grid">
+                {more.map(({ p: item, media }) => (
+                    <a class="feature" href={projectHref(item.name)}>
+                        <div class="feature-media" transition:name={`m-${projectSlug(item.name)}`}>
+                            {media.preview ? (
+                                <video
+                                    src={media.preview}
+                                    poster={media.poster ?? undefined}
+                                    autoplay muted loop playsinline preload="metadata"
+                                    data-hero-video
+                                    aria-label={`${item.name} — looping preview`}></video>
+                            ) : media.poster ? (
+                                <img src={media.poster} alt={`${item.name} — cover`} loading="lazy" decoding="async" />
+                            ) : null}
+                            {projectKind(item) !== 'project' && (
+                                <span class="index-kind" data-kind={projectKind(item)}>
+                                    <span>{KIND_LABEL[projectKind(item)]}</span>
+                                </span>
+                            )}
+                        </div>
+                        <div class="feature-body">
+                            <h3 class="display strip-title" transition:name={`t-${projectSlug(item.name)}`}>{item.name}</h3>
+                        </div>
+                        <p class="lead-cap">{item.caption}</p>
+                    </a>
+                ))}
+            </div>
+        </section>
+
         <section class="band strip" aria-labelledby="dep-h">
             <p class="label" id="dep-h" style="margin-bottom:28px">See Reality deployments</p>
             <div class="strip-grid">
