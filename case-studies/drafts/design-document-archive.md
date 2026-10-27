@@ -12,13 +12,15 @@ Not published. This is the record of the ten historical design documents reviewe
 | GDD: Internship in the Afterlife | Internship in the Afterlife | The nine storyboards (pp. 5–6); the interaction loop and planned haptics (pp. 1–3); the team's task split (pp. 3–4) | Jingren (Komi) Ma, Tomme Denney, Namrata Mahesh Shajwani |
 | Night with Wallace GDD | Wallace | The competing-task design, the bark/doorbell feedback and the consequences, marked as the design rather than the build | No authors named; the repository has six contributors |
 
-Not linked as downloads: none of these PDFs has been cleared for publication. The Internship report also contains a private comment thread between teammates (p. 2) and a list of friends' names used as sample content, so it should not be published as-is.
+Linked as downloads: only the two What Remains of Me documents, which Tomme cleared on 27 October 2026. The others are not cleared. The Internship report also contains a private comment thread between teammates (p. 2) and a list of friends' names used as sample content, so it should not be published as-is.
 
 Not used from the Unforgotten Stories document: the Google Maps screenshot (p. 2) and the archival photograph (p. 8), which are third-party images.
 
-## Held back
+## Published after confirmation (27 October 2026)
 
-**Merge Point Design Document (04/25/2025).** The cover lists Tom Tang, Nandita Venkat, Nadia Youssef and Jingren Ma; Tomme is not credited. The document also states that no running cross-platform proof of concept was built (p. 7). Held until a contribution is confirmed; if it is, the p. 9 interface imagery and the pp. 2–6 interaction matrix are the strongest material.
+**Merge Point Design Document (04/25/2025).** Tomme confirmed he worked on the multiplayer system connecting the Quest headset and a phone in one synced space. The cover lists Tom Tang, Nandita Venkat, Nadia Youssef and Jingren Ma; the page credits all five and says so. Published: the p. 9 colour explorations and AR Player UI board, and a p. 2 excerpt of the interaction table. The page states the document's admission that no running cross-platform prototype was finished. The p. 8 mood board (third-party images) and the PDF itself are not published.
+
+## Held back
 
 **Memory Corrupted Game Design Document (v0.1, 1/3/24).** Tomme listed as lead developer. Concept stage: several sections still carry template prompts ("Highlight the unique features…", "Introduce key characters…"). No build or page. Archive.
 
@@ -26,13 +28,17 @@ Not used from the Unforgotten Stories document: the Google Maps screenshot (p. 2
 
 **UnderGrad Capstone Game Design Document ("Untitled Auto Battler", T.U.R.N.I.P.).** Early concept with unfilled placeholders ("[Game Engine and Version]", "*Incorporate this into Concept Blurb*"). No authors, build or page. Archive.
 
-**Inception Game (BGJ2023).** Template text throughout ("[Your Game Title]", "Your game deals with…"). Brackeys Game Jam 2023 — possibly the concept that preceded Soul Solace, unconfirmed. Archive.
+**Inception Game (BGJ2023).** Template text throughout ("[Your Game Title]", "Your game deals with…"). Brackeys Game Jam 2023. Tomme thinks it could be the early concept for Soul Solace, with a name change, but does not remember — not associated with that page. Archive.
 
-## Open questions
+## Answers (27 October 2026)
 
-- Who wrote the two What Remains of Me documents, and may they be published?
-- Who was in Team Let's Go Eevee, and what was Tomme's role on Unforgotten Stories?
-- Did Komi draw the Internship storyboards, as the schedule assigned? May they be shown?
-- Real names for the Wallace contributors (jchengjr, ryantheking603, Rpowrs, audreytho, namebesam), and who designed what.
-- Did Tomme contribute to Merge Point?
-- Is the Inception Game document the concept for Soul Solace?
+- What Remains of Me: the Game Systems Design group wrote both documents together, Tomme included, and they may be posted. Both are now linked on the page.
+- Unforgotten Stories: Team Let's Go Eevee was Tomme, Tejim and Ronak. Tomme's individual role is not yet recorded on the page.
+- Internship in the Afterlife: Komi drew the storyboards and they may be shown; Tomme built the interaction systems and programmed the game; Namrata and Komi did the 3D modelling.
+- Wallace: built mainly by Tomme and Ren; the other four contributors made small contributions. Names not recalled.
+
+## Still open
+
+- Tomme's role on Unforgotten Stories, and Tejim's and Ronak's full names if they want them used.
+- Ren's full name, if wanted.
+- Whether the Internship haptics shipped.
