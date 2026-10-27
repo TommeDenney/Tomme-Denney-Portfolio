@@ -1865,19 +1865,27 @@ h3.display {
 
 /* LEADS — label above rather than in the margin, and wider than the rows
    beneath so the hierarchy is size rather than position. */
-/* FEATURED — four across, two by two under 1100px. At four the column is a
-   quarter of the page, so the display size comes down again or "Inhabiting
-   Memory" wraps to three lines and stops reading as a title. */
+/* FEATURED — three across. At two the titles could run to 68px; at three the
+   column is a third of the page, so the display size comes down to match or
+   "Inhabiting Memory" wraps to three lines and stops reading as a title. */
 .leads-band .leads {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: clamp(24px, 2.4vw, 44px);
     max-width: 1680px;
     margin: 0 auto;
 }
 
 .lead-title {
-    font-size: clamp(28px, 2.5vw, 40px);
+    font-size: clamp(30px, 3.1vw, 46px);
     line-height: .98;
+}
+
+/* The four featured projects under the large three: the same cards as the
+   rows further down, so the step down in size says "also featured" rather
+   than "next section". */
+.leads-band .leads-sub {
+    max-width: 1680px;
+    margin: clamp(44px, 5vw, 72px) auto 0;
 }
 
 @media (max-width: 1100px) {

@@ -283,12 +283,12 @@ export const PROJECTS: Project[] = [
     {
         id: 'recollection', name: 'Recollection', cat: 'Product · Usurper Interactive · Live · 2026', cover: '/projects/recollection/1.jpg',
         bg: 'linear-gradient(145deg,#04151f,#432534,#183a37)', ico: '💍',
-        tags: ['Product Design', 'Service Design', 'Privacy by Design', 'Onboarding', '360° Video', 'WebXR', 'Unity C#', 'Cloudflare'],
+        tags: ['Product Design', 'Service Design', 'Privacy by Design', 'Onboarding', '360° Video', 'Meta VR Glasses', 'Meta Quest', 'Unity C#', 'Cloudflare'],
         caption: 'A wedding or any milestone, recorded from every direction, so nobody is stuck with one person’s edit of it.',
         glance: [
-            ['Platform', 'Phone and desktop browser, Quest browser, XREAL glasses, iOS app'],
+            ['Platform', 'Meta’s VR glasses and Meta Quest 3 and 3S'],
             ['Interaction', 'Named moments instead of a timeline, switching camera without losing your place, and headset sign-in without typing in the headset'],
-            ['Status', 'Live · iOS and glasses verified on hardware · WebXR in a headset and Android not yet run on hardware'],
+            ['Status', 'Live, for Meta’s VR glasses and Quest 3/3S · the case study below also records the earlier, wider product'],
             ['Built with', 'Unity 6, Astro, Cloudflare Workers, D1, R2'],
         ],
         desc: 'A wedding video is one person\u2019s edit of your day \u2014 someone chose the angle, and every time you go back you get their choice again. Recollection captures the day in every direction at once, cuts it into named moments, and lets you switch camera mid-moment without losing your place. The design problem was not fidelity; it was removing the editor from between a person and their own memory, for an audience of a hundred wedding guests who will not install anything or make an account. So a guest redeems a code and gets a token scoped to one event: no login, no app, and no master key \u2014 the all-access path was removed rather than disabled. The commercial end of the same line of work as my thesis, and the only part of it with a price.',

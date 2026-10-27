@@ -4,6 +4,8 @@
 
 [NEEDS INPUT: what is my role against my co-founders' on Recollection specifically? The business plan is a three-person course project with Jennifer Ann Lawrence and Sebastian Salas; the four product repositories are under my account. Those are different splits and the metadata line should say which is which.]
 
+*Update, October 2026: Recollection is now made only for Meta’s VR glasses and Meta Quest 3 and 3S. The browser, XREAL glasses and iOS tiers in this case study describe the earlier version of the product, and are kept here as the record of how it got to two devices.*
+
 ## Where this came from
 
 This is the fourth step of one line of work, and the only one that sells anything.
