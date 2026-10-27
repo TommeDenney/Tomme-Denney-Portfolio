@@ -417,7 +417,11 @@ const retrospective = (p.retrospective ?? [])
  * a live site and no figures put its only outbound link at the bottom of the
  * prose, which on a full case study is several screens down.
  */
-const actions = Boolean(ext || p.dl || parent);
+const actions = Boolean(ext || p.dl || parent || p.extraLinks?.length);
+
+const figures = (p.figures ?? [])
+    .filter((f) => hasAsset(f.src))
+    .map((f) => ({ ...f, url: assetUrl(f.src) }));
 const railed = actions || slots.length > 0;
 
 const relatedFirst = (p.related ?? [])
@@ -549,6 +553,9 @@ const description = p.caption ?? `${p.desc.slice(0, 175).trimEnd()}…`;
                         {actions && (
                             <p class="stack cs-actions">
                                 {ext && <a class="btn btn-ext" href={ext.url} target="_blank" rel="noopener">{ext.label}</a>}
+                                {p.extraLinks?.map((l) => (
+                                    <a class="btn btn-ext" href={l.url} target="_blank" rel="noopener">{l.label}</a>
+                                ))}
                                 {p.dl && (
                                     <a class="btn btn-ext" href={assetUrl(p.dl)} target="_blank" rel="noopener">{p.dlLabel ?? 'Download'}</a>
                                 )}
@@ -610,6 +617,36 @@ const description = p.caption ?? `${p.desc.slice(0, 175).trimEnd()}…`;
                                     <a class="btn btn-ext" href={embed.itchio} target="_blank" rel="noopener">Itch.io</a>
                                 </p>
                             )}
+                        </div>
+                    </div>
+                </section>
+            )}
+
+            {figures.length > 0 && (
+                <section class="band" aria-labelledby="figs-h">
+                    <div class="band-grid">
+                        <p class="label band-label" id="figs-h">Evidence</p>
+                        <div class="figs-grid">
+                            {figures.map((f) => (
+                                <figure class="fig">
+                                    {/* Same enlargement as the case-study rail: hover on a
+                                        wide screen, tap or Enter to open the original. Most of
+                                        these are small UI sketches and pixel art that are
+                                        unreadable at grid size. */}
+                                    <a
+                                        class="fig-zoom"
+                                        href={f.url}
+                                        target="_blank"
+                                        rel="noopener"
+                                        style={`--zoom:url("${f.url}")`}
+                                        aria-label={`${f.caption} — open full size`}
+                                    >
+                                        <img src={f.url} alt={f.caption} loading="lazy" decoding="async" />
+                                        <span class="fig-hint">Hover to enlarge &middot; click for full size</span>
+                                    </a>
+                                    <figcaption>{f.caption} <span class="fig-src">{f.source}</span></figcaption>
+                                </figure>
+                            ))}
                         </div>
                     </div>
                 </section>

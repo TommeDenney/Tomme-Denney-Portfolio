@@ -79,6 +79,16 @@ export type Project = {
      * production document from the time. Empty for every project today.
      */
     retrospective?: { src: string; caption: string; made: string }[];
+    /**
+     * Captioned evidence for a project page that has no long-form case study:
+     * figures lifted from the original design documents, and captures from
+     * the build. `source` names where each one came from — the document's own
+     * title and year, or the build — so an original artefact is never confused
+     * with a capture, or with a retrospective diagram (see `retrospective`).
+     */
+    figures?: { src: string; caption: string; source: string }[];
+    /** Outbound links beyond the one in PROJECT_EXTERNAL_SITES, each verified to load. */
+    extraLinks?: { url: string; label: string }[];
 };
 
 /**
@@ -450,12 +460,13 @@ export const PROJECTS: Project[] = [
         tags: ['Horror', 'Unity', 'Survival', 'Atmosphere', 'First Person', 'Halloween', 'WebGL'],
         caption: 'Give out candy. Do your tasks. Do not let Wallace out.',
         glance: [
+            ['Team', 'Six contributors to the project repository · 33 of its 49 commits are mine'],
             ['Platform', 'PC and browser (WebGL)'],
             ['Controls', 'WASD to move, left click to interact'],
             ['Status', 'Playable in the browser and on itch.io, 2025'],
             ['Built with', 'Unity'],
         ],
-        desc: 'A short first-person horror game built on a task list. You\'re watching your neighbor\'s house for the night. Give out candy to trick-or-treaters — or don\'t, but leave the lights off. Take care of their very special dog, Wallace. Keep the front and back doors open for visitors. Do your tasks or die. Wallace is a real dog, by the way. WASD to move, Left Click to interact. Volume up.'
+        desc: 'A short first-person horror game built on a task list. You\'re watching your neighbor\'s house for the night. Give out candy to trick-or-treaters — or don\'t, but leave the lights off. Take care of their very special dog, Wallace. Keep the front and back doors open for visitors. Do your tasks or die. Wallace is a real dog, by the way. WASD to move, Left Click to interact. Volume up.\n\nThe design document, under the working title Night With Wallace, builds the horror out of obligations that compete for the same pair of hands. There are chores to finish before the family gets home — laundry, washing and putting away the dishes in an Overcooked style, taking the trash out to the backyard. There is Wallace, who needs feeding and letting out, and who makes trouble when he is ignored: knocking things off surfaces, biting light bulbs, moving the candy bowl. And there is the door, where trick-or-treaters want the right amount of candy and will not wait for it.\n\nSound is what the document asks the player to manage those three with. Wallace barks when he is up to something, and the bark is both the warning and the clue to where he is — ignore it, and you no longer know what he has done or where. The doorbell and knocking pull you to the front of the house. The consequences stack: a visitor kept waiting too long cuts the power on the way out, sending you to the generator, and Wallace grows far more aggressive in the dark; let his needs build up and he kills you.\n\nThat is the design as written. The playable build carries the core of it — candy at the door, Wallace’s care, a house that goes dark, and a task list you fail at your peril — and this page does not claim the rest of the document’s list shipped.'
     },
     {
         id: 'returnofthechickens', name: 'Return of the Chickens', cat: 'VR Shooter · Demo · 2024', cover: '/projects/returnofthechickens/1.png',
@@ -630,11 +641,30 @@ export const PROJECTS: Project[] = [
         partOf: 'seereality'
     },
     {
-        id: 'internshipintheafterlife', name: 'Internship in the Afterlife', cat: 'Narrative Game · XR 5020 · 2024', cover: '/projects/internshipintheafterlife/1.png',
+        id: 'internshipintheafterlife', name: 'Internship in the Afterlife', cat: 'VR Puzzle · XR 5020 · 2024', cover: '/projects/internshipintheafterlife/1.png',
         bg: 'linear-gradient(145deg,#10080a,#301818,#502828)', ico: '👻',
-        tags: ['Narrative', 'Comedy', 'Game Design', 'Afterlife', 'XR 5020', 'Interactive Fiction'],
-        caption: 'Your first performance review is from beyond the grave. Good luck.',
-        desc: 'What happens when your internship is in the afterlife? Navigate a bureaucratic underworld, complete absurd tasks for spectral supervisors, and try to survive your first performance review — from beyond the grave. Created as XR 5020 Course Final 2024.'
+        tags: ['VR', 'Hand Interaction', 'Language & Empathy', 'Meta Quest', 'Unity', 'XR 5020'],
+        caption: 'Your first day on the afterlife’s front desk: spell each soul’s name from memory, in a language you may not read.',
+        glance: [
+            ['Team', 'Three people · Jingren (Komi) Ma, Namrata Mahesh Shajwani and Tomme Denney · XR 5020, taught by Prof. Wallace Lages'],
+            ['My part', 'In the team’s plan, I set up the Unity project and its GitHub version control; gameplay programming was shared by all three'],
+            ['Platform', 'Meta Quest (Android)'],
+            ['Interaction', 'Grab a letter block, place it in order, and the name is checked: right sends the soul up the stairway, wrong sends it through the trap door'],
+            ['Status', 'Course final, December 2024 · on itch.io'],
+            ['Built with', 'Unity'],
+        ],
+        desc: 'You work the check-in booth of the afterlife. A soul arrives, its name is shown for a moment, and then you have to rebuild it from memory: the syllables come out of a mystery box one at a time, slot-machine style, and you place each block in order on the display in front of the soul. Spell it right and the soul is certified and walks up the stairway; spell it wrong and the floor opens. Drop five and you are fired. The report planned names in English, Mandarin and Hindi, so the puzzle is partly memory and partly reading a script you may not know — the point of the project, which the team framed around the language barriers international students, tourists and immigrants deal with.\n\nThe interaction is one loop of grasp, place and check, and the capture shows each part: putting on the employee lanyard to start, the prompt to memorise the name, hands picking up coloured letter blocks, and the two endings — “Congratulations, you did great” and “You are fired”. The team’s report also specified the feedback for that loop in haptics: a light vibration when a block is picked up, a gentle ting for a correct placement, and a stronger, buzzer-like pulse for a wrong one, with recorded phrases in several dialects adding pressure after a mistake. That is the plan as written; the capture cannot show whether the haptics shipped.\n\nMade by three people for XR 5020, taught by Prof. Wallace Lages. In the team’s schedule, the storyboards below were Komi’s, the 3D models were Komi’s and Namrata’s, the Unity project and version control were mine, and the gameplay programming was shared by all three of us.',
+        figures: [
+            { src: '/projects/internshipintheafterlife/figs/storyboard-1.jpg', caption: 'Putting on the afterlife employee card to enter the game.', source: 'Storyboard from the team project report, 2024, p. 5 · assigned to Jingren (Komi) Ma' },
+            { src: '/projects/internshipintheafterlife/figs/storyboard-2.jpg', caption: 'The player as receptionist: “Welcome to Afterlife — what’s your name?”', source: 'Storyboard from the team project report, 2024, p. 5 · assigned to Jingren (Komi) Ma' },
+            { src: '/projects/internshipintheafterlife/figs/storyboard-3.jpg', caption: 'A soul shows its name for a few seconds, to be remembered.', source: 'Storyboard from the team project report, 2024, p. 5 · assigned to Jingren (Komi) Ma' },
+            { src: '/projects/internshipintheafterlife/figs/storyboard-4.jpg', caption: 'Letter cubes to grab with a controller and place in the answer box.', source: 'Storyboard from the team project report, 2024, p. 5 · assigned to Jingren (Komi) Ma' },
+            { src: '/projects/internshipintheafterlife/figs/storyboard-5.jpg', caption: 'The name spelled correctly, and the halo appears.', source: 'Storyboard from the team project report, 2024, p. 5 · assigned to Jingren (Komi) Ma' },
+            { src: '/projects/internshipintheafterlife/figs/storyboard-6.jpg', caption: 'The certified soul moves on to the stairway.', source: 'Storyboard from the team project report, 2024, p. 5 · assigned to Jingren (Komi) Ma' },
+            { src: '/projects/internshipintheafterlife/figs/storyboard-7.jpg', caption: 'A soul whose name is written in another language.', source: 'Storyboard from the team project report, 2024, p. 6 · assigned to Jingren (Komi) Ma' },
+            { src: '/projects/internshipintheafterlife/figs/storyboard-8.jpg', caption: 'The name spelled wrong: crossed-out blocks and a flame.', source: 'Storyboard from the team project report, 2024, p. 6 · assigned to Jingren (Komi) Ma' },
+            { src: '/projects/internshipintheafterlife/figs/storyboard-9.jpg', caption: 'After five souls are dropped through the trap door, the receptionist is fired.', source: 'Storyboard from the team project report, 2024, p. 6 · assigned to Jingren (Komi) Ma' },
+        ],
     },
     {
         id: 'toweroffrankenfrog', name: 'Tower of Frankenfrog', cat: 'Tower Defense · Husky Jam 2024', cover: '/projects/toweroffrankenfrog/1.png',
@@ -669,7 +699,26 @@ export const PROJECTS: Project[] = [
         bg: 'linear-gradient(145deg,#1a0a0a,#4a1a1a,#8a2a2a)', ico: '📖',
         tags: ['Narrative', 'Unity', 'WebGL', 'Heritage', 'Partition', 'Playable'],
         caption: 'Seven years old. Forced from home. The Partition, lived from the inside.',
-        desc: 'Step into the shoes of one developer\'s grandmother during the Pakistani-Indian Partition. As a seven-year-old ripped from Karachi, you navigate the streets, survive the journey, and uncover the truth behind your family\'s past.'
+        glance: [
+            ['Team', 'Team Let’s Go Eevee'],
+            ['Platform', 'Windows, and playable in the browser'],
+            ['Interaction', 'Look to select, left click to act, left click held to decide — and a toy to look at for comfort'],
+            ['Status', 'Released on itch.io and GameJolt, 2023'],
+            ['Built with', 'Unity'],
+        ],
+        desc: 'Step into the shoes of one developer\'s grandmother during the Pakistani-Indian Partition. As a seven-year-old ripped from Karachi, you navigate the streets, survive the journey, and uncover the truth behind your family\'s past.\n\nThe team’s design document, revised after looking at Before Your Eyes, keeps the input deliberately small for a child’s point of view: looking around is limited, looking at an object is what makes it interactive, a left click acts, and a left click held for three seconds makes a decision. The first decision comes at home — the parents say there is only room for one toy, a cloth doll or a pinwheel, and the capture shows the child asking to bring both. The toy chosen then stays with her: in the document, looking at it slows time and brings back the memory of being given it, and the objective on screen during the walk through Karachi reads “witness events or look at your toy for comfort”.\n\nThe flow is linear by design. A scene cannot be revisited once left, and the story moves between the ship and the memories of the city, with the child led through Karachi by a parent’s hand — free to look around, not to walk away. The document also asks for grayscale, black borders like a film, and an interface that stays out of the way; the two menu sketches below are from it, a title screen with the ship idling at sea and a pause menu over a darkened scene.',
+        figures: [
+            {
+                src: '/projects/unforgottenstories/figs/title-menu-sketch.png',
+                caption: 'Title screen sketch: the ship at sea under a placeholder title, with Start, Load, Settings and Exit along the bottom.',
+                source: 'Unforgotten Stories Design Documentation V3, p. 8 · Team Let’s Go Eevee, 2023',
+            },
+            {
+                src: '/projects/unforgottenstories/figs/pause-menu-sketch.png',
+                caption: 'Pause menu sketch: Resume, Settings, Save and Exit listed over a darkened crowd scene.',
+                source: 'Unforgotten Stories Design Documentation V3, p. 8 · Team Let’s Go Eevee, 2023',
+            },
+        ],
     },
     {
         id: 'flora', name: 'Flora Park Mystery', cat: 'Murder Mystery · Global Game Jam 2023', cover: '/projects/flora/1.png',
@@ -694,12 +743,50 @@ export const PROJECTS: Project[] = [
         glance: [
             ['Team', 'Games@Northeastern Studio · I was assigned to Logistics & Studio Management and to the Game Systems Design discipline group'],
             ['Platform', 'Windows, macOS, Linux, and in the browser on itch.io'],
-            ['Mechanics', 'Side-scrolling platforming against an energy meter; drained energy can be transferred to terminals to power moving platforms'],
+            ['Mechanics', 'A wire for swinging and for plugging in: drain energy from battery packs and transfer it to terminals, and — in the design documents — drain or overload enemies and manage a virus that rides on your energy'],
             ['Status', 'Alpha prototype on itch.io · version 0.1.5 was the studio’s GDC build'],
             ['Built with', 'Unity'],
         ],
-        desc: 'You play as Atlas, a robot reactivated in an abandoned, high-tech AI laboratory at the bottom of the ocean. It is a puzzle platformer: you upgrade Atlas’s abilities to get through the facility, deal with the feral AI in your way, and piece together what happened to the world and why you were switched back on. In the build shown here, Atlas runs on an energy meter, and energy Atlas has drained can be transferred into terminals to power the platforms you need to cross.\n\nThe game was made by Games@Northeastern: Studio, and the class that built it was organised to simulate a game studio. The class was split into departments — Art, Assets & Sound; Audience, covering quality assurance, community management and user research; Design; Logistics & Studio Management; Narrative & Story Development; and Programming & Implementation — and then into discipline groups: six content-design teams, Community Management, Game Systems Design, NPC Systems Design, Project Management, Quality Assurance and User Research.\n\nI was assigned to Logistics & Studio Management as my department and to Game Systems Design as my discipline group. The mechanics described above belong to the team; this page records where I sat in the production rather than claiming individual features. What the project gave me was the experience of design and production working as separate groups with handoffs between them, inside a structure that ran its own playtesting — the studio’s itch.io page still carries its user-research survey.',
+        desc: 'You play as Atlas, a robot reactivated in an abandoned, high-tech AI laboratory at the bottom of the ocean. It is a puzzle platformer: you upgrade Atlas’s abilities to get through the facility, deal with the feral AI in your way, and piece together what happened to the world and why you were switched back on. In the build shown here, Atlas runs on an energy meter, and energy Atlas has drained can be transferred into terminals to power the platforms you need to cross.\n\nTwo documents from the Game Systems Design group, “Interaction (Wire, virus and energy) systems” and the “NEW battery and virus design document” (spring 2023), set out the rules underneath that. The wire is both the way around and the weapon: thrown toward the cursor, it plugs into the nearest pluggable object; holding the throw slows time to aim it in the air; on the ground it reels in and out to follow Atlas, and in the air it can be firmed up or swung to a 45-degree limit. Plugged into an enemy, the player chooses between draining it — taking its energy — and overloading it — pushing Atlas’s own energy in — and an enemy driven past full charge is stunned. Energy is Atlas’s health, and virus is carried as a share of it: draining an infected enemy pulls its virus across — not at all from a clean enemy, and faster the more infected the enemy is — and Atlas shuts down at 0% energy or 100% virus. The spring 2023 document adds that charging from a clean source dilutes the virus, and that an enemy with no virus is docile until it is given some.\n\nThe capture shows the wire swing, draining a battery pack, and spending that energy to power a terminal. Overload and the virus meter are in the documents but not in the footage, and the build’s HUD is a plain battery. The indicator the documents describe was drawn as a ring of charge and infection states, and a browser charge test shows how charge and virus read on an enemy outlet.\n\nThe game was made by Games@Northeastern: Studio, and the class that built it was organised to simulate a game studio. The class was split into departments — Art, Assets & Sound; Audience, covering quality assurance, community management and user research; Design; Logistics & Studio Management; Narrative & Story Development; and Programming & Implementation — and then into discipline groups: six content-design teams, Community Management, Game Systems Design, NPC Systems Design, Project Management, Quality Assurance and User Research.\n\nI was assigned to Logistics & Studio Management as my department and to Game Systems Design as my discipline group. The mechanics described above belong to the team; this page records where I sat in the production rather than claiming individual features. What the project gave me was the experience of design and production working as separate groups with handoffs between them, inside a structure that ran its own playtesting — the studio’s itch.io page still carries its user-research survey.',
         stillAlts: ['The What Remains of Me title logo, lettered in rusted pipes.'],
+        figures: [
+            {
+                src: '/projects/whatremainsofme/figs/energy-virus-indicator.png',
+                caption: 'The energy and virus indicator as a set of states: a ring of green charge that gives way to purple as infection rises, through to empty.',
+                source: '“NEW battery and virus design document” (spring 2023) · Game Systems Design group',
+            },
+            {
+                src: '/projects/whatremainsofme/figs/charge-test.png',
+                caption: 'The browser charge test: Charge, Virus and Limiter sliders and a Lock control, driving an enemy outlet’s ring.',
+                source: 'Charge test, linked from the spring 2023 document · captured October 2026',
+            },
+            {
+                src: '/projects/whatremainsofme/figs/swing-tutorial.png',
+                caption: 'The swing tutorial: “To swing: L Mouse / R Trigger”, on keyboard and gamepad.',
+                source: 'Gameplay capture, alpha build',
+            },
+            {
+                src: '/projects/whatremainsofme/figs/drain-dialogue.png',
+                caption: 'An NPC teaching the drain: “did you know you can drain energy from battery packs?”',
+                source: 'Gameplay capture, alpha build',
+            },
+            {
+                src: '/projects/whatremainsofme/figs/wire-to-terminal.png',
+                caption: 'Atlas wired into a terminal beside a battery pack, the energy meter part spent.',
+                source: 'Gameplay capture, alpha build',
+            },
+            {
+                src: '/projects/whatremainsofme/figs/terminal-powered.png',
+                caption: 'The wire run to a terminal whose screen has turned blue, beside a platform track.',
+                source: 'Gameplay capture, alpha build',
+            },
+            {
+                src: '/projects/whatremainsofme/figs/wire-on-enemy.png',
+                caption: 'The wire plugged into an enemy robot.',
+                source: 'Gameplay capture, alpha build',
+            },
+        ],
+        extraLinks: [{ url: 'https://what-remains-of-me-charge-test.netlify.app/', label: 'Open the charge test' }],
         related: ['greatvendingmachine'],
     },
     {

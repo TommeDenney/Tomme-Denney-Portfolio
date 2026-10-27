@@ -1587,6 +1587,40 @@ h3.display {
     }
 }
 
+/* ── EVIDENCE FIGURES ────────────────────────────────────────────────────── */
+
+/* Captioned figures on a project page without a case study: two across, so a
+   UI sketch is large enough to read before anyone enlarges it, one across on a
+   phone. The source line sits under the caption in the muted colour, because
+   it answers a different question — where this came from, not what it is. */
+.figs-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 clamp(18px, 2.4vw, 38px);
+}
+
+.figs-grid .fig {
+    margin: 0 0 var(--step);
+}
+
+.figs-grid img {
+    image-rendering: auto;
+}
+
+.fig-src {
+    display: block;
+    margin-top: 6px;
+    color: var(--muted);
+    font-size: 12px;
+    letter-spacing: .02em;
+}
+
+@media (max-width: 760px) {
+    .figs-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
 /* ── DOCUMENT LIST ───────────────────────────────────────────────────────── */
 
 /* A row of document cards, three across, sharing the roster's proportions so
