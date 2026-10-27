@@ -1,0 +1,192 @@
+---
+/**
+ * About.
+ *
+ * The one page where the frameworks may be named directly. Everywhere else
+ * they have to show up as consequences inside a decision — a framework named
+ * without a consequence reads as coursework, which is the opposite of the
+ * point. No grades anywhere: they inform which projects lead, they are not
+ * content.
+ */
+import Base from '../layouts/Base.astro';
+import SiteNav from '../components/SiteNav.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import { projectHref } from '../data/projects';
+---
+
+<Base
+    title="About — Tomme Denney, XR Interaction Designer"
+    description="XR interaction designer and prototyper. MS Extended Reality with a concentration in Human-Computer Interaction, BFA Game Design — Northeastern University."
+    path="/about"
+>
+    <SiteNav current="about" />
+
+    <main id="main" class="shell">
+        {/* This was the homepage masthead. It reads better here, where a
+            reader has already decided they want to know who made the work. */}
+        <header class="mast">
+            <p class="label">Tomme Denney &middot; Boston, Massachusetts</p>
+            <h1 class="display" transition:name="page-heading">
+                I design experiences you <span class="mast-accent">enter</span>, not ones you look at.
+            </h1>
+            <div class="mast-body">
+                <p class="lede">
+                    XR interaction designer and prototyper — and enough of a builder to
+                    test an idea in a headset instead of arguing about it in a deck.
+                </p>
+                <div class="prose muted">
+                    <p>
+                        MS in Extended Reality with a concentration in Human-Computer
+                        Interaction, and a BFA in Game Design, both from Northeastern
+                        University. Since 2024, one of the developers at
+                        <a href={projectHref('See Reality')}>See Reality</a>, building
+                        XR that runs inside live guided tours.
+                    </p>
+                    <p>
+                        I treat comfort as an accessibility problem rather than a polish
+                        pass: locomotion, session length, play space and the person who
+                        has never worn a headset are design questions from the first sketch.
+                    </p>
+                </div>
+            </div>
+        </header>
+
+        <section class="band">
+            <div class="band-grid">
+            <p class="label band-label">What I bring to a team</p>
+            <div class="prose">
+            <p>
+                The human-facing half of an interactive system: what a person
+                needs to understand, what they can do with their hands, head and
+                body, what the system tells them back, and how a first-time user
+                gets from putting the headset on to doing the thing. I design that,
+                then build it far enough in Unity that a team can try it rather
+                than imagine it — and work with engineers, artists and domain
+                experts to get it the rest of the way.
+            </p>
+            <ul class="bring">
+                <li>
+                    <strong>Interaction design for XR.</strong> Hand tracking,
+                    controllers and gaze as input; interaction states and feedback;
+                    onboarding for people who have never worn a headset; locomotion
+                    and comfort in room-scale VR and passthrough mixed reality.
+                </li>
+                <li>
+                    <strong>Game design.</strong> Mechanics and player decisions,
+                    control schemes, challenge and level flow, blockouts, design
+                    documentation, and iterating against playtests.
+                </li>
+                <li>
+                    <strong>Prototyping.</strong> Unity and C# on Meta Quest and
+                    OpenXR — passthrough, hand tracking, room-scale VR, and networked
+                    multiplayer in Normcore, in progress. I build to answer design
+                    questions and to show expected behaviour, not as a production
+                    engineer.
+                </li>
+                <li>
+                    <strong>HCI research.</strong> Interview-led design, presence and
+                    emotional-response surveys, and, from coursework, eye-tracking and
+                    heart-rate instrumentation.
+                </li>
+                <li>
+                    <strong>Learning now.</strong> Figma, for interaction wireframes
+                    and flows ahead of a build.
+                </li>
+            </ul>
+            <p>
+                Most of the work here is games and tourism XR. The same method —
+                break a real procedure into steps a novice can perform physically,
+                and give them feedback while they do it — is what I would bring to
+                simulation, training, and interfaces for systems that act in the
+                physical world, robots included. Those are directions I am
+                interested in, not ones I have shipped.
+            </p>
+            </div></div>
+        </section>
+
+        <section class="band">
+            <div class="band-grid">
+            <p class="label band-label">How I actually work</p>
+            <div class="prose">
+            <p>
+                Five phases, run end to end on two graduate projects in
+                <em>Design for Dignity</em>, with a graded deliverable at each one.
+                I show this sequence only on projects that genuinely went through
+                it — a process diagram on a project that skipped ideation is a lie
+                with a nice icon.
+            </p>
+            <ol class="phases">
+                <li><span>Research</span></li>
+                <li><span>Definition</span></li>
+                <li><span>Ideation</span></li>
+                <li><span>Synthesis</span></li>
+                <li><span>Delivery</span></li>
+            </ol>
+            </div></div>
+        </section>
+
+        <section class="band">
+            <div class="band-grid">
+            <p class="label band-label">What I mean by dignity</p>
+            <div class="prose">
+            <p>
+                From graduate coursework in <em>Design for Dignity</em>: a design
+                either honours four things about a person or erodes them.
+                <strong>Merit</strong> — is this someone of inherent worth, or a
+                funnel stage? <strong>Autonomy</strong> — can they choose, refuse,
+                exit, and control how they are represented?
+                <strong>Human rights</strong> — what are they entitled to
+                regardless of whether they are a valuable user?
+                <strong>Interpersonal connection</strong> — does this strengthen a
+                relationship between people, or stand in for one?
+            </p>
+            <p>
+                I would rather show it than claim it. In
+                <a href={projectHref('Inhabiting Memory')}>Inhabiting Memory</a>,
+                every interpretive room came from that person's own interview
+                rather than my reading of them, and I ruled out the most obvious
+                mechanic available — letting a visitor handle a deceased relative
+                as an object — because it treats a person as a prop. Those are the
+                pillars working as build constraints, which is the only form in
+                which they mean anything.
+            </p>
+            </div></div>
+        </section>
+
+        <section class="band">
+            <div class="band-grid">
+            <p class="label band-label">Instrumented evaluation</p>
+            <div class="prose">
+            <p>
+                Graduate coursework in <em>Biometrics of Design</em> put me on eye
+                tracking and heart-rate instrumentation — measuring where
+                attention actually went and what the body did, rather than asking
+                someone to recall it afterwards. It is the least common thing on
+                this site and the one I would most like to use again: self-report
+                tells you what a person believes about an experience, and
+                instrumentation tells you what happened to them.
+            </p>
+            </div></div>
+        </section>
+
+        <section class="band">
+            <div class="band-grid">
+            <p class="label band-label">Where the rest of it comes from</p>
+            <div class="prose">
+            <p>
+                Game interface design — diegetic UI, iconography, and taking a
+                sketch through to a tested prototype. Interaction and experience
+                foundations — object surveys, heuristic critique, and low-fidelity
+                to high-fidelity wireframes. XR history and theory, which is where
+                the argument that spatial media behaves differently from a screen
+                actually comes from. And psychology, which is what any claim about
+                attention, memory or cognitive load has to rest on.
+            </p>
+            </div></div>
+        </section>
+
+        <p class="band" style="padding-bottom:0"><a class="btn" href="/work">See the work</a></p>
+    </main>
+
+    <SiteFooter />
+</Base>

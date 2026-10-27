@@ -1,0 +1,608 @@
+---
+/**
+ * A project's own page, one per entry in PROJECTS.
+ *
+ * The overlay views on / are still the way the site is browsed, but overlay
+ * state has no URL: nothing about the address changes when a project opens, so
+ * a project could not be linked, shared or indexed. These routes exist so it
+ * can be. They read the same PROJECTS objects the overlay does — nothing here
+ * is a second copy of the content — and index.astro is untouched.
+ *
+ * Where a project has a `caseStudy`, the long-form Markdown in case-studies/
+ * replaces the short `desc` rather than sitting next to it, so the prose has
+ * exactly one home.
+ */
+import Base from '../../layouts/Base.astro';
+import SiteNav from '../../components/SiteNav.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
+import RosterGrid from '../../components/RosterGrid.astro';
+import VideoAutoplay from '../../components/VideoAutoplay.astro';
+import {
+    PROJECTS, PROJECT_EXTERNAL_SITES, PROJECT_EMBEDS,
+    projectSlug, projectHref, projectDisciplines, projectKind, KIND_LABEL,
+    type Project,
+} from '../../data/projects';
+import { projectMedia, hasAsset, captionTrack, docPreview } from '../../lib/projectMedia';
+import { assetUrl } from '../../lib/assets';
+import { PROJECT_ROSTERS } from '../../data/seereality';
+
+export function getStaticPaths() {
+    return PROJECTS.map((project) => ({
+        params: { slug: projectSlug(project.name) },
+        props: { project },
+    }));
+}
+
+interface Props { project: Project }
+const { project: p } = Astro.props;
+
+const media = projectMedia(p.cover, p.galleryImages !== false);
+const ext = PROJECT_EXTERNAL_SITES[p.id];
+const embed = PROJECT_EMBEDS[p.id];
+// The case study that covers this project, where it is one deployment out of
+// several. Without it a reader who lands on a client page from search has no
+// route to the reasoning, and the reasoning is the part worth reading.
+const parent = p.partOf ? PROJECTS.find((o) => o.id === p.partOf) : undefined;
+
+/**
+ * Astro runs Markdown anywhere in the project through its normal pipeline, so
+ * the case studies can stay at the repo root next to the drafts they came from
+ * instead of being copied into src/. remarkStripNeedsInput has already removed
+ * the author's open questions by the time `Content` renders — see
+ * scripts/remark-strip-needs-input.mjs.
+ */
+const caseStudies = import.meta.glob<{ Content: any }>(
+    '../../../case-studies/*.md',
+    { eager: true },
+);
+
+const caseStudy = p.caseStudy
+    ? caseStudies[`../../../case-studies/${p.caseStudy}.md`]
+    : undefined;
+
+const Content = caseStudy?.Content;
+
+/**
+ * The evidence for a case study, in the order it should be read. Each slot is
+ * emitted only if the file is really on disk, which is what keeps an unfilled
+ * one from becoming a broken <video> on a live page.
+ *
+ * Every figure used to carry a second line arguing for its own significance —
+ * "that it is a real commercial thing with an identity, not a prototype" and
+ * twenty-nine more like it. A caption that has to explain why a picture counts
+ * is a caption that does not trust the picture, and read end to end they were
+ * the most obviously written thing on the site. One line each now: what it is.
+ */
+/**
+ * A portrait screen recording, shown alongside its notes rather than as a
+ * full-width hero. An iPhone capture is 588x1280; stretched across the top it
+ * would be four fifths letterbox, and shrunk to fit it would be unreadable.
+ */
+type Demo = { src: string; poster?: string; caption: string; notes: string[] };
+const DEMOS: Record<string, Demo> = {
+    'buddy-run': {
+        src: '/case-studies/buddy-run/app-demo.mp4',
+        poster: '/case-studies/buddy-run/app-demo.jpg',
+        caption: 'Three minutes through the app: intake, baseline run, sprint, and the live run screen.',
+        notes: [
+            'The whole screen is the readout. Background colour carries the heart-rate zone, so the state is legible at a glance mid-stride rather than needing a number read off a chart.',
+            'The zone is named in words — "Above Target", "Below Target", "run at a pace where you can hold a conversation" — because a runner at effort has no attention spare for arithmetic.',
+            'Target cadence has plus and minus controls and the tempo guide has an off switch. The algorithm proposes; the runner decides.',
+        ],
+    },
+};
+
+type Slot = {
+    src: string;
+    /**
+     * A higher-resolution copy for the hover enlargement. `src` is sized for
+     * the 400px rail; loading a 3040px file to fill that slot would be a
+     * third of a megabyte spent on a thumbnail.
+     */
+    large?: string;
+    poster?: string;
+    caption: string;
+};
+const SLOTS: Record<string, Slot[]> = {
+    'ar-work-of-art': [
+        {
+            src: '/case-studies/ar-work-of-art/particles-star.jpg',
+            large: '/case-studies/ar-work-of-art/particles-star-large.jpg',
+            caption: 'A block resolving into a particle burst, mid-run.',
+        },
+        {
+            src: '/case-studies/ar-work-of-art/particles-dense.jpg',
+            large: '/case-studies/ar-work-of-art/particles-dense-large.jpg',
+            caption: 'The room later in a sustained run, thick with accumulated effects.',
+        },
+        {
+            src: '/case-studies/ar-work-of-art/particles-early.jpg',
+            large: '/case-studies/ar-work-of-art/particles-early-large.jpg',
+            caption: 'The same environment sparser, before the effects build up.',
+        },
+    ],
+    'i-am-you': [
+        {
+            src: '/case-studies/i-am-you/trail-camera.jpg',
+            large: '/case-studies/i-am-you/trail-camera-large.jpg',
+            caption: 'The trail-camera view: greyscale, vignetted, grainy — the hiker seen from the position the player occupies.',
+        },
+        {
+            src: '/case-studies/i-am-you/colour-world.jpg',
+            large: '/case-studies/i-am-you/colour-world-large.jpg',
+            caption: 'The same forest in colour, outside the camera feed.',
+        },
+        {
+            src: '/case-studies/i-am-you/ice-cream-man.jpg',
+            large: '/case-studies/i-am-you/ice-cream-man-large.jpg',
+            caption: 'The Ice Cream Man — grief as a soft-serve silhouette.',
+        },
+        {
+            src: '/case-studies/i-am-you/polaroid.jpg',
+            large: '/case-studies/i-am-you/polaroid-large.jpg',
+            caption: 'A Polaroid on the forest floor, found by flashlight.',
+        },
+    ],
+    'truth-of-the-ancient-forest': [
+        {
+            src: '/case-studies/truth-of-the-ancient-forest/sprite-sheet.jpg',
+            large: '/case-studies/truth-of-the-ancient-forest/sprite-sheet-large.jpg',
+            caption: 'The production sheet: four sets of role tokens, durability meters, and the spell deck. Line work on solid black, because that is what the laser cutter could cut. Abstract card art by Divine Siam.',
+        },
+        {
+            src: '/case-studies/truth-of-the-ancient-forest/temple-tiles.jpg',
+            large: '/case-studies/truth-of-the-ancient-forest/temple-tiles-large.jpg',
+            caption: 'The ancient temple tiles, in the abstract style that replaced the religious imagery of versions 1 and 2.',
+        },
+        {
+            src: '/case-studies/truth-of-the-ancient-forest/board-tiles.jpg',
+            large: '/case-studies/truth-of-the-ancient-forest/board-tiles-large.jpg',
+            caption: 'Numbered floor tiles and dark wall tiles — the pieces the map is built from during play.',
+        },
+    ],
+    recollection: [
+        {
+            src: '/case-studies/recollection/share-card.jpg',
+            large: '/case-studies/recollection/share-card-large.jpg',
+            caption: 'The product\u2019s own share card, in Playfair Display and Pinyon Script.',
+        },
+    ],
+    spark: [
+        {
+            src: '/case-studies/spark/system-map.jpg',
+            large: '/case-studies/spark/system-map-large.jpg',
+            caption: 'The system map: outreach, inputs, session, outcomes.',
+        },
+        {
+            src: '/case-studies/spark/heros-journey.jpg',
+            large: '/case-studies/spark/heros-journey-large.jpg',
+            caption: 'Fifteen stages from exclusion to community spread, with each dignity pillar marked where it activates.',
+        },
+        {
+            src: '/case-studies/spark/perception-gap.jpg',
+            large: '/case-studies/spark/perception-gap-large.jpg',
+            caption: 'The perception gap, and the answer to it: change who holds the pen.',
+        },
+        {
+            src: '/case-studies/spark/personas.jpg',
+            large: '/case-studies/spark/personas-large.jpg',
+            caption: 'Margaret and Emma. Constructed from published survey data, not interviewed.',
+        },
+        {
+            src: '/case-studies/spark/service-blueprint.jpg',
+            large: '/case-studies/spark/service-blueprint-large.jpg',
+            caption: 'Six phases across physical evidence, both participants, onstage and backstage facilitation.',
+        },
+        {
+            src: '/case-studies/spark/storyboard.jpg',
+            large: '/case-studies/spark/storyboard-large.jpg',
+            caption: 'The session as ten panels — the facilitator is gone by the eighth.',
+        },
+        {
+            src: '/case-studies/spark/research-board.jpg',
+            large: '/case-studies/spark/research-board-large.jpg',
+            caption: 'The research board, unretouched: the direction that became Spark, with the affordance argument on the green note.',
+        },
+        {
+            src: '/case-studies/spark/palette.jpg',
+            large: '/case-studies/spark/palette-large.jpg',
+            caption: 'Palette and type, checked for WCAG AA with high-contrast pairings for low-vision users.',
+        },
+    ],
+    'buddy-run': [
+        {
+            src: '/case-studies/buddy-run/design-screens.jpg',
+            large: '/case-studies/buddy-run/design-screens-large.jpg',
+            caption:
+                'The final interface design by Yunbing Han: baseline explainer, weekly plan, and run history.',
+        },
+        {
+            src: '/case-studies/buddy-run/built-screens.jpg',
+            large: '/case-studies/buddy-run/built-screens-large.jpg',
+            caption:
+                'The same app as implemented, reading live from the Whoop strap at 79 bpm.',
+        },
+    ],
+    'inhabiting-memory': [
+        {
+            src: '/case-studies/inhabiting-memory/locomotion.mp4',
+            poster: '/case-studies/inhabiting-memory/locomotion.jpg',
+            caption: 'One pass through the museum: walking inside a module, then teleporting to the next.',
+        },
+        {
+            src: '/case-studies/inhabiting-memory/temporal-splat.mp4',
+            poster: '/case-studies/inhabiting-memory/temporal-splat.jpg',
+            caption: 'A moving reconstruction, filmed with the head moving.',
+        },
+        {
+            src: '/case-studies/inhabiting-memory/flat-vs-spatial.mp4',
+            poster: '/case-studies/inhabiting-memory/flat-vs-spatial.jpg',
+            caption: 'The same submitted photographs on a screen, then stood inside.',
+        },
+        {
+            src: '/case-studies/inhabiting-memory/room-scale.mp4',
+            poster: '/case-studies/inhabiting-memory/room-scale.jpg',
+            caption: 'A participant in the study room: body walking the module, hands raised to teleport.',
+        },
+        {
+            src: '/case-studies/inhabiting-memory/hand-tracking.mp4',
+            poster: '/case-studies/inhabiting-memory/hand-tracking.jpg',
+            caption: 'Hand-tracked menu selection and teleport, close on the hands.',
+        },
+        {
+            src: '/case-studies/inhabiting-memory/module-diagram.png',
+            caption: 'Real play space, virtual module, and the teleport network across the level.',
+        },
+        {
+            src: '/case-studies/inhabiting-memory/mockups.jpg',
+            caption: 'The original iPad mockups, unretouched.',
+        },
+        {
+            src: '/case-studies/inhabiting-memory/rooms.jpg',
+            caption: 'One frame from each of the six rooms.',
+        },
+        {
+            src: '/case-studies/inhabiting-memory/failure-state.png',
+            caption: 'A reconstruction breaking down: artifacts and unstable geometry.',
+        },
+    ],
+};
+
+const slots = (p.caseStudy ? SLOTS[p.caseStudy] ?? [] : [])
+    .filter((s) => hasAsset(s.src))
+    .map((s) => ({
+        ...s,
+        url: assetUrl(s.src),
+        largeUrl: s.large && hasAsset(s.large) ? assetUrl(s.large) : assetUrl(s.src),
+        posterUrl: s.poster && hasAsset(s.poster) ? assetUrl(s.poster) : undefined,
+        isVideo: s.src.endsWith('.mp4'),
+    }));
+
+// The hero is the project video where there is one. For a case study a static
+// splat still is deliberately not the fallback: it reads as a noisy photograph
+// and undersells the work to anyone who has never worn a headset, so the hero
+// falls back to type on the project's own gradient instead.
+const heroVideo = media.video;
+const heroStill = p.noStillHero ? null : media.poster;
+const disciplines = projectDisciplines(p);
+const kind = projectKind(p);
+const demo = p.caseStudy ? DEMOS[p.caseStudy] : undefined;
+const demoOk = demo && hasAsset(demo.src);
+/*
+ * What to read next, as four cards rather than four numbered rules.
+ *
+ * The numbered index was the last survivor of the version of this site that
+ * listed work as a contents page, and on a project page it read as a footnote:
+ * four lines of type at the bottom of pages whose whole argument is visual. A
+ * reader who has just watched a passthrough capture will not click a word. So
+ * it is the same card the homepage and /work use — preview, title, caption —
+ * in one full-bleed row of four, and the previews are the small looping ones so
+ * the row costs a megabyte rather than a hundred.
+ */
+// A body of work shown as a grid of everything in it, rather than as one
+// argument. See src/data/seereality.ts.
+const roster = PROJECT_ROSTERS[p.id] ?? [];
+
+/*
+ * The documents, with the first page of each one rendered.
+ *
+ * `presentation` predates the `documents` array and is the same kind of thing,
+ * so it is folded in here rather than rendered as a special case ahead of the
+ * list — a reader has no interest in which field a PDF arrived from.
+ */
+const docs = [
+    ...(p.presentation
+        ? [{
+            label: 'Thesis presentation',
+            file: p.presentation,
+            note: 'The deck as presented at the showcase.',
+        }]
+        : []),
+    ...(p.documents ?? []),
+].map((d) => ({ ...d, preview: docPreview(d.file) }));
+
+/*
+ * The right-hand rail exists for either of two reasons now: there is evidence
+ * to show, or there is somewhere to send a reader. Before this, a project with
+ * a live site and no figures put its only outbound link at the bottom of the
+ * prose, which on a full case study is several screens down.
+ */
+const actions = Boolean(ext || p.dl || parent);
+const railed = actions || slots.length > 0;
+
+const others = PROJECTS.filter((o) => o.id !== p.id)
+    .slice(0, 4)
+    .map((o) => ({ p: o, media: projectMedia(o.cover, false), kind: projectKind(o) }));
+
+const title = `${p.name} — Tomme Denney`;
+const description = p.caption ?? `${p.desc.slice(0, 175).trimEnd()}…`;
+---
+
+<Base
+    title={title}
+    description={description}
+    path={projectHref(p.name)}
+    image={media.poster ?? p.cover}
+    ogType="article"
+>
+    <SiteNav current="work" />
+
+    <main id="main">
+        {(heroVideo || heroStill) && (
+            <div class="cs-hero" transition:name={`m-${projectSlug(p.name)}`}>
+                {heroVideo ? (
+                    <video
+                        src={heroVideo}
+                        poster={media.poster ?? undefined}
+                        autoplay muted loop playsinline controls preload="metadata"
+                        data-hero-video
+                        data-audio
+                        aria-label={`${p.name} — project video`}>
+                        {media.captions && (
+                            <track
+                                kind="captions"
+                                src={media.captions}
+                                srclang="en"
+                                label="English (auto)"
+                                default
+                            />
+                        )}
+                    </video>
+                ) : (
+                    <img src={heroStill!} alt={`${p.name} — cover`} />
+                )}
+            </div>
+        )}
+
+        <div class="shell">
+            <header class="cs-head">
+                <p class="label">{KIND_LABEL[kind]}</p>
+                <h1 class="display" style="margin-top:16px" transition:name={`t-${projectSlug(p.name)}`}>{p.name}</h1>
+                {p.caption && <p class="cs-dek">{p.caption}</p>}
+                <div class="cs-meta">
+                    <span>{p.cat}</span>
+                    {disciplines.map((d) => <span>{d}</span>)}
+                </div>
+                {p.glance && (
+                    <dl class="cs-facts">
+                        {p.glance.map(([k, v]) => (
+                            <div><dt class="label">{k}</dt><dd>{v}</dd></div>
+                        ))}
+                    </dl>
+                )}
+            </header>
+
+            {demoOk && demo && (
+                <section class="band" aria-labelledby="demo-h">
+                    <div class="band-grid">
+                        <p class="label band-label" id="demo-h">Prototype</p>
+                        <div class="demo">
+                            <div class="demo-phone">
+                                <video
+                                    src={assetUrl(demo.src)}
+                                    poster={demo.poster && hasAsset(demo.poster) ? assetUrl(demo.poster) : undefined}
+                                    controls
+                                    muted
+                                    loop
+                                    playsinline
+                                    preload="metadata"
+                                    aria-label={demo.caption}>
+                                    {captionTrack(demo.src) && (
+                                        <track
+                                            kind="captions"
+                                            src={captionTrack(demo.src)!}
+                                            srclang="en"
+                                            label="English (auto)"
+                                        />
+                                    )}
+                                </video>
+                            </div>
+                            <div class="demo-notes">
+                                <p class="muted" style="font-size:14px">{demo.caption}</p>
+                                <ul>
+                                    {demo.notes.map((n) => <li set:html={n.replace(/"([^"]+)"/g, '<em>$1</em>')} />)}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            )}
+
+            {/* Prose left, evidence in a rail on the right. Stacked, the page
+                was as tall as the writing plus the pictures; side by side it is
+                as tall as whichever is taller, and the figures are in view
+                while the argument they support is being read. The rail
+                collapses under the prose on narrow screens, and the whole
+                thing falls back to one column when a case study has no
+                evidence yet. */}
+            <section class={railed ? 'cs-body cs-split' : 'cs-body'}>
+                <div class="cs-main">
+                    <p class="label" style="margin-bottom:22px">{Content ? KIND_LABEL[kind] : 'Overview'}</p>
+                    {Content ? (
+                        <Content />
+                    ) : (
+                        /* Blank lines in `desc` are paragraph breaks. Rendered as one
+                           <p> they collapsed into a run-on block, which mattered as
+                           soon as a project without a case study had to carry its
+                           reasoning in the description. */
+                        <div class="prose">
+                            {p.desc.split(/\n\n+/).map((para) => <p>{para}</p>)}
+                        </div>
+                    )}
+                </div>
+
+                {railed && (
+                    <aside class="cs-side" aria-labelledby={slots.length > 0 ? 'ev-h' : undefined}>
+                        {actions && (
+                            <p class="stack cs-actions">
+                                {ext && <a class="btn btn-ext" href={ext.url} target="_blank" rel="noopener">{ext.label}</a>}
+                                {p.dl && (
+                                    <a class="btn btn-ext" href={assetUrl(p.dl)} target="_blank" rel="noopener">{p.dlLabel ?? 'Download'}</a>
+                                )}
+                                {parent && (
+                                    <a class="btn" href={projectHref(parent.name)}>
+                                        All the {parent.name} work
+                                    </a>
+                                )}
+                            </p>
+                        )}
+                        {slots.length > 0 && (
+                            <p class="label" id="ev-h" style="margin-bottom:22px">Evidence</p>
+                        )}
+                        {slots.map((s) => (
+                            <figure class="fig fig-rail">
+                                {s.isVideo ? (
+                                    <video src={s.url} poster={s.posterUrl} controls muted loop playsinline preload="none"></video>
+                                ) : (
+                                    /* An anchor, not a div with a handler: hovering shows the
+                                       enlargement, and tapping or pressing Enter opens the
+                                       full-resolution file. A rail figure is 400px wide and
+                                       these are dense interface screenshots — at that size
+                                       each phone is about 130px across and unreadable. */
+                                    <a
+                                        class="fig-zoom"
+                                        href={s.largeUrl}
+                                        target="_blank"
+                                        rel="noopener"
+                                        style={`--zoom:url("${s.largeUrl}")`}
+                                        aria-label={`${s.caption} — open full size`}
+                                    >
+                                        <img src={s.url} alt={s.caption} loading="lazy" decoding="async" />
+                                        <span class="fig-hint">Hover to enlarge &middot; click for full size</span>
+                                    </a>
+                                )}
+                                <figcaption>{s.caption}</figcaption>
+                            </figure>
+                        ))}
+                    </aside>
+                )}
+            </section>
+
+            {roster.map((section) => <RosterGrid section={section} />)}
+
+            {embed && (
+                <section class="band" aria-labelledby="play-h">
+                    <div class="band-grid">
+                        <p class="label band-label" id="play-h">Play in browser</p>
+                        <div>
+                            <iframe
+                                src={embed.src}
+                                title={`${p.name} — playable build`}
+                                loading="lazy"
+                                allowfullscreen
+                                allow="autoplay; fullscreen *; gamepad"
+                                style="width:100%;aspect-ratio:16/9;border:0;background:#04151f"></iframe>
+                            {embed.itchio && (
+                                <p style="margin-top:18px">
+                                    <a class="btn btn-ext" href={embed.itchio} target="_blank" rel="noopener">Itch.io</a>
+                                </p>
+                            )}
+                        </div>
+                    </div>
+                </section>
+            )}
+
+            {media.gallery.length > 0 && (
+                <section class="band" aria-labelledby="gal-h">
+                    <div class="band-grid">
+                        <p class="label band-label" id="gal-h">Stills</p>
+                        <div class="photos">
+                            {media.gallery.map((src, i) => (
+                                <figure><img src={src} alt={`${p.name} — still ${i + 1}`} loading="lazy" decoding="async" /></figure>
+                            ))}
+                        </div>
+                    </div>
+                </section>
+            )}
+
+            {docs.length > 0 && (
+                <section class="band" aria-labelledby="doc-h">
+                    <div class="band-grid">
+                        <p class="label band-label" id="doc-h">Documents</p>
+                        {/* Cards rather than a list of links. A list left a
+                            reader guessing whether "Hero's journey map" was a
+                            diagram or four pages of prose; the first page
+                            answers that before anyone clicks. */}
+                        <div class="docs-grid">
+                            {docs.map((d) => (
+                                <a class="doc" href={d.file} target="_blank" rel="noopener">
+                                    <div class="doc-media">
+                                        {d.preview ? (
+                                            <img
+                                                src={d.preview}
+                                                alt={`${d.label} — first page`}
+                                                loading="lazy"
+                                                decoding="async"
+                                            />
+                                        ) : null}
+                                        <span class="index-kind doc-kind"><span>PDF</span></span>
+                                    </div>
+                                    <h3 class="doc-name">{d.label}</h3>
+                                    {d.note && <p class="doc-note">{d.note}</p>}
+                                </a>
+                            ))}
+                        </div>
+                    </div>
+                </section>
+            )}
+
+        </div>
+
+        <section class="band strip cs-next" aria-labelledby="next-h">
+            <p class="label" id="next-h" style="margin-bottom:28px">Next</p>
+            <div class="strip-grid">
+                {others.map(({ p: o, media: m, kind: k }) => (
+                    <a class="feature" href={projectHref(o.name)}>
+                        <div class="feature-media" transition:name={`m-${projectSlug(o.name)}`}>
+                            {m.preview ? (
+                                <video
+                                    src={m.preview}
+                                    poster={m.poster ?? undefined}
+                                    autoplay muted loop playsinline preload="metadata"
+                                    data-hero-video
+                                    aria-label={`${o.name} — looping preview`}></video>
+                            ) : m.poster ? (
+                                <img src={m.poster} alt={`${o.name} — cover`} loading="lazy" decoding="async" />
+                            ) : (
+                                <div class="feature-fallback" style={`background:${o.bg}`} aria-hidden="true">
+                                    <span>{o.ico}</span>
+                                </div>
+                            )}
+                            {k !== 'project' && (
+                                <span class="index-kind" data-kind={k}><span>{KIND_LABEL[k]}</span></span>
+                            )}
+                        </div>
+                        <div class="feature-body">
+                            <h2 class="display strip-title" transition:name={`t-${projectSlug(o.name)}`}>{o.name}</h2>
+                        </div>
+                        <p class="lead-cap">{o.caption ?? o.cat}</p>
+                    </a>
+                ))}
+            </div>
+        </section>
+    </main>
+
+    <SiteFooter />
+
+    <VideoAutoplay />
+</Base>

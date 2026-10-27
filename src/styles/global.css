@@ -1,0 +1,1917 @@
+/**
+ * Portfolio v2.
+ *
+ * Written from scratch rather than layered onto v1, because v1's identity was
+ * in its structure and not its palette: 16px-rounded card tiles, an
+ * auto-advancing carousel, a spring-loaded hero stack, a custom cursor. Those
+ * are gone. What replaces them is archival and editorial — a display serif at
+ * poster scale, hairline rules, numbered index rows, square corners, and an
+ * asymmetric grid with the labels in the left margin.
+ *
+ * The colours are not in this file. Five palettes live in
+ * src/data/palettes.ts and arrive as html[data-palette][data-theme] blocks
+ * from Base.astro; what is here is everything derived from them — muted text,
+ * hairlines, scrims and the hover sweep are all mixed from the eight colours a
+ * palette names, so adding or removing one touches no CSS.
+ *
+ * The three rules every palette is measured against, which come from the
+ * original Vintage Charm pairing and hold for the rest:
+ *
+ *   1. Body text sits at 13:1 or better on the page colour. There is room to
+ *      lose some of that to the background field, which is why it exists at
+ *      all.
+ *   2. The accent is never body text and never a small link. In the warm
+ *      palettes it is a mid-tone — burnt orange is 3.80:1 on ink — so it
+ *      appears only as rules, underlines, display-size numerals, focus rings
+ *      and the sweep. The cold palettes could carry it as text and still
+ *      do not, so the palettes stay swappable.
+ *   3. `surface` and `deep` are panels, never type on the page. Text on them
+ *      is `on-deep`, which every palette states outright.
+ */
+
+:root {
+    /* The colours live in src/data/palettes.ts and arrive as
+       html[data-palette][data-theme] blocks from Base.astro. What is left here
+       is everything derived from them, so a palette only ever has to name
+       eight colours and cannot half-apply. */
+
+    /* Muted text and the hairlines, mixed from whatever the text colour is.
+       These were three hand-written rgba()s of wheat, which is why every
+       palette before this one would have needed its own copy of them. */
+    --mt: color-mix(in srgb, var(--text) 70%, transparent);
+    --rule: color-mix(in srgb, var(--text) 18%, transparent);
+    --rule-strong: color-mix(in srgb, var(--text) 42%, transparent);
+
+    /* Scrims for the lightbox and the hover hint. Built on --ink rather than
+       on --bg: a photograph wants a dark surround even on a light page. */
+    --scrim: color-mix(in srgb, var(--ink) 95%, transparent);
+    --scrim-soft: color-mix(in srgb, var(--ink) 82%, transparent);
+
+    /* How much a card grows under the pointer. 1.25 was the ask and it does
+       not survive a four-column grid: at that size a card overlaps its
+       neighbours by about forty pixels a side and an edge card pushes past
+       the gutter. This is the largest value that still reads as one card
+       lifting rather than the row breaking — raise it here if the grid is
+       ever loosened. */
+    --card-hover: 1.06;
+
+    /* The pointer bump for the small interactive things — buttons, nav links,
+       the wordmark, the tier badge. 1.25 works here where it does not work on
+       a card: none of these sit in a grid with a neighbour 16px away. */
+    --tap-hover: 1.25;
+
+    /* The foil.
+     *
+     * Lifted from the treatment on the Recollection site, which fills its type
+     * with a gold gradient and slides it: the glyphs are the reflective thing,
+     * not a panel behind them. Same idea in this palette — body colour at both
+     * ends, the accent either side of a sheen, and a single band travelling
+     * across the letters once per hover.
+     *
+     * The ends are both `--text` on purpose. The gradient tiles, so a hovered
+     * element is covered at every position in the animation; without matching
+     * ends the seam would show, and without tiling the uncovered part of a
+     * glyph would drop out to nothing mid-sweep.
+     *
+     * Contrast survives because no stop is darker than the accent and most of
+     * the run is body colour. The sheen is the opposite base — near-white on a
+     * dark page, and a deepened accent on a light one, where a bright band
+     * would have been a hole in the word.
+     */
+    --foil-sheen: color-mix(in srgb, var(--paper) 72%, white);
+    --foil:
+        linear-gradient(100deg,
+            var(--text) 0%, var(--text) 32%,
+            var(--accent) 43%, var(--foil-sheen) 50%, var(--accent) 57%,
+            var(--text) 68%, var(--text) 100%);
+
+    --measure: 62ch;
+    --page: 1440px;
+    --gutter: clamp(20px, 5vw, 88px);
+    --step: clamp(72px, 11vh, 148px);
+}
+
+/* On a light page the shine has to go darker, not brighter. */
+html[data-theme='wheat'] {
+    --foil-sheen: color-mix(in srgb, var(--ink) 74%, var(--accent));
+}
+
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: Barlow, 'Helvetica Neue', Arial, sans-serif;
+    font-size: 17px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    transition: background .4s, color .4s;
+}
+
+img,
+video {
+    display: block;
+    max-width: 100%;
+}
+
+::selection {
+    background: var(--accent);
+    color: var(--on-accent);
+}
+
+/* Orange at 3px is a UI element, which is the one job its contrast allows. */
+a:focus-visible,
+button:focus-visible,
+[tabindex]:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 4px;
+}
+
+/* ── PALETTE PICKER ───────────────────────────────────────── */
+
+/* Temporary — see src/components/PalettePicker.astro. Opaque rather than
+   translucent: it sits over the drifting background field and a see-through
+   panel would make its own labels move. */
+.picker {
+    position: fixed;
+    right: clamp(14px, 2vw, 26px);
+    bottom: clamp(14px, 2vw, 26px);
+    z-index: 60;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+}
+
+.picker-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--text);
+    background: var(--bg);
+    border: 1px solid var(--rule-strong);
+    padding: 9px 13px;
+    cursor: pointer;
+    transition: border-color .2s, transform .35s cubic-bezier(.22, .61, .36, 1);
+}
+
+.picker-btn:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+}
+
+.picker-dots {
+    display: flex;
+    gap: 3px;
+}
+
+.picker-dots i {
+    display: block;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    border: 1px solid var(--rule);
+}
+
+.picker-list {
+    order: -1;
+    width: min(19rem, calc(100vw - 32px));
+    padding: 16px;
+    background: var(--bg);
+    border: 1px solid var(--rule-strong);
+    box-shadow: 0 18px 44px color-mix(in srgb, var(--ink) 45%, transparent);
+}
+
+.picker-head {
+    margin-bottom: 12px;
+}
+
+.picker-opt {
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+    width: 100%;
+    font-family: inherit;
+    text-align: left;
+    color: var(--text);
+    background: none;
+    border: 0;
+    border-top: 1px solid var(--rule);
+    padding: 11px 0 12px;
+    cursor: pointer;
+}
+
+.picker-opt:hover .picker-opt-name,
+.picker-opt[aria-pressed='true'] .picker-opt-name {
+    border-bottom-color: var(--accent);
+}
+
+.picker-opt .picker-dots {
+    padding-top: 3px;
+}
+
+.picker-opt-text {
+    display: block;
+}
+
+.picker-opt-name {
+    display: inline-block;
+    font-family: Fraunces, 'Times New Roman', serif;
+    font-variation-settings: 'SOFT' 0, 'WONK' 1, 'opsz' 40;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 1.1;
+    border-bottom: 2px solid transparent;
+    transition: border-color .2s;
+}
+
+.picker-opt-note {
+    display: block;
+    margin-top: 4px;
+    font-size: 12px;
+    line-height: 1.45;
+    color: var(--mt);
+}
+
+@media (max-width: 560px) {
+    .picker-now {
+        display: none;
+    }
+}
+
+/* ── BACKGROUND FIELD ──────────────────────────────────────── */
+
+/* See src/components/Ambient.astro. Negative z-index rather than a z-index on
+   everything else: a fixed child at -1 paints above the body's background and
+   below every element in flow, which is exactly the slot this needs and costs
+   no changes anywhere else. */
+.ambient {
+    position: fixed;
+    inset: -20vmax;
+    z-index: -1;
+    pointer-events: none;
+    overflow: hidden;
+    transition: transform 1.1s cubic-bezier(.22, .61, .36, 1), opacity .9s;
+}
+
+/* A click swells the field for the length of the press-and-release. */
+.ambient.jolt {
+    transform: scale(1.045);
+}
+
+/* Two nested elements per blob on purpose: the outer one carries the
+   pointer-and-page offset, which is a transition, and the inner one carries
+   the endless drift, which is an animation. One element cannot hold both on
+   the same property. */
+.amb {
+    position: absolute;
+    width: 62vmax;
+    height: 54vmax;
+    transform: translate(
+        calc((var(--px, 0) + var(--ox, 0)) * var(--kx) * 1px),
+        calc((var(--py, 0) + var(--oy, 0)) * var(--ky) * 1px)
+    );
+    transition: transform 1.6s cubic-bezier(.22, .61, .36, 1);
+    will-change: transform;
+}
+
+.amb > div {
+    width: 100%;
+    height: 100%;
+    opacity: var(--amb-alpha);
+    transition: opacity .9s;
+    will-change: transform;
+}
+
+.ambient.jolt .amb > div {
+    opacity: calc(var(--amb-alpha) * 1.35);
+}
+
+.amb-1 {
+    top: -8vmax;
+    left: -6vmax;
+    --kx: 70;
+    --ky: 48;
+}
+
+.amb-1 > div {
+    background: radial-gradient(closest-side, var(--amb-1), transparent 74%);
+    animation: drift-1 96s ease-in-out infinite alternate;
+}
+
+.amb-2 {
+    top: 18vmax;
+    right: -10vmax;
+    --kx: -96;
+    --ky: 62;
+}
+
+.amb-2 > div {
+    background: radial-gradient(closest-side, var(--amb-2), transparent 72%);
+    animation: drift-2 124s ease-in-out infinite alternate;
+}
+
+.amb-3 {
+    bottom: -12vmax;
+    left: 12vmax;
+    --kx: 52;
+    --ky: -74;
+}
+
+.amb-3 > div {
+    background: radial-gradient(closest-side, var(--amb-3), transparent 76%);
+    animation: drift-3 152s ease-in-out infinite alternate;
+}
+
+.amb-4 {
+    top: 42vmax;
+    left: 34vmax;
+    --kx: -64;
+    --ky: -40;
+}
+
+.amb-4 > div {
+    background: radial-gradient(closest-side, var(--amb-4), transparent 70%);
+    animation: drift-4 108s ease-in-out infinite alternate;
+}
+
+/* Minutes per pass, and no two the same length, so the field never repeats a
+   composition while anyone is looking at it. */
+@keyframes drift-1 {
+    from { transform: translate(0, 0) scale(1); }
+    to { transform: translate(18vmax, 12vmax) scale(1.18); }
+}
+
+@keyframes drift-2 {
+    from { transform: translate(0, 0) scale(1.1); }
+    to { transform: translate(-14vmax, 20vmax) scale(.92); }
+}
+
+@keyframes drift-3 {
+    from { transform: translate(0, 0) scale(.95); }
+    to { transform: translate(22vmax, -16vmax) scale(1.22); }
+}
+
+@keyframes drift-4 {
+    from { transform: translate(0, 0) scale(1.05); }
+    to { transform: translate(-20vmax, -14vmax) scale(.9); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ambient,
+    .amb,
+    .amb > div {
+        transition: none;
+        animation: none;
+    }
+}
+
+/* ── TYPE ────────────────────────────────────────────────────────────────── */
+
+/* Fraunces carries the whole change of character. Barlow Condensed read as
+   industrial signage; a variable serif with its optical-size axis wound up
+   reads as a printed archive, which is what this work is about. */
+.display {
+    font-family: Fraunces, 'Times New Roman', serif;
+    font-variation-settings: 'SOFT' 0, 'WONK' 1, 'opsz' 144;
+    font-weight: 600;
+    letter-spacing: -.025em;
+    line-height: .94;
+    text-wrap: balance;
+}
+
+h1.display {
+    font-size: clamp(44px, 8.4vw, 132px);
+}
+
+h2.display {
+    font-size: clamp(32px, 4.6vw, 62px);
+}
+
+h3.display {
+    font-size: clamp(24px, 2.6vw, 34px);
+    line-height: 1.05;
+}
+
+/* The tracked label is where the period character actually lives — in the
+   labels, not in a novelty face. */
+.label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--mt);
+}
+
+.lede {
+    font-size: clamp(19px, 2.1vw, 25px);
+    line-height: 1.5;
+    max-width: 34ch;
+}
+
+.prose {
+    max-width: var(--measure);
+}
+
+.prose p + p {
+    margin-top: 1.1em;
+}
+
+.prose a {
+    color: inherit;
+    text-decoration: none;
+    border-bottom: 2px solid var(--accent);
+    padding-bottom: 1px;
+}
+
+.prose em {
+    font-style: italic;
+}
+
+.muted {
+    color: var(--mt);
+}
+
+/* ── SHELL ───────────────────────────────────────────────────────────────── */
+
+.shell {
+    max-width: var(--page);
+    margin: 0 auto;
+    padding: 0 var(--gutter);
+}
+
+.nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    display: flex;
+    /* Centred rather than baseline-aligned since the monogram arrived: a
+       28px mark and an 12px link have no shared baseline worth aligning to,
+       and the lockup reads as one object this way. */
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 22px var(--gutter);
+    background: var(--bg);
+    border-bottom: 1px solid var(--rule);
+    transition: background .4s;
+}
+
+.nav-mark {
+    display: flex;
+    align-items: center;
+    gap: .46em;
+    line-height: 1;
+    font-family: Fraunces, serif;
+    font-variation-settings: 'WONK' 1, 'opsz' 20;
+    font-weight: 600;
+    font-size: 19px;
+    letter-spacing: -.01em;
+    color: var(--text);
+    text-decoration: none;
+}
+
+/* The TD monogram, painted in currentColor through its own alpha. One asset
+   serves both themes, and it follows the mark's colour for free. */
+.nav-logo {
+    flex: none;
+    height: 1.5em;
+    aspect-ratio: 268 / 256;
+    background: currentColor;
+    -webkit-mask: url('/logo-td.png') center / contain no-repeat;
+    mask: url('/logo-td.png') center / contain no-repeat;
+}
+
+.nav-links {
+    display: flex;
+    align-items: baseline;
+    gap: clamp(14px, 2.4vw, 34px);
+    list-style: none;
+}
+
+.nav-links a {
+    /* Inline-block, not inline: transform has no effect on a non-replaced
+       inline box, which is why these three sat still while everything else
+       grew. */
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--mt);
+    text-decoration: none;
+    padding-bottom: 3px;
+    border-bottom: 2px solid transparent;
+    transition: color .2s, border-color .2s;
+}
+
+.nav-links a:hover {
+    color: var(--text);
+}
+
+/* The page you are on keeps a solid rule. Hover gets the sweep instead, so
+   the two states cannot be confused for each other. */
+.nav-links a[aria-current='page'] {
+    color: var(--text);
+    border-color: var(--accent);
+}
+
+.foot {
+    margin-top: var(--step);
+    padding: 64px var(--gutter) 56px;
+    background: var(--deep);
+    color: var(--on-deep);
+}
+
+.foot-in {
+    max-width: var(--page);
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 32px;
+}
+
+.foot a {
+    color: var(--on-deep);
+}
+
+.foot-mail {
+    font-family: Fraunces, serif;
+    font-variation-settings: 'WONK' 1, 'opsz' 90;
+    font-size: clamp(24px, 3.4vw, 44px);
+    line-height: 1;
+    text-decoration: none;
+    border-bottom: 2px solid var(--accent);
+}
+
+.foot-meta {
+    font-size: 12px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    opacity: .66;
+}
+
+/* ── SECTION SCAFFOLD: labels in the left margin ─────────────────────────── */
+
+.band {
+    padding-top: var(--step);
+}
+
+.band + .band {
+    border-top: 1px solid var(--rule);
+}
+
+.band-grid {
+    display: grid;
+    grid-template-columns: 168px minmax(0, 1fr);
+    gap: 0 48px;
+    align-items: start;
+}
+
+.band-label {
+    position: sticky;
+    top: 96px;
+    padding-top: 6px;
+}
+
+@media (max-width: 900px) {
+    .band-grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 18px;
+    }
+
+    .band-label {
+        position: static;
+    }
+}
+
+/* ── HOME ────────────────────────────────────────────────────────────────── */
+
+.mast {
+    padding: clamp(48px, 9vw, 128px) 0 var(--step);
+}
+
+.mast h1 {
+    margin: 18px 0 0;
+    max-width: 20ch;
+}
+
+.mast-accent {
+    color: var(--accent);
+    font-style: italic;
+}
+
+.mast-body {
+    margin-top: 44px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 32px 48px;
+    max-width: 980px;
+}
+
+/* ── TIER BADGE ──────────────────────────────────────────────────────────── */
+
+/* Sat on the numbered index rows this site used to list work with. The index
+   is gone — every list of work is a row of cards now — and the badge moved
+   onto the card's media, bottom left. */
+.index-kind {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    padding: 5px 10px;
+    background: var(--deep);
+    color: var(--on-deep);
+}
+
+.index-kind[data-kind='project'] {
+    background: none;
+    color: var(--mt);
+    border: 1px solid var(--rule);
+}
+
+@media (max-width: 900px), (hover: none) {
+    .index-kind {
+        display: none;
+    }
+}
+
+/* ── FILTERS ─────────────────────────────────────────────────────────────── */
+
+.filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 22px;
+    margin-bottom: 34px;
+}
+
+.filter {
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .13em;
+    text-transform: uppercase;
+    color: var(--mt);
+    background: none;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    padding: 4px 0;
+    cursor: pointer;
+    transition: color .2s, border-color .2s;
+}
+
+.filter:hover {
+    color: var(--text);
+}
+
+.filter.on {
+    color: var(--text);
+    border-color: var(--accent);
+}
+
+.filter-n {
+    font-size: 10px;
+    opacity: .55;
+}
+
+/* ── THE FOIL, AND THE ORBITING ARROW ──────────────────────────── */
+
+/* Everything clickable and typographic carries the foil: the gradient is
+   clipped to the glyphs at all times and simply hidden behind an opaque text
+   colour, so hovering is a matter of dropping the colour and running the
+   gradient once. Nothing is layered behind the type, which is what the earlier
+   version got wrong — a panel sliding under the letters read as a highlight
+   passing over the button, not as the letters themselves catching light. */
+.btn,
+.filter,
+.nav-mark,
+.nav-links a,
+.lead-cta,
+.index-kind > span,
+.rcard-links a {
+    background-image: var(--foil);
+    background-size: 320% 100%;
+    background-position: 130% 0;
+    -webkit-background-clip: text;
+    background-clip: text;
+    transition: transform .35s cubic-bezier(.22, .61, .36, 1),
+        color .18s, border-color .22s;
+}
+
+.btn:hover,
+.btn:focus-visible,
+.filter:hover,
+.filter:focus-visible,
+.nav-mark:hover,
+.nav-mark:focus-visible,
+.nav-links a:hover,
+.nav-links a:focus-visible,
+.rcard-links a:hover,
+.rcard-links a:focus-visible,
+.feature:hover .lead-cta,
+.feature:hover .index-kind > span {
+    color: transparent;
+    animation: foil-run .9s cubic-bezier(.36, .07, .3, 1) both;
+}
+
+@keyframes foil-run {
+    from { background-position: 130% 0; }
+    to { background-position: -30% 0; }
+}
+
+/* The badge's own pill has to move out of the way: background-clip clips every
+   background layer, colour included, so a badge that kept its fill in
+   `background` would lose it the moment the type took the gradient. */
+/* The wordmark's monogram is a mask painted in currentColor, and currentColor
+   goes transparent with the rest of the type. It takes the gradient directly
+   instead — through the mask, so the foil runs inside the letters of the mark
+   itself. */
+.nav-mark:hover .nav-logo,
+.nav-mark:focus-visible .nav-logo {
+    background-color: var(--text);
+    background-image: var(--foil);
+    background-size: 320% 100%;
+    animation: foil-run .9s cubic-bezier(.36, .07, .3, 1) both;
+}
+
+/* A button no longer fills on hover. The foil is the event; a solid panel
+   behind it flattened the one thing that was supposed to catch the light. */
+.btn:hover,
+.btn:focus-visible {
+    border-color: var(--accent);
+}
+
+/* ── ARROWS ────────────────────────────────────────────── */
+
+/* Drawn rather than typed, so they have something to do when a pointer
+   arrives: a glyph inside a text node cannot be animated on its own.
+ *
+ * They all move the same short distance. The boxed buttons briefly had one
+ * that left its slot and flew the perimeter along the border box — it worked,
+ * and it was a second arrow doing a worse version of what the first one
+ * already did well. The nudge is the effect.
+ */
+/*
+ * `display: inline`, and moved with `left`/`top` rather than a transform.
+ *
+ * These pseudo-elements live inside elements whose background is clipped to
+ * their text for the foil, and Chrome paints an inline-block descendant into
+ * that clip a second time, at the top left of the background box, in the base
+ * text colour. The result was a ghost arrow parked in the corner of every
+ * button — the "double arrow". An inline box does not get painted twice, and
+ * since transform does not apply to one, relative offsets do the sliding
+ * instead. They transition just as well and they cost no layout.
+ */
+.btn::after,
+.lead-cta::after,
+.rcard-links a::after {
+    content: '\2192';
+    display: inline;
+    position: relative;
+    left: 0;
+    top: 0;
+    margin-left: .5em;
+    transition: left .4s cubic-bezier(.22, .61, .36, 1),
+        top .4s cubic-bezier(.22, .61, .36, 1), color .2s;
+}
+
+/* Out of the page rather than along it, for a link that leaves the site. */
+.btn-ext::after,
+.rcard-links a.ext::after {
+    content: '\2197';
+}
+
+.btn:hover::after,
+.btn:focus-visible::after,
+.rcard-links a:hover::after,
+.rcard-links a:focus-visible::after,
+.feature:hover .lead-cta::after {
+    left: 6px;
+}
+
+.btn-ext:hover::after,
+.btn-ext:focus-visible::after,
+.rcard-links a.ext:hover::after,
+.rcard-links a.ext:focus-visible::after {
+    left: 5px;
+    top: -5px;
+}
+
+/* Never inherit the colour. A pseudo-element inside an element whose colour
+   has just gone transparent for the foil is an invisible arrow, which is
+   exactly what happened to "See the project" and "Read it". */
+.btn:hover::after,
+.btn:focus-visible::after,
+.rcard-links a:hover::after,
+.rcard-links a:focus-visible::after,
+.feature:hover .lead-cta::after {
+    color: var(--accent);
+}
+
+/* ── THE BUMP ──────────────────────────────────────────── */
+
+/* Transform only, so nothing reflows and no neighbour moves. */
+.btn {
+    position: relative;
+}
+
+.btn,
+.filter,
+.nav-mark,
+.nav-links a {
+    transform-origin: left center;
+}
+
+.index-kind {
+    transform-origin: left bottom;
+    /* The badge takes the scale; the foil is on the label inside it. Without
+       its own transition here the size change snapped, because the rule that
+       used to carry one moved in with the span. */
+    transition: transform .35s cubic-bezier(.22, .61, .36, 1);
+}
+
+.btn:hover,
+.btn:focus-visible,
+.filter:hover,
+.filter:focus-visible,
+.nav-links a:hover,
+.nav-links a:focus-visible,
+.nav-mark:hover,
+.nav-mark:focus-visible {
+    transform: scale(var(--tap-hover));
+    z-index: 4;
+}
+
+.feature:hover .index-kind {
+    transform: scale(var(--tap-hover));
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .btn,
+    .filter,
+    .index-kind,
+    .nav-mark,
+    .nav-links a,
+    .btn::after,
+    .lead-cta::after,
+    .rcard-links a::after {
+        transition: none;
+    }
+
+    .btn:hover,
+    .btn:focus-visible,
+    .filter:hover,
+    .nav-links a:hover,
+    .nav-mark:hover,
+    .feature:hover .index-kind {
+        transform: none;
+    }
+
+    .btn:hover::after,
+    .rcard-links a:hover::after,
+    .feature:hover .lead-cta::after {
+        left: 0;
+        top: 0;
+    }
+
+    .btn:hover,
+    .filter:hover,
+    .nav-mark:hover,
+    .nav-links a:hover,
+    .rcard-links a:hover,
+    .feature:hover .lead-cta,
+    .feature:hover .index-kind > span,
+    .nav-mark:hover .nav-logo {
+        animation: none;
+        color: inherit;
+    }
+}
+
+/* ── CARD HOVER ─────────────────────────────────────────── */
+
+/* Every clickable card grows a little under the pointer — the project cards on
+   the home page and /work, the roster cells that lead somewhere, and the
+   document cards. Position is set in the base rule rather than on :hover so
+   the browser has a containing block to stack from before the transform
+   starts; z-index on hover puts the growing card over its neighbours instead
+   of under the next one in source order. */
+.feature,
+.rcard-link,
+.doc {
+    position: relative;
+    transition: transform .45s cubic-bezier(.22, .61, .36, 1);
+}
+
+.feature:hover,
+.feature:focus-visible,
+.rcard-link:hover,
+.rcard-link:focus-within,
+.doc:hover,
+.doc:focus-visible {
+    transform: scale(var(--card-hover));
+    z-index: 3;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .feature,
+    .rcard-link,
+    .doc {
+        transition: none;
+    }
+
+    .feature:hover,
+    .feature:focus-visible,
+    .rcard-link:hover,
+    .rcard-link:focus-within,
+    .doc:hover,
+    .doc:focus-visible {
+        transform: none;
+    }
+}
+
+/* ── FEATURE BLOCK ───────────────────────────────────────────────────────── */
+
+.feature {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+}
+
+.feature-media {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--surface);
+}
+
+.feature-media img,
+.feature-media video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.feature-body {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px 32px;
+    margin-top: 22px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--rule-strong);
+}
+
+.feature:hover .feature-body {
+    border-color: var(--accent);
+}
+
+/* ── CASE STUDY ──────────────────────────────────────────────────────────── */
+
+.cs-hero {
+    position: relative;
+    margin-top: 0;
+    aspect-ratio: 21 / 9;
+    min-height: 42vh;
+    overflow: hidden;
+    background: var(--deep);
+}
+
+.cs-hero img,
+.cs-hero video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.cs-head {
+    padding: var(--step) 0 0;
+}
+
+.cs-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 28px;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid var(--rule);
+    font-size: 13px;
+    color: var(--mt);
+}
+
+/* The at-a-glance rows under the meta line: role, platform, interaction,
+   status. Label over value, in as many columns as fit. */
+.cs-facts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 20px 36px;
+    margin-top: 26px;
+    max-width: 1180px;
+}
+
+.cs-facts dd {
+    margin: 7px 0 0;
+    font-size: 15px;
+    line-height: 1.45;
+}
+
+.cs-dek {
+    font-family: Fraunces, serif;
+    font-variation-settings: 'WONK' 1, 'opsz' 60;
+    font-size: clamp(21px, 2.4vw, 30px);
+    line-height: 1.32;
+    max-width: 44ch;
+    margin-top: 26px;
+}
+
+.cs-body {
+    padding-top: var(--step);
+}
+
+.cs-body h2 {
+    font-family: Fraunces, serif;
+    font-variation-settings: 'SOFT' 0, 'WONK' 1, 'opsz' 90;
+    font-weight: 600;
+    font-size: clamp(28px, 3.4vw, 44px);
+    line-height: 1;
+    letter-spacing: -.02em;
+    margin: 2.2em 0 .7em;
+    scroll-margin-top: 90px;
+}
+
+.cs-body h2:first-child {
+    margin-top: 0;
+}
+
+.cs-body h3 {
+    font-size: 19px;
+    font-weight: 700;
+    margin: 2em 0 .45em;
+}
+
+.cs-body p,
+.cs-body ul,
+.cs-body ol {
+    max-width: var(--measure);
+}
+
+.cs-body p + p {
+    margin-top: 1.1em;
+}
+
+.cs-body ul,
+.cs-body ol {
+    margin: 1em 0 1em 1.3em;
+}
+
+.cs-body li + li {
+    margin-top: .5em;
+}
+
+.cs-body strong {
+    font-weight: 700;
+}
+
+.cs-body hr {
+    border: 0;
+    border-top: 1px solid var(--rule);
+    margin: 2.4em 0;
+}
+
+.cs-body a {
+    color: inherit;
+    border-bottom: 2px solid var(--accent);
+    text-decoration: none;
+}
+
+/* ── ROSTER ──────────────────────────────────────────────────────────────── */
+
+/* A body of work listed in full: one ruled cell per experience, three across.
+   Three rather than four because every cell carries a paragraph, and a
+   paragraph in a quarter-column is eight words a line. */
+.roster {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(26px, 2.6vw, 42px) clamp(18px, 1.8vw, 30px);
+}
+
+.roster-note {
+    max-width: var(--measure);
+    margin-bottom: clamp(30px, 3vw, 48px);
+    color: var(--mt);
+    font-size: 16px;
+}
+
+.rcard {
+    border-top: 1px solid var(--rule-strong);
+    padding-top: 18px;
+}
+
+.rcard-media {
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--surface);
+    margin-bottom: 16px;
+}
+
+.rcard-media img,
+.rcard-media video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.rcard-name {
+    font-family: Fraunces, 'Times New Roman', serif;
+    font-variation-settings: 'SOFT' 0, 'WONK' 1, 'opsz' 60;
+    font-weight: 600;
+    font-size: clamp(19px, 1.5vw, 24px);
+    line-height: 1.06;
+    letter-spacing: -.02em;
+    text-wrap: balance;
+}
+
+.rcard-name a {
+    color: inherit;
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+    transition: border-color .2s;
+}
+
+.rcard-name a:hover {
+    border-color: var(--accent);
+}
+
+.rcard-meta {
+    margin-top: 9px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--mt);
+}
+
+.rcard-body {
+    margin-top: 13px;
+    font-size: 15px;
+    line-height: 1.58;
+}
+
+.rcard-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 20px;
+    margin-top: 15px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+}
+
+.rcard-links a {
+    color: var(--text);
+    text-decoration: none;
+    border-bottom: 2px solid var(--accent);
+    padding-bottom: 2px;
+}
+
+@media (max-width: 1100px) {
+    .roster {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 640px) {
+    .roster {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+/* ── FIGURES ─────────────────────────────────────────────────────────────── */
+
+.fig {
+    margin: var(--step) 0;
+}
+
+.fig img,
+.fig video {
+    width: 100%;
+    background: var(--surface);
+}
+
+.fig figcaption {
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid var(--rule);
+    font-size: 14px;
+    line-height: 1.55;
+}
+
+/* ── PROSE + EVIDENCE RAIL ───────────────────────────────────────────────── */
+
+.cs-split {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 400px);
+    gap: clamp(32px, 5vw, 76px);
+    align-items: start;
+}
+
+.cs-main {
+    min-width: 0;
+}
+
+/* Deliberately not sticky. Two figures come to roughly 750px, which is taller
+   than the usable height of a 800px window — pinning it would trap the scroll
+   wheel inside the rail and clip the lower caption with no way to reach it.
+   It flows, and the page is still only as tall as the prose. */
+.cs-side {
+    min-width: 0;
+    /* Its own rule, so the rail reads as an aside rather than a second column
+       of the argument. */
+    border-left: 1px solid var(--rule);
+    padding-left: clamp(20px, 2.4vw, 34px);
+}
+
+/* The outbound links, at the head of the rail. They are the first thing in
+   the column, so the label under them carries the top margin instead. */
+.cs-actions {
+    margin-bottom: 34px;
+}
+
+.cs-actions + .label {
+    padding-top: 30px;
+    border-top: 1px solid var(--rule);
+}
+
+.fig-rail {
+    margin: 0 0 30px;
+}
+
+.fig-rail figcaption {
+    font-size: 13px;
+}
+
+@media (max-width: 1000px) {
+    .cs-split {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .cs-side {
+        border-left: 0;
+        padding-left: 0;
+        padding-top: 34px;
+        border-top: 1px solid var(--rule);
+    }
+
+    .fig-rail {
+        max-width: 560px;
+    }
+}
+
+/* ── PHOTOGRAPHY ─────────────────────────────────────────────────────────── */
+
+/* Featured: an auto-scrolling strip, paused on hover so a photograph can
+   actually be looked at, and stopped entirely under reduced motion. */
+.feat {
+    margin-top: var(--step);
+    overflow: hidden;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    padding: 22px 0;
+}
+
+.feat-inner {
+    display: flex;
+    gap: 14px;
+    width: max-content;
+    animation: feat-scroll 90s linear infinite;
+}
+
+.feat:hover .feat-inner,
+.feat:focus-within .feat-inner {
+    animation-play-state: paused;
+}
+
+@keyframes feat-scroll {
+    to {
+        transform: translateX(-50%);
+    }
+}
+
+.feat-card {
+    flex: 0 0 auto;
+    height: clamp(200px, 26vh, 300px);
+    padding: 0;
+    border: 0;
+    background: var(--surface);
+    cursor: zoom-in;
+    overflow: hidden;
+}
+
+.feat-card img {
+    height: 100%;
+    width: auto;
+    object-fit: cover;
+    transition: opacity .3s;
+}
+
+.feat-card:hover img {
+    opacity: .84;
+}
+
+/* All works: a justified grid. Each tile's flex-basis and flex-grow come from
+   its real aspect ratio, so a row fills the width without cropping, and the
+   ratios are in the HTML rather than read back from decoded images. */
+.jgrid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.jitem {
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+    background: var(--surface);
+    cursor: zoom-in;
+    flex-shrink: 1;
+    will-change: transform;
+}
+
+.jitem img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.jitem.open {
+    cursor: zoom-out;
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+/* The last row would otherwise stretch its few tiles to absurd widths. */
+.jgrid::after {
+    content: '';
+    flex-grow: 999999;
+}
+
+@media (max-width: 700px) {
+    .jgrid {
+        display: grid;
+        grid-template-columns: 1fr;
+    }
+
+    .jitem {
+        height: auto !important;
+        flex-basis: auto !important;
+        aspect-ratio: 3 / 2;
+    }
+}
+
+.lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: none;
+    place-items: center;
+    padding: 4vmin;
+    background: var(--scrim);
+}
+
+.lightbox[open] {
+    display: grid;
+}
+
+.lightbox img {
+    max-width: 100%;
+    max-height: 92vh;
+    object-fit: contain;
+}
+
+.lightbox-x {
+    position: absolute;
+    top: 18px;
+    right: 22px;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--paper);
+    background: none;
+    border: 1px solid color-mix(in srgb, var(--paper) 40%, transparent);
+    padding: 8px 14px;
+    cursor: pointer;
+}
+
+/* Stills inside a case study keep the simple column layout. */
+.photos {
+    columns: 2;
+    column-gap: 12px;
+}
+
+.photos figure {
+    break-inside: avoid;
+    margin-bottom: 12px;
+}
+
+.photos img {
+    width: 100%;
+    background: var(--surface);
+}
+
+@media (max-width: 700px) {
+    .photos {
+        columns: 1;
+    }
+}
+
+/* ── UTILITY ─────────────────────────────────────────────────────────────── */
+
+.btn {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--text);
+    text-decoration: none;
+    padding: 14px 26px;
+    border: 1px solid var(--rule-strong);
+}
+
+/* No hover fill — see the foil block above, which this rule used to undo:
+   `background` is a shorthand and reset the gradient and its clip, and
+   `color` painted the type back over what was left. */
+
+.stack > * + * {
+    margin-top: 18px;
+}
+
+.skip {
+    position: absolute;
+    left: -9999px;
+}
+
+.skip:focus {
+    left: 16px;
+    top: 12px;
+    z-index: 200;
+    background: var(--deep);
+    color: var(--on-deep);
+    padding: 10px 16px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        transition-duration: .01ms !important;
+        animation-duration: .01ms !important;
+    }
+}
+
+/* The skills list on /about: ruled rows like the phases under it, so the two
+   lists read as the same kind of thing. */
+.bring {
+    list-style: none;
+    margin: 26px 0;
+    border-top: 1px solid var(--rule);
+}
+
+.bring li {
+    padding: 14px 0;
+    border-bottom: 1px solid var(--rule);
+}
+
+/* Process phases — shown on /about, and on a case study only where the project
+   genuinely ran them. */
+.phases {
+    list-style: none;
+    counter-reset: ph;
+    margin-top: 26px;
+    border-top: 1px solid var(--rule);
+}
+
+.phases li {
+    counter-increment: ph;
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    padding: 13px 0;
+    border-bottom: 1px solid var(--rule);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+}
+
+.phases li::before {
+    content: counter(ph, decimal-leading-zero);
+    font-family: Fraunces, serif;
+    font-variation-settings: 'opsz' 20;
+    font-size: 13px;
+    letter-spacing: 0;
+    color: var(--accent);
+}
+
+/* The theme control: a swatch of what it switches to, not a word. */
+/* ── PORTRAIT DEMO ───────────────────────────────────────────────────────── */
+
+/* A phone screen recording is 588x1280. Across the top it would be four
+   fifths letterbox, so it sits beside its notes instead. */
+.demo {
+    display: grid;
+    grid-template-columns: minmax(0, 300px) minmax(0, 1fr);
+    gap: clamp(24px, 4vw, 56px);
+    align-items: start;
+}
+
+.demo-phone {
+    border: 1px solid var(--rule-strong);
+    padding: 8px;
+    background: var(--surface);
+}
+
+.demo-phone video {
+    width: 100%;
+    display: block;
+    aspect-ratio: 588 / 1280;
+    background: #000;
+}
+
+.demo-notes ul {
+    list-style: none;
+    margin-top: 18px;
+    border-top: 1px solid var(--rule);
+}
+
+.demo-notes li {
+    padding: 15px 0;
+    border-bottom: 1px solid var(--rule);
+    max-width: 54ch;
+}
+
+.demo-notes em {
+    font-style: italic;
+    color: var(--mt);
+}
+
+@media (max-width: 760px) {
+    .demo {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .demo-phone {
+        max-width: 300px;
+    }
+}
+
+/* ── DOCUMENT LIST ───────────────────────────────────────────────────────── */
+
+/* A row of document cards, three across, sharing the roster's proportions so
+   the two grids on a project page do not disagree about what a card is. */
+.docs-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(24px, 2.4vw, 38px) clamp(18px, 1.8vw, 30px);
+}
+
+.doc {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+}
+
+.doc-media {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+}
+
+/* Contained, not cropped. These are pages: a 16:9 deck cover cropped to a 4:3
+   card lost a quarter of its width and cut the first letter off its own title,
+   and a letter-size page cropped to fill would lose the bottom half of a
+   diagram. Letterboxing against the surface colour costs a little air and
+   shows every document whole. */
+.doc-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+/* The badge is hidden on touch for the project cards, where the page's own
+   filters already say what tier a card is. Here it is the only thing telling a
+   reader that tapping opens a PDF, so it stays. */
+.doc-kind {
+    display: block;
+    position: absolute;
+    left: 10px;
+    bottom: 10px;
+    z-index: 2;
+}
+
+.doc-name {
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid var(--rule-strong);
+    font-family: Fraunces, 'Times New Roman', serif;
+    font-variation-settings: 'SOFT' 0, 'WONK' 1, 'opsz' 60;
+    font-weight: 600;
+    font-size: clamp(17px, 1.3vw, 21px);
+    line-height: 1.08;
+    letter-spacing: -.015em;
+    transition: border-color .2s;
+}
+
+.doc:hover .doc-name {
+    border-color: var(--accent);
+}
+
+.doc-note {
+    margin-top: 9px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--mt);
+}
+
+@media (max-width: 1100px) {
+    .docs-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 640px) {
+    .docs-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+/* ── HOVER ENLARGEMENT FOR RAIL FIGURES ──────────────────────────────────── */
+
+/* These are interface screenshots three phones wide. In a 400px rail each
+   phone is about 130px across, which is enough to see the layout and not
+   nearly enough to read it. Hovering paints the full image over the page from
+   a pseudo-element, so the figure itself never leaves the flow — swapping the
+   real image to position:fixed would collapse its own hover target and flicker
+   between states forever. */
+.fig-zoom {
+    display: block;
+    position: relative;
+    cursor: zoom-in;
+}
+
+.fig-zoom img {
+    width: 100%;
+    transition: opacity .2s;
+}
+
+.fig-hint {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 7px 9px;
+    background: var(--scrim-soft);
+    color: var(--paper);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    text-align: center;
+    opacity: 0;
+    transition: opacity .2s;
+}
+
+.fig-zoom:hover .fig-hint,
+.fig-zoom:focus-visible .fig-hint {
+    opacity: 1;
+}
+
+@media (hover: hover) and (min-width: 1000px) {
+    .fig-zoom::before,
+    .fig-zoom::after {
+        content: '';
+        position: fixed;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity .22s ease;
+    }
+
+    /* Backdrop, so the enlargement is not competing with the prose behind it. */
+    .fig-zoom::before {
+        inset: 0;
+        z-index: 190;
+        background: color-mix(in srgb, var(--ink) 88%, transparent);
+    }
+
+    .fig-zoom::after {
+        inset: 3vh 3vw;
+        z-index: 191;
+        background-image: var(--zoom);
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: contain;
+    }
+
+    .fig-zoom:hover::before,
+    .fig-zoom:hover::after,
+    .fig-zoom:focus-visible::before,
+    .fig-zoom:focus-visible::after {
+        opacity: 1;
+    }
+
+    /* Dim the thumbnail so it is obvious which figure is enlarged. */
+    .fig-zoom:hover img {
+        opacity: .25;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .fig-zoom::before,
+    .fig-zoom::after,
+    .fig-hint {
+        transition: none;
+    }
+}
+
+/* Two leads side by side. They are peers, so neither gets the larger tile. */
+.leads {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: clamp(28px, 4vw, 52px);
+}
+
+.lead-cap {
+    margin-top: 14px;
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--mt);
+}
+
+/* The full-bleed rows carry their own separation: a --step of air and a
+   tracked label each. The .band + .band hairline drawn between two of them
+   read as a hard edge across the whole page, so rows opt out of it. Sections
+   inside a shell keep it — there the rule is doing real work. */
+.strip + .strip {
+    border-top: 0;
+}
+
+/* NEXT — the row at the foot of a project page. It is a sibling of the
+   shell rather than a child, so it cannot inherit the .band + .band rule. */
+.cs-next {
+    border-top: 1px solid var(--rule);
+}
+
+/* SELECTED WORK — a full-bleed row, so four cards do not read as a smaller
+   version of the two leads above them. */
+.strip {
+    max-width: none;
+    padding-left: var(--gutter);
+    padding-right: var(--gutter);
+}
+
+.strip-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(16px, 1.8vw, 28px);
+}
+
+.feature-media .index-kind {
+    position: absolute;
+    left: 10px;
+    bottom: 10px;
+    z-index: 2;
+}
+
+.strip .feature-body {
+    margin-top: 16px;
+    padding-bottom: 12px;
+}
+
+.strip .lead-cap {
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+@media (max-width: 1100px) {
+    .strip-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 26px 20px;
+    }
+}
+
+@media (max-width: 560px) {
+    .strip-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+/* LEADS — label above rather than in the margin, and wider than the rows
+   beneath so the hierarchy is size rather than position. */
+/* FEATURED — three across. At two the titles could run to 68px; at three the
+   column is a third of the page, so the display size comes down to match or
+   "Inhabiting Memory" wraps to three lines and stops reading as a title. */
+.leads-band .leads {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(24px, 2.4vw, 44px);
+    max-width: 1680px;
+    margin: 0 auto;
+}
+
+.lead-title {
+    font-size: clamp(30px, 3.1vw, 46px);
+    line-height: .98;
+}
+
+@media (max-width: 1100px) {
+    .leads-band .leads {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+.leads-band .feature-body {
+    margin-top: 22px;
+    padding-bottom: 16px;
+}
+
+.leads-band .lead-cap {
+    margin-top: 14px;
+    font-size: clamp(15px, 1.2vw, 18px);
+}
+
+.strip-title {
+    font-size: clamp(20px, 1.7vw, 27px);
+    line-height: 1.02;
+}
+
+@media (max-width: 760px) {
+    .leads-band .leads {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+/* A card for a project with no cover file on disk yet. */
+.feature-fallback {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    font-size: 40px;
+}
+
+/* /work runs the same grid as the homepage rows. */
+#grid .feature[hidden] {
+    display: none;
+}
+
+/* The homepage's three lines. Smaller than a page heading and tighter than
+   .mast, because the featured work under it has to start on the first screen
+   at laptop height — the intro says what the work is, the work proves it. */
+.home-intro {
+    padding-top: clamp(40px, 6vw, 88px);
+}
+
+.home-intro h1.display {
+    font-size: clamp(40px, 6.2vw, 96px);
+    margin-top: 18px;
+    max-width: 16ch;
+}
+
+.home-intro .lede {
+    margin-top: 28px;
+    max-width: 40ch;
+}
+
+.home-where {
+    margin-top: 18px;
+    max-width: 62ch;
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+.home-intro + .leads-band {
+    padding-top: clamp(48px, 7vh, 88px);
+}

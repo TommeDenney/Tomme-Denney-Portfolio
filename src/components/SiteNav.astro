@@ -1,0 +1,38 @@
+---
+/**
+ * The bar. Sticky, hairline-ruled, and the same on every page — v1 rewrote its
+ * own nav in JS whenever the mode changed, which meant two copies of the markup
+ * that had to agree by hand.
+ */
+/*
+ * The light/dark toggle used to live at the end of this row. It is gone: the
+ * palette picker in the bottom right is the only appearance control now, and
+ * two of them in opposite corners asked a visitor to hold both in their head.
+ * The wheat values are still in src/data/palettes.ts, so this is one <li> and
+ * a script away from coming back.
+ */
+interface Props { current?: 'home' | 'work' | 'about' | 'photography' }
+// Photography is reached from /work rather than the top bar: four peer links
+// gave it equal billing with the design work, which is the opposite of the
+// point when the whole site is a repositioning.
+const { current } = Astro.props;
+---
+<a class="skip" href="#main">Skip to content</a>
+<nav class="nav" transition:name="site-nav" transition:animate="none">
+    <a class="nav-mark" href="/">
+        {/* The monogram is a mask rather than an image, so it is drawn in the
+            theme's own text colour and flips with it — the source art is black
+            on paper, which would have needed a second file and a swap. */}
+        <span class="nav-logo" aria-hidden="true"></span>
+        Tomme Denney
+    </a>
+    <ul class="nav-links">
+        {/* The wordmark already goes home, but a named link is what a visitor
+            looks for, and it keeps the row readable as a set. */}
+        <li><a href="/" aria-current={current === 'home' ? 'page' : undefined}>Home</a></li>
+        <li>
+            <a href="/work" aria-current={current === 'work' || current === 'photography' ? 'page' : undefined}>Work</a>
+        </li>
+        <li><a href="/about" aria-current={current === 'about' ? 'page' : undefined}>About</a></li>
+    </ul>
+</nav>

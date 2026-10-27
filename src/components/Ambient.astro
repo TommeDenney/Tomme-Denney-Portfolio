@@ -1,0 +1,107 @@
+---
+/**
+ * The background.
+ *
+ * Four very large, very soft blobs of the palette's own navy, drifting on a
+ * minute-and-a-half loop behind everything. It is the one decorative thing on
+ * the site, and the whole job is to be felt rather than seen: the lightest
+ * blob is about nine percent lighter than the page, which leaves wheat text at
+ * roughly 10:1 against it — the contrast floor is 4.5:1, so there is room to
+ * spare even where two blobs overlap.
+ *
+ * No blur filter. A radial gradient with a soft stop already looks blurred and
+ * costs nothing per frame, where a 90px blur on four elements the size of the
+ * viewport is a full-screen re-filter every time one of them moves.
+ *
+ * It answers the pointer, a click, and a navigation:
+ *
+ *   - pointer: each blob drifts toward the cursor by a different amount and in
+ *     a different direction, on a 1.6s ease, which reads as depth rather than
+ *     as tracking.
+ *   - click: the whole field swells a little and brightens for a moment.
+ *   - navigation: the composition shifts to an offset derived from the new
+ *     path, so every page has its own arrangement and moving between two pages
+ *     always moves it the same way. The element is persisted across the view
+ *     transition, so the drift never restarts.
+ */
+---
+<div class="ambient" aria-hidden="true" transition:persist="ambient">
+    <div class="amb amb-1"><div></div></div>
+    <div class="amb amb-2"><div></div></div>
+    <div class="amb amb-3"><div></div></div>
+    <div class="amb amb-4"><div></div></div>
+</div>
+
+<script is:inline>
+    (function () {
+        if (window.__ambient) return;
+        window.__ambient = true;
+
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+        /* Looked up through a function rather than held in the closure. The
+           field is persisted across navigations, but a stale reference here
+           would fail silently — writing to a detached node while the live one
+           sat untouched — and that is exactly the bug the explicit persist key
+           above was hiding. */
+        var cached = null;
+
+        function field() {
+            if (!cached || !cached.isConnected) cached = document.querySelector('.ambient');
+            return cached;
+        }
+
+        if (!field()) return;
+
+        /* One write per frame. pointermove fires far more often than the
+           screen refreshes, and each write here invalidates four transforms. */
+        var wantX = 0;
+        var wantY = 0;
+        var queued = false;
+
+        function write() {
+            queued = false;
+            var el = field();
+            if (!el) return;
+            el.style.setProperty('--px', wantX.toFixed(3));
+            el.style.setProperty('--py', wantY.toFixed(3));
+        }
+
+        window.addEventListener('pointermove', function (e) {
+            wantX = e.clientX / window.innerWidth - 0.5;
+            wantY = e.clientY / window.innerHeight - 0.5;
+            if (!queued) {
+                queued = true;
+                requestAnimationFrame(write);
+            }
+        }, { passive: true });
+
+        var settle;
+        window.addEventListener('pointerdown', function () {
+            var el = field();
+            if (!el) return;
+            el.classList.add('jolt');
+            clearTimeout(settle);
+            settle = setTimeout(function () {
+                var live = field();
+                if (live) live.classList.remove('jolt');
+            }, 900);
+        }, { passive: true });
+
+        /* A path always produces the same arrangement, so the background is a
+           property of the page rather than something random on arrival. */
+        function place() {
+            var el = field();
+            if (!el) return;
+            var path = location.pathname;
+            var h = 0;
+            for (var i = 0; i < path.length; i++) h = (h * 31 + path.charCodeAt(i)) | 0;
+            var span = function (n) { return ((Math.abs(n) % 200) / 100) - 1; };
+            el.style.setProperty('--ox', span(h).toFixed(3));
+            el.style.setProperty('--oy', span(h >> 8).toFixed(3));
+        }
+
+        place();
+        document.addEventListener('astro:page-load', place);
+    })();
+</script>

@@ -1,0 +1,158 @@
+---
+/**
+ * The work index.
+ *
+ * Cards in the same shape as the homepage rather than a numbered list: the
+ * list read as a table of contents, and this work is visual enough that a
+ * reader should be able to see it without clicking first.
+ *
+ * Filtering is a hidden attribute toggle rather than a re-render. Twenty-three
+ * cards does not justify shipping a framework, and every card stays in the
+ * HTML so all of it is crawlable whichever filter is showing.
+ */
+import Base from '../layouts/Base.astro';
+import SiteNav from '../components/SiteNav.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import VideoAutoplay from '../components/VideoAutoplay.astro';
+import { PROJECTS, projectHref, projectSlug, projectKind, KIND_LABEL } from '../data/projects';
+import { projectMedia } from '../lib/projectMedia';
+
+const cards = PROJECTS.map((p) => {
+    const kind = projectKind(p);
+    return {
+        p,
+        kind,
+        // Case studies and notes are both written up, so they answer the same
+        // question a reader is asking with that filter.
+        group: kind === 'project' ? 'project' : 'written',
+        href: projectHref(p.name),
+        media: projectMedia(p.cover, false),
+    };
+});
+
+const counts = {
+    all: cards.length,
+    written: cards.filter((c) => c.group === 'written').length,
+    project: cards.filter((c) => c.group === 'project').length,
+};
+
+const FILTERS = [
+    { id: 'all', label: 'All', n: counts.all },
+    { id: 'written', label: 'Case studies', n: counts.written },
+    { id: 'project', label: 'Projects', n: counts.project },
+];
+---
+
+<Base
+    title="Work — Tomme Denney"
+    description="XR interaction design, gameplay prototyping and HCI research by Tomme Denney: mixed reality deployed on live tours, a VR thesis on locomotion and presence, and games."
+    path="/work"
+>
+    <SiteNav current="work" />
+
+    <main id="main">
+        <header class="shell mast">
+            <p class="label">Index</p>
+            <h1 class="display" transition:name="page-heading">Work</h1>
+            <p class="lede" style="margin-top:26px">
+                XR and game work, deployed and written up first. Case studies carry
+                the reasoning — the interaction problem, the decisions, what was
+                tested; projects are the craft.
+            </p>
+        </header>
+
+        <section class="band strip">
+            <div class="filters" role="group" aria-label="Filter by depth">
+                {FILTERS.map((f, i) => (
+                    <button
+                        class={i === 0 ? 'filter on' : 'filter'}
+                        data-filter={f.id}
+                        aria-pressed={i === 0 ? 'true' : 'false'}
+                    >
+                        {f.label} <span class="filter-n">{f.n}</span>
+                    </button>
+                ))}
+            </div>
+
+            <div class="strip-grid" id="grid">
+                {cards.map(({ p, kind, group, href, media }) => (
+                    <a class="feature" href={href} data-group={group}>
+                        <div class="feature-media" transition:name={`m-${projectSlug(p.name)}`}>
+                            {media.preview ? (
+                                <video
+                                    src={media.preview}
+                                    poster={media.poster ?? undefined}
+                                    autoplay muted loop playsinline preload="metadata"
+                                    data-hero-video
+                                    aria-label={`${p.name} — looping preview`}></video>
+                            ) : media.poster ? (
+                                <img src={media.poster} alt={`${p.name} — cover`} loading="lazy" decoding="async" />
+                            ) : (
+                                <div class="feature-fallback" style={`background:${p.bg}`} aria-hidden="true">
+                                    <span>{p.ico}</span>
+                                </div>
+                            )}
+                            {kind !== 'project' && (
+                                <span class="index-kind" data-kind={kind}><span>{KIND_LABEL[kind]}</span></span>
+                            )}
+                        </div>
+                        <div class="feature-body">
+                            <h2 class="display strip-title" transition:name={`t-${projectSlug(p.name)}`}>{p.name}</h2>
+                        </div>
+                        <p class="lead-cap">{p.caption ?? p.cat}</p>
+                    </a>
+                ))}
+            </div>
+
+            <p class="muted" id="empty" hidden style="padding:48px 0">Nothing in that group yet.</p>
+        </section>
+    </main>
+
+    <SiteFooter />
+
+    <VideoAutoplay />
+
+    <script is:inline>
+        /*
+         * The depth filter. Bound on astro:page-load rather than at parse
+         * time: client-side navigation replaces these buttons with new
+         * elements, so a listener attached to the ones that existed at first
+         * paint would leave the filter dead on the second visit. The flag on
+         * the button makes a repeat call a no-op.
+         */
+        (function () {
+            function init() {
+                var buttons = document.querySelectorAll('.filter');
+                var cards = document.querySelectorAll('#grid .feature');
+                var empty = document.getElementById('empty');
+                if (!buttons.length || !empty) return;
+
+                buttons.forEach(function (btn) {
+                    if (btn.dataset.wired) return;
+                    btn.dataset.wired = '1';
+
+                    btn.addEventListener('click', function () {
+                        var f = btn.dataset.filter;
+                        buttons.forEach(function (b) {
+                            b.classList.toggle('on', b === btn);
+                            b.setAttribute('aria-pressed', b === btn ? 'true' : 'false');
+                        });
+                        var shown = 0;
+                        cards.forEach(function (card) {
+                            var show = f === 'all' || card.dataset.group === f;
+                            card.hidden = !show;
+                            if (show) shown++;
+                        });
+                        empty.hidden = shown > 0;
+                    });
+                });
+            }
+
+            init();
+            if (!window.__filterWired) {
+                window.__filterWired = true;
+                document.addEventListener('astro:page-load', init);
+            }
+        })();
+    </script>
+</Base>
