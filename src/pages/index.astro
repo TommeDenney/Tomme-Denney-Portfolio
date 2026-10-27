@@ -15,13 +15,13 @@ import VideoAutoplay from '../components/VideoAutoplay.astro';
 import { PROJECTS, PMAP, projectHref, projectSlug, projectKind, KIND_LABEL } from '../data/projects';
 import { projectMedia } from '../lib/projectMedia';
 
-// Three featured projects, in this order on purpose. See Reality first: it is
+// Four featured projects, in this order on purpose. See Reality first: it is
 // the only professional, deployed, multi-year body of work here, and it is the
 // answer to the first question a hiring reader has. Then the thesis, which is
-// locomotion and hand input designed and tested end to end, and I Am You,
-// whose control scheme is the clearest piece of interaction design on the site
-// with an individually credited author.
-const LEADS = ['seereality', 'genexr', 'iamyou'];
+// locomotion and hand input designed and tested end to end; I Am You, whose
+// control scheme is the clearest piece of interaction design on the site with
+// an individually credited author; and Spark, the full service design.
+const LEADS = ['seereality', 'genexr', 'iamyou', 'spark'];
 const leads = LEADS.map((id) => ({ p: PMAP[id], media: projectMedia(PMAP[id].cover, false) }));
 
 // The index under the leads: the work worth a recruiter's next click, in the
@@ -62,26 +62,12 @@ const socialImage = PMAP.genexr.cover;
     <SiteNav current="home" />
 
     <main id="main">
-        {/* Three lines, not a masthead: what the work is, how it gets made,
-            and where it applies — then straight into the work. The longer
-            introduction stays on /about. */}
-        <header class="shell home-intro">
-            <p class="label">Tomme Denney &middot; Boston, Massachusetts</p>
-            <h1 class="display">XR interaction designer &amp; <span class="mast-accent">prototyper</span></h1>
-            <p class="lede">
-                I design how people move, reach, look and get feedback inside
-                virtual worlds — then build it in Unity, so it can be tried in a
-                headset instead of argued about in a deck.
-            </p>
-            <p class="home-where muted">
-                Game-design craft, human-centred interaction design and real-time
-                Unity prototyping — for games, spatial computing, simulation and
-                emerging interactive products. My XR work runs inside live guided
-                tours in the US, Canada and Italy.
-            </p>
-        </header>
+        {/* The introduction lives on /about; the homepage opens on the work.
+            The heading stays for screen readers and search, which still need
+            to know whose page this is and what it is about. */}
+        <h1 class="sr-only">Tomme Denney — XR interaction designer &amp; prototyper</h1>
 
-        <section class="band strip leads-band" aria-labelledby="lead-h">
+        <section class="band strip leads-band home-first" aria-labelledby="lead-h">
             <p class="label" id="lead-h" style="margin-bottom:30px">Featured projects</p>
             <div class="leads">
                 {leads.map(({ p: lead, media }) => (
