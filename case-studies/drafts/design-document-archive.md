@@ -33,7 +33,7 @@ Not used from the Unforgotten Stories document: the Google Maps screenshot (p. 2
 ## Answers (27 October 2026)
 
 - What Remains of Me: the Game Systems Design group wrote both documents together, Tomme included, and they may be posted. Both are now linked on the page.
-- Unforgotten Stories: Team Let's Go Eevee was Tomme, Tejim and Ronak. Tomme's individual role is not yet recorded on the page.
+- Unforgotten Stories: Team Let's Go Eevee was Tomme, Tejim and Ronak. Tomme's individual role is not yet recorded on the page. (The repository's "TeapotTenshi" commits are Tomme's own, under his old GitHub username — same account ID.)
 - Internship in the Afterlife: Komi drew the storyboards and they may be shown; Tomme built the interaction systems and programmed the game; Namrata and Komi did the 3D modelling.
 - Wallace: built mainly by Tomme and Ren; the other four contributors made small contributions. Names not recalled.
 

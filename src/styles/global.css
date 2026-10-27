@@ -1176,6 +1176,28 @@ h3.display {
     line-height: 1.58;
 }
 
+/* What I built on this one, and who built the rest — separated from the
+   description so a reader can find the credit without reading the paragraph. */
+.rcard-mine {
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid var(--rule);
+    font-size: 15px;
+    line-height: 1.58;
+}
+
+.rcard-mine .label {
+    display: block;
+    margin-bottom: 6px;
+}
+
+.rcard-team {
+    margin-top: 8px;
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--muted);
+}
+
 .rcard-links {
     display: flex;
     flex-wrap: wrap;

@@ -111,6 +111,8 @@ const items = section.items.map(resolve);
                         </h3>
                         {item.meta && <p class="rcard-meta">{item.meta}</p>}
                         <p class="rcard-body">{item.body}</p>
+                        {item.mine && <p class="rcard-mine"><span class="label">My part</span> {item.mine}</p>}
+                        {item.team && <p class="rcard-team">{item.team}</p>}
                         {(href || item.link) && (
                             <p class="rcard-links">
                                 {href && <a href={href}>See the project</a>}
