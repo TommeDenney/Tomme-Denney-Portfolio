@@ -124,6 +124,17 @@ export function projectKind(p: Project): ProjectKind {
     return p.caseStudy ? 'case' : 'project';
 }
 
+/**
+ * The year a project belongs to, for ordering /work newest first: the latest
+ * year in its category line, or Infinity for work that is still running —
+ * "Present", "Live" — so ongoing work sorts above anything finished.
+ */
+export function projectYear(p: Project): number {
+    if (/present|\blive\b/i.test(p.cat)) return Infinity;
+    const years = (p.cat.match(/\b(19|20)\d\d\b/g) ?? []).map(Number);
+    return years.length ? Math.max(...years) : -Infinity;
+}
+
 /** The badge text for that tier. */
 export const KIND_LABEL: Record<ProjectKind, string> = {
     case: 'Case study',
@@ -456,7 +467,7 @@ export const PROJECTS: Project[] = [
     },
     {
         id: 'mergepoint', name: 'Merge Point', cat: 'Cross-Platform VR + AR Co-op · Team Project · 2025',
-        cover: '/projects/mergepoint/1.jpg',
+        cover: '/projects/mergepoint/1.png',
         bg: 'linear-gradient(145deg,#04151f,#183a37,#c44900)', ico: '🚂',
         tags: ['Asymmetric Co-op', 'Cross-Platform XR', 'Multiplayer XR', 'Meta Quest 3', 'Mobile AR', 'ARCore', 'Unity C#'],
         caption: 'One player in a headset, the rest on phones, and a portal between them that only works if they talk.',
@@ -469,12 +480,10 @@ export const PROJECTS: Project[] = [
             ['Built with', 'Unity 2022.3, OpenXR, Meta XR SDK, Google ARCore'],
         ],
         desc: 'An intergalactic zoo train has crashed on an alien planet and the animals are loose. One player is on the planet in VR, on a Quest 3. The others are on phones in the real room, looking into that world through a passthrough portal window that the VR player carries and positions. The VR player has to keep the animals fed, keep the carnivores away from the herbivores, and repair the train; the phone players have the materials to do it with.\n\nThe interaction design is a split of abilities across devices. The VR player teleports by raycast, grabs with the controller, sees a hunger bar over each animal and a red highlight on damaged train parts, and fits a part where a green highlight shows it belongs. A phone player taps to pick up the train parts floating around their room, swipes them through the portal, and makes food by opening a whiteboard, choosing the hungry animal, and tracing a dotted sketch of what it eats — a steak for the lion — before tapping Create to turn it into a 3D object. Nothing tells either side what the other needs except talking: the scene table’s entry for that step reads “speaking out loud. use your mouth and ears”. The train fixed is a win; hunger run out and more than one animal eaten is a loss.\n\nI worked on the multiplayer system meant to put the headset and the phone in one synced space — the part every other mechanic depends on, since the portal is only a window if both devices agree where things are. By the team’s own account in the design document, a running cross-platform prototype was not finished in time for proof-of-concept testing, so what is here is the design: the scene-by-scene interaction table, the colour explorations and the phone and TV interface screens.',
-        stillAlts: [
-            'Colour exploration 2: the same scene in deep greens with an orange train and a yellow-clad child beside the portal ring.',
-            'Colour exploration 3: autumn oranges and yellows, a blue train and a red-clad child beside the portal ring.',
-            'Colour exploration 4: olive greens with a red train and an orange-clad child beside the portal ring.',
-            'Colour exploration 5: cool greens and a pale sky with an orange train and a pink-clad child beside the portal ring.',
-        ],
+        // The cover is a crop of the AR Player UI board's title screen, which is
+        // only 264px wide in the source document — fine on a card, soft as a
+        // full-width banner, so the page opens on its title instead.
+        noStillHero: true,
         figures: [
             {
                 src: '/projects/mergepoint/figs/ar-player-ui.jpg',

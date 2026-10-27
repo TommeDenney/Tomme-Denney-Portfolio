@@ -14,10 +14,37 @@ import Base from '../layouts/Base.astro';
 import SiteNav from '../components/SiteNav.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import VideoAutoplay from '../components/VideoAutoplay.astro';
-import { PROJECTS, projectHref, projectSlug, projectKind, KIND_LABEL } from '../data/projects';
+import { PROJECTS, projectHref, projectSlug, projectKind, projectYear, KIND_LABEL } from '../data/projects';
 import { projectMedia } from '../lib/projectMedia';
 
-const cards = PROJECTS.map((p) => {
+// Newest first: ongoing work, then by year. Within a year, where the month is
+// documented, newest first by the lists below — Keys to the Universe October
+// 2026, Inhabiting Memory April 2026, BOFUM MIT Reality Hack in January 2026;
+// Buddy Run fall 2025, Wallace October 2025, Merge Point April 2025, HaptiDraw
+// MIT Reality Hack in January 2025; Internship in the Afterlife December 2024,
+// Attack of the Chickens Global Game Jam in January 2024. A project not listed
+// for its year keeps the order PROJECTS gives it (the sort is stable), after
+// the listed ones it is known to postdate and before those it predates.
+const WITHIN_YEAR: Record<number, { first: string[]; last: string[] }> = {
+    2026: { first: ['keystotheuniverse', 'genexr', 'spark'], last: ['bofum'] },
+    2025: { first: ['buddyrun', 'wallace', 'mergepoint'], last: ['haptidraw'] },
+    2024: { first: ['internshipintheafterlife'], last: ['attackofthechickens'] },
+};
+function withinYearRank(id: string, year: number): number {
+    const order = WITHIN_YEAR[year];
+    if (!order) return 0;
+    const f = order.first.indexOf(id);
+    if (f >= 0) return f - order.first.length;
+    const l = order.last.indexOf(id);
+    return l >= 0 ? 1 + l : 0;
+}
+const byYear = [...PROJECTS].sort((a, b) => {
+    const ya = projectYear(a), yb = projectYear(b);
+    if (ya !== yb) return yb - ya;
+    return withinYearRank(a.id, ya) - withinYearRank(b.id, yb);
+});
+
+const cards = byYear.map((p) => {
     const kind = projectKind(p);
     return {
         p,
@@ -51,17 +78,11 @@ const FILTERS = [
     <SiteNav current="work" />
 
     <main id="main">
-        <header class="shell mast">
-            <p class="label">Index</p>
-            <h1 class="display" transition:name="page-heading">Work</h1>
-            <p class="lede" style="margin-top:26px">
-                XR and game work, deployed and written up first. Case studies carry
-                the reasoning — the interaction problem, the decisions, what was
-                tested; projects are the craft.
-            </p>
-        </header>
+        {/* No masthead: the page opens on the filters and the work. The
+            heading stays for screen readers and search. */}
+        <h1 class="sr-only">Work</h1>
 
-        <section class="band strip">
+        <section class="band strip home-first">
             <div class="filters" role="group" aria-label="Filter by depth">
                 {FILTERS.map((f, i) => (
                     <button

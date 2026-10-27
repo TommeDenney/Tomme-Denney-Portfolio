@@ -15,14 +15,10 @@ import VideoAutoplay from '../components/VideoAutoplay.astro';
 import { PROJECTS, PMAP, projectHref, projectSlug, projectKind, KIND_LABEL } from '../data/projects';
 import { projectMedia } from '../lib/projectMedia';
 
-// Seven featured projects: three large, four under them. The large three, in
-// this order on purpose. See Reality first: it is the only professional,
-// deployed, multi-year body of work here, and it is the answer to the first
-// question a hiring reader has. Then the thesis, which is locomotion and hand
-// input designed and tested end to end, and I Am You, whose control scheme is
-// the clearest piece of interaction design on the site with an individually
-// credited author.
-const LEADS = ['seereality', 'genexr', 'iamyou'];
+// Seven featured projects: three large, four under them, in the order Tomme
+// set. See Reality, Spark and Recollection lead — the deployed professional
+// work, the full service design, and the live product.
+const LEADS = ['seereality', 'spark', 'recollection'];
 const leads = LEADS.map((id) => ({ p: PMAP[id], media: projectMedia(PMAP[id].cover, false) }));
 
 // The index under the leads: the work worth a recruiter's next click, in the
@@ -36,17 +32,16 @@ const card = (id: string) => ({ p: PMAP[id], media: projectMedia(PMAP[id].cover,
 // are on the See Reality page and on /work.
 const DEPLOYMENTS = ['relive1776', 'showmeitaly', 'lexington', 'nashvilleadventures'];
 
-// The four under the large three, still inside Featured: Spark, the full
-// service design; the two live products; and Internship in the Afterlife,
-// whose interaction systems are mine. No featured card repeats in the rows
-// below.
-const MORE = ['spark', 'keystotheuniverse', 'recollection', 'internshipintheafterlife'];
+// The four under the large three, still inside Featured. No featured card
+// repeats in the rows below.
+const MORE = ['genexr', 'keystotheuniverse', 'buddyrun', 'haptidraw'];
 const more = MORE.map(card);
 
 // Then the written-up work, then work that speaks for itself. Badges carry the
 // tier inside each row.
-const WRITTEN = ['haptidraw', 'buddyrun', 'virtualforest', 'truthancientforest'];
-const PROJECTS_ROW = ['bofum', 'wallace', 'returnofthechickens', 'greatvendingmachine'];
+// Three, not four: every other case study is featured above.
+const WRITTEN = ['iamyou', 'virtualforest', 'truthancientforest'];
+const PROJECTS_ROW = ['internshipintheafterlife', 'bofum', 'wallace', 'greatvendingmachine'];
 const written = WRITTEN.map(card);
 const deployments = DEPLOYMENTS.map(card);
 const projectsRow = PROJECTS_ROW.map(card);

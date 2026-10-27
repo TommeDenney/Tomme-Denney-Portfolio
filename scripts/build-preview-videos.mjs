@@ -62,6 +62,12 @@ const EXTRA = {
         src: 'public/projects/nashvilleadventures/0.mp4',
         start: 104,
     },
+    internshipintheafterlife: {
+        // The capture opens on black before the title. 0:20 is inside the
+        // headset, in the clouds, with the letter blocks in reach.
+        src: 'public/projects/internshipintheafterlife/0.mp4',
+        start: 20,
+    },
     showmeitaly: {
         // Straight to the gladiators on the arena floor.
         src: 'public/projects/showmeitaly/0.mp4',

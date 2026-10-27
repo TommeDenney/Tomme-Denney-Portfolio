@@ -1958,8 +1958,8 @@ h3.display {
     padding-top: clamp(48px, 7vh, 88px);
 }
 
-/* The homepage now opens on the featured work, directly under the nav. */
-.leads-band.home-first {
+/* Pages that open on their content directly under the nav, with no masthead. */
+.home-first {
     padding-top: clamp(40px, 6vw, 88px);
 }
 
